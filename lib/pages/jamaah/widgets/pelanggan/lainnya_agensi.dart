@@ -38,7 +38,11 @@ class _LainnyaAgensiState extends State<LainnyaAgensi> {
   }
 
   Widget inputMarketing() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Refrensi",
@@ -53,12 +57,18 @@ class _LainnyaAgensiState extends State<LainnyaAgensi> {
         ],
         onChanged: (value) {},
         selectedItem: "MARKETING",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
 
   Widget inputNamaMarketing() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         mode: Mode.BOTTOM_SHEET,
@@ -78,6 +88,8 @@ class _LainnyaAgensiState extends State<LainnyaAgensi> {
         ),
         dropdownBuilder: (context, selectedItem) =>
             Text(selectedItem != null ? selectedItem['NAMA_LGKP'] : "Jarsinah"),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -87,7 +99,8 @@ class _LainnyaAgensiState extends State<LainnyaAgensi> {
       initialValue: "Jayadi",
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(border: OutlineInputBorder()),
+      decoration: const InputDecoration(
+          fillColor: Colors.white, filled: true, hoverColor: Colors.white),
     );
   }
 

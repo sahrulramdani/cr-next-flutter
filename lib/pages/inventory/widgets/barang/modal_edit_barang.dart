@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, missing_return
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
@@ -26,7 +26,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Kode Barang'),
+          labelText: 'Kode Barang',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {},
       initialValue: listBarang[int.parse(widget.idBarang)]['id'],
     );
@@ -36,21 +39,35 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nama Barang'),
+          labelText: 'Nama Barang',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {},
       initialValue: listBarang[int.parse(widget.idBarang)]['nama'],
     );
   }
 
   Widget inputSatuan() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Satuan",
         mode: Mode.MENU,
         items: const ["BOX", "BUAH", "LUSIN", "METER", "PAX", "PCS"],
         onChanged: print,
         selectedItem: listBarang[int.parse(widget.idBarang)]['satuan'],
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        // validator: (value) {
+        //   if (value == "Pilih Status Barang") {
+        //     return "Status Barang masih kosong !";
+        //   }
+        // },
       ),
     );
   }
@@ -61,20 +78,34 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Stok Awal Barang'),
+          labelText: 'Stok Awal Barang',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       initialValue: listBarang[int.parse(widget.idBarang)]['stok'],
     );
   }
 
   Widget inputStatusBarang() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Status Barang",
         mode: Mode.MENU,
         items: const ["Aktif", "Nonaktif"],
         onChanged: print,
         selectedItem: "Aktif",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        // validator: (value) {
+        //   if (value == "Pilih Status Barang") {
+        //     return "Status Barang masih kosong !";
+        //   }
+        // },
       ),
     );
   }
@@ -86,7 +117,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Harga Beli'),
+          labelText: 'Harga Beli',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       initialValue: listBarang[int.parse(widget.idBarang)]['harga_beli'],
     );
   }
@@ -98,7 +132,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Harga Jual'),
+          labelText: 'Harga Jual',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       initialValue: listBarang[int.parse(widget.idBarang)]['harga_jual'],
     );
   }
@@ -107,7 +144,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Keterangan'),
+          labelText: 'Keterangan',
+          fillColor: Colors.white,
+          filled: true,
+          hoverColor: Colors.white),
       initialValue: listBarang[int.parse(widget.idBarang)]['keterangan'],
     );
   }

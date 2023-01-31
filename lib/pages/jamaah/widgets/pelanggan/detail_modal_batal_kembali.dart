@@ -26,7 +26,11 @@ class _DetailModalBatalKembaliState extends State<DetailModalBatalKembali> {
   TextEditingController dendaBatal = TextEditingController();
 
   Widget inputPilihJenis() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Pilih",
@@ -54,6 +58,8 @@ class _DetailModalBatalKembaliState extends State<DetailModalBatalKembali> {
           }
         },
         selectedItem: jenis ?? "Pilih",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -84,7 +90,10 @@ class _DetailModalBatalKembaliState extends State<DetailModalBatalKembali> {
       // onChanged: (value) {},
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Sejumlah'),
+          labelText: 'Sejumlah',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -95,7 +104,10 @@ class _DetailModalBatalKembaliState extends State<DetailModalBatalKembali> {
       controller: biayaAdmin,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Biaya Admin'),
+          labelText: 'Biaya Admin',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -106,7 +118,10 @@ class _DetailModalBatalKembaliState extends State<DetailModalBatalKembali> {
       controller: dendaBatal,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Denda Pembatalan'),
+          labelText: 'Denda Pembatalan',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 

@@ -21,7 +21,6 @@ class _SatuanFormState extends State<SatuanForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        border: OutlineInputBorder(),
         labelText: 'Satuan',
       ),
     );

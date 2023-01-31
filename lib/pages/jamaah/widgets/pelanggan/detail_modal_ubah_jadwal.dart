@@ -34,63 +34,66 @@ class _DetailModalUbahJadwalState extends State<DetailModalUbahJadwal> {
   TextEditingController dateExp = TextEditingController();
 
   Widget inputNamaJadwal() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Jadwal",
-          items: listJadwalProduk,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                paket = value["paket"] + ' ' + value['jenis'];
-                tarif = value['uang'] + '.' + value["tarif"];
-                berangkat = value["berangkat"];
-                sisa = value["sisa"];
-                hari = value["hari"];
-              });
-              // fncTotal();
-            } else {
-              setState(() {
-                paket = '';
-                tarif = '';
-                berangkat = '';
-                sisa = '';
-                hari = '';
-              });
-              // fncTotal();
-            }
-          },
-          showClearButton: true,
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                  item['paket'] +
-                      ' - ' +
-                      item['jenis'] +
-                      ' - ' +
-                      item['keterangan'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                    item['uang'] +
-                        ' ' +
-                        item['tarif'] +
-                        ' - ' +
-                        'Sisa Seat : ' +
-                        item['sisa'],
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(item['berangkat'] + ' - ' + item['pulang'],
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['keterangan']
-              : "Produk belum Dipilih"),
-          validator: (value) {
-            if (value == null) {
-              return "Jadwal Produk masih kosong !";
-            }
-          }),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Jadwal",
+        items: listJadwalProduk,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              paket = value["paket"] + ' ' + value['jenis'];
+              tarif = value['uang'] + '.' + value["tarif"];
+              berangkat = value["berangkat"];
+              sisa = value["sisa"];
+              hari = value["hari"];
+            });
+            // fncTotal();
+          } else {
+            setState(() {
+              paket = '';
+              tarif = '';
+              berangkat = '';
+              sisa = '';
+              hari = '';
+            });
+            // fncTotal();
+          }
+        },
+        showClearButton: true,
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(
+            item['paket'] + ' - ' + item['jenis'] + ' - ' + item['keterangan'],
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+              item['uang'] +
+                  ' ' +
+                  item['tarif'] +
+                  ' - ' +
+                  'Sisa Seat : ' +
+                  item['sisa'],
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          trailing: Text(item['berangkat'] + ' - ' + item['pulang'],
+              textAlign: TextAlign.center),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
+            ? selectedItem['keterangan']
+            : "Produk belum Dipilih"),
+        validator: (value) {
+          if (value == null) {
+            return "Jadwal Produk masih kosong !";
+          }
+        },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+      ),
     );
   }
 

@@ -24,8 +24,7 @@ class _ModalStokBarangState extends State<ModalStokBarang> {
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Stok Baru Barang'),
+      decoration: const InputDecoration(labelText: 'Stok Baru Barang'),
     );
   }
 

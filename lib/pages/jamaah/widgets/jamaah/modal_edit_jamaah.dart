@@ -12,8 +12,11 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class ModalEditJamaah extends StatefulWidget {
+  final List<Map<String, dynamic>> listProvinsi;
+
   const ModalEditJamaah({
     Key key,
+    @required this.listProvinsi,
   }) : super(key: key);
 
   @override
@@ -87,60 +90,114 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
 
   @override
   void initState() {
-    getProvinsi();
+    // getProvinsi();
     super.initState();
   }
 
   Widget inputNIK() {
     return TextFormField(
-      initialValue: '32750119288821',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'NIK',
-          hintText: '32xxxxxxxxxxx'),
+          hintText: '32xxxxxxxxxxx',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: "32750119288821",
+      validator: (value) {
+        if (value.isEmpty) {
+          return "NIK masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputNama() {
     return TextFormField(
-      initialValue: 'Alfi Gunawan S.pd Lc,MA',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nama Lengkap'),
+          labelText: 'Nama Lengkap',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: "Alfi Gunawan S.pd Lc,MA",
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Nama masih kosong !";
+        }
+      },
     );
+    // return TextFormField(
+    //   initialValue: 'Alfi Gunawan S.pd Lc,MA',
+    //   style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+    //   decoration: const InputDecoration(
+    //       border: OutlineInputBorder(), labelText: 'Nama Lengkap'),
+    // );
   }
 
   Widget inputJenisKelamin() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Jenis Kelamin",
         mode: Mode.MENU,
         items: const ["Pria", "Wanita"],
-        onChanged: print,
-        selectedItem: "Pria",
+        // onChanged: (value) {
+        //   if (value == "Pria") {
+        //     jenisKelamin = 'P';
+        //     jk = value;
+        //   } else {
+        //     jenisKelamin = 'W';
+        //     jk = value;
+        //   }
+        // },
+        // selectedItem: jk ?? "Pilih Jenis Kelamin",
+        dropdownSearchDecoration: const InputDecoration(
+          border: InputBorder.none,
+          filled: true,
+          fillColor: Colors.white,
+        ),
+        validator: (value) {
+          if (value == "Pilih Jenis Kelamin") {
+            return "Jenis Kelamin masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputTempatLahir() {
     return TextFormField(
-      initialValue: 'SUBANG',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Tempat Lahir'),
+          labelText: 'Tempat Lahir',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      // onChanged: (value) {
+      //   tempatLahir = value;
+      // },
+      initialValue: "Subang",
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Tempat lahir masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputTglLahir() {
-    return TextField(
+    return TextFormField(
       controller: dateTgl,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Lahir', border: OutlineInputBorder()),
-      onChanged: (String value) {
-        tglEstimasi = value;
-      },
+          labelText: 'Tanggal Lahir', filled: true, fillColor: Colors.white),
+      // onChanged: (String value) {
+      //   tglLahir = value;
+      // },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -149,10 +206,13 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
-            dateTgl.text = formattedDate;
-          });
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          dateTgl.text = formattedDate;
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Tgl Lahir masih kosong !";
         }
       },
     );
@@ -160,20 +220,32 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
 
   Widget inputAlamat() {
     return TextFormField(
-      initialValue: 'Jl Rawa Aren, Kp.Baru, Bandung Barat',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Alamat'),
+          labelText: 'Alamat', filled: true, fillColor: Colors.white),
+      // onChanged: (value) {
+      //   alamat = value;
+      // },
+      initialValue: "Kp. Rawa Aren, Bekasi Timur",
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Alamat masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputProvinsi() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Provinsi",
-          items: listProvinsi,
+          items: widget.listProvinsi,
           onChanged: (value) {
             if (value != null) {
               namaProvinsi = value["name"];
@@ -189,18 +261,24 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                 title: Text(item['name'].toString()),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaProvinsi ?? "JAWA BARAT"),
+              Text(namaProvinsi ?? "Nama Provinsi belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Provinsi masih kosong !";
             }
-          }),
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, filled: true, fillColor: Colors.white)),
     );
   }
 
   Widget inputKota() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Kab / Kota",
@@ -220,18 +298,24 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                 title: Text(item['name'].toString()),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaKota ?? "KOTA SUBANG"),
+              Text(namaKota ?? "Nama Kota belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Kota masih kosong !";
             }
-          }),
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, fillColor: Colors.white, filled: true)),
     );
   }
 
   Widget inputKec() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Kecamatan",
@@ -251,18 +335,24 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                 title: Text(item['name'].toString()),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaKec ?? "SUBANG BARAT"),
+              Text(namaKec ?? "Nama Kecamatan belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Kecamatan masih kosong !";
             }
-          }),
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, filled: true, fillColor: Colors.white)),
     );
   }
 
   Widget inputKel() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Kelurahan",
@@ -281,60 +371,101 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                 title: Text(item['name'].toString()),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaKel ?? "SEJAHTERA"),
+              Text(namaKel ?? "Nama Kelurahan belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Kelurahan masih kosong !";
             }
-          }),
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, filled: true, fillColor: Colors.white)),
     );
   }
 
   Widget inputKodePos() {
     return TextFormField(
-      initialValue: '17139',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Kode Pos'),
+          labelText: 'Kode Pos',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      // onChanged: (value) {
+      //   kodePos = value;
+      // },
+      initialValue: "17139",
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Kode Pos masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputNamaAyah() {
     return TextFormField(
-      initialValue: 'Kohar',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nama Ayah'),
+          labelText: 'Nama Ayah',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      // onChanged: (value) {
+      //   namaAyah = value;
+      // },
+      initialValue: "Kohir",
     );
   }
 
   Widget inputTelp() {
     return TextFormField(
-      initialValue: '08828817388127',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Telepon',
-          hintText: "08xxxxxxxxxxx"),
+          hintText: "08xxxxxxxxxxx",
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      // onChanged: (value) {
+      //   noTelp = value;
+      // },
+      initialValue: "08828817388127",
     );
   }
 
   Widget inputMenikah() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Status Menikah",
         mode: Mode.MENU,
         items: const ["Single", "Menikah", "Duda / Janda"],
-        onChanged: print,
-        selectedItem: "Menikah",
+        // onChanged: (value) {
+        //   menikah = value;
+        // },
+        selectedItem: "Pilih Status Menikah",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Status Menikah") {
+            return "Status menikah masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputPendidikan() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Pendidikan Terakhir",
         mode: Mode.MENU,
@@ -350,15 +481,28 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           "S2 / Sederajat",
           "S3 / Sederajat"
         ],
-        onChanged: print,
-        selectedItem: "SMA/MA Sederajat",
+        // onChanged: (value) {
+        //   pendidikan = value;
+        // },
+        selectedItem: "Pilih Pendidikan Terakhir",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Pendidikan") {
+            return "Status pendidikan masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputPekerjaan() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Pekerjaan",
         mode: Mode.MENU,
@@ -373,40 +517,74 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           "Tidak Bekerja",
           "Lainnya",
         ],
-        onChanged: print,
-        selectedItem: "Wirausaha",
+        // onChanged: (value) {
+        //   pekerjaan = value;
+        // },
+        selectedItem: "Pilih Pekerjaan",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Pekerjaan") {
+            return "Pekerjaan masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputPaspor() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Paspor",
         mode: Mode.MENU,
         items: const ["Ada", "Belum Ada"],
-        onChanged: print,
-        selectedItem: "Ada",
+        // onChanged: (value) {
+        //   if (value == "Ada") {
+        //     paspor = 'a';
+        //     cekpaspor = 'Ada';
+        //   } else {
+        //     paspor = 'n';
+        //     cekpaspor = 'Belum Ada';
+        //   }
+        // },
+        selectedItem: "Pilih Status Paspor",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Status Paspor") {
+            return "Status paspor masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputNoPaspor() {
     return TextFormField(
-      initialValue: '3777400000131',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nomor Paspor'),
+          labelText: 'Nomor Paspor',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: "3777400000131",
     );
   }
 
   Widget inputPasporKeluar() {
     return TextFormField(
-      initialValue: 'BANDUNG',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Dikeluarkan di'),
+          labelText: 'Dikeluarkan di',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: "Bandung",
     );
   }
 
@@ -414,7 +592,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     return TextField(
       controller: dateKeluar,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Dikeluarkan', border: OutlineInputBorder()),
+          labelText: 'Tanggal Dikeluarkan',
+          filled: true,
+          fillColor: Colors.white),
       onChanged: (String value) {
         tglKeluar = value;
       },
@@ -427,9 +607,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
         );
         if (pickedDate != null) {
           String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
-            dateKeluar.text = formattedDate;
-          });
+          dateKeluar.text = formattedDate;
         }
       },
     );
@@ -439,7 +617,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     return TextField(
       controller: dateExp,
       decoration: const InputDecoration(
-          labelText: 'Berlaku Hingga', border: OutlineInputBorder()),
+        labelText: 'Berlaku Hingga',
+        filled: true,
+        fillColor: Colors.white,
+      ),
       onChanged: (String value) {
         tglExpire = value;
       },
@@ -452,9 +633,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
         );
         if (pickedDate != null) {
           String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
-            dateExp.text = formattedDate;
-          });
+          dateExp.text = formattedDate;
         }
       },
     );

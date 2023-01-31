@@ -33,7 +33,11 @@ class _DetailModalUbahHandlingState extends State<DetailModalUbahHandling> {
   String kantor;
 
   Widget inputKantor() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Dari Kantor",
@@ -55,49 +59,57 @@ class _DetailModalUbahHandlingState extends State<DetailModalUbahHandling> {
           });
         },
         selectedItem: kantor ?? "Pilih Kantor",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
 
   Widget inputBarang() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Pilih Barang",
-          items: listBarang,
-          onChanged: (value) {
-            setState(() {
-              kodeBarang = value['id'];
-              namaBarang = value['nama'];
-            });
-          },
-          showClearButton: true,
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                  item['nama'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                    'Harga Beli : ' +
-                        item['harga_beli'] +
-                        ' - ' +
-                        'Harga Jual : ' +
-                        item['harga_jual'],
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(
-                    'Stok : ' + item['stok'] + ' - ' + item['satuan'],
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['nama']
-              : "Produk belum Dipilih"),
-          validator: (value) {
-            if (value == null) {
-              return "Produk masih kosong !";
-            }
-          }),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Pilih Barang",
+        items: listBarang,
+        onChanged: (value) {
+          setState(() {
+            kodeBarang = value['id'];
+            namaBarang = value['nama'];
+          });
+        },
+        showClearButton: true,
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(
+            item['nama'],
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+              'Harga Beli : ' +
+                  item['harga_beli'] +
+                  ' - ' +
+                  'Harga Jual : ' +
+                  item['harga_jual'],
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          trailing: Text('Stok : ' + item['stok'] + ' - ' + item['satuan'],
+              textAlign: TextAlign.center),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
+            ? selectedItem['nama']
+            : "Produk belum Dipilih"),
+        validator: (value) {
+          if (value == null) {
+            return "Produk masih kosong !";
+          }
+        },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+      ),
     );
   }
 
@@ -108,9 +120,10 @@ class _DetailModalUbahHandlingState extends State<DetailModalUbahHandling> {
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'Jumlah',
-      ),
+          labelText: 'Jumlah',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         setState(() {
           jumlah = value;

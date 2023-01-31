@@ -25,8 +25,10 @@ class _ModalEditSatuanState extends State<ModalEditSatuan> {
       initialValue: widget.satuan,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        border: OutlineInputBorder(),
         labelText: 'Satuan',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
       ),
     );
   }

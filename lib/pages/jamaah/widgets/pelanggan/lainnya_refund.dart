@@ -15,9 +15,11 @@ class LainnyaRefund extends StatelessWidget {
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Kurs Saat Ini',
-          hintText: '15,653'),
+          hintText: '15,653',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -31,7 +33,10 @@ class LainnyaRefund extends StatelessWidget {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       initialValue: '0',
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Pengembalian'),
+          labelText: 'Pengembalian',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 

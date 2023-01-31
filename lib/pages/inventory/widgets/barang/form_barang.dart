@@ -23,8 +23,11 @@ class _BarangFormState extends State<BarangForm> {
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Kode Barang'),
-      onChanged: (value) {},
+        labelText: 'Kode Barang',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
       initialValue: "Auto Generate",
     );
   }
@@ -33,20 +36,37 @@ class _BarangFormState extends State<BarangForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nama Barang'),
-      onChanged: (value) {},
+        labelText: 'Nama Barang',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+      // onChanged: (value) {
+
+      // },
     );
   }
 
   Widget inputSatuan() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Satuan",
         mode: Mode.MENU,
         items: const ["BOX", "BUAH", "LUSIN", "METER", "PAX", "PCS"],
         onChanged: print,
         selectedItem: "Pilih Satuan",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Jenis Kelamin") {
+            return "Jenis Kelamin masih kosong !";
+          }
+        },
       ),
     );
   }
@@ -57,19 +77,34 @@ class _BarangFormState extends State<BarangForm> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Stok Awal Barang'),
+        labelText: 'Stok Awal Barang',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
     );
   }
 
   Widget inputStatusBarang() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Status Barang",
         mode: Mode.MENU,
         items: const ["Aktif", "Nonaktif"],
         onChanged: print,
         selectedItem: "Pilih Status Barang",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Status Barang") {
+            return "Status Barang masih kosong !";
+          }
+        },
       ),
     );
   }
@@ -81,7 +116,11 @@ class _BarangFormState extends State<BarangForm> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Harga Beli'),
+        labelText: 'Harga Beli',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
     );
   }
 
@@ -92,7 +131,11 @@ class _BarangFormState extends State<BarangForm> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Harga Jual'),
+        labelText: 'Harga Jual',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
     );
   }
 
@@ -100,7 +143,11 @@ class _BarangFormState extends State<BarangForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Keterangan'),
+        labelText: 'Keterangan',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
     );
   }
 

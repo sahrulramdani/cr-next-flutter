@@ -27,24 +27,21 @@ class _DetailModalKonfirmPasporState extends State<DetailModalKonfirmPaspor> {
   Widget inputNamaPaspor() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nama Paspor'),
+      decoration: const InputDecoration(labelText: 'Nama Paspor'),
     );
   }
 
   Widget inputNomorPaspor() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nomor Paspor'),
+      decoration: const InputDecoration(labelText: 'Nomor Paspor'),
     );
   }
 
   Widget inputLokasiPaspor() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Lokasi Pengeluaran Paspor'),
+      decoration: const InputDecoration(labelText: 'Lokasi Pengeluaran Paspor'),
     );
   }
 
@@ -52,7 +49,8 @@ class _DetailModalKonfirmPasporState extends State<DetailModalKonfirmPaspor> {
     return TextField(
       controller: dateKeluar,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Pengeluaran', border: OutlineInputBorder()),
+        labelText: 'Tanggal Pengeluaran',
+      ),
       onChanged: (String value) {
         tglKeluar = value;
       },
@@ -77,7 +75,8 @@ class _DetailModalKonfirmPasporState extends State<DetailModalKonfirmPaspor> {
     return TextField(
       controller: dateExp,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Expired', border: OutlineInputBorder()),
+        labelText: 'Tanggal Expired',
+      ),
       onChanged: (String value) {
         tglExp = value;
       },

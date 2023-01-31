@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, must_be_immutable
+// ignore_for_file: deprecated_member_use, must_be_immutable, missing_return
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
@@ -67,23 +67,38 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   Widget inputPaket() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Paket",
         mode: Mode.MENU,
-        items: const ["Haji", "Umroh", "Domestik", "Internasional"],
+        items: const ["Haji", "Urmroh", "Domestik", "Internasional"],
         onChanged: (value) {
           paket = value;
         },
-        selectedItem: paket ?? dataJadwal[0]['tipe'].toString(),
+        selectedItem: "Pilih Paket",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+        validator: (value) {
+          if (value == "Pilih Paket") {
+            return "Paket masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputJenisPaket() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Jenis Paket",
         mode: Mode.MENU,
@@ -91,21 +106,34 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         onChanged: (value) {
           jenis = value;
         },
-        selectedItem: jenis ?? dataJadwal[0]['jenisna'].toString(),
+        selectedItem: "Pilih Jenis Paket",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+        validator: (value) {
+          if (value == "Pilih Jenis Paket") {
+            return "Jenis Paket masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputTujuan() {
     return TextFormField(
-      initialValue: tujuan ?? dataJadwal[0]['tujuan'].toString(),
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Tujuan Paket',
-          hintText: 'tujuan'),
+          hintText: 'tujuan',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         tujuan = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Tujuan masih kosong !";
+        }
       },
     );
   }
@@ -114,7 +142,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     return TextField(
       controller: dateBerangkat,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Berangkat', border: OutlineInputBorder()),
+          labelText: 'Tanggal Berangkat',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (String value) {
         tglBerangkat = value;
       },
@@ -126,10 +157,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
-            dateBerangkat.text = formattedDate;
-          });
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          dateBerangkat.text = formattedDate;
         }
       },
     );
@@ -137,11 +166,14 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
 
   Widget inputTanggalPulang() {
     return TextField(
-      controller: dateBerangkat,
+      controller: datePulang,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Pulang', border: OutlineInputBorder()),
+          labelText: 'Tanggal Pulang',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (String value) {
-        tglBerangkat = value;
+        tglPulang = value;
       },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
@@ -151,10 +183,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          setState(() {
-            dateBerangkat.text = formattedDate;
-          });
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          datePulang.text = formattedDate;
         }
       },
     );
@@ -162,66 +192,111 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
 
   Widget inputJumlahHari() {
     return TextFormField(
-      initialValue: jumlahHari ?? dataJadwal[0]['jumlah_hari'].toString(),
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Jumlah Hari'),
+          labelText: 'Jumlah Hari',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         jumlahHari = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Jumlah Hari masih kosong !";
+        }
       },
     );
   }
 
   Widget inputPesawat() {
     return TextFormField(
-      initialValue: pesawat ?? dataJadwal[0]['pesawat'].toString(),
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Pesawat'),
+          labelText: 'Pesawat',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         pesawat = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Pesawat masih kosong !";
+        }
       },
     );
   }
 
   Widget inputRute() {
     return TextFormField(
-      initialValue: rute ?? dataJadwal[0]['rute_penerbangan'].toString(),
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Rute Pesawat'),
+          labelText: 'Rute Pesawat',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         rute = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Rute masih kosong !";
+        }
       },
     );
   }
 
   Widget inputTarif() {
     return TextFormField(
-      initialValue: tarif ?? dataJadwal[0]['biaya_rp'].toString(),
       textAlign: TextAlign.right,
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Tarif'),
+          labelText: 'Tarif',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      onChanged: (value) {
+        tarif = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Tarif masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputJumlahSeat() {
     return TextFormField(
-      initialValue: jumlahSeat ?? dataJadwal[0]['jumlah_seat'].toString(),
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Jumlah Seat'),
+          labelText: 'Jumlah Seat',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      onChanged: (value) {
+        jumlahSeat = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Jumlah Seat masih kosong !";
+        }
+      },
     );
   }
 
   Widget inputMataUang() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Mata Uang",
         mode: Mode.MENU,
@@ -229,17 +304,26 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         onChanged: (value) {
           mataUang = value;
         },
-        selectedItem: mataUang ?? dataJadwal[0]['mata_uang'].toString(),
+        selectedItem: "Pilih Mata Uang",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (value == "Pilih Mata Uang") {
+            return "Mata Uang masih kosong !";
+          }
+        },
       ),
     );
   }
 
   Widget inputKeterangan() {
     return TextFormField(
-      initialValue: keterangan ?? dataJadwal[0]['keterangan'].toString(),
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Keterangan'),
+          labelText: 'Keterangan',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         keterangan = value;
       },

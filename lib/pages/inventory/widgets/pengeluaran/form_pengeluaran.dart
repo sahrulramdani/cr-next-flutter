@@ -35,16 +35,18 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
       readOnly: true,
       initialValue: "PB120223002",
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Faktur',
-          hintText: 'Auto Generate'),
+      decoration:
+          const InputDecoration(labelText: 'Faktur', hintText: 'Auto Generate'),
     );
   }
 
   Widget inputBarang() {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Pilih Barang",
@@ -78,7 +80,9 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
             if (value == null) {
               return "Produk masih kosong !";
             }
-          }),
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
     );
   }
 
@@ -87,10 +91,8 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
       readOnly: true,
       initialValue: satuan ?? 'Satuan',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Satuan',
-          hintText: 'Auto Generate'),
+      decoration:
+          const InputDecoration(labelText: 'Satuan', hintText: 'Auto Generate'),
     );
   }
 
@@ -102,8 +104,7 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
       controller: harga,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Harga Beli'),
+      decoration: const InputDecoration(labelText: 'Harga Beli'),
     );
   }
 
@@ -113,8 +114,7 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
       controller: qty,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Quantity'),
+      decoration: const InputDecoration(labelText: 'Quantity'),
     );
   }
 
@@ -125,8 +125,7 @@ class _PengeluaranFormState extends State<PengeluaranForm> {
       },
       initialValue: keterangan ?? '',
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Keterangan'),
+      decoration: const InputDecoration(labelText: 'Keterangan'),
     );
   }
 

@@ -10,7 +10,11 @@ class LainnyaPotongan extends StatelessWidget {
   const LainnyaPotongan({Key key}) : super(key: key);
 
   Widget inputTipePotongan() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Tipe Potongan",
@@ -21,6 +25,8 @@ class LainnyaPotongan extends StatelessWidget {
         ],
         onChanged: (value) {},
         selectedItem: "Pilih Refrensi",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -31,9 +37,11 @@ class LainnyaPotongan extends StatelessWidget {
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Kurs Saat Ini',
-          hintText: '15,653'),
+          hintText: '15,653',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -45,7 +53,10 @@ class LainnyaPotongan extends StatelessWidget {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Nominal'),
+          labelText: 'Nominal',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -53,7 +64,10 @@ class LainnyaPotongan extends StatelessWidget {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Keterangan Potongan'),
+          labelText: 'Keterangan Potongan',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 

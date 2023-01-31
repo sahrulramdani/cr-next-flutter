@@ -10,7 +10,11 @@ class LainnyaFasilitas extends StatelessWidget {
   const LainnyaFasilitas({Key key}) : super(key: key);
 
   Widget inputPaspor() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Paspor",
@@ -25,12 +29,18 @@ class LainnyaFasilitas extends StatelessWidget {
           "Proses Sendiri / Pending Paspor",
         ],
         selectedItem: "Pembuatan Baru / Kolektif Kantor",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
 
   Widget inputVaksin() {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
         label: "Vaksin",
@@ -41,6 +51,8 @@ class LainnyaFasilitas extends StatelessWidget {
           "Proses Sendiri",
         ],
         selectedItem: "Kolektif Kantor",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -54,7 +66,10 @@ class LainnyaFasilitas extends StatelessWidget {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       initialValue: '2,000,000',
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Biaya'),
+          labelText: 'Biaya',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
@@ -67,7 +82,10 @@ class LainnyaFasilitas extends StatelessWidget {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       initialValue: '15,600',
       decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Kurs'),
+          labelText: 'Kurs',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
     );
   }
 
