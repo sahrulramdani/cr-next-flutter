@@ -60,3 +60,13 @@ fncGetTanggal(tgl) {
 
   return '$tanggal $namaBulan $tahun';
 }
+
+fncTanggal(String tgl) {
+  String tanggalAll = tgl.replaceAll('-', '');
+  String tanggal = tanggalAll.substring(0, 2);
+  String bulan = tanggalAll.substring(2, 4);
+  String tahun = tanggalAll.substring(4, 8);
+  String date = "$tahun-$bulan-$tanggal";
+
+  return date;
+}

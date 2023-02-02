@@ -1,6 +1,7 @@
 // ignore_for_file: missing_return, deprecated_member_use
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/public_variable.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_upload_foto_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_upload_ktp_agency.dart';
 import 'package:http/http.dart' as http;
@@ -280,11 +281,11 @@ class _AgencyFormState extends State<AgencyForm> {
         DateTime pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           dateLahir.text = formattedDate;
         }
       },
@@ -541,7 +542,7 @@ class _AgencyFormState extends State<AgencyForm> {
           ),
           subtitle: Text(item['NOXX_IDNT'].toString()),
           trailing: Text(
-              DateFormat("yyyy-MM-dd")
+              DateFormat("dd-MM-yyyy")
                   .format(DateTime.parse(item['TGLX_LHIR'].toString())),
               textAlign: TextAlign.center),
         ),
@@ -766,11 +767,11 @@ class _AgencyFormState extends State<AgencyForm> {
         DateTime pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           dateKeluar.text = formattedDate;
         }
       },
@@ -787,11 +788,11 @@ class _AgencyFormState extends State<AgencyForm> {
         DateTime pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           dateExp.text = formattedDate;
         }
       },
@@ -826,7 +827,7 @@ class _AgencyFormState extends State<AgencyForm> {
       namaAgency,
       jenisKelamin,
       tempatLahir,
-      dateLahir.text,
+      fncTanggal(dateLahir.text),
       alamat,
       idKantor,
       namaProvinsi,
@@ -845,8 +846,8 @@ class _AgencyFormState extends State<AgencyForm> {
       fotoKtpAgencyBase,
       noPaspor,
       dikeluarkanDi,
-      dateKeluar.text != '' ? dateKeluar.text : null,
-      dateExp.text != '' ? dateExp.text : null,
+      dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
+      dateExp.text != '' ? fncTanggal(dateExp.text) : null,
     ).then(
       (value) {
         if (value.status == true) {
@@ -918,11 +919,11 @@ class _AgencyFormState extends State<AgencyForm> {
               const Expanded(child: SizedBox(width: 20)),
               ElevatedButton.icon(
                 onPressed: () {
-                  // if (formKey.currentState.validate()) {
-                  fncSaveData();
-                  // } else {
-                  //   return null;
-                  // }
+                  if (formKey.currentState.validate()) {
+                    fncSaveData();
+                  } else {
+                    return null;
+                  }
                 },
                 icon: const Icon(Icons.save),
                 label: const Text(
@@ -939,6 +940,16 @@ class _AgencyFormState extends State<AgencyForm> {
               const SizedBox(width: 10),
               ElevatedButton.icon(
                 onPressed: () {
+                  setState(() {
+                    fotoAgency = '';
+                    fotoAgencyBase = '';
+                    fotoAgencyByte = null;
+
+                    fotoKtpAgency = '';
+                    fotoKtpAgencyBase = '';
+                    fotoKtpAgencyByte = null;
+                  });
+
                   menuController.changeActiveitemTo('Agency');
                   navigationController.navigateTo('/mrkt/agency');
                 },

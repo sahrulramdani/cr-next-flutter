@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_edit_agency.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_hapus_agency.dart';
-import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_edit_agency.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_detail_agency.dart';
 
 /// Example without a datasource
 /// BUTTON HAPUS
@@ -29,9 +30,9 @@ class ButtonHapus extends StatelessWidget {
 }
 
 /// BUTTON DETAIL
-class ButtonEdit extends StatelessWidget {
+class ButtonDetail extends StatelessWidget {
   final String idAgen;
-  const ButtonEdit({Key key, @required this.idAgen}) : super(key: key);
+  const ButtonDetail({Key key, @required this.idAgen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +44,30 @@ class ButtonEdit extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (context) => ModalEditAgency(
+            builder: (context) => ModalDetailAgency(
                   idAgency: idAgen,
                 ));
+      },
+    );
+  }
+}
+
+/// BUTTON DETAIL
+class ButtonEdit extends StatelessWidget {
+  final String idAgen;
+  const ButtonEdit({Key key, @required this.idAgen}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.edit_outlined,
+        color: myBlue,
+      ),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => ModalEditAgency(idAgency: idAgen));
       },
     );
   }
@@ -62,35 +84,35 @@ class MyData extends DataTableSource {
       DataCell(Text(
         (index + 1).toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['KDXX_MRKT'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['NAMA_LGKP'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['FEE'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['FIRST_LVL'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
@@ -99,28 +121,28 @@ class MyData extends DataTableSource {
             .format(DateTime.parse(dataAgency[index]['TGLX_GBNG'])),
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['PERD_JMAH'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['TOTL_JMAH'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
       DataCell(Text(
         dataAgency[index]['TOTL_POIN'].toString(),
         style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 'n'
+            color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
                 : Colors.black),
       )),
@@ -128,6 +150,10 @@ class MyData extends DataTableSource {
         child: Row(
           children: [
             ButtonEdit(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
+            const SizedBox(
+              width: 5,
+            ),
+            ButtonDetail(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
             const SizedBox(
               width: 5,
             ),
@@ -169,6 +195,7 @@ class _TableAgencyState extends State<TableAgency> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 5.0,
           source: myTable,
           columns: [
             DataColumn(

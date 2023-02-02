@@ -1,6 +1,6 @@
 // ignore_for_file: missing_return, deprecated_member_use
 import 'package:flutter_web_course/constants/dummy_karyawan.dart';
-import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_dokumen.dart';
+import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -922,10 +922,10 @@ class _KaryawanFormState extends State<KaryawanForm> {
                                     padding: const EdgeInsets.only(top: 10),
                                     child: ElevatedButton.icon(
                                       onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                const ModalUploadDokumen());
+                                        // showDialog(
+                                        //     context: context,
+                                        //     builder: (context) =>
+                                        //         const ModalUploadDokumen());
                                       },
                                       icon: const Icon(Icons.save),
                                       label: const Text(

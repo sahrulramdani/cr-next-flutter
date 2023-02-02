@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy_marketing.dart';
 
 class DetailCompAgency extends StatefulWidget {
   final String idAgency;
@@ -15,33 +17,35 @@ class DetailCompAgency extends StatefulWidget {
 }
 
 class _DetailCompAgencyState extends State<DetailCompAgency> {
-  // void getDetail() async {
-  //   String id = widget.idAgency;
-  //   var response = await http
-  //       .get(Uri.parse("$urlAddress/marketing/agency/detail/$id"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataAgen =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     detailAgency = dataAgen;
-  //   });
-  // }
+  List<Map<String, dynamic>> detailAgency = [];
+
+  void getDetail() async {
+    String id = widget.idAgency;
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/agency/detail/$id"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataAgen =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      detailAgency = dataAgen;
+    });
+  }
 
   @override
   void initState() {
-    // getDetail();
+    getDetail();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> detailAgency = dummyMarketingTable
-        .where(((element) => element['id_marketing']
-            .toString()
-            .toUpperCase()
-            .contains(widget.idAgency.toUpperCase())))
-        .toList();
+    // List<Map<String, dynamic>> detailAgency = dummyMarketingTable
+    //     .where(((element) => element['id_marketing']
+    //         .toString()
+    //         .toUpperCase()
+    //         .contains(widget.idAgency.toUpperCase())))
+    //     .toList();
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -55,10 +59,11 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                     Container(
                       width: 180,
                       height: 180,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            image: AssetImage('assets/images/profile.jpg'),
+                            image: NetworkImage(
+                                '$urlAddress/uploads/' + data['FOTO_AGEN']),
                             fit: BoxFit.fill),
                       ),
                     ),
@@ -73,38 +78,41 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                       DataRow(cells: [
                         const DataCell(Text('ID User')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['id_marketing'])),
+                        DataCell(Text(widget.idAgency)),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Nama Lengkap')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['nama_lengkap'])),
+                        DataCell(Text(data['NAMA_LGKP'] ?? '')),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Nomor Identitas')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['identitas'].toString())),
+                        DataCell(Text(data['NOXX_IDNT'].toString())),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Jenis Kelamin')),
                         const DataCell(Text(':')),
-                        DataCell(Text(
-                            data['jenis_kelamin'] == 'P' ? 'Pria' : 'Wanita')),
+                        DataCell(
+                            Text(data['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita')),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Alamat')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['mr_alamat'])),
+                        DataCell(Text(data['ALAMAT'])),
                       ]),
-                      const DataRow(cells: [
-                        DataCell(Text('Tempat, Tanggal Lahir')),
-                        DataCell(Text(':')),
-                        DataCell(Text('SUBANG, 20 Januari 1972')),
+                      DataRow(cells: [
+                        const DataCell(Text('Tempat, Tanggal Lahir')),
+                        const DataCell(Text(':')),
+                        DataCell(Text(data['TMPT_LHIR'] +
+                            ', ' +
+                            fncGetTanggal(DateFormat("dd-MM-yyyy")
+                                .format(DateTime.parse(data['TGLX_LHIR']))))),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Periode Jamaah')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['periode_pelanggan'].toString())),
+                        DataCell(Text(data['PERD_JMAH'].toString())),
                       ]),
                     ])
                   ],
@@ -121,59 +129,58 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                       DataRow(cells: [
                         const DataCell(Text('Kelurahan')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['kelurahan'])),
+                        DataCell(Text(data['KDXX_KELX'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Kecamatan')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['kecamatan'])),
+                        DataCell(Text(data['KDXX_KECX'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Kab / Kota')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['kabupaten'])),
+                        DataCell(Text(data['KDXX_KOTA'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Provinsi')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['provinsi'])),
+                        DataCell(Text(data['KDXX_PROV'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('First Level')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['level'])),
+                        DataCell(Text(data['FIRST_LVL'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Leader')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['nama_leader'] ?? '-')),
+                        DataCell(Text(data['UPLINE'] ?? '-')),
                       ]),
                       DataRow(cells: [
-                        const DataCell(Text('Nama Lengkap')),
+                        const DataCell(Text('Total Jamaah')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['nama_lengkap'])),
+                        DataCell(Text(data['TOTL_JMAH'].toString())),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Tanggal Bergabung')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['tanggal_gabung'].toString())),
+                        DataCell(Text(DateFormat("dd-MM-yyyy")
+                            .format(DateTime.parse(data['TGLX_GBNG'])))),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Status')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['status_aktif'] == 'a'
-                            ? 'Aktif'
-                            : 'Tidak Aktif')),
+                        DataCell(Text(data['STATUS_AGEN'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Kantor')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['nama_kantor'])),
+                        DataCell(Text(data['NAMA_KNTR'])),
                       ]),
                       DataRow(cells: [
                         const DataCell(Text('Fee Level')),
                         const DataCell(Text(':')),
-                        DataCell(Text(data['mk'])),
+                        DataCell(Text(data['FEE'])),
                       ]),
                     ])
                   ],

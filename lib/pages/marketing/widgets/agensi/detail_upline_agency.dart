@@ -1,8 +1,11 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy_marketing.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'dart:convert';
 
 class DetailUplineAgency extends StatefulWidget {
   String idAgency;
@@ -13,136 +16,145 @@ class DetailUplineAgency extends StatefulWidget {
 }
 
 class _DetailUplineAgencyState extends State<DetailUplineAgency> {
+  List<Map<String, dynamic>> listDownline = [];
+
+  void getDetailDownline() async {
+    String id = widget.idAgency;
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/agency/detail/downline/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listDownline = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    getDetailDownline();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> listDownline = dummyMarketingTable
-        .where((element) =>
-            element['id_leader'].toString().contains(widget.idAgency))
-        .toList();
     int x = 1;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: [
-          DataTable(
-              columns: [
-                DataColumn(
-                    label: Text('No.',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('ID Agency',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Nama',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Level',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Periode',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Total',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Poin',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Status',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('HP',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-                DataColumn(
-                    label: Text('Kantor',
-                        style: TextStyle(
-                            color: myGrey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gilroy',
-                            fontSize: 16))),
-              ],
-              rows: listDownline.map((data) {
-                return DataRow(cells: [
-                  DataCell(Text((x++).toString())),
-                  DataCell(Text(data['id_marketing'])),
-                  DataCell(Text(data['nama_lengkap'])),
-                  DataCell(Text(data['level'])),
-                  DataCell(Text(data['periode_pelanggan'].toString())),
-                  DataCell(Text(data['total_pelanggan'].toString())),
-                  DataCell(Text(data['poin'].toString())),
-                  DataCell(Text(
-                      data['status_aktif'] == 'a' ? 'Aktif' : 'Non Aktif')),
-                  DataCell(Text(data['telepon'])),
-                  DataCell(Text(data['nama_kantor'])),
-                ]);
-              }).toList()),
-          // rows: const [
-          //   DataRow(cells: [
-          //     DataCell(Text('1')),
-          //     DataCell(Text('AGMR00001')),
-          //     DataCell(Text('Muhammad Ibrahim')),
-          //     DataCell(Text('Raudhah')),
-          //     DataCell(Text('2')),
-          //     DataCell(Text('8')),
-          //     DataCell(Text('0')),
-          //     DataCell(Text('Aktif')),
-          //     DataCell(Text('086637288392')),
-          //     DataCell(Text('Pusat')),
-          //   ]),
-          //   DataRow(cells: [
-          //     DataCell(Text('2')),
-          //     DataCell(Text('AGMR00005')),
-          //     DataCell(Text('Soleh Hidayat')),
-          //     DataCell(Text('Raudhah')),
-          //     DataCell(Text('1')),
-          //     DataCell(Text('3')),
-          //     DataCell(Text('0')),
-          //     DataCell(Text('Aktif')),
-          //     DataCell(Text('087736471923')),
-          //     DataCell(Text('Pusat')),
-          //   ])
-          // ],
-          // )
-        ]),
-      ),
+          padding: const EdgeInsets.all(10),
+          child: listDownline.isEmpty
+              ? SizedBox(
+                  height: 400,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      const Image(
+                        width: 200,
+                        fit: BoxFit.cover,
+                        image: AssetImage('images/hero-alert-fail.png'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text('Agensi Belum Memiliki Downline :(')
+                    ],
+                  ),
+                )
+              : Column(children: [
+                  DataTable(
+                      columns: [
+                        DataColumn(
+                            label: Text('No.',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('ID Agency',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Nama',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Level',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Periode',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Total',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Poin',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Status',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('HP',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                        DataColumn(
+                            label: Text('Kantor',
+                                style: TextStyle(
+                                    color: myGrey,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gilroy',
+                                    fontSize: 16))),
+                      ],
+                      rows: listDownline.map((data) {
+                        return DataRow(cells: [
+                          DataCell(Text((x++).toString())),
+                          DataCell(Text(data['KDXX_MRKT'])),
+                          DataCell(Text(data['NAMA_LGKP'])),
+                          DataCell(Text(data['FEE'])),
+                          DataCell(Text(data['PERD_JMAH'].toString())),
+                          DataCell(Text(data['TOTL_JMAH'].toString())),
+                          DataCell(Text(data['TOTL_POIN'].toString())),
+                          DataCell(Text(
+                              data['STAS_AGEN'] == 1 ? 'Aktif' : 'Non Aktif')),
+                          DataCell(Text(data['NOXX_TELP'])),
+                          DataCell(Text(data['NAMA_KNTR'])),
+                        ]);
+                      }).toList()),
+                ])),
     );
   }
 }

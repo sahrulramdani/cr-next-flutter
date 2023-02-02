@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:flutter_web_course/constants/dummy_jamaah.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/form_jamaah.dart';
@@ -11,9 +10,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_web_course/constants/style.dart';
-// import 'package:flutter_web_course/pages/marketing/widgets/table_agency.dart';
-// import 'package:flutter_web_course/pages/marketing/widgets/form_agency.dart';
-// import 'package:flutter_web_course/pages/marketing/widgets/print_agency.dart';
 
 class JamaahDataPage extends StatefulWidget {
   const JamaahDataPage({Key key}) : super(key: key);
@@ -23,69 +19,24 @@ class JamaahDataPage extends StatefulWidget {
 }
 
 class _JamaahDataPageState extends State<JamaahDataPage> {
-  // dynamic namaAgen;
-  // dynamic namaKantor;
-  // dynamic namaLeader;
-  // dynamic feeLevel;
-
   bool enableFormL = false;
-  List<Map<String, dynamic>> listProvinsi = [];
-  List<Map<String, dynamic>> listJamaah = dummyJamaahTable;
-  // List<Map<String, dynamic>> listCalon = [];
-  // List<Map<String, dynamic>> listFee = [];
-  // List<Map<String, dynamic>> listLokasi = [];
+  List<Map<String, dynamic>> listJamaah = [];
+
   // -------------------------------------------------------------------
   // ---------------------------- GET DATA -----------------------------
   // -------------------------------------------------------------------
-  void getProvinsi() async {
-    var response = await http.get(Uri.parse(
-        "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"));
+  void getJamaah() async {
+    var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
-      listProvinsi = dataStatus;
+      listJamaah = dataStatus;
     });
   }
 
-  // void getCalon() async {
-  //   var response = await http
-  //       .get(Uri.parse("$urlAddress/marketing/calon-agency"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataCalon =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listCalon = dataCalon;
-  //   });
-  // }
-
-  // void getFee() async {
-  //   var response =
-  //       await http.get(Uri.parse("$urlAddress/marketing/fee-level"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataFee =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listFee = dataFee;
-  //   });
-  // }
-
-  // void getLokasi() async {
-  //   var response =
-  //       await http.get(Uri.parse("$urlAddress/marketing/location"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataLokasi =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listLokasi = dataLokasi;
-  //   });
-  // }
-
   @override
   void initState() {
-    getProvinsi();
+    getJamaah();
     super.initState();
   }
 
@@ -277,9 +228,9 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                       ),
                     ],
                   ),
-                  child: JamaahForm(
-                    listProvinsi: listProvinsi,
-                  ))),
+                  child: const JamaahForm(
+                      // listProvinsi: listProvinsi,
+                      ))),
           Visibility(
               visible: !enableFormL,
               child: Container(

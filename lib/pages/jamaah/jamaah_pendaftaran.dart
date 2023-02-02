@@ -2,7 +2,7 @@
 
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
-import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_dokumen.dart';
+import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
@@ -777,10 +777,10 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                               const EdgeInsets.only(top: 10),
                                           child: ElevatedButton.icon(
                                             onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      const ModalUploadDokumen());
+                                              // showDialog(
+                                              //     context: context,
+                                              //     builder: (context) =>
+                                              //         const ModalUploadDokumen());
                                             },
                                             icon: const Icon(Icons.save),
                                             label: const Text(

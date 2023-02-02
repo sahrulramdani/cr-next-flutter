@@ -7,7 +7,7 @@ import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_edit_jamaah
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_hapus_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_jamaah.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class ButtonEdit extends StatelessWidget {
   const ButtonEdit({Key key}) : super(key: key);
@@ -87,13 +87,16 @@ class MyData extends DataTableSource {
   DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(dataJamaah[index]['identitas'])),
-      DataCell(Text(dataJamaah[index]['nama_lengkap'])),
-      DataCell(Text(dataJamaah[index]['nama_ayah'])),
-      DataCell(Text(dataJamaah[index]['jenis_kelamin'])),
-      DataCell(Text(dataJamaah[index]['lahir_indo'])),
-      DataCell(Text(dataJamaah[index]['alamat'])),
-      DataCell(Text(dataJamaah[index]['telepon'])),
+      DataCell(Text(dataJamaah[index]['NOXX_IDNT'].toString())),
+      DataCell(Text(dataJamaah[index]['NAMA_LGKP'])),
+      DataCell(Text(dataJamaah[index]['NAMA_AYAH'])),
+      DataCell(Text(dataJamaah[index]['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita')),
+      DataCell(Text(dataJamaah[index]['TMPT_LHIR'] +
+          ', ' +
+          DateFormat("dd-MM-yyyy")
+              .format(DateTime.parse(dataJamaah[index]['TGLX_LHIR'])))),
+      DataCell(Text(dataJamaah[index]['ALAMAT'])),
+      DataCell(Text(dataJamaah[index]['NOXX_TELP'].toString())),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -144,6 +147,7 @@ class _TableMasterJamaahState extends State<TableMasterJamaah> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 15.0,
           source: myTable,
           columns: [
             DataColumn(

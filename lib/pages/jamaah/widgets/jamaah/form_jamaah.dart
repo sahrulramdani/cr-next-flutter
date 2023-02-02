@@ -1,5 +1,10 @@
 // ignore_for_file: missing_return, deprecated_member_use
-import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_dokumen.dart';
+import 'package:flutter_web_course/comp/modal_save_fail.dart';
+import 'package:flutter_web_course/constants/dummy_data_bandara.dart';
+import 'package:flutter_web_course/constants/public_variable.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
+import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_ktp_jamaah.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
@@ -10,14 +15,15 @@ import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
+import '../../../../models/http_controller.dart';
 import 'dart:convert';
 
 class JamaahForm extends StatefulWidget {
-  final List<Map<String, dynamic>> listProvinsi;
+  // final List<Map<String, dynamic>> listProvinsi;
 
   const JamaahForm({
     Key key,
-    @required this.listProvinsi,
+    // @required this.listProvinsi,
   }) : super(key: key);
 
   @override
@@ -30,7 +36,6 @@ class _JamaahFormState extends State<JamaahForm> {
   String jenisKelamin;
   String jk;
   String tempatLahir;
-  String tglLahir;
   String alamat;
   String idProvinsi;
   String namaProvinsi;
@@ -43,24 +48,37 @@ class _JamaahFormState extends State<JamaahForm> {
   String kodePos;
   String namaAyah;
   String noTelp;
-  String menikah;
-  String pendidikan;
-  String pekerjaan;
+  String idMenikah;
+  String namaMenikah;
+  String idPendidikan;
+  String namaPendidikan;
+  String idPekerjaan;
+  String namaPekerjaan;
   String paspor;
   String cekpaspor;
   String noPaspor;
   String dikeluarkanDi;
 
-  String tglKeluar;
-  String tglExpire;
-
+  List<Map<String, dynamic>> listProvinsi = [];
   List<Map<String, dynamic>> listKota = [];
   List<Map<String, dynamic>> listKec = [];
   List<Map<String, dynamic>> listKel = [];
+  List<Map<String, dynamic>> listMenikah = [];
+  List<Map<String, dynamic>> listPendidikan = [];
+  List<Map<String, dynamic>> listPekerjaan = [];
 
   TextEditingController dateLahir = TextEditingController();
   TextEditingController dateKeluar = TextEditingController();
   TextEditingController dateExp = TextEditingController();
+
+  void getProvinsi() async {
+    var response = await http.get(Uri.parse(
+        "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listProvinsi = dataStatus;
+    setState(() {});
+  }
 
   getKota(id) async {
     var response = await http.get(Uri.parse(
@@ -93,6 +111,46 @@ class _JamaahFormState extends State<JamaahForm> {
     setState(() {
       listKel = dataStatus;
     });
+  }
+
+  getMenikah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listMenikah = dataStatus;
+    });
+  }
+
+  getPendidikan() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPendidikan = dataStatus;
+    });
+  }
+
+  getPekerjaan() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPekerjaan = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    getProvinsi();
+    getMenikah();
+    getPendidikan();
+    getPekerjaan();
+    super.initState();
   }
 
   Widget inputNIK() {
@@ -180,18 +238,15 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextFormField(
       controller: dateLahir,
       decoration: const InputDecoration(labelText: 'Tanggal Lahir'),
-      onChanged: (String value) {
-        tglLahir = value;
-      },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           dateLahir.text = formattedDate;
         }
       },
@@ -229,7 +284,7 @@ class _JamaahFormState extends State<JamaahForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Provinsi",
-          items: widget.listProvinsi,
+          items: listProvinsi,
           onChanged: (value) {
             if (value != null) {
               namaProvinsi = value["name"];
@@ -247,7 +302,7 @@ class _JamaahFormState extends State<JamaahForm> {
           dropdownBuilder: (context, selectedItem) =>
               Text(namaProvinsi ?? "Nama Provinsi belum Dipilih"),
           validator: (value) {
-            if (value == null) {
+            if (value == "Nama Provinsi belum Dipilih") {
               return "Provinsi masih kosong !";
             }
           },
@@ -284,7 +339,7 @@ class _JamaahFormState extends State<JamaahForm> {
           dropdownBuilder: (context, selectedItem) =>
               Text(namaKota ?? "Nama Kota belum Dipilih"),
           validator: (value) {
-            if (value == null) {
+            if (value == "Nama Kota belum Dipilih") {
               return "Kota masih kosong !";
             }
           },
@@ -321,7 +376,7 @@ class _JamaahFormState extends State<JamaahForm> {
           dropdownBuilder: (context, selectedItem) =>
               Text(namaKec ?? "Nama Kecamatan belum Dipilih"),
           validator: (value) {
-            if (value == null) {
+            if (value == "Nama Kecamatan belum Dipilih") {
               return "Kecamatan masih kosong !";
             }
           },
@@ -357,7 +412,7 @@ class _JamaahFormState extends State<JamaahForm> {
           dropdownBuilder: (context, selectedItem) =>
               Text(namaKel ?? "Nama Kelurahan belum Dipilih"),
           validator: (value) {
-            if (value == null) {
+            if (value == "Nama Kelurahan belum Dipilih") {
               return "Kelurahan masih kosong !";
             }
           },
@@ -413,20 +468,26 @@ class _JamaahFormState extends State<JamaahForm> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
         label: "Status Menikah",
-        mode: Mode.MENU,
-        items: const ["Single", "Menikah", "Duda / Janda"],
+        items: listMenikah,
         onChanged: (value) {
-          menikah = value;
+          namaMenikah = value['CODD_DESC'];
+          idMenikah = value['CODD_VALU'];
         },
-        selectedItem: "Pilih Status Menikah",
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaMenikah ?? "Status menikah belum Dipilih"),
         validator: (value) {
-          if (value == "Pilih Status Menikah") {
+          if (value == "Status menikah belum Dipilih") {
             return "Status menikah masih kosong !";
           }
         },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }
@@ -439,31 +500,26 @@ class _JamaahFormState extends State<JamaahForm> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-        label: "Pendidikan Terakhir",
-        mode: Mode.MENU,
-        items: const [
-          "TK / PAUD",
-          "SD/MI Sederajat",
-          "SMP/Mts Sederajat",
-          "SMA/MA Sederajat",
-          "D1 / Sederajat",
-          "D2 / Sederajat",
-          "D3 / Sederajat",
-          "D4/S1 Sederajat",
-          "S2 / Sederajat",
-          "S3 / Sederajat"
-        ],
+        mode: Mode.BOTTOM_SHEET,
+        label: "Pendidikan",
+        items: listPendidikan,
         onChanged: (value) {
-          pendidikan = value;
+          namaPendidikan = value['CODD_DESC'];
+          idPendidikan = value['CODD_VALU'];
         },
-        selectedItem: "Pilih Pendidikan Terakhir",
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaPendidikan ?? "Pendidikan terakhir Belum dipilih"),
         validator: (value) {
-          if (value == "Pilih Pendidikan") {
-            return "Status pendidikan masih kosong !";
+          if (value == "Pendidikan terakhir Belum dipilih") {
+            return "Pendidikan masih kosong !";
           }
         },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }
@@ -476,30 +532,26 @@ class _JamaahFormState extends State<JamaahForm> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
         label: "Pekerjaan",
-        mode: Mode.MENU,
-        items: const [
-          "PNS",
-          "Pegawai Swasta",
-          "TNI/POLRI",
-          "Petani",
-          "Nelayan",
-          "Wirausaha",
-          "Ibu Rumah Tangga",
-          "Tidak Bekerja",
-          "Lainnya",
-        ],
+        items: listPekerjaan,
         onChanged: (value) {
-          pekerjaan = value;
+          namaPekerjaan = value['CODD_DESC'];
+          idPekerjaan = value['CODD_VALU'];
         },
-        selectedItem: "Pilih Pekerjaan",
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaPekerjaan ?? "Pekerjaan Belum dipilih"),
         validator: (value) {
-          if (value == "Pilih Pekerjaan") {
+          if (value == "Pekerjaan Belum dipilih") {
             return "Pekerjaan masih kosong !";
           }
         },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }
@@ -540,6 +592,9 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(labelText: 'Nomor Paspor'),
+      onChanged: (value) {
+        noPaspor = value;
+      },
     );
   }
 
@@ -547,6 +602,9 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(labelText: 'Dikeluarkan di'),
+      onChanged: (value) {
+        dikeluarkanDi = value;
+      },
     );
   }
 
@@ -554,9 +612,6 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextField(
       controller: dateKeluar,
       decoration: const InputDecoration(labelText: 'Tanggal Dikeluarkan'),
-      onChanged: (String value) {
-        tglKeluar = value;
-      },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -587,9 +642,6 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextField(
       controller: dateExp,
       decoration: const InputDecoration(labelText: 'Berlaku Hingga'),
-      onChanged: (String value) {
-        tglExpire = value;
-      },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -605,12 +657,115 @@ class _JamaahFormState extends State<JamaahForm> {
     );
   }
 
-  fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+  Widget inputUploadFoto() {
+    return TextFormField(
+      initialValue: fotoJamaah != "" ? fotoJamaah : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload Foto',
+      ),
+    );
+  }
 
-    menuController.changeActiveitemTo('Data Jamaah');
-    navigationController.navigateTo('/jamaah/master');
+  Widget inputUploadKTP() {
+    return TextFormField(
+      initialValue: fotoKtpJamaah != "" ? fotoKtpJamaah : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload KTP',
+      ),
+    );
+  }
+
+  fncSaveData() {
+    // print(nik);
+    // print(namaJamaah);
+    // print(jenisKelamin);
+    // print(tempatLahir);
+    // print(fncTanggal(dateLahir.text));
+    // print(alamat);
+    // print(namaProvinsi);
+    // print(namaKota);
+    // print(namaKec);
+    // print(namaKel);
+    // print(kodePos);
+    // print(namaAyah);
+    // print(noTelp);
+    // print(namaMenikah);
+    // print(namaPendidikan);
+    // print(namaPekerjaan);
+    // print(fotoJamaah);
+    // print(fotoKtpAgencyBase);
+    // print(noPaspor);
+    // print(dikeluarkanDi);
+    // print(dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null);
+    // print(dateExp.text != '' ? fncTanggal(dateExp.text) : null);
+
+    // showDialog(
+    //     context: context, builder: (context) => const ModalSaveSuccess());
+
+    // menuController.changeActiveitemTo('Data Jamaah');
+    // navigationController.navigateTo('/jamaah/master');
+
+    HttpController.saveJamaah(
+      nik,
+      namaJamaah,
+      jenisKelamin,
+      tempatLahir,
+      fncTanggal(dateLahir.text),
+      alamat,
+      namaProvinsi,
+      namaKota,
+      namaKec,
+      namaKel,
+      kodePos,
+      namaAyah,
+      noTelp,
+      idMenikah,
+      idPendidikan,
+      idPekerjaan,
+      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
+      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
+      noPaspor,
+      dikeluarkanDi,
+      dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
+      dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          showDialog(
+              context: context, builder: (context) => const ModalSaveSuccess());
+
+          menuController.changeActiveitemTo('Data Jamaah');
+          navigationController.navigateTo('/jamaah/master');
+
+          setState(() {
+            fotoJamaah = '';
+            fotoJamaahBase = '';
+            fotoJamaahByte = null;
+
+            fotoKtpJamaah = '';
+            fotoKtpJamaahBase = '';
+            fotoKtpJamaahByte = null;
+          });
+        } else {
+          showDialog(
+              context: context, builder: (context) => const ModalSaveFail());
+
+          setState(() {
+            fotoJamaah = '';
+            fotoJamaahBase = '';
+            fotoJamaahByte = null;
+
+            fotoKtpJamaah = '';
+            fotoKtpJamaahBase = '';
+            fotoKtpJamaahByte = null;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -648,7 +803,11 @@ class _JamaahFormState extends State<JamaahForm> {
               const Expanded(child: SizedBox(width: 20)),
               ElevatedButton.icon(
                 onPressed: () {
-                  fncSaveData();
+                  if (formKey.currentState.validate()) {
+                    fncSaveData();
+                  } else {
+                    return null;
+                  }
                 },
                 icon: const Icon(Icons.save),
                 label: const Text(
@@ -665,6 +824,16 @@ class _JamaahFormState extends State<JamaahForm> {
               const SizedBox(width: 10),
               ElevatedButton.icon(
                 onPressed: () {
+                  setState(() {
+                    fotoJamaah = '';
+                    fotoJamaahBase = '';
+                    fotoJamaahByte = null;
+
+                    fotoKtpJamaah = '';
+                    fotoKtpJamaahBase = '';
+                    fotoKtpJamaahByte = null;
+                  });
+
                   menuController.changeActiveitemTo('Data Jamaah');
                   navigationController.navigateTo('/jamaah/master');
                 },
@@ -721,6 +890,35 @@ class _JamaahFormState extends State<JamaahForm> {
                               const SizedBox(height: 8),
                               inputKodePos(),
                               const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                      width: 370, child: inputUploadFoto()),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                const ModalUploadFotoJamaah());
+                                      },
+                                      icon: const Icon(Icons.save),
+                                      label: const Text(
+                                        'Upload Foto',
+                                        style: TextStyle(fontFamily: 'Gilroy'),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: myBlue,
+                                        minimumSize: const Size(100, 40),
+                                        shadowColor: Colors.grey,
+                                        elevation: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -751,10 +949,9 @@ class _JamaahFormState extends State<JamaahForm> {
                               const SizedBox(height: 8),
                               inputTglExp(),
                               const SizedBox(height: 8),
-                              const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  SizedBox(width: 300, child: inputRouteFile()),
+                                  SizedBox(width: 370, child: inputUploadKTP()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -763,11 +960,11 @@ class _JamaahFormState extends State<JamaahForm> {
                                         showDialog(
                                             context: context,
                                             builder: (context) =>
-                                                const ModalUploadDokumen());
+                                                const ModalUploadKtpJamaah());
                                       },
                                       icon: const Icon(Icons.save),
                                       label: const Text(
-                                        'Upload Dokumen',
+                                        'Upload Ktp',
                                         style: TextStyle(fontFamily: 'Gilroy'),
                                       ),
                                       style: ElevatedButton.styleFrom(
