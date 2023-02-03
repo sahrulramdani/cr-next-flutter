@@ -1,5 +1,8 @@
-// ignore_for_file: deprecated_member_use, missing_return
+// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable
 
+import 'package:flutter_web_course/comp/modal_save_fail.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -9,41 +12,119 @@ import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
+import 'package:file_picker/file_picker.dart';
 import 'dart:convert';
 
 class ModalEditJamaah extends StatefulWidget {
-  final List<Map<String, dynamic>> listProvinsi;
-
-  const ModalEditJamaah({
-    Key key,
-    @required this.listProvinsi,
-  }) : super(key: key);
+  String idJamaah;
+  ModalEditJamaah({Key key, @required this.idJamaah}) : super(key: key);
 
   @override
   State<ModalEditJamaah> createState() => _ModalEditJamaahState();
 }
 
 class _ModalEditJamaahState extends State<ModalEditJamaah> {
-  String tglEstimasi;
-  String idProvinsi;
+  String nik;
+  String namaJamaah;
+  String jenisKelamin;
+  String jk;
+  String tempatLahir;
+  String alamat;
   String namaProvinsi;
-  String idKota;
   String namaKota;
-  String idKec;
   String namaKec;
-  String idKel;
   String namaKel;
-  String tglKeluar;
-  String tglExpire;
+  String kodePos;
+  String namaAyah;
+  String noTelp;
+  String idMenikah;
+  String namaMenikah;
+  String idPendidikan;
+  String namaPendidikan;
+  String idPekerjaan;
+  String namaPekerjaan;
+  String paspor;
+  String cekPaspor;
+  String noPaspor;
+  String dikeluarkanDi;
 
+  String fotoJamaah = "";
+  String fotoJamaahBase = "";
+  Uint8List fotoJamaahByte;
+  String fotoLamaJamaah = "";
+
+  String fotoKtpJamaah = "";
+  String fotoKtpJamaahBase = "";
+  Uint8List fotoKtpJamaahByte;
+  String fotoLamaKtpJamaah = "";
+
+  List<Map<String, dynamic>> dataJamaah = [];
   List<Map<String, dynamic>> listProvinsi = [];
   List<Map<String, dynamic>> listKota = [];
   List<Map<String, dynamic>> listKec = [];
   List<Map<String, dynamic>> listKel = [];
+  List<Map<String, dynamic>> listMenikah = [];
+  List<Map<String, dynamic>> listPendidikan = [];
+  List<Map<String, dynamic>> listPekerjaan = [];
 
-  TextEditingController dateTgl = TextEditingController();
+  TextEditingController dateLhir = TextEditingController();
   TextEditingController dateKeluar = TextEditingController();
   TextEditingController dateExp = TextEditingController();
+
+  void getDetail() async {
+    String id = widget.idJamaah;
+    var response = await http
+        .get(Uri.parse("$urlAddress/jamaah/jamaah/detail/$id"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      dataJamaah = dataStatus;
+      nik = widget.idJamaah;
+      namaJamaah = dataStatus[0]['NAMA_LGKP'];
+      jenisKelamin = dataStatus[0]['JENS_KLMN'];
+      if (dataStatus[0]['JENS_KLMN'] == 'P') {
+        jk = 'Pria';
+      } else {
+        jk = 'Wanita';
+      }
+      tempatLahir = dataStatus[0]['TMPT_LHIR'];
+      dateLhir.text = DateFormat("dd-MM-yyyy")
+          .format(DateTime.parse(dataStatus[0]['TGLX_LHIR']));
+      alamat = dataStatus[0]['ALAMAT'];
+      namaProvinsi = dataStatus[0]['KDXX_PROV'];
+      namaKota = dataStatus[0]['KDXX_KOTA'];
+      namaKec = dataStatus[0]['KDXX_KECX'];
+      namaKel = dataStatus[0]['KDXX_KELX'];
+      kodePos = dataStatus[0]['KDXX_POSX'].toString();
+      namaAyah = dataStatus[0]['NAMA_AYAH'];
+      noTelp = dataStatus[0]['NOXX_TELP'];
+      idMenikah = dataStatus[0]['JENS_MNKH'];
+      namaMenikah = dataStatus[0]['MENIKAH'];
+      idPendidikan = dataStatus[0]['JENS_PEND'];
+      namaPendidikan = dataStatus[0]['PENDIDIKAN'];
+      idPekerjaan = dataStatus[0]['JENS_PKRJ'];
+      namaPekerjaan = dataStatus[0]['PEKERJAAN'];
+      if (dataStatus[0]['NOXX_PSPR'] != null) {
+        cekPaspor = 'Ada';
+        noPaspor = dataStatus[0]['NOXX_PSPR'];
+        dikeluarkanDi = dataStatus[0]['KLUR_DIXX'];
+        dateKeluar.text = DateFormat("dd-MM-yyyy")
+            .format(DateTime.parse(dataStatus[0]['TGLX_KLUR']));
+        dateExp.text = DateFormat("dd-MM-yyyy")
+            .format(DateTime.parse(dataStatus[0]['TGLX_EXPX']));
+      } else {
+        cekPaspor = 'Belum Ada';
+      }
+      fotoJamaah = dataStatus[0]['FOTO_JMAH'];
+      fotoLamaJamaah = dataStatus[0]['FOTO_JMAH'];
+      fotoKtpJamaah = dataStatus[0]['FOTO_KTPX'];
+      fotoLamaKtpJamaah = dataStatus[0]['FOTO_KTPX'];
+    });
+  }
 
   void getProvinsi() async {
     var response = await http.get(Uri.parse(
@@ -88,10 +169,45 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     });
   }
 
+  getMenikah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listMenikah = dataStatus;
+    });
+  }
+
+  getPendidikan() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPendidikan = dataStatus;
+    });
+  }
+
+  getPekerjaan() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPekerjaan = dataStatus;
+    });
+  }
+
   @override
   void initState() {
-    // getProvinsi();
     super.initState();
+    getDetail();
+    getProvinsi();
+    getMenikah();
+    getPendidikan();
+    getPekerjaan();
   }
 
   Widget inputNIK() {
@@ -103,7 +219,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: "32750119288821",
+      initialValue: nik ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "NIK masih kosong !";
@@ -120,19 +236,16 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: "Alfi Gunawan S.pd Lc,MA",
+      initialValue: namaJamaah ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "Nama masih kosong !";
         }
       },
+      onChanged: (value) {
+        namaJamaah = value;
+      },
     );
-    // return TextFormField(
-    //   initialValue: 'Alfi Gunawan S.pd Lc,MA',
-    //   style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-    //   decoration: const InputDecoration(
-    //       border: OutlineInputBorder(), labelText: 'Nama Lengkap'),
-    // );
   }
 
   Widget inputJenisKelamin() {
@@ -146,16 +259,16 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
         label: "Jenis Kelamin",
         mode: Mode.MENU,
         items: const ["Pria", "Wanita"],
-        // onChanged: (value) {
-        //   if (value == "Pria") {
-        //     jenisKelamin = 'P';
-        //     jk = value;
-        //   } else {
-        //     jenisKelamin = 'W';
-        //     jk = value;
-        //   }
-        // },
-        // selectedItem: jk ?? "Pilih Jenis Kelamin",
+        onChanged: (value) {
+          if (value == "Pria") {
+            jenisKelamin = 'P';
+            jk = value;
+          } else {
+            jenisKelamin = 'W';
+            jk = value;
+          }
+        },
+        selectedItem: jk ?? "Pilih Jenis Kelamin",
         dropdownSearchDecoration: const InputDecoration(
           border: InputBorder.none,
           filled: true,
@@ -178,10 +291,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      // onChanged: (value) {
-      //   tempatLahir = value;
-      // },
-      initialValue: "Subang",
+      onChanged: (value) {
+        tempatLahir = value;
+      },
+      initialValue: tempatLahir ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "Tempat lahir masih kosong !";
@@ -192,22 +305,19 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
 
   Widget inputTglLahir() {
     return TextFormField(
-      controller: dateTgl,
+      controller: dateLhir,
       decoration: const InputDecoration(
           labelText: 'Tanggal Lahir', filled: true, fillColor: Colors.white),
-      // onChanged: (String value) {
-      //   tglLahir = value;
-      // },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-          dateTgl.text = formattedDate;
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+          dateLhir.text = formattedDate;
         }
       },
       validator: (value) {
@@ -223,10 +333,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
           labelText: 'Alamat', filled: true, fillColor: Colors.white),
-      // onChanged: (value) {
-      //   alamat = value;
-      // },
-      initialValue: "Kp. Rawa Aren, Bekasi Timur",
+      onChanged: (value) {
+        alamat = value;
+      },
+      initialValue: alamat ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "Alamat masih kosong !";
@@ -245,15 +355,13 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Provinsi",
-          items: widget.listProvinsi,
+          items: listProvinsi,
           onChanged: (value) {
             if (value != null) {
               namaProvinsi = value["name"];
-              idProvinsi = value["id"];
               getKota(value['id']);
             } else {
               namaProvinsi = null;
-              idProvinsi = null;
             }
           },
           showSearchBox: true,
@@ -286,11 +394,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           onChanged: (value) {
             if (value != null) {
               namaKota = value["name"];
-              idKota = value["id"];
               getKec(value['id']);
             } else {
               namaKota = null;
-              idKota = null;
             }
           },
           showSearchBox: true,
@@ -323,11 +429,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           onChanged: (value) {
             if (value != null) {
               namaKec = value["name"];
-              idKec = value["id"];
               getKel(value["id"]);
             } else {
               namaKec = null;
-              idKec = null;
             }
           },
           showSearchBox: true,
@@ -360,10 +464,8 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           onChanged: (value) {
             if (value != null) {
               namaKel = value["name"];
-              idKel = value["id"];
             } else {
               namaKel = null;
-              idKel = null;
             }
           },
           showSearchBox: true,
@@ -390,10 +492,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      // onChanged: (value) {
-      //   kodePos = value;
-      // },
-      initialValue: "17139",
+      onChanged: (value) {
+        kodePos = value;
+      },
+      initialValue: kodePos ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "Kode Pos masih kosong !";
@@ -410,10 +512,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      // onChanged: (value) {
-      //   namaAyah = value;
-      // },
-      initialValue: "Kohir",
+      onChanged: (value) {
+        namaAyah = value;
+      },
+      initialValue: namaAyah ?? '',
     );
   }
 
@@ -426,10 +528,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      // onChanged: (value) {
-      //   noTelp = value;
-      // },
-      initialValue: "08828817388127",
+      onChanged: (value) {
+        noTelp = value;
+      },
+      initialValue: noTelp ?? '',
     );
   }
 
@@ -441,20 +543,26 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
         label: "Status Menikah",
-        mode: Mode.MENU,
-        items: const ["Single", "Menikah", "Duda / Janda"],
-        // onChanged: (value) {
-        //   menikah = value;
-        // },
-        selectedItem: "Pilih Status Menikah",
-        dropdownSearchDecoration: const InputDecoration(
-            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        items: listMenikah,
+        onChanged: (value) {
+          namaMenikah = value['CODD_DESC'];
+          idMenikah = value['CODD_VALU'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaMenikah ?? "Status menikah belum Dipilih"),
         validator: (value) {
-          if (value == "Pilih Status Menikah") {
+          if (value == "Status menikah belum Dipilih") {
             return "Status menikah masih kosong !";
           }
         },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -467,31 +575,26 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-        label: "Pendidikan Terakhir",
-        mode: Mode.MENU,
-        items: const [
-          "TK / PAUD",
-          "SD/MI Sederajat",
-          "SMP/Mts Sederajat",
-          "SMA/MA Sederajat",
-          "D1 / Sederajat",
-          "D2 / Sederajat",
-          "D3 / Sederajat",
-          "D4/S1 Sederajat",
-          "S2 / Sederajat",
-          "S3 / Sederajat"
-        ],
-        // onChanged: (value) {
-        //   pendidikan = value;
-        // },
-        selectedItem: "Pilih Pendidikan Terakhir",
-        dropdownSearchDecoration: const InputDecoration(
-            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Pendidikan",
+        items: listPendidikan,
+        onChanged: (value) {
+          namaPendidikan = value['CODD_DESC'];
+          idPendidikan = value['CODD_VALU'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaPendidikan ?? "Pendidikan terakhir Belum dipilih"),
         validator: (value) {
-          if (value == "Pilih Pendidikan") {
-            return "Status pendidikan masih kosong !";
+          if (value == "Pendidikan terakhir Belum dipilih") {
+            return "Pendidikan masih kosong !";
           }
         },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -504,30 +607,26 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
         label: "Pekerjaan",
-        mode: Mode.MENU,
-        items: const [
-          "PNS",
-          "Pegawai Swasta",
-          "TNI/POLRI",
-          "Petani",
-          "Nelayan",
-          "Wirausaha",
-          "Ibu Rumah Tangga",
-          "Tidak Bekerja",
-          "Lainnya",
-        ],
-        // onChanged: (value) {
-        //   pekerjaan = value;
-        // },
-        selectedItem: "Pilih Pekerjaan",
-        dropdownSearchDecoration: const InputDecoration(
-            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        items: listPekerjaan,
+        onChanged: (value) {
+          namaPekerjaan = value['CODD_DESC'];
+          idPekerjaan = value['CODD_VALU'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaPekerjaan ?? "Pekerjaan Belum dipilih"),
         validator: (value) {
-          if (value == "Pilih Pekerjaan") {
+          if (value == "Pekerjaan Belum dipilih") {
             return "Pekerjaan masih kosong !";
           }
         },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -543,23 +642,18 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
         label: "Paspor",
         mode: Mode.MENU,
         items: const ["Ada", "Belum Ada"],
-        // onChanged: (value) {
-        //   if (value == "Ada") {
-        //     paspor = 'a';
-        //     cekpaspor = 'Ada';
-        //   } else {
-        //     paspor = 'n';
-        //     cekpaspor = 'Belum Ada';
-        //   }
-        // },
-        selectedItem: "Pilih Status Paspor",
-        dropdownSearchDecoration: const InputDecoration(
-            border: InputBorder.none, filled: true, fillColor: Colors.white),
-        validator: (value) {
-          if (value == "Pilih Status Paspor") {
-            return "Status paspor masih kosong !";
+        onChanged: (value) {
+          if (value == "Ada") {
+            paspor = 'a';
+            cekPaspor = 'Ada';
+          } else {
+            paspor = 'n';
+            cekPaspor = 'Belum Ada';
           }
         },
+        selectedItem: cekPaspor ?? "Pilih Status Paspor",
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
     );
   }
@@ -572,7 +666,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: "3777400000131",
+      initialValue: noPaspor ?? '',
+      onChanged: (value) {
+        noPaspor = value;
+      },
     );
   }
 
@@ -584,7 +681,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: "Bandung",
+      initialValue: dikeluarkanDi ?? '',
+      onChanged: (value) {
+        dikeluarkanDi = value;
+      },
     );
   }
 
@@ -595,9 +695,6 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           labelText: 'Tanggal Dikeluarkan',
           filled: true,
           fillColor: Colors.white),
-      onChanged: (String value) {
-        tglKeluar = value;
-      },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -621,9 +718,6 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        tglExpire = value;
-      },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -639,22 +733,153 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     );
   }
 
-  fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+  Widget inputUploadFoto() {
+    return TextFormField(
+      initialValue: fotoJamaah != "" ? fotoJamaah : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload Foto',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
 
-    menuController.changeActiveitemTo('Data Jamaah');
-    navigationController.navigateTo('/jamaah/master');
+  Widget inputUploadKTP() {
+    return TextFormField(
+      initialValue: fotoKtpJamaah != "" ? fotoKtpJamaah : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload KTP',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
+
+  Widget resultFotoJamaah() {
+    if (fotoJamaahByte != null) {
+      return Image.memory(
+        fotoJamaahByte,
+        width: 150,
+      );
+    } else {
+      if (fotoJamaah != '') {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/$fotoJamaah'),
+          width: 150,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          width: 150,
+        );
+      }
+    }
+  }
+
+  Widget resultFotoKTP() {
+    if (fotoKtpJamaahByte != null) {
+      return Image.memory(
+        fotoKtpJamaahByte,
+        width: 150,
+      );
+    } else {
+      if (fotoKtpJamaah != "") {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/$fotoKtpJamaah'),
+          width: 150,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          width: 150,
+        );
+      }
+    }
+  }
+
+  getImageJamaah() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoJamaah = fileResult.files.first.name;
+        fotoJamaahByte = fileResult.files.first.bytes;
+        fotoJamaahBase = encodeFoto;
+      });
+    }
+  }
+
+  getImageKtp() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoKtpJamaah = fileResult.files.first.name;
+        fotoKtpJamaahByte = fileResult.files.first.bytes;
+        fotoKtpJamaahBase = encodeFoto;
+      });
+    }
+  }
+
+  fncSaveData() {
+    HttpController.updateJamaah(
+      nik,
+      namaJamaah,
+      jenisKelamin,
+      tempatLahir,
+      fncTanggal(dateLhir.text),
+      alamat,
+      namaProvinsi,
+      namaKota,
+      namaKec,
+      namaKel,
+      kodePos,
+      namaAyah,
+      noTelp,
+      idMenikah,
+      idPendidikan,
+      idPekerjaan,
+      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
+      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
+      noPaspor,
+      dikeluarkanDi,
+      dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
+      dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+      fotoLamaJamaah,
+      fotoLamaKtpJamaah,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          showDialog(
+              context: context, builder: (context) => const ModalSaveSuccess());
+        } else {
+          showDialog(
+              context: context, builder: (context) => const ModalSaveFail());
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final formKey = GlobalKey<FormState>();
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Stack(children: [
         Form(
+          key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.81,
@@ -709,7 +934,42 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                 inputKec(),
                                 const SizedBox(height: 8),
                                 inputKel(),
-                                const SizedBox(height: 65),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    resultFotoJamaah(),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        width: 370, child: inputUploadFoto()),
+                                    const SizedBox(width: 10),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          getImageJamaah();
+                                        },
+                                        icon: const Icon(Icons.save),
+                                        label: const Text(
+                                          'Upload Foto',
+                                          style:
+                                              TextStyle(fontFamily: 'Gilroy'),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: myBlue,
+                                          minimumSize: const Size(100, 40),
+                                          shadowColor: Colors.grey,
+                                          elevation: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -742,6 +1002,41 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                 const SizedBox(height: 8),
                                 inputTglExp(),
                                 const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    resultFotoKTP(),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        width: 370, child: inputUploadKTP()),
+                                    const SizedBox(width: 10),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          getImageKtp();
+                                        },
+                                        icon: const Icon(Icons.save),
+                                        label: const Text(
+                                          'Upload KTP',
+                                          style:
+                                              TextStyle(fontFamily: 'Gilroy'),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: myBlue,
+                                          minimumSize: const Size(100, 40),
+                                          shadowColor: Colors.grey,
+                                          elevation: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),

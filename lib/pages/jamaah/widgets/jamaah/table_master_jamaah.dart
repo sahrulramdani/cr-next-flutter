@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_edit_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_hapus_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_jamaah.dart';
@@ -10,7 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 class ButtonEdit extends StatelessWidget {
-  const ButtonEdit({Key key}) : super(key: key);
+  String idJamaah;
+  ButtonEdit({Key key, @required this.idJamaah}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,8 @@ class ButtonEdit extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalEditJamaah());
+            context: context,
+            builder: (context) => ModalEditJamaah(idJamaah: idJamaah));
       },
     );
   }
@@ -100,11 +101,13 @@ class MyData extends DataTableSource {
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            ButtonEdit(),
-            ButtonChat(),
-            ButtonUpload(),
-            ButtonHapus(),
+          children: [
+            ButtonEdit(
+              idJamaah: dataJamaah[index]['NOXX_IDNT'].toString(),
+            ),
+            const ButtonChat(),
+            const ButtonUpload(),
+            const ButtonHapus(),
             // SizedBox(
             //   width: 5,
             // ),

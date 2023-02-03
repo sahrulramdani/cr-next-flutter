@@ -154,10 +154,10 @@ class MyData extends DataTableSource {
               width: 5,
             ),
             ButtonDetail(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
-            const SizedBox(
-              width: 5,
-            ),
-            ButtonHapus(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
+            // const SizedBox(
+            //   width: 5,
+            // ),
+            // ButtonHapus(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
           ],
         ),
       )),

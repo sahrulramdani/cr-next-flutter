@@ -861,11 +861,6 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
         selectedItem: cekPaspor ?? "Pilih Status Paspor",
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
-        validator: (value) {
-          if (value == "Pilih Status Paspor") {
-            return "Status paspor masih kosong !";
-          }
-        },
       ),
     );
   }
@@ -1097,8 +1092,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       idMenikah,
       idPendidikan,
       idPekerjaan,
-      fotoAgencyBase != '' ? fotoAgencyBase : 'ADA',
-      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'ADA',
+      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
+      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
       noPaspor,
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,

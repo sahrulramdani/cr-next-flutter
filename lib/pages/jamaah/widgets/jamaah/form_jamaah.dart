@@ -579,11 +579,6 @@ class _JamaahFormState extends State<JamaahForm> {
         selectedItem: "Pilih Status Paspor",
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
-        validator: (value) {
-          if (value == "Pilih Status Paspor") {
-            return "Status paspor masih kosong !";
-          }
-        },
       ),
     );
   }
