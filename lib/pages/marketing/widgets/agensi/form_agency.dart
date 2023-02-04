@@ -27,6 +27,7 @@ class AgencyForm extends StatefulWidget {
 }
 
 class _AgencyFormState extends State<AgencyForm> {
+  String namaJamaah;
   String nik;
   String namaAgency;
   String jenisKelamin;
@@ -60,6 +61,9 @@ class _AgencyFormState extends State<AgencyForm> {
   String noPaspor;
   String dikeluarkanDi;
 
+  String fileFoto;
+  String fileKtp;
+
   List<Map<String, dynamic>> listProvinsi = [];
   List<Map<String, dynamic>> listKota = [];
   List<Map<String, dynamic>> listKec = [];
@@ -70,10 +74,19 @@ class _AgencyFormState extends State<AgencyForm> {
   List<Map<String, dynamic>> listMenikah = [];
   List<Map<String, dynamic>> listPendidikan = [];
   List<Map<String, dynamic>> listPekerjaan = [];
+  List<Map<String, dynamic>> listJamaah = [];
 
   TextEditingController dateLahir = TextEditingController();
   TextEditingController dateKeluar = TextEditingController();
   TextEditingController dateExp = TextEditingController();
+
+  void getJamaah() async {
+    var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listJamaah = dataStatus;
+    setState(() {});
+  }
 
   void getProvinsi() async {
     var response = await http.get(Uri.parse(
@@ -179,6 +192,8 @@ class _AgencyFormState extends State<AgencyForm> {
 
   @override
   void initState() {
+    super.initState();
+    getJamaah();
     getProvinsi();
     getKantor();
     getLeader();
@@ -186,11 +201,79 @@ class _AgencyFormState extends State<AgencyForm> {
     getMenikah();
     getPendidikan();
     getPekerjaan();
-    super.initState();
   }
 
   // -----------------------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------------------
+  Widget inputJamaah() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
+        label: "Nama Jamaah",
+        items: listJamaah,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              nik = value['NOXX_IDNT'];
+              namaAgency = value['NAMA_LGKP'];
+              jenisKelamin = value['JENS_KLMN'];
+              jk = value['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita';
+              tempatLahir = value['TMPT_LHIR'];
+              dateLahir.text = DateFormat("dd-MM-yyyy")
+                  .format(DateTime.parse(value['TGLX_LHIR']));
+              alamat = value['ALAMAT'];
+              namaProvinsi = value['KDXX_PROV'];
+              namaKota = value['KDXX_KOTA'];
+              namaKec = value['KDXX_KECX'];
+              namaKel = value['KDXX_KELX'];
+              kodePos = value['KDXX_POSX'].toString();
+              namaAyah = value['NAMA_AYAH'];
+              noTelp = value['NOXX_TELP'];
+              idMenikah = value['JENS_MNKH'];
+              namaMenikah = value['MENIKAH'];
+              idPendidikan = value['JENS_PEND'];
+              namaPendidikan = value['PENDIDIKAN'];
+              idPekerjaan = value['JENS_PKRJ'];
+              namaPekerjaan = value['PEKERJAAN'];
+              fotoCalonAgen = value['FOTO_JMAH'];
+              fileFoto = value['FOTO_JMAH'];
+              ktpCalonAgen = value['FOTO_KTPX'];
+              fileKtp = value['FOTO_KTPX'];
+              cekpaspor = value['NOXX_PSPR'] != null ? 'Ada' : 'Belum Ada';
+              noPaspor = value['NOXX_PSPR'];
+              dikeluarkanDi = value['KLUR_DIXX'];
+              dateKeluar.text = DateFormat("dd-MM-yyyy")
+                  .format(DateTime.parse(value['TGLX_KLUR']));
+              dateExp.text = DateFormat("dd-MM-yyyy")
+                  .format(DateTime.parse(value['TGLX_EXPX']));
+            });
+          }
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_LGKP'].toString()),
+          leading: CircleAvatar(
+            backgroundImage:
+                NetworkImage('$urlAddress/uploads/${item['FOTO_JMAH']}'),
+          ),
+          subtitle: Text(item['NOXX_IDNT'].toString()),
+          trailing: Text(
+              DateFormat("dd-MM-yyyy")
+                  .format(DateTime.parse(item['TGLX_LHIR'].toString())),
+              textAlign: TextAlign.center),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaJamaah ?? "Jika Berasal Dari Jamaah"),
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+      ),
+    );
+  }
 
   Widget inputNIK() {
     return TextFormField(
@@ -332,8 +415,11 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['NAMA_KNTR'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaKantor ?? "Nama Kantor belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaKantor ?? "Nama Kantor belum Dipilih",
+          style:
+              TextStyle(color: namaKantor == null ? Colors.red : Colors.black),
+        ),
         validator: (value) {
           if (value == "Nama Kantor belum Dipilih") {
             return "Kantor masih kosong !";
@@ -578,8 +664,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaFee ?? "Fee Level belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaFee ?? "Fee Level belum Dipilih",
+            style:
+                TextStyle(color: namaFee == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Fee Level belum Dipilih") {
             return "Fee Level masih kosong !";
@@ -633,8 +721,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaMenikah ?? "Status menikah belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaMenikah ?? "Status menikah belum Dipilih",
+            style: TextStyle(
+                color: namaMenikah == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Status menikah belum Dipilih") {
             return "Status menikah masih kosong !";
@@ -665,8 +755,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPendidikan ?? "Pendidikan terakhir Belum dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaPendidikan ?? "Pendidikan terakhir Belum dipilih",
+            style: TextStyle(
+                color: namaPendidikan == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Pendidikan terakhir Belum dipilih") {
             return "Pendidikan masih kosong !";
@@ -697,8 +789,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPekerjaan ?? "Pekerjaan Belum dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaPekerjaan ?? "Pekerjaan Belum dipilih",
+            style: TextStyle(
+                color: namaPekerjaan == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Pekerjaan Belum dipilih") {
             return "Pekerjaan masih kosong !";
@@ -801,7 +895,7 @@ class _AgencyFormState extends State<AgencyForm> {
 
   Widget inputUploadFoto() {
     return TextFormField(
-      initialValue: fotoAgency != "" ? fotoAgency : "Pilih",
+      initialValue: fileFoto ?? "Pilih",
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
@@ -812,13 +906,47 @@ class _AgencyFormState extends State<AgencyForm> {
 
   Widget inputUploadKTP() {
     return TextFormField(
-      initialValue: fotoKtpAgency != "" ? fotoKtpAgency : "Pilih",
+      initialValue: fileKtp ?? "Pilih",
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
         labelText: 'Upload KTP',
       ),
     );
+  }
+
+  fncBersih() {
+    setState(() {
+      nik = null;
+      namaAgency = null;
+      jenisKelamin = null;
+      jk = null;
+      tempatLahir = null;
+      dateLahir.text = null;
+      alamat = null;
+      namaProvinsi = null;
+      namaKota = null;
+      namaKec = null;
+      namaKel = null;
+      kodePos = null;
+      namaAyah = null;
+      noTelp = null;
+      idMenikah = null;
+      namaMenikah = null;
+      idPendidikan = null;
+      namaPendidikan = null;
+      idPekerjaan = null;
+      namaPekerjaan = null;
+      fotoCalonAgen = '';
+      fileFoto = null;
+      ktpCalonAgen = '';
+      fileKtp = null;
+      cekpaspor = null;
+      noPaspor = null;
+      dikeluarkanDi = null;
+      dateKeluar.text = null;
+      dateExp.text = null;
+    });
   }
 
   fncSaveData() {
@@ -848,6 +976,8 @@ class _AgencyFormState extends State<AgencyForm> {
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+      fotoCalonAgen,
+      ktpCalonAgen,
     ).then(
       (value) {
         if (value.status == true) {
@@ -865,6 +995,9 @@ class _AgencyFormState extends State<AgencyForm> {
             fotoKtpAgency = '';
             fotoKtpAgencyBase = '';
             fotoKtpAgencyByte = null;
+
+            fotoCalonAgen = '';
+            ktpCalonAgen = '';
           });
         } else {
           showDialog(
@@ -878,6 +1011,9 @@ class _AgencyFormState extends State<AgencyForm> {
             fotoKtpAgency = '';
             fotoKtpAgencyBase = '';
             fotoKtpAgencyByte = null;
+
+            fotoCalonAgen = '';
+            ktpCalonAgen = '';
           });
         }
       },
@@ -948,6 +1084,9 @@ class _AgencyFormState extends State<AgencyForm> {
                     fotoKtpAgency = '';
                     fotoKtpAgencyBase = '';
                     fotoKtpAgencyByte = null;
+
+                    fotoCalonAgen = '';
+                    ktpCalonAgen = '';
                   });
 
                   menuController.changeActiveitemTo('Agency');
@@ -984,6 +1123,32 @@ class _AgencyFormState extends State<AgencyForm> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 410, child: inputJamaah()),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        fncBersih();
+                                      },
+                                      icon: const Icon(
+                                          Icons.cleaning_services_outlined),
+                                      label: const Text(
+                                        'Clear',
+                                        style: TextStyle(fontFamily: 'Gilroy'),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: myBlue,
+                                        minimumSize: const Size(100, 40),
+                                        shadowColor: Colors.grey,
+                                        elevation: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               inputNIK(),
                               const SizedBox(height: 8),
                               inputNama(),

@@ -28,6 +28,27 @@ class _ModalUploadKtpAgencyState extends State<ModalUploadKtpAgency> {
     }
   }
 
+  Widget resultKtp() {
+    if (fotoKtpAgencyByte != null) {
+      return Image.memory(
+        fotoKtpAgencyByte,
+        width: 220,
+      );
+    } else {
+      if (ktpCalonAgen != "") {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/$ktpCalonAgen'),
+          width: 220,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          width: 220,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -45,23 +66,7 @@ class _ModalUploadKtpAgencyState extends State<ModalUploadKtpAgency> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      fotoKtpAgency.isEmpty
-                          ? Container(
-                              height: 220,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/NO_IMAGE.jpg'),
-                                    fit: BoxFit.fill),
-                              ),
-                            )
-                          : SizedBox(
-                              height: 220,
-                              child: Image.memory(
-                                fotoKtpAgencyByte,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                      resultKtp(),
                       const SizedBox(height: 15),
                       ElevatedButton.icon(
                         onPressed: () async {

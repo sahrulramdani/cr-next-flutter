@@ -28,6 +28,27 @@ class _ModalUploadFotoAgencyState extends State<ModalUploadFotoAgency> {
     }
   }
 
+  Widget resultFoto() {
+    if (fotoAgencyByte != null) {
+      return Image.memory(
+        fotoAgencyByte,
+        width: 220,
+      );
+    } else {
+      if (fotoCalonAgen != "") {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/$fotoCalonAgen'),
+          width: 220,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          width: 220,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -45,23 +66,7 @@ class _ModalUploadFotoAgencyState extends State<ModalUploadFotoAgency> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      fotoAgency.isEmpty
-                          ? Container(
-                              height: 220,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/NO_IMAGE.jpg'),
-                                    fit: BoxFit.fill),
-                              ),
-                            )
-                          : SizedBox(
-                              height: 220,
-                              child: Image.memory(
-                                fotoAgencyByte,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                      resultFoto(),
                       const SizedBox(height: 15),
                       ElevatedButton.icon(
                         onPressed: () async {

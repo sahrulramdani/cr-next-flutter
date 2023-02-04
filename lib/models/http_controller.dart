@@ -35,6 +35,8 @@ class HttpController {
     String dikeluarkanDi,
     String tglKeluar,
     String tglExpire,
+    String fotoDriJmah,
+    String ktpDriJmah,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/agency/save");
 
@@ -67,6 +69,8 @@ class HttpController {
         "KLUR_DIXX": dikeluarkanDi ?? '',
         "TGLX_KLUR": tglKeluar ?? '',
         "TGLX_EXPX": tglExpire ?? '',
+        "FOTO_LMAX": fotoDriJmah,
+        "KTPX_LMAX": ktpDriJmah,
       },
     );
 

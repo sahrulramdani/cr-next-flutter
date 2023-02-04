@@ -9,6 +9,9 @@ String fotoKtpAgency = "";
 String fotoKtpAgencyBase = "";
 Uint8List fotoKtpAgencyByte;
 
+String fotoCalonAgen = "";
+String ktpCalonAgen = "";
+
 // JAMAAH
 String fotoJamaah = "";
 String fotoJamaahBase = "";
