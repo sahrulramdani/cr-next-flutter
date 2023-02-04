@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
+import 'package:flutter_web_course/models/http_controller.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class ModalHapusJamaah extends StatelessWidget {
-  // final String idAgency;
+  final String idJamaah;
 
-  const ModalHapusJamaah({Key key}) : super(key: key);
+  const ModalHapusJamaah({Key key, @required this.idJamaah}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,24 @@ class ModalHapusJamaah extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ModalDeleteSuccess());
+                        HttpController.deleteJamaah(idJamaah).then(
+                          (value) {
+                            if (value.status == true) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const ModalDeleteSuccess());
 
-                        menuController.changeActiveitemTo('Data Jamaah');
-                        navigationController.navigateTo('/jamaah/master');
+                              menuController.changeActiveitemTo('Data Jamaah');
+                              navigationController.navigateTo('/jamaah/master');
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const ModalDeleteFail());
+                            }
+                          },
+                        );
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

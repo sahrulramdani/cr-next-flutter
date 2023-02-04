@@ -70,3 +70,10 @@ fncTanggal(String tgl) {
 
   return date;
 }
+
+fncTelp(String telp) {
+  String reguler = telp.substring(1);
+  String noAkhir = '62$reguler';
+
+  return noAkhir;
+}

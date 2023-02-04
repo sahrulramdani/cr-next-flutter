@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_edit_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_hapus_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_jamaah.dart';
@@ -29,7 +30,15 @@ class ButtonEdit extends StatelessWidget {
 }
 
 class ButtonChat extends StatelessWidget {
-  const ButtonChat({Key key}) : super(key: key);
+  String telepon;
+  String nama;
+  String jk;
+  ButtonChat({
+    Key key,
+    @required this.telepon,
+    @required this.nama,
+    @required this.jk,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +48,14 @@ class ButtonChat extends StatelessWidget {
         color: myBlue,
       ),
       onPressed: () => launch(
-          'https://api.whatsapp.com/send/?phone=62895616007743&text&type=phone_number&app_absent=0'),
+          'https://api.whatsapp.com/send/?phone=$telepon&text=Assalamualaikum+Wr.+Wb.%0A$jk+$nama+sehat+%3F%0AKami+dari+Travel+Cahaya+Raudhah+%0ABerhubungan+dengan+Umroh+di+Arab+Saudi+sementara+belum+di+buka+kami+memproduksi+atau+menjual+beberapa+produk+baru+%0AYaitu+berupa+%3A+%0A1.+Air+Zamzam+%0A2.+Madu+Randu+%0A3.+Madu+Hitam+%0A4.+Madu+Putih+Sumbawa+%0A5.+Madu+Beragam+Lainnya+%0ADan+juga+%3A+%0A1.+Sabun+Pencuci+Piring+%0A2.+Sabun+Detergen+%0A3.+Sabun+Pembersih+Lantai+Sereh+%0A4.+Sabun+Softener+Pakaian+%0A5.+Dan+sebagainya+%0AJika+$jk+$nama+berminat+kami+siap+antar+ke+rumah+gratis+ongkir+sampai+rumah+%0ATerimakasih+sudah+memilih+travel+Cahaya+Raudhah.+%0ASalam+dari+kami+keluarga+besar+PT.+Cahaya+Raudhah+%0AWassalamualaikum+Wr.+Wb.&type=phone_number&app_absent=0'),
     );
   }
 }
 
 class ButtonHapus extends StatelessWidget {
-  const ButtonHapus({Key key}) : super(key: key);
+  String idJamaah;
+  ButtonHapus({Key key, @required this.idJamaah}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,25 +66,30 @@ class ButtonHapus extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalHapusJamaah());
+            context: context,
+            builder: (context) => ModalHapusJamaah(idJamaah: idJamaah));
       },
     );
   }
 }
 
 class ButtonUpload extends StatelessWidget {
-  const ButtonUpload({Key key}) : super(key: key);
+  String idJamaah;
+  ButtonUpload({Key key, @required this.idJamaah}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
-        Icons.upload_outlined,
+        Icons.image_search_outlined,
         color: myBlue,
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalUploadJamaah());
+            context: context,
+            builder: (context) => ModalUploadJamaah(
+                  idJamaah: idJamaah,
+                ));
       },
     );
   }
@@ -102,12 +117,17 @@ class MyData extends DataTableSource {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ButtonEdit(
-              idJamaah: dataJamaah[index]['NOXX_IDNT'].toString(),
-            ),
-            const ButtonChat(),
-            const ButtonUpload(),
-            const ButtonHapus(),
+            ButtonEdit(idJamaah: dataJamaah[index]['NOXX_IDNT'].toString()),
+            ButtonChat(
+                jk: dataJamaah[index]['JENS_KLMN'] == 'P' ? 'Pak' : 'Bu',
+                nama: dataJamaah[index]['NAMA_LGKP']
+                    .toString()
+                    .replaceAll(' ', '+'),
+                telepon: fncTelp(
+                  dataJamaah[index]['NOXX_TELP'].toString(),
+                )),
+            ButtonUpload(idJamaah: dataJamaah[index]['NOXX_IDNT'].toString()),
+            ButtonHapus(idJamaah: dataJamaah[index]['NOXX_IDNT'].toString()),
             // SizedBox(
             //   width: 5,
             // ),

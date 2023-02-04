@@ -316,4 +316,20 @@ class HttpController {
       status: data["status"],
     );
   }
+
+  static Future<HttpController> deleteJamaah(String kodeJamaah) async {
+    Uri urlApi = Uri.parse("$urlAddress/jamaah/jamaah/delete");
+
+    var hasilResponse = await http.post(
+      urlApi,
+      body: {
+        "NOXX_IDNT": kodeJamaah,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpController(
+      status: data["status"],
+    );
+  }
 }
