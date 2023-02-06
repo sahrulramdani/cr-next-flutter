@@ -1,3 +1,7 @@
+// ignore_for_file: must_call_super
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/form_satuan.dart';
@@ -6,6 +10,7 @@ import 'package:flutter_web_course/pages/inventory/widgets/satuan/table_satuan.d
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:http/http.dart' as http;
 
 class InventorySatuanPage extends StatefulWidget {
   const InventorySatuanPage({Key key}) : super(key: key);
@@ -15,6 +20,25 @@ class InventorySatuanPage extends StatefulWidget {
 }
 
 class _InventorySatuanPageState extends State<InventorySatuanPage> {
+  List<Map<String, dynamic>> listSatuan = [];
+
+  void getData() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listSatuan = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   bool enableFormL = false;
   Widget cmdTambah() {
     return ElevatedButton.icon(
@@ -266,7 +290,7 @@ class _InventorySatuanPageState extends State<InventorySatuanPage> {
                         ),
                       ],
                     ),
-                    const TableSatuan()
+                    TableSatuan(listSatuan: listSatuan)
                   ],
                 ),
               ))

@@ -1,14 +1,16 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
+import 'package:flutter_web_course/models/http_jadwal.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_web_course/models/http_controller.dart';
 
 class ModalHapusJadwal extends StatelessWidget {
-  // final String idAgency;
+  String idJadwal;
 
-  const ModalHapusJadwal({Key key}) : super(key: key);
+  ModalHapusJadwal({Key key, @required this.idJadwal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,17 @@ class ModalHapusJadwal extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ModalDeleteSuccess());
+                        HttpJadwal.deleteJadwal(idJadwal).then((value) {
+                          if (value.status == true) {
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ModalDeleteSuccess());
 
-                        menuController.changeActiveitemTo('Jadwal');
-                        navigationController.navigateTo('/mrkt/jadwal');
+                            menuController.changeActiveitemTo('Jadwal');
+                            navigationController.navigateTo('/mrkt/jadwal');
+                          }
+                        });
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

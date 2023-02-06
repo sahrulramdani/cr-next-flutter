@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 
-import '../../../../models/http_controller.dart';
+import '../../../../models/http_agency.dart';
 
 class AgencyForm extends StatefulWidget {
   const AgencyForm({Key key}) : super(key: key);
@@ -81,7 +81,8 @@ class _AgencyFormState extends State<AgencyForm> {
   TextEditingController dateExp = TextEditingController();
 
   void getJamaah() async {
-    var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/calon-agency"));
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     listJamaah = dataStatus;
@@ -950,7 +951,7 @@ class _AgencyFormState extends State<AgencyForm> {
   }
 
   fncSaveData() {
-    HttpController.saveAgency(
+    HttpAgency.saveAgency(
       nik,
       namaAgency,
       jenisKelamin,

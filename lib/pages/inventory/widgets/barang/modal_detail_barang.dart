@@ -12,6 +12,7 @@ import 'package:flutter_web_course/pages/inventory/widgets/barang/detail_table_r
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:intl/intl.dart';
+import "package:http/http.dart" as http;
 
 class ModalDetailBarang extends StatefulWidget {
   final String idBarang;
@@ -80,7 +81,8 @@ class _ModalDetailBarangState extends State<ModalDetailBarang> {
     return TextField(
       controller: dateAwal,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Awal', border: OutlineInputBorder()),
+        labelText: 'Tanggal Awal',
+      ),
       onChanged: (String value) {
         tglAwal = value;
       },
@@ -105,7 +107,8 @@ class _ModalDetailBarangState extends State<ModalDetailBarang> {
     return TextField(
       controller: dateAkhir,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Akhir', border: OutlineInputBorder()),
+        labelText: 'Tanggal Akhir',
+      ),
       onChanged: (String value) {
         tglAkhir = value;
       },
@@ -127,7 +130,7 @@ class _ModalDetailBarangState extends State<ModalDetailBarang> {
   }
 
   Widget menuButton() => SizedBox(
-        height: 40,
+        height: 50,
         child: Row(
           children: [
             SizedBox(width: 150, child: inputTglAwal()),
@@ -173,8 +176,8 @@ class _ModalDetailBarangState extends State<ModalDetailBarang> {
                         color: Colors.amber[900],
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                          'Daftar Riwayat ${listBarang[int.parse(widget.idBarang)]['nama']}',
+                      Text('Daftar Riwayat ',
+                          // 'Daftar Riwayat ${listBarang[int.parse(widget.idBarang)]['nama']}',
                           style: TextStyle(
                               color: myGrey,
                               fontWeight: FontWeight.bold,

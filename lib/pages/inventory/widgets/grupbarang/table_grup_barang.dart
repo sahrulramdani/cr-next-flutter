@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -17,8 +17,8 @@ import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_list
 // import 'package:intl/intl.dart';
 
 class ButtonKelola extends StatelessWidget {
-  String namaBarang;
-  ButtonKelola({Key key, @required this.namaBarang}) : super(key: key);
+  String idGrupBarang;
+  ButtonKelola({Key key, @required this.idGrupBarang}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,15 @@ class ButtonKelola extends StatelessWidget {
           showDialog(
               context: context,
               builder: (context) => ModalListGrup(
-                    namaGrup: namaBarang,
+                    idGrupbrg: idGrupBarang,
                   ));
         });
   }
 }
 
 class ButtonHapus extends StatelessWidget {
-  const ButtonHapus({Key key}) : super(key: key);
+  String idGrup;
+  ButtonHapus({Key key, @required this.idGrup}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,27 +51,32 @@ class ButtonHapus extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (context) => const ModalHapusGrupBarang());
+            builder: (context) => ModalHapusGrupBarang(idGrup: idGrup));
       },
     );
   }
 }
 
 class MyData extends DataTableSource {
+  final List<Map<String, dynamic>> listData;
+  MyData(this.listData);
+
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(listGrupBarang[index]['grup'])),
-      DataCell(Text(listGrupBarang[index]['qty_jenis'])),
-      DataCell(Text(listGrupBarang[index]['keterangan'])),
+      DataCell(Text(listData[index]['NAMA_GRUP'].toString())),
+      DataCell(Text(listData[index]['QTY'].toString())),
+      DataCell(Text(listData[index]['KETERANGAN'].toString())),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ButtonKelola(namaBarang: listGrupBarang[index]['grup']),
+            ButtonKelola(idGrupBarang: listData[index]['KDXX_GRUP']),
             const SizedBox(width: 10),
-            const ButtonHapus(),
+            ButtonHapus(
+              idGrup: listData[index]['KDXX_GRUP'],
+            ),
           ],
         ),
       )),
@@ -81,14 +87,15 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listGrupBarang.length;
+  int get rowCount => listData.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
 class TableGrupBarang extends StatefulWidget {
-  const TableGrupBarang({Key key}) : super(key: key);
+  final List<Map<String, dynamic>> listData;
+  TableGrupBarang({Key key, @required this.listData}) : super(key: key);
 
   @override
   State<TableGrupBarang> createState() => _TableGrupBarangState();
@@ -99,11 +106,11 @@ class _TableGrupBarangState extends State<TableGrupBarang> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final DataTableSource myTable = MyData();
+    final DataTableSource myTable = MyData(widget.listData);
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.72,
+      height: screenHeight * 0.60,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

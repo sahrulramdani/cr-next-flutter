@@ -4,12 +4,12 @@ import "package:http/http.dart" as http;
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 
-class HttpController {
+class HttpAgency {
   bool status;
 
-  HttpController({this.status});
+  HttpAgency({this.status});
 
-  static Future<HttpController> saveAgency(
+  static Future<HttpAgency> saveAgency(
     String nik,
     String namaAgen,
     String jenisKelamin,
@@ -75,12 +75,12 @@ class HttpController {
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpController(
+    return HttpAgency(
       status: data["status"],
     );
   }
 
-  static Future<HttpController> updateAgencyBank(
+  static Future<HttpAgency> updateAgencyBank(
     String kodeMarketing,
     String kodeBank,
     String nomorRekening,
@@ -101,12 +101,12 @@ class HttpController {
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpController(
+    return HttpAgency(
       status: data["status"],
     );
   }
 
-  static Future<HttpController> updateAgency(
+  static Future<HttpAgency> updateAgency(
     String id,
     String nik,
     String namaAgen,
@@ -175,12 +175,12 @@ class HttpController {
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpController(
+    return HttpAgency(
       status: data["status"],
     );
   }
 
-  static Future<HttpController> deleteAgency(String kodeAgen) async {
+  static Future<HttpAgency> deleteAgency(String kodeAgen) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/agency/delete");
 
     var hasilResponse = await http.post(
@@ -191,148 +191,7 @@ class HttpController {
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpController(
-      status: data["status"],
-    );
-  }
-
-  // JAMAAH
-  static Future<HttpController> saveJamaah(
-    String nik,
-    String namaJamaah,
-    String jenisKelamin,
-    String tempatLahir,
-    String tanggalLahir,
-    String alamat,
-    String provinsi,
-    String kota,
-    String kecamatan,
-    String kelurahan,
-    String kodePos,
-    String namaAyah,
-    String noTelp,
-    String menikah,
-    String pendidikan,
-    String pekerjaan,
-    String fotoJamaah,
-    String fotoKtpJamaah,
-    String noPaspor,
-    String dikeluarkanDi,
-    String tglKeluar,
-    String tglExpire,
-  ) async {
-    Uri urlApi = Uri.parse("$urlAddress/jamaah/jamaah/save");
-
-    var hasilResponse = await http.post(
-      urlApi,
-      body: {
-        "NOXX_IDNT": nik,
-        "NAMA_LGKP": namaJamaah,
-        "JENS_KLMN": jenisKelamin,
-        "TMPT_LHIR": tempatLahir,
-        "TGLX_LHIR": tanggalLahir,
-        "ALAMAT": alamat,
-        "KDXX_PROV": provinsi,
-        "KDXX_KOTA": kota,
-        "KDXX_KECX": kecamatan,
-        "KDXX_KELX": kelurahan,
-        "KDXX_POSX": kodePos,
-        "NAMA_AYAH": namaAyah,
-        "NOXX_TELP": noTelp,
-        "JENS_MNKH": menikah,
-        "JENS_PEND": pendidikan,
-        "JENS_PKRJ": pekerjaan,
-        "FOTO_JMAH": fotoJamaah,
-        "FOTO_KTPX": fotoKtpJamaah,
-        "NOXX_PSPR": noPaspor ?? '',
-        "KLUR_DIXX": dikeluarkanDi ?? '',
-        "TGLX_KLUR": tglKeluar ?? '',
-        "TGLX_EXPX": tglExpire ?? '',
-      },
-    );
-
-    var data = json.decode(hasilResponse.body);
-    return HttpController(
-      status: data["status"],
-    );
-  }
-
-  static Future<HttpController> updateJamaah(
-    String nik,
-    String namaJamaah,
-    String jenisKelamin,
-    String tempatLahir,
-    String tanggalLahir,
-    String alamat,
-    String provinsi,
-    String kota,
-    String kecamatan,
-    String kelurahan,
-    String kodePos,
-    String namaAyah,
-    String noTelp,
-    String menikah,
-    String pendidikan,
-    String pekerjaan,
-    String fotoJamaah,
-    String fotoKtpJamaah,
-    String noPaspor,
-    String dikeluarkanDi,
-    String tglKeluar,
-    String tglExpire,
-    String fotoLamaJamaah,
-    String fotoLamaKtpJamaah,
-  ) async {
-    Uri urlApi = Uri.parse("$urlAddress/jamaah/jamaah/update");
-
-    var hasilResponse = await http.post(
-      urlApi,
-      body: {
-        "NOXX_IDNT": nik,
-        "NAMA_LGKP": namaJamaah,
-        "JENS_KLMN": jenisKelamin,
-        "TMPT_LHIR": tempatLahir,
-        "TGLX_LHIR": tanggalLahir,
-        "ALAMAT": alamat,
-        "KDXX_PROV": provinsi,
-        "KDXX_KOTA": kota,
-        "KDXX_KECX": kecamatan,
-        "KDXX_KELX": kelurahan,
-        "KDXX_POSX": kodePos,
-        "NAMA_AYAH": namaAyah,
-        "NOXX_TELP": noTelp,
-        "JENS_MNKH": menikah,
-        "JENS_PEND": pendidikan,
-        "JENS_PKRJ": pekerjaan,
-        "FOTO_JMAH": fotoJamaah,
-        "FOTO_KTPX": fotoKtpJamaah,
-        "NOXX_PSPR": noPaspor ?? '',
-        "KLUR_DIXX": dikeluarkanDi ?? '',
-        "TGLX_KLUR": tglKeluar ?? '',
-        "TGLX_EXPX": tglExpire ?? '',
-        "FOTO_LAMA": fotoLamaJamaah,
-        "KTPX_LAMA": fotoLamaKtpJamaah,
-      },
-    );
-
-    var data = json.decode(hasilResponse.body);
-    return HttpController(
-      status: data["status"],
-    );
-  }
-
-  static Future<HttpController> deleteJamaah(String kodeJamaah) async {
-    Uri urlApi = Uri.parse("$urlAddress/jamaah/jamaah/delete");
-
-    var hasilResponse = await http.post(
-      urlApi,
-      body: {
-        "NOXX_IDNT": kodeJamaah,
-      },
-    );
-
-    var data = json.decode(hasilResponse.body);
-    return HttpController(
+    return HttpAgency(
       status: data["status"],
     );
   }

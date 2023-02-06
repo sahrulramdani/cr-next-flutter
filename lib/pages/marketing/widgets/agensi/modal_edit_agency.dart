@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
-import '../../../../models/http_controller.dart';
+import '../../../../models/http_agency.dart';
 
 class ModalEditAgency extends StatefulWidget {
   String idAgency;
@@ -1071,7 +1071,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     // menuController.changeActiveitemTo('Data Jamaah');
     // navigationController.navigateTo('/jamaah/master');
 
-    HttpController.updateAgency(
+    HttpAgency.updateAgency(
       widget.idAgency,
       nik,
       nama,

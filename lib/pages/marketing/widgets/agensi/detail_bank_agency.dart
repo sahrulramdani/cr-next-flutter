@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
-import 'package:flutter_web_course/models/http_controller.dart';
+import 'package:flutter_web_course/models/http_agency.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_course/constants/style.dart';
 import 'dart:convert';
@@ -176,7 +176,7 @@ class _DetailBankAgencyState extends State<DetailBankAgency> {
   }
 
   fncSaveData() {
-    HttpController.updateAgencyBank(
+    HttpAgency.updateAgencyBank(
             widget.idAgency, idBank, nomorRekening, namaRekening, kodeStatus)
         .then(
       (value) {

@@ -3,6 +3,7 @@ import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/dummy_data_bandara.dart';
 import 'package:flutter_web_course/constants/public_variable.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/models/http_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_ktp_jamaah.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
-import '../../../../models/http_controller.dart';
+import '../../../../models/http_agency.dart';
 import 'dart:convert';
 
 class JamaahForm extends StatefulWidget {
@@ -704,7 +705,7 @@ class _JamaahFormState extends State<JamaahForm> {
     // menuController.changeActiveitemTo('Data Jamaah');
     // navigationController.navigateTo('/jamaah/master');
 
-    HttpController.saveJamaah(
+    HttpJamaah.saveJamaah(
       nik,
       namaJamaah,
       jenisKelamin,

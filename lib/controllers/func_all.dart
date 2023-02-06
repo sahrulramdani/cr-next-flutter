@@ -1,4 +1,8 @@
 // ignore_for_file: unnecessary_new
+import 'dart:math';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_web_course/constants/style.dart';
 
 fncGetID(nama, tgl) {
   String name = nama.substring(0, 3).toString().toUpperCase();
@@ -29,7 +33,7 @@ fncGetTanggal(tgl) {
   String tanggalAll = tgl.replaceAll('-', '');
   String tanggal = tanggalAll.substring(0, 2);
   String bulan = tanggalAll.substring(2, 4);
-  String tahun = tanggalAll.substring(6, 8);
+  String tahun = tanggalAll.substring(4, 8);
   String namaBulan;
 
   if (bulan == '01') {
@@ -61,6 +65,14 @@ fncGetTanggal(tgl) {
   return '$tanggal $namaBulan $tahun';
 }
 
+fncRandomId(int length) {
+  const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+  Random random = Random();
+  return String.fromCharCodes(Iterable.generate(
+      length, (_) => characters.codeUnitAt(random.nextInt(characters.length))));
+}
+
 fncTanggal(String tgl) {
   String tanggalAll = tgl.replaceAll('-', '');
   String tanggal = tanggalAll.substring(0, 2);
@@ -76,4 +88,17 @@ fncTelp(String telp) {
   String noAkhir = '62$reguler';
 
   return noAkhir;
+}
+
+fncJatuhTempo(tgl) {
+  String tanggalAll = tgl.replaceAll('-', '');
+  String tanggal = tanggalAll.substring(0, 2);
+  String bulan = tanggalAll.substring(2, 4);
+  String tahun = tanggalAll.substring(4, 8);
+
+  int tempoHari = 30;
+  final tanggalDapat = DateTime.parse('$tahun-$bulan-$tanggal');
+  final jatuhTempo = tanggalDapat.subtract(Duration(days: tempoHari));
+
+  return jatuhTempo;
 }

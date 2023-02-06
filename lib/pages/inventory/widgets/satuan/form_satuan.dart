@@ -1,4 +1,5 @@
 // ignore_for_file: missing_return, deprecated_member_use
+import 'package:flutter_web_course/models/http_satuan.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
 
 class SatuanForm extends StatefulWidget {
@@ -17,21 +17,38 @@ class SatuanForm extends StatefulWidget {
 }
 
 class _SatuanFormState extends State<SatuanForm> {
+  String namaSatuan;
+
   Widget inputSatuan() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
         labelText: 'Satuan',
       ),
+      onChanged: ((value) {
+        namaSatuan = value;
+      }),
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Satuan masih kosong !";
+        }
+      },
     );
   }
 
   fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+    HttpSatuan.saveSatuan(namaSatuan).then((value) {
+      if (value.status == true) {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveSuccess());
 
-    menuController.changeActiveitemTo('Satuan');
-    navigationController.navigateTo('/inventory/satuan');
+        menuController.changeActiveitemTo('Satuan');
+        navigationController.navigateTo('/inventory/satuan');
+      } else {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveFail());
+      }
+    });
   }
 
   @override

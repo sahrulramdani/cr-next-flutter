@@ -1,8 +1,14 @@
+// ignore_for_file: unused_local_variable, must_be_immutable
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_edit_satuan.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_hapus_satuan.dart';
+import 'package:flutter_web_course/pages/overview/widgets/datatable_proyek.dart';
+import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jadwal.dart';
@@ -25,14 +31,15 @@ class ButtonEdit extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (context) => ModalEditSatuan(satuan: satuan));
+            builder: (context) => ModalEditSatuan(idsatuan: satuan));
       },
     );
   }
 }
 
 class ButtonHapus extends StatelessWidget {
-  const ButtonHapus({Key key}) : super(key: key);
+  String idsatuan;
+  ButtonHapus({Key key, @required this.idsatuan}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +50,29 @@ class ButtonHapus extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalHapusSatuan());
+            context: context,
+            builder: (context) => ModalHapusSatuan(idsatuan: idsatuan));
       },
     );
   }
 }
 
 class MyData extends DataTableSource {
+  final List<Map<String, dynamic>> listSatuan;
+  MyData(this.listSatuan);
+
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(listDataSatuan[index]['satuan'])),
+      DataCell(Text(listSatuan[index]['NAMA_STAN'])),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ButtonEdit(satuan: listDataSatuan[index]['satuan']),
+            ButtonEdit(satuan: listSatuan[index]['IDXX_STAN']),
             const SizedBox(width: 10),
-            const ButtonHapus()
+            ButtonHapus(idsatuan: listSatuan[index]['IDXX_STAN']),
           ],
         ),
       )),
@@ -72,14 +83,15 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listDataSatuan.length;
+  int get rowCount => listSatuan.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
 class TableSatuan extends StatefulWidget {
-  const TableSatuan({Key key}) : super(key: key);
+  List<Map<String, dynamic>> listSatuan;
+  TableSatuan({Key key, @required this.listSatuan}) : super(key: key);
 
   @override
   State<TableSatuan> createState() => _TableSatuanState();
@@ -90,7 +102,7 @@ class _TableSatuanState extends State<TableSatuan> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final DataTableSource myTable = MyData();
+    final DataTableSource myTable = MyData(widget.listSatuan);
 
     return SizedBox(
       width: screenWidth,

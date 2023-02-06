@@ -2,7 +2,7 @@
 
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
-import 'package:flutter_web_course/models/http_controller.dart';
+import 'package:flutter_web_course/models/http_jamaah.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -832,7 +832,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
   }
 
   fncSaveData() {
-    HttpController.updateJamaah(
+    HttpJamaah.updateJamaah(
       nik,
       namaJamaah,
       jenisKelamin,

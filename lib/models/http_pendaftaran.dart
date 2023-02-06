@@ -1,0 +1,59 @@
+import 'dart:async';
+import 'dart:convert';
+import "package:http/http.dart" as http;
+import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+
+class HttpPendaftaran {
+  bool status;
+
+  HttpPendaftaran({this.status});
+
+  static Future<HttpPendaftaran> savePendaftaran(
+    String idPelanggan,
+    String idKantor,
+    String nik,
+    String idProduk,
+    String ktp,
+    String kk,
+    String lampiran,
+    String pembuatan,
+    String vaksin,
+    String handling,
+    String refrensi,
+    String namaAgency,
+    String estimasi,
+    String jatuhTempo,
+    String kkBase,
+    String dokumenBase,
+    String listTagihan,
+    // String idTagihan,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save");
+    var hasilResponse = await http.post(urlApi, body: {
+      "KDXX_DFTR": idPelanggan,
+      "KDXX_KNTR": idKantor,
+      "NOXX_IDNT": nik,
+      "KDXX_JDWL": idProduk,
+      "DOKX_KTPX": ktp,
+      "DOKX_KKXX": kk,
+      "DOKX_LAIN": lampiran,
+      "PEMB_PSPR": pembuatan,
+      "PRSS_VKSN": vaksin,
+      "HANDLING": handling,
+      "REFRENSI": refrensi,
+      "KDXX_MRKT": namaAgency,
+      "ESTX_TOTL": estimasi,
+      "JTUH_TEMP": jatuhTempo,
+      "FOTO_KKXX": kkBase,
+      "FOTO_DOCX": dokumenBase,
+      "TAGIHAN": listTagihan,
+      // "NOXX_TGIH": idTagihan,
+    });
+
+    var data = json.decode(hasilResponse.body);
+    return HttpPendaftaran(
+      status: data["status"],
+    );
+  }
+}

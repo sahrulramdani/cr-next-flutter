@@ -1,4 +1,6 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
@@ -11,31 +13,38 @@ import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/pages/inventory/widgets/detail_table_riwayat.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/list_grup_barang_table.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_tambah_barang_grup.dart';
+import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 // import 'package:pattern_formatter/pattern_formatter.dart';
 // import 'package:intl/intl.dart';
 
 class ModalListGrup extends StatefulWidget {
-  final String namaGrup;
-  const ModalListGrup({Key key, @required this.namaGrup}) : super(key: key);
+  String idGrupbrg;
+  ModalListGrup({Key key, @required this.idGrupbrg}) : super(key: key);
 
   @override
   State<ModalListGrup> createState() => _ModalListGrupState();
 }
 
 class _ModalListGrupState extends State<ModalListGrup> {
-  List<Map<String, dynamic>> listBarangPadaGrup = listBarangGrup;
+  List<Map<String, dynamic>> listBarangPadaGrup = [];
 
-  getList() {
+  void getGrupBarangDetail() async {
+    var id = widget.idGrupbrg;
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/grupsbrg/getGrupDetail/$id"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
     setState(() {
-      listBarangPadaGrup = listBarangGrup;
+      listBarangPadaGrup = data;
     });
   }
 
   @override
   void initState() {
-    getList();
     super.initState();
+    getGrupBarangDetail();
   }
 
   Widget spacePemisah() {
@@ -50,9 +59,8 @@ class _ModalListGrupState extends State<ModalListGrup> {
       onPressed: () async {
         showDialog(
             context: context,
-            builder: (context) => ModalTambahBarangGrup(
-                  namaGrup: widget.namaGrup,
-                ));
+            builder: (context) =>
+                ModalTambahBarangGrup(idGrup: widget.idGrupbrg));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
@@ -137,7 +145,8 @@ class _ModalListGrupState extends State<ModalListGrup> {
                       ),
                       const SizedBox(width: 10),
                       FittedBox(
-                        child: Text('Kelola Item Grup ${widget.namaGrup}',
+                        child: Text('Kelola Item Grup',
+                            // child: Text('Kelola Item Grup ${widget.namaGrup}',
                             style: TextStyle(
                               color: myGrey,
                               fontWeight: FontWeight.bold,
@@ -157,7 +166,7 @@ class _ModalListGrupState extends State<ModalListGrup> {
                           children: [
                             const SizedBox(height: 30),
                             ListGrupBarangTable(
-                              namaGrup: widget.namaGrup,
+                              // namaGrup: widget.idGrupbrg,
                               listBarangGrupTable: listBarangPadaGrup,
                             ),
                           ],

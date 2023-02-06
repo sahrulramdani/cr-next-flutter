@@ -1,18 +1,22 @@
 // ignore_for_file: deprecated_member_use, missing_return
 
+import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/models/http_pendaftaran.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
+// import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -24,10 +28,23 @@ class JamaahPendaftaranPage extends StatefulWidget {
 }
 
 class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
-  List<Map<String, dynamic>> listAgency = [];
+  String idKantor = '00001';
+  String namaKantor;
+  String idProduk;
   String namaProduk;
+  String nik;
   String namaPelanggan;
+  String kk;
+  String ktp;
+  String lampiran;
+  String pembuatan;
+  String vaksin;
+  String handling;
+  String refrensi;
   String namaAgency;
+  String totalEst;
+  String tglBerangkat;
+
   String paket;
   String tarif;
   String harga;
@@ -36,19 +53,32 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   String umur;
   String alamat;
   String paspor;
-  String pembuatan;
-  String vaksin;
   String fasilitas;
-  String biaya;
+  // String biaya;
   String biayaVaksin;
   String biayaPaspor;
+  String biayaAdmin = '100,000';
   String estimasi;
+  String mataUang;
 
-  String kk;
-  String ktp;
-  String lampiran;
+  String ktpPelanggan;
+  Uint8List ktpPelangganByte;
+
+  String fotoKkPelanggan = "";
+  String fotoKkPelangganBase = "";
+  Uint8List fotoKkPelangganByte;
+
+  String fotoDokPelanggan = "";
+  String fotoDokPelangganBase = "";
+  Uint8List fotoDokPelangganByte;
 
   bool enableMarket = false;
+
+  List<Map<String, dynamic>> listAgency = [];
+  List<Map<String, dynamic>> listJadwal = [];
+  List<Map<String, dynamic>> listKantor = [];
+  List<Map<String, dynamic>> listJamaah = [];
+  List<Map<String, String>> listTagihan = [];
 
   void getList() async {
     var response =
@@ -62,10 +92,42 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     });
   }
 
+  getKantor() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/kantor"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listKantor = dataStatus;
+    });
+  }
+
+  getJadwal() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/get-jadwal"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJadwal = dataStatus;
+    });
+  }
+
+  void getJamaah() async {
+    var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listJamaah = dataStatus;
+    setState(() {});
+  }
+
   @override
   void initState() {
-    getList();
     super.initState();
+    getList();
+    getJadwal();
+    getKantor();
+    getJamaah();
   }
 
   Widget inputKantor() {
@@ -76,28 +138,33 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          enabled: false,
-          label: "Dari Kantor",
-          mode: Mode.BOTTOM_SHEET,
-          items: const [
-            "Pusat",
-            "Turangga",
-            "Tasikmalaya",
-            "KPRK Garut",
-            "KPRK Tasikmalaya",
-            "KPRK Karawang",
-            "KPRK Purwakarta",
-            "KPRK Cirebon",
-          ],
-          showSearchBox: true,
-          onChanged: print,
-          selectedItem: "Pusat",
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        enabled: enableMarket,
+        mode: Mode.BOTTOM_SHEET,
+        label: "Nama Kantor",
+        items: listKantor,
+        onChanged: (value) {
+          namaKantor = value['NAMA_KNTR'];
+          idKantor = value['KDXX_KNTR'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_KNTR'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) => const Text('Pusat'),
+        validator: (value) {
+          if (value == "Nama Kantor belum Dipilih") {
+            return "Kantor masih kosong !";
+          }
+        },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+      ),
     );
   }
 
   Widget inputNamaJadwal() {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -107,56 +174,64 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Jadwal",
-          items: listJadwalProduk,
+          items: listJadwal,
           onChanged: (value) {
             if (value != null) {
               setState(() {
-                paket = value["paket"] +
+                idProduk = value['IDXX_JDWL'];
+                paket = value["namaPaket"] +
                     ' ' +
-                    value['jenis'] +
+                    value['jenisPaket'] +
                     ' - ' +
-                    value['keterangan'];
-                tarif = value['uang'] + '.' + value["tarif"];
-                berangkat = value["berangkat"];
-                pulang = value["pulang"];
-                harga = value["tarif"];
+                    value['KETERANGAN'];
+                tarif = myformat.format(value['TARIF_PKET']);
+                berangkat = fncGetTanggal(value['TGLX_BGKT']);
+                pulang = fncGetTanggal(value['TGLX_PLNG']);
+                harga = myformat.format(value['TARIF_PKET']);
+                mataUang = value['MATA_UANG'];
+                tglBerangkat = value['TGLX_BGKT'];
               });
-              fncTotal();
+              // fncTotal();
             } else {
               setState(() {
+                idProduk = '';
                 paket = '';
                 tarif = '';
                 berangkat = '';
                 pulang = '';
                 harga = '';
+                mataUang = '';
+                tglBerangkat;
               });
-              fncTotal();
+              // fncTotal();
             }
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(
-                  item['paket'] +
+                  item['namaPaket'] +
                       ' - ' +
-                      item['jenis'] +
+                      item['jenisPaket'] +
                       ' - ' +
-                      item['keterangan'],
+                      item['KETERANGAN'],
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                    item['uang'] +
+                    item['MATA_UANG'] +
                         ' ' +
-                        item['tarif'] +
+                        myformat.format(item['TARIF_PKET']) +
                         ' - ' +
                         'Sisa Seat : ' +
-                        item['sisa'],
+                        item['SISA'].toString(),
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(item['berangkat'] + ' - ' + item['pulang'],
+                trailing: Text(
+                    fncGetTanggal(item['TGLX_BGKT']) +
+                        ' - ' +
+                        fncGetTanggal(item['TGLX_PLNG']),
                     textAlign: TextAlign.center),
               ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['keterangan']
-              : "Produk belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(paket ?? "Produk belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Jadwal Produk masih kosong !";
@@ -177,21 +252,25 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Nama Pelanggan",
-          items: listPelanggan,
+          items: listJamaah,
           onChanged: (value) {
             if (value != null) {
               setState(() {
-                namaPelanggan = value["nama"];
-                umur = value['umur'];
-                alamat = value['alamat'];
-                paspor = value['paspor'];
+                nik = value['NOXX_IDNT'];
+                namaPelanggan = value["NAMA_LGKP"];
+                umur = value['UMUR'].toString();
+                alamat = value['ALAMAT'];
+                paspor =
+                    value['NOXX_PSPR'] != null ? 'Tersedia' : 'Tidak Tersedia';
 
-                ktp = 'KTP';
-                kk = 'KK';
+                ktp = value['FOTO_KTPX'] != '' ? 'KTP' : 'Belum';
+                kk = 'Belum';
                 lampiran = 'Belum';
+                ktpPelanggan = value['FOTO_KTPX'];
               });
             } else {
               setState(() {
+                nik = null;
                 namaPelanggan = '';
                 umur = '';
                 alamat = '';
@@ -200,27 +279,25 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                 ktp = null;
                 kk = null;
                 lampiran = null;
+                ktpPelanggan = null;
               });
             }
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                    item['nama'] + ' - ' + item['jk'] + ' - ' + item['umur'],
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                leading: const CircleAvatar(),
-                subtitle: Text(
-                    item['nik'] +
-                        ' - No Telp : ' +
-                        item['telp'] +
-                        ' - TTL : ' +
-                        item['ttl'],
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(item['alamat']),
+                title: Text(item['NAMA_LGKP'].toString()),
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage('$urlAddress/uploads/${item['FOTO_JMAH']}'),
+                ),
+                subtitle: Text(item['NOXX_IDNT'].toString()),
+                trailing: Text(
+                    DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
+                    textAlign: TextAlign.center),
               ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['nama']
-              : "Pelanggan belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              selectedItem != null ? namaPelanggan : "Pelanggan belum Dipilih"),
           validator: (value) {
             if (value == null) {
               return "Nama Pelanggan masih kosong !";
@@ -245,7 +322,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "KTP",
             "Belum",
           ],
-          onChanged: print,
+          onChanged: (value) {
+            ktp = value;
+          },
           selectedItem: ktp ?? "Pilih Status KTP",
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
@@ -266,7 +345,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "KK",
             "Belum",
           ],
-          onChanged: print,
+          onChanged: (value) {
+            kk = value;
+          },
           selectedItem: kk ?? "Pilih Status KK",
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
@@ -289,7 +370,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "Ijazah",
             "Belum",
           ],
-          onChanged: print,
+          onChanged: (value) {
+            lampiran = value;
+          },
           selectedItem: lampiran ?? "Pilih Lampiran",
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
@@ -400,7 +483,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "Belum Diterima",
             "Tidak Dengan Handling",
           ],
-          onChanged: print,
+          onChanged: (value) {
+            handling = value;
+          },
           selectedItem: "Pilih Status Handling",
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
@@ -430,22 +515,22 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     );
   }
 
-  Widget inputBiayaFasilitas() {
-    return TextFormField(
-      textAlign: TextAlign.right,
-      onChanged: (value) {
-        setState(() {
-          fasilitas = 'IDR.$value';
-          biaya = value;
-        });
-        fncTotal();
-      },
-      keyboardType: TextInputType.number,
-      inputFormatters: [ThousandsFormatter()],
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Biaya Fasilitas'),
-    );
-  }
+  // Widget inputBiayaFasilitas() {
+  //   return TextFormField(
+  //     textAlign: TextAlign.right,
+  //     onChanged: (value) {
+  //       setState(() {
+  //         fasilitas = 'IDR.$value';
+  //         biaya = value;
+  //       });
+  //       fncTotal();
+  //     },
+  //     keyboardType: TextInputType.number,
+  //     inputFormatters: [ThousandsFormatter()],
+  //     style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+  //     decoration: const InputDecoration(labelText: 'Biaya Fasilitas'),
+  //   );
+  // }
 
   Widget inputKurs() {
     return TextFormField(
@@ -476,6 +561,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "FREE",
           ],
           onChanged: (value) {
+            refrensi = value;
             if (value == 'MARKETING') {
               setState(() {
                 enableMarket = true;
@@ -506,7 +592,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           items: listAgency,
           onChanged: (value) {
             if (value != null) {
-              namaAgency = value["KDXX_AGEN"];
+              namaAgency = value["KDXX_MRKT"];
             } else {
               namaAgency = '';
             }
@@ -514,8 +600,11 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(item['NAMA_LGKP'].toString()),
-                leading: const CircleAvatar(),
-                subtitle: Text(item['KDXX_AGEN'].toString()),
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage('$urlAddress/uploads/${item['FOTO_AGEN']}'),
+                ),
+                subtitle: Text(item['KDXX_MRKT'].toString()),
                 trailing: Text(
                     DateFormat("dd-MM-yyyy")
                         .format(DateTime.parse(item['TGLX_LHIR'].toString())),
@@ -529,28 +618,28 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     );
   }
 
-  Widget inputKamar() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          label: "Kategori Kamar",
-          mode: Mode.BOTTOM_SHEET,
-          items: const [
-            "Suite",
-            "Double",
-            "Triple",
-            "Quad",
-          ],
-          onChanged: print,
-          selectedItem: "Pilih Kategori Kamar",
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
+  // Widget inputKamar() {
+  //   return Container(
+  //     height: 50,
+  //     decoration: const BoxDecoration(
+  //         border: Border(
+  //             bottom: BorderSide(
+  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+  //     child: DropdownSearch(
+  //         label: "Kategori Kamar",
+  //         mode: Mode.BOTTOM_SHEET,
+  //         items: const [
+  //           "Suite",
+  //           "Double",
+  //           "Triple",
+  //           "Quad",
+  //         ],
+  //         onChanged: print,
+  //         selectedItem: "Pilih Kategori Kamar",
+  //         dropdownSearchDecoration:
+  //             const InputDecoration(border: InputBorder.none)),
+  //   );
+  // }
 
   Widget inputRouteFile() {
     return TextFormField(
@@ -564,23 +653,253 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   }
 
   fncTotal() {
-    int cek = ((biaya != null ? int.parse(biaya.replaceAll(',', '')) : 0) +
+    int cek = (
+        // (biaya != null ? int.parse(biaya.replaceAll(',', '')) : 0) +
         (harga != null ? int.parse(harga.replaceAll(',', '')) : 0) +
-        (biayaPaspor != null ? int.parse(biayaPaspor.replaceAll(',', '')) : 0) +
-        (biayaVaksin != null ? int.parse(biayaVaksin.replaceAll(',', '')) : 0));
+            (biayaPaspor != null
+                ? int.parse(biayaPaspor.replaceAll(',', ''))
+                : 0) +
+            (biayaAdmin != null
+                ? int.parse(biayaAdmin.replaceAll(',', ''))
+                : 0) +
+            (biayaVaksin != null
+                ? int.parse(biayaVaksin.replaceAll(',', ''))
+                : 0));
 
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     setState(() {
-      estimasi = ('IDR.${myFormat.format(cek)}').toString();
+      estimasi = ('$mataUang.${myFormat.format(cek)}').toString();
+      totalEst = cek.toString();
     });
   }
 
-  fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+  Widget btnUploadKtp() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        // showDialog(
+        //     context: context,
+        //     builder: (context) =>
+        //         const ModalUploadDokumen());
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload KTP',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
 
-    menuController.changeActiveitemTo('Pelanggan');
-    navigationController.navigateTo('/jamaah/pelanggan');
+  Widget btnUploadKK() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        getImageKK();
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload KK',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
+
+  Widget btnUploadDokumen() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        getImageDok();
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload Dokumen',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
+
+  Widget resultFotoKTP() {
+    if (ktpPelangganByte != null) {
+      return Image.memory(
+        ktpPelangganByte,
+        height: 100,
+      );
+    } else {
+      if (ktpPelanggan != null) {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/$ktpPelanggan'),
+          height: 100,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          height: 100,
+        );
+      }
+    }
+  }
+
+  Widget resultFotoKK() {
+    if (fotoKkPelangganByte != null) {
+      return Image.memory(
+        fotoKkPelangganByte,
+        height: 100,
+      );
+    } else {
+      return const Image(
+        image: AssetImage('assets/images/NO_IMAGE.jpg'),
+        height: 100,
+      );
+    }
+  }
+
+  Widget resultFotoDok() {
+    if (fotoDokPelangganByte != null) {
+      return Image.memory(
+        fotoDokPelangganByte,
+        height: 100,
+      );
+    } else {
+      return const Image(
+        image: AssetImage('assets/images/NO_IMAGE.jpg'),
+        height: 100,
+      );
+    }
+  }
+
+  getImageKK() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoKkPelanggan = fileResult.files.first.name;
+        fotoKkPelangganByte = fileResult.files.first.bytes;
+        fotoKkPelangganBase = encodeFoto;
+      });
+    }
+  }
+
+  getImageDok() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoDokPelanggan = fileResult.files.first.name;
+        fotoDokPelangganByte = fileResult.files.first.bytes;
+        fotoDokPelangganBase = encodeFoto;
+      });
+    }
+  }
+
+  fncSaveData() async {
+    // GET ID PELANGGAN
+    var response1 = await http
+        .get(Uri.parse("$urlAddress/jamaah/pendaftaran/kode"), headers: {
+      'pte-token': kodeToken,
+    });
+    dynamic body1 = json.decode(response1.body);
+    String idPelanggan = body1['idPelanggan'];
+
+    // // GET ID TAGIHAN
+    // var response2 = await http
+    //     .get(Uri.parse("$urlAddress/jamaah/pendaftaran/tagihan"), headers: {
+    //   'pte-token': kodeToken,
+    // });
+    // dynamic body2 = json.decode(response2.body);
+    // String idTagihan = body2['idTagihan'];
+
+    // MEMBUAT TAGIHAN
+    var tagihan = {
+      {
+        '"nama_tagihan"': '"Paket Umroh"',
+        '"total_tagihan"': '"${tarif.replaceAll(',', '')}"',
+      },
+      if (biayaVaksin != '0')
+        {
+          '"nama_tagihan"': '"Vaksin"',
+          '"total_tagihan"': '"${biayaVaksin.replaceAll(',', '')}"',
+        },
+      if (biayaPaspor != '0')
+        {
+          '"nama_tagihan"': '"Paspor"',
+          '"total_tagihan"': '"${biayaPaspor.replaceAll(',', '')}"',
+        },
+      {
+        '"nama_tagihan"': '"Biaya Admin"',
+        '"total_tagihan"': '"${biayaAdmin.replaceAll(',', '')}"',
+      },
+    };
+    listTagihan.addAll(tagihan);
+
+    // print(idPelanggan);
+    // print(idKantor);
+    // print(nik);
+    // print(idProduk);
+    // print(ktp);
+    // print(kk);
+    // print(lampiran);
+    // print(pembuatan);
+    // print(vaksin);
+    // print(handling);
+    // print(refrensi);
+    // print(namaAgency);
+    // print(totalEst);
+    // print(fncJatuhTempo(tglBerangkat));
+    // print(fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK');
+    // print(fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK');
+    // print('$listTagihan');
+
+    HttpPendaftaran.savePendaftaran(
+      idPelanggan,
+      idKantor,
+      nik,
+      idProduk,
+      ktp,
+      kk,
+      lampiran,
+      pembuatan,
+      vaksin,
+      handling,
+      refrensi,
+      namaAgency,
+      totalEst,
+      fncJatuhTempo(tglBerangkat).toString(),
+      fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
+      fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK',
+      '$listTagihan',
+      // idTagihan
+    ).then((value) {
+      if (value.status == true) {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveSuccess());
+        menuController.changeActiveitemTo('Pelanggan');
+        navigationController.navigateTo('/jamaah/pelanggan');
+      } else {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveFail());
+      }
+    });
   }
 
   @override
@@ -721,83 +1040,112 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    // Row(
-                                    //   children: [
-                                    //     SizedBox(
-                                    //         width: 330, child: inputPaspor()),
-                                    //     const SizedBox(width: 20),
-                                    //     SizedBox(
-                                    //         width: 330, child: inputVaksin()),
-                                    //   ],
-                                    // ),
-                                    inputPaspor(),
-                                    const SizedBox(height: 8),
-                                    inputVaksin(),
-                                    const SizedBox(height: 8),
-                                    // Row(
-                                    //   children: [
-                                    //     SizedBox(
-                                    //         width: 300,
-                                    //         child: inputStatusHandling()),
-                                    //     const SizedBox(width: 20),
-                                    //     SizedBox(
-                                    //         width: 360, child: inputHandling()),
-                                    //   ],
-                                    // ),
-                                    inputHandling(),
-                                    const SizedBox(height: 8),
-                                    inputStatusHandling(),
-                                    const SizedBox(height: 8),
-                                    // Row(
-                                    //   children: [
-                                    //     SizedBox(
-                                    //         width: 460,
-                                    //         child: inputBiayaFasilitas()),
-                                    //     const SizedBox(width: 20),
-                                    //     SizedBox(
-                                    //         width: 200, child: inputKurs()),
-                                    //   ],
-                                    // ),
-                                    inputKurs(),
-                                    const SizedBox(height: 8),
-                                    inputRefrensi(),
-                                    const SizedBox(height: 8),
-                                    inputNamaMarketing(),
-                                    const SizedBox(height: 8),
-                                    inputKamar(),
-                                    const SizedBox(height: 8),
                                     Row(
                                       children: [
                                         SizedBox(
-                                            width: 450,
-                                            child: inputRouteFile()),
+                                            width: 330, child: inputPaspor()),
+                                        const SizedBox(width: 20),
+                                        SizedBox(
+                                            width: 330, child: inputVaksin()),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    // inputPaspor(),
+                                    // inputVaksin(),
+                                    // const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                            width: 300,
+                                            child: inputStatusHandling()),
+                                        const SizedBox(width: 20),
+                                        SizedBox(
+                                            width: 360, child: inputHandling()),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    // inputHandling(),
+                                    // inputStatusHandling(),
+                                    // const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                            width: 200, child: inputKurs()),
+                                        const SizedBox(width: 20),
+                                        SizedBox(
+                                            width: 460, child: inputRefrensi()),
+                                      ],
+                                    ),
+                                    // inputKurs(),
+                                    // const SizedBox(height: 8),
+                                    // inputRefrensi(),
+                                    const SizedBox(height: 8),
+                                    inputNamaMarketing(),
+                                    const SizedBox(height: 8),
+                                    // inputKamar(),
+                                    // const SizedBox(height: 8),
+                                    Container(
+                                      width: 680,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.grey)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          resultFotoKTP(),
+                                          const SizedBox(width: 10),
+                                          resultFotoKK(),
+                                          const SizedBox(width: 10),
+                                          resultFotoDok()
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        // btnUploadKtp(),
+                                        // const SizedBox(width: 10),
+                                        btnUploadKK(),
                                         const SizedBox(width: 10),
-                                        Container(
-                                          padding:
-                                              const EdgeInsets.only(top: 10),
-                                          child: ElevatedButton.icon(
-                                            onPressed: () {
-                                              // showDialog(
-                                              //     context: context,
-                                              //     builder: (context) =>
-                                              //         const ModalUploadDokumen());
-                                            },
-                                            icon: const Icon(Icons.save),
-                                            label: const Text(
-                                              'Upload Dokumen',
-                                              style: TextStyle(
-                                                  fontFamily: 'Gilroy'),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: myBlue,
-                                              minimumSize: const Size(100, 40),
-                                              shadowColor: Colors.grey,
-                                              elevation: 10,
-                                            ),
-                                          ),
-                                        ),
+                                        btnUploadDokumen()
                                       ],
                                     )
+                                    // Row(
+                                    //   children: [
+                                    //     SizedBox(
+                                    //         width: 450,
+                                    //         child: inputRouteFile()),
+                                    //     const SizedBox(width: 10),
+                                    //     Container(
+                                    //       padding:
+                                    //           const EdgeInsets.only(top: 10),
+                                    //       child: ElevatedButton.icon(
+                                    //         onPressed: () {
+                                    //           // showDialog(
+                                    //           //     context: context,
+                                    //           //     builder: (context) =>
+                                    //           //         const ModalUploadDokumen());
+                                    //         },
+                                    //         icon: const Icon(Icons.save),
+                                    //         label: const Text(
+                                    //           'Upload Dokumen',
+                                    //           style: TextStyle(
+                                    //               fontFamily: 'Gilroy'),
+                                    //         ),
+                                    //         style: ElevatedButton.styleFrom(
+                                    //           backgroundColor: myBlue,
+                                    //           minimumSize: const Size(100, 40),
+                                    //           shadowColor: Colors.grey,
+                                    //           elevation: 10,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // )
                                   ],
                                 ),
                               ),
@@ -811,30 +1159,41 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                         dataRowHeight: 35,
                                         border:
                                             TableBorder.all(color: Colors.grey),
-                                        columns: [
-                                          const DataColumn(
-                                              label: Text('Tarif')),
-                                          const DataColumn(label: Text(':')),
+                                        columns: const [
                                           DataColumn(
-                                              label: Text(
-                                            tarif ?? '0',
-                                            textAlign: TextAlign.right,
-                                          )),
+                                              label: Text('Tarif',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold))),
+                                          DataColumn(
+                                              label: Text(':',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold))),
+                                          DataColumn(
+                                              label: Text('Harga',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold))),
                                         ],
                                         rows: [
                                           DataRow(cells: [
                                             const DataCell(Text('Tarif')),
                                             const DataCell(Text(':')),
-                                            DataCell(Text(
-                                              tarif ?? '0',
-                                              textAlign: TextAlign.right,
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                tarif ?? '0',
+                                                textAlign: TextAlign.right,
+                                              ),
                                             )),
                                           ]),
                                           DataRow(cells: [
                                             const DataCell(
                                                 Text('Biaya Vaksin')),
                                             const DataCell(Text(':')),
-                                            DataCell(Expanded(
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
                                               child: Text(
                                                 biayaVaksin ?? '0',
                                                 textAlign: TextAlign.right,
@@ -845,9 +1204,21 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                             const DataCell(
                                                 Text('Biaya Paspor')),
                                             const DataCell(Text(':')),
-                                            DataCell(Expanded(
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
                                               child: Text(
                                                 biayaPaspor ?? '0',
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            )),
+                                          ]),
+                                          DataRow(cells: [
+                                            const DataCell(Text('Biaya Admin')),
+                                            const DataCell(Text(':')),
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                biayaAdmin ?? '0',
                                                 textAlign: TextAlign.right,
                                               ),
                                             )),
@@ -856,7 +1227,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                             const DataCell(
                                                 Text('Estimasi Total')),
                                             const DataCell(Text(':')),
-                                            DataCell(Expanded(
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
                                               child: Text(
                                                 estimasi ?? '0',
                                                 textAlign: TextAlign.right,
@@ -865,7 +1237,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                           ]),
                                         ]),
                                   ),
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 30),
                                   Container(
                                     width: 400,
                                     decoration: BoxDecoration(

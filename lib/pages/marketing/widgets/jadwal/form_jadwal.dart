@@ -1,5 +1,9 @@
-// ignore_for_file: missing_return, deprecated_member_use
+// ignore_for_file: missing_return, deprecated_member_use, avoid_print, unused_local_variable, must_call_super, dead_code, prefer_interpolation_to_compose_strings
+import 'dart:convert';
+
 import 'package:flutter_web_course/constants/dummy_jadwal.dart';
+import 'package:flutter_web_course/constants/dummy_data_bandara.dart';
+import 'package:flutter_web_course/models/http_jadwal.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +12,6 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:intl/intl.dart';
 
@@ -20,21 +23,84 @@ class JadwalForm extends StatefulWidget {
 }
 
 class _JadwalFormState extends State<JadwalForm> {
-  String paket;
-  String jenis;
+  String namaPaket;
+  String idpaket;
+  String idjenis;
+  String namaJenis;
   String tujuan;
   String jumlahHari;
   String pesawat;
   String rute;
+  String namaRute;
+  String rute2;
+  String namaTransit;
+  String rute3;
   String tarif;
   String jumlahSeat;
   String mataUang;
+  String idMataUang;
   String keterangan;
 
   String tglBerangkat;
   String tglPulang;
   TextEditingController dateBerangkat = TextEditingController();
   TextEditingController datePulang = TextEditingController();
+
+  List<Map<String, dynamic>> listJenisPaket = [];
+  List<Map<String, dynamic>> listPaket = [];
+  List<Map<String, dynamic>> listMataUang = [];
+  List<Map<String, dynamic>> listTransit = [];
+  List<Map<String, dynamic>> listBandara = dummyDataBandara;
+
+  void getJenisPaket() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getjenispaket"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJenisPaket = data;
+    });
+  }
+
+  void getPaket() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getpaket"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listPaket = data;
+    });
+  }
+
+  void getMataUang() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getmatauang"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listMataUang = data;
+    });
+  }
+
+  void getTransit() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listTransit = data;
+    });
+  }
+
+  @override
+  void initState() {
+    getJenisPaket();
+    getPaket();
+    getMataUang();
+    getTransit();
+    super.initState();
+  }
 
   Widget inputPaket() {
     return Container(
@@ -46,11 +112,17 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
         label: "Paket",
         mode: Mode.MENU,
-        items: const ["Haji", "Urmroh", "Domestik", "Internasional"],
+        items: listPaket,
         onChanged: (value) {
-          paket = value;
+          namaPaket = value["CODD_DESC"];
+          idpaket = value["CODD_VALU"];
         },
         selectedItem: "Pilih Paket",
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaPaket ?? "Pilih Paket"),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -72,11 +144,17 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
         label: "Jenis Paket",
         mode: Mode.MENU,
-        items: const ["Reguler B3", "Reguler B5", "Plus Negara"],
+        items: listJenisPaket,
         onChanged: (value) {
-          jenis = value;
+          namaJenis = value["CODD_DESC"];
+          idjenis = value["CODD_VALU"];
         },
         selectedItem: "Pilih Jenis Paket",
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaJenis ?? "Pilih Jenis Paket"),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -119,7 +197,7 @@ class _JadwalFormState extends State<JadwalForm> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           dateBerangkat.text = formattedDate;
         }
       },
@@ -141,7 +219,7 @@ class _JadwalFormState extends State<JadwalForm> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           datePulang.text = formattedDate;
         }
       },
@@ -180,17 +258,97 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   Widget inputRute() {
-    return TextFormField(
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Rute Pesawat'),
-      onChanged: (value) {
-        rute = value;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Rute masih kosong !";
-        }
-      },
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Awal",
+          items: listBandara,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            rute = value['iata_code'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['iata_code']} - ${item['municipality']}"),
+                trailing: Text(item['name']),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(rute ?? "Rute Awal belum Dipilih"),
+          validator: (value) {
+            if (value == null) {
+              return "Rute Awal masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputRute2() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Transit",
+          items: listTransit,
+          onChanged: (value) {
+            rute2 = value['IDXX_RTS'];
+            namaTransit = value['NAMA_NEGR'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_NEGR']),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(namaTransit ?? "Rute Transit belum Dipilih"),
+          validator: (value) {
+            if (value == null) {
+              return "Rute Transit kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputRute3() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Akhir",
+          items: listBandara,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            rute3 = value['iata_code'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['iata_code']} - ${item['municipality']}"),
+                trailing: Text(item['name']),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(rute3 ?? "Rute Akhir belum Dipilih"),
+          validator: (value) {
+            if (value == null) {
+              return "Rute Akhir masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
     );
   }
 
@@ -238,11 +396,17 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
         label: "Mata Uang",
         mode: Mode.MENU,
-        items: const ["IDR", "USD"],
+        items: listMataUang,
         onChanged: (value) {
-          mataUang = value;
+          mataUang = value["CODD_DESC"];
+          idMataUang = value["CODD_VALU"];
         },
         selectedItem: "Pilih Mata Uang",
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(mataUang ?? "Pilih Mata Uang"),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -265,51 +429,47 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   fncSaveData() {
-    var obj = [
-      {
-        "id_jadwal": fncGetIDJadwal(dateBerangkat.text),
-        "tipe": paket,
-        "jenis": "a",
-        "tujuan": tujuan,
-        "tanggal_berangkat": dateBerangkat.text,
-        "jumlah_hari": jumlahHari,
-        "biaya": tarif.replaceAll(',', ''),
-        "mata_uang": mataUang,
-        "jumlah_seat": jumlahSeat,
-        "pesawat": pesawat,
-        "rute_penerbangan": rute,
-        "keterangan": keterangan,
-        "status_berangkat": "a",
-        "status_sistem": "reguler",
-        "date_create": "2022-11-23 08:06:42",
-        "user_create": "U20190814001",
-        "date_update": null,
-        "user_update": null,
-        "tanggal_pulang": "2023-01-25",
-        "status_tanggal_berangkat": "n",
-        "status_konfirmasi": "0/40",
-        "jenisna": jenis,
-        "tipena": "$paket $keterangan $jenis",
-        "tg_berangkat": fncGetTanggal(dateBerangkat.text),
-        "tg_pulang": fncGetTanggal(datePulang.text),
-        "biaya_rp": tarif,
-        "biaya_rpmu": tarif,
-        "tgi_berangkat": dateBerangkat.text,
-        "tgi_pulang": datePulang.text,
-        "sisa_seat": jumlahSeat,
-        "status": "0",
-        "via_kantor": "1",
-        "via_marketing": "39"
+    // print("ID JADWAL : ${widget.idJadwal}");
+    // print("ID PAKET : $idpaket");
+    // print("ID JENIS : $idjenis");
+    // print("TUJUAN : $tujuan");
+    // print("JUMLAH HARI : $jumlahHari");
+    // print("PESAWAT : $pesawat");
+    // print("RUTE 1 : $rute");
+    // print("RUTE 2 : $rute2");
+    // print("RUTE 3 : $rute3");
+    // print("TARIF : $tarif");
+    // print("JUMLAH SEAT : $jumlahSeat");
+    // print("MATA UANG : $idMataUang");
+    // print("KETERANGAN : $keterangan");
+    // print("TANGGAL BERANGKT : ${dateBerangkat.text}");
+    // print("TANGGAL PULNG : ${datePulang.text}");
+    HttpJadwal.saveJadwal(
+            idpaket,
+            idjenis,
+            tujuan,
+            jumlahHari,
+            pesawat,
+            rute,
+            rute2,
+            rute3,
+            tarif,
+            jumlahSeat,
+            idMataUang,
+            keterangan,
+            dateBerangkat.text,
+            datePulang.text)
+        .then((value) {
+      if (value.status == true) {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveSuccess());
+        menuController.changeActiveitemTo('Jadwal');
+        navigationController.navigateTo('/mrkt/jadwal');
+      } else {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveFail());
       }
-    ];
-
-    dummyJadwalTable.addAll(obj);
-
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
-
-    menuController.changeActiveitemTo('Jadwal');
-    navigationController.navigateTo('/mrkt/jadwal');
+    });
   }
 
   @override
@@ -414,6 +574,7 @@ class _JadwalFormState extends State<JadwalForm> {
                               const SizedBox(height: 8),
                               inputJumlahHari(),
                               const SizedBox(height: 8),
+                              inputPesawat(),
                             ],
                           ),
                         ),
@@ -424,9 +585,11 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 525,
                           child: Column(
                             children: [
-                              inputPesawat(),
-                              const SizedBox(height: 8),
                               inputRute(),
+                              const SizedBox(height: 8),
+                              inputRute2(),
+                              const SizedBox(height: 8),
+                              inputRute3(),
                               const SizedBox(height: 8),
                               inputTarif(),
                               const SizedBox(height: 8),

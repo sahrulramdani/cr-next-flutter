@@ -1,14 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
+import 'package:flutter_web_course/models/http_barang.dart';
+import "package:http/http.dart" as http;
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class ModalHapusBarang extends StatelessWidget {
-  // final String idAgency;
+  String idBarang;
 
-  const ModalHapusBarang({Key key}) : super(key: key);
+  ModalHapusBarang({Key key, @required this.idBarang}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +52,18 @@ class ModalHapusBarang extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ModalDeleteSuccess());
+                        HttpBarang.deleteBarang(idBarang).then((value) {
+                          if (value.status == true) {
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ModalDeleteSuccess());
 
-                        menuController.changeActiveitemTo('Barang');
-                        navigationController.navigateTo('/inventory/barang');
+                            menuController.changeActiveitemTo('Barang');
+                            navigationController
+                                .navigateTo('/inventory/barang');
+                          }
+                        });
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

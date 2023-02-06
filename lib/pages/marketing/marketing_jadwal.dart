@@ -1,3 +1,7 @@
+// ignore_for_file: unused_local_variable
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
@@ -8,7 +12,7 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/form_jadwal.da
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 // import 'dart:convert';
 import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/pages/marketing/widgets/table_agency.dart';
@@ -24,11 +28,23 @@ class MarketingJadwalPage extends StatefulWidget {
 
 class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   bool enableFormL = false;
-  List<Map<String, dynamic>> listJadwal = dummyJadwalTable;
+  List<Map<String, dynamic>> listJadwal = [];
+
+  void getAllJadwal() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getAllJadwal"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJadwal = data;
+    });
+  }
 
   @override
   void initState() {
     // getProvinsi();
+    getAllJadwal();
     super.initState();
   }
 
@@ -277,22 +293,22 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
                                       hintText: 'Cari Berdasarkan Paket'),
-                                  onChanged: (value) {
-                                    if (value == '') {
-                                      setState(() {
-                                        listJadwal = dummyJadwalTable;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        listJadwal = dummyJadwalTable
-                                            .where(((element) => element['tipe']
-                                                .toString()
-                                                .toUpperCase()
-                                                .contains(value.toUpperCase())))
-                                            .toList();
-                                      });
-                                    }
-                                  },
+                                  // onChanged: (value) {
+                                  //   if (value == '') {
+                                  //     setState(() {
+                                  //       listJadwal = dummyJadwalTable;
+                                  //     });
+                                  //   } else {
+                                  //     setState(() {
+                                  //       listJadwal = dummyJadwalTable
+                                  //           .where(((element) => element['tipe']
+                                  //               .toString()
+                                  //               .toUpperCase()
+                                  //               .contains(value.toUpperCase())))
+                                  //           .toList();
+                                  //     });
+                                  //   }
+                                  // },
                                 ),
                               ),
                             ],

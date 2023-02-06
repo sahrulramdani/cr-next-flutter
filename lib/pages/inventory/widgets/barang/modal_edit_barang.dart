@@ -1,4 +1,6 @@
-// ignore_for_file: deprecated_member_use, missing_return
+// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable, unused_local_variable, avoid_print
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
@@ -8,19 +10,72 @@ import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/models/http_barang.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 
+import '../../../../comp/modal_save_fail.dart';
+
 class ModalEditBarang extends StatefulWidget {
-  final String idBarang;
-  const ModalEditBarang({Key key, @required this.idBarang}) : super(key: key);
+  String idBarang;
+  ModalEditBarang({Key key, @required this.idBarang}) : super(key: key);
 
   @override
   State<ModalEditBarang> createState() => _ModalEditBarangState();
 }
 
 class _ModalEditBarangState extends State<ModalEditBarang> {
+  NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+  String kodeBarang;
+  String namaBarang;
+  String idSatuan;
+  String namaSatuan;
+  String stokAwal;
+  String status;
+  String hargaBeli;
+  String hargaJual;
+  String keterangan;
+
+  List<Map<String, dynamic>> listSatuan = [];
+
+  void getSatuan() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listSatuan = data;
+    });
+  }
+
+  void getDetailBarang() async {
+    var id = widget.idBarang;
+    var response =
+        await http.get(Uri.parse("$urlAddress/inventory/barang/getdetail/$id"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      kodeBarang = data[0]['KDXX_BRGX'];
+      namaBarang = data[0]['NAMA_BRGX'];
+      idSatuan = data[0]['JENS_STUA'];
+      namaSatuan = data[0]['NAMA_STAN'];
+      stokAwal = data[0]['STOK_BRGX'].toString();
+      status = data[0]['STAT_BRG'].toString();
+      hargaBeli = myformat.format(data[0]['HRGX_BELI']);
+      hargaJual = myformat.format(data[0]['HRGX_JUAL']);
+      keterangan = data[0]['KETERANGAN'].toString();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDetailBarang();
+    getSatuan();
+  }
+
   Widget inputKodeBarang() {
     return TextFormField(
       readOnly: true,
@@ -30,8 +85,7 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      onChanged: (value) {},
-      initialValue: listBarang[int.parse(widget.idBarang)]['id'],
+      initialValue: kodeBarang,
     );
   }
 
@@ -43,8 +97,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      onChanged: (value) {},
-      initialValue: listBarang[int.parse(widget.idBarang)]['nama'],
+      onChanged: (value) {
+        namaBarang = value;
+      },
+      initialValue: namaBarang,
     );
   }
 
@@ -58,9 +114,16 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
       child: DropdownSearch(
         label: "Satuan",
         mode: Mode.MENU,
-        items: const ["BOX", "BUAH", "LUSIN", "METER", "PAX", "PCS"],
-        onChanged: print,
-        selectedItem: listBarang[int.parse(widget.idBarang)]['satuan'],
+        items: listSatuan,
+        onChanged: (value) {
+          idSatuan = value['IDXX_STAN'];
+          namaSatuan = value['NAMA_STAN'];
+        },
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_STAN'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaSatuan ?? "Pilih Satuan"),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
         // validator: (value) {
@@ -82,7 +145,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: listBarang[int.parse(widget.idBarang)]['stok'],
+      initialValue: stokAwal,
+      onChanged: (value) {
+        stokAwal = value;
+      },
     );
   }
 
@@ -97,15 +163,17 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
         label: "Status Barang",
         mode: Mode.MENU,
         items: const ["Aktif", "Nonaktif"],
-        onChanged: print,
-        selectedItem: "Aktif",
+        onChanged: (value) {
+          if (value == "Aktif") {
+            status = '1';
+          } else {
+            status = '0';
+          }
+        },
+        dropdownBuilder: (context, selectedItem) =>
+            Text(status == '1' ? 'Aktif' : 'Nonaktif' ?? "Pilih Mata Uang"),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
-        // validator: (value) {
-        //   if (value == "Pilih Status Barang") {
-        //     return "Status Barang masih kosong !";
-        //   }
-        // },
       ),
     );
   }
@@ -121,7 +189,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: listBarang[int.parse(widget.idBarang)]['harga_beli'],
+      initialValue: hargaBeli,
+      onChanged: (value) {
+        hargaBeli = value;
+      },
     );
   }
 
@@ -136,7 +207,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
-      initialValue: listBarang[int.parse(widget.idBarang)]['harga_jual'],
+      initialValue: hargaJual,
+      onChanged: (value) {
+        hargaJual = value;
+      },
     );
   }
 
@@ -148,26 +222,48 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
           fillColor: Colors.white,
           filled: true,
           hoverColor: Colors.white),
-      initialValue: listBarang[int.parse(widget.idBarang)]['keterangan'],
+      initialValue: keterangan,
+      onChanged: (value) {
+        keterangan = value;
+      },
     );
   }
 
   fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+    // print("KODE BARANG : $kodeBarang");
+    // print("NAMA BARANG : $namaBarang");
+    // print("ID SATUAN : $idSatuan");
+    // print("STOK AWAL : $stokAwal");
+    // print("STATUS : $status");
+    // print("HARGA BELI : $hargaBeli");
+    // print("HARGA JUAL : $hargaJual");
+    // print("KETERANGAN : $keterangan");
+    HttpBarang.updateBarang(kodeBarang, namaBarang, idSatuan, stokAwal,
+            hargaBeli, hargaJual, status, keterangan)
+        .then((value) {
+      if (value.status == true) {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveSuccess());
 
-    menuController.changeActiveitemTo('Barang');
-    navigationController.navigateTo('/inventory/barang');
+        menuController.changeActiveitemTo('Barang');
+        navigationController.navigateTo('/inventory/barang');
+      } else {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveFail());
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final formKey = GlobalKey<FormState>();
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Stack(children: [
         Form(
+          key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.81,
@@ -182,8 +278,7 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
                         color: Colors.amber[900],
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                          'Ubah Barang ${listBarang[int.parse(widget.idBarang)]['nama']}',
+                      Text('Ubah Barang $namaBarang',
                           style: TextStyle(
                               color: myGrey,
                               fontWeight: FontWeight.bold,

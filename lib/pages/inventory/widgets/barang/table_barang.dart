@@ -5,6 +5,7 @@ import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_detail_b
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_edit_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_hapus_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_stok_barang.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jamaah.dart';
@@ -33,7 +34,8 @@ class ButtonEdit extends StatelessWidget {
 }
 
 class ButtonHapus extends StatelessWidget {
-  const ButtonHapus({Key key}) : super(key: key);
+  String idBarang;
+  ButtonHapus({Key key, @required this.idBarang}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,16 +46,17 @@ class ButtonHapus extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalHapusBarang());
+            context: context,
+            builder: (context) => ModalHapusBarang(idBarang: idBarang));
       },
     );
   }
 }
 
 class ButtonStok extends StatelessWidget {
-  final String namaBarang;
+  String idBarang;
 
-  const ButtonStok({Key key, @required this.namaBarang}) : super(key: key);
+  ButtonStok({Key key, @required this.idBarang}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,7 @@ class ButtonStok extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) => ModalStokBarang(
-                  namaBarang: namaBarang,
+                  idBarang: idBarang,
                 ));
       },
     );
@@ -94,6 +97,7 @@ class ButtonDetail extends StatelessWidget {
 }
 
 class MyData extends DataTableSource {
+  NumberFormat myformat = NumberFormat.decimalPattern('en_us');
   final List<Map<String, dynamic>> dataBarang;
   MyData(this.dataBarang);
 
@@ -102,32 +106,34 @@ class MyData extends DataTableSource {
     return DataRow(
         color: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
-          return int.parse(dataBarang[index]['stok']) < 10
+          return int.parse(dataBarang[index]['STOK_BRGX'].toString()) < 10
               ? Colors.red[100]
               : Colors.transparent;
         }),
         cells: [
           DataCell(Text((index + 1).toString())),
-          DataCell(Text(dataBarang[index]['id'])),
-          DataCell(Text(dataBarang[index]['nama'])),
-          DataCell(Text(dataBarang[index]['stok'])),
-          DataCell(Text(dataBarang[index]['satuan'])),
-          DataCell(Text(dataBarang[index]['harga_beli'])),
-          DataCell(Text(dataBarang[index]['harga_jual'])),
-          DataCell(Text(dataBarang[index]['keterangan'])),
+          DataCell(Text(dataBarang[index]['KDXX_BRGX'].toString())),
+          DataCell(Text(dataBarang[index]['NAMA_BRGX'].toString())),
+          DataCell(Text(dataBarang[index]['STOK_BRGX'].toString())),
+          DataCell(Text(dataBarang[index]['NAMA_STAN'].toString())),
+          DataCell(Text(myformat.format(dataBarang[index]['HRGX_BELI']))),
+          DataCell(Text(myformat.format(dataBarang[index]['HRGX_JUAL']))),
+          DataCell(Text(dataBarang[index]['KETERANGAN'].toString())),
           DataCell(Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ButtonStok(
-                  namaBarang: dataBarang[index]['nama'],
+                  idBarang: dataBarang[index]['KDXX_BRGX'].toString(),
                 ),
                 const SizedBox(width: 10),
-                ButtonEdit(idBarang: index.toString()),
+                ButtonEdit(idBarang: dataBarang[index]['KDXX_BRGX'].toString()),
                 const SizedBox(width: 10),
-                ButtonDetail(idBarang: index.toString()),
+                ButtonDetail(
+                    idBarang: dataBarang[index]['KDXX_BRGX'].toString()),
                 const SizedBox(width: 10),
-                const ButtonHapus()
+                ButtonHapus(
+                    idBarang: dataBarang[index]['KDXX_BRGX'].toString()),
               ],
             ),
           )),
@@ -166,6 +172,7 @@ class _TableBarangState extends State<TableBarang> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 5.0,
           source: myTable,
           columns: [
             DataColumn(

@@ -1,14 +1,18 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
+import 'package:flutter_web_course/models/http_satuan.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class ModalHapusSatuan extends StatelessWidget {
   // final String idAgency;
+  String idsatuan;
 
-  const ModalHapusSatuan({Key key}) : super(key: key);
+  ModalHapusSatuan({Key key, @required this.idsatuan}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +52,18 @@ class ModalHapusSatuan extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ModalDeleteSuccess());
+                        HttpSatuan.deleteSatuan(idsatuan).then((value) {
+                          if (value.status == true) {
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ModalDeleteSuccess());
 
-                        menuController.changeActiveitemTo('Satuan');
-                        navigationController.navigateTo('/inventory/satuan');
+                            menuController.changeActiveitemTo('Satuan');
+                            navigationController
+                                .navigateTo('/inventory/satuan');
+                          }
+                        });
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

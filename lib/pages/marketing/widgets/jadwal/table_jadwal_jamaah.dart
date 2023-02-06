@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors, avoid_print, unused_import, unused_local_variable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_detail_j
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jamaah.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_upload_jamaah.dart';
 // import 'package:url_launcher/url_launcher.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class ButtonDetail extends StatelessWidget {
   String idJadwal;
@@ -34,7 +34,10 @@ class ButtonDetail extends StatelessWidget {
 
 class ButtonEdit extends StatelessWidget {
   String idJadwal;
-  ButtonEdit({Key key, @required this.idJadwal}) : super(key: key);
+  ButtonEdit({
+    Key key,
+    @required this.idJadwal,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +58,8 @@ class ButtonEdit extends StatelessWidget {
 }
 
 class ButtonHapus extends StatelessWidget {
-  const ButtonHapus({Key key}) : super(key: key);
+  String idJadwal;
+  ButtonHapus({Key key, @required this.idJadwal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,8 @@ class ButtonHapus extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalHapusJadwal());
+            context: context,
+            builder: (context) => ModalHapusJadwal(idJadwal: idJadwal));
       },
     );
   }
@@ -78,37 +83,50 @@ class MyData extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+    var Tanggal = (DateFormat("dd-MM-yyyy").format(DateTime.now())).toString();
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
       DataCell(Icon(
-        dataJadwal[index]['status'] == '0'
-            ? Icons.punch_clock_outlined
-            : Icons.check,
-        color: dataJadwal[index]['status'] == '0' ? Colors.red : Colors.green,
+        dataJadwal[index]['status'] == 1
+            ? Icons.check
+            : Icons.access_time_outlined,
+        color: dataJadwal[index]['status'] == 1
+            ? Colors.green
+            : Colors.orange[800],
         size: 20,
       )),
-      DataCell(Text(dataJadwal[index]['tipe'])),
-      DataCell(Text(dataJadwal[index]['jenisna'])),
-      DataCell(Text(dataJadwal[index]['jumlah_hari'])),
-      DataCell(Text(dataJadwal[index]['tgi_berangkat'])),
-      DataCell(Text(dataJadwal[index]['tgi_pulang'])),
-      DataCell(Text(dataJadwal[index]['biaya_rp'])),
-      DataCell(Text(dataJadwal[index]['mata_uang'])),
-      DataCell(Text(dataJadwal[index]['sisa_seat'].toString())),
-      DataCell(Text(dataJadwal[index]['tipena'])),
+      DataCell(Text(dataJadwal[index]['namaPaket'].toString())),
+      DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
+      DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString())),
+      DataCell(Text(dataJadwal[index]['TGLX_BGKT'] == null
+          ? "00-00-0000"
+          : dataJadwal[index]['TGLX_BGKT'].toString())),
+      DataCell(Text(dataJadwal[index]["TGLX_PLNG"] == null
+          ? "00-00-0000"
+          : dataJadwal[index]["TGLX_PLNG"].toString())),
+      DataCell(Text(myformat
+          .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())))),
+      DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
+      DataCell(Text(dataJadwal[index]['SISA'] == 0
+          ? 'Full'
+          : dataJadwal[index]['SISA'].toString())),
+      DataCell(Text(dataJadwal[index]['KETERANGAN'])),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ButtonDetail(
-              idJadwal: dataJadwal[index]['id_jadwal'],
+              idJadwal: dataJadwal[index]['IDXX_JDWL'],
             ),
             const SizedBox(width: 5),
             ButtonEdit(
-              idJadwal: dataJadwal[index]['id_jadwal'],
+              idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
             ),
             const SizedBox(width: 5),
-            const ButtonHapus(),
+            ButtonHapus(
+              idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
+            ),
           ],
         ),
       )),
@@ -147,6 +165,7 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 5.0,
           source: myTable,
           columns: [
             DataColumn(

@@ -1,14 +1,17 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
+import 'package:flutter_web_course/models/http_grup_barang.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class ModalHapusGrupBarang extends StatelessWidget {
-  // final String idAgency;
+  String idGrup;
 
-  const ModalHapusGrupBarang({Key key}) : super(key: key);
+  ModalHapusGrupBarang({Key key, @required this.idGrup}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +51,18 @@ class ModalHapusGrupBarang extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ModalDeleteSuccess());
+                        HttpGrupBarang.deleteGrupBarang(idGrup).then((value) {
+                          if (value.status == true) {
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ModalDeleteSuccess());
 
-                        menuController.changeActiveitemTo('Grup Barang');
-                        navigationController
-                            .navigateTo('/inventory/grup-barang');
+                            menuController.changeActiveitemTo('Grup Barang');
+                            navigationController
+                                .navigateTo('/inventory/grup-barang');
+                          }
+                        });
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

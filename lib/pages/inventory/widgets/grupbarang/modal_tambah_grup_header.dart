@@ -1,6 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return, prefer_interpolation_to_compose_strings, must_be_immutable
-
-import 'dart:convert';
+// ignore_for_file: deprecated_member_use, missing_return, prefer_interpolation_to_compose_strings, non_constant_identifier_names, avoid_print
 
 import 'package:flutter_web_course/models/http_grup_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_list_grup.dart';
@@ -9,7 +7,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:intl/intl.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 
@@ -20,107 +17,72 @@ import '../../../../constants/controllers.dart';
 // import 'package:intl/intl.dart';
 // import 'dart:convert';
 
-class ModalTambahBarangGrup extends StatefulWidget {
-  String idGrup;
-  ModalTambahBarangGrup({Key key, @required this.idGrup}) : super(key: key);
+class ModalTambahBarangGrupHeader extends StatefulWidget {
+  // final String namaGrup;
+  const ModalTambahBarangGrupHeader({Key key}) : super(key: key);
 
   @override
-  State<ModalTambahBarangGrup> createState() => _ModalTambahBarangGrupState();
+  State<ModalTambahBarangGrupHeader> createState() =>
+      _ModalTambahBarangGrupHeaderState();
 }
 
-class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
-  NumberFormat myformat = NumberFormat.decimalPattern('en_us');
-  String kodeBarang;
-  String namaBarang;
-  String satuan;
-  String keterangan;
-  String quantity;
-  // TextEditingController qty = TextEditingController();
-  List<Map<String, dynamic>> listBarang = [];
+class _ModalTambahBarangGrupHeaderState
+    extends State<ModalTambahBarangGrupHeader> {
+  String namaGrupBarang;
+  String Keterangan;
 
-  void getBarang() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/barang/getAllBarang"));
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-
-    setState(() {
-      listBarang = data;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getBarang();
-  }
-
-  Widget inputBarang() {
-    return Container(
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      height: 50,
-      child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Pilih Barang",
-          items: listBarang,
-          onChanged: (value) {
-            setState(() {
-              kodeBarang = value['KDXX_BRGX'];
-              namaBarang = value['NAMA_BRGX'];
-              satuan = value['NAMA_STAN'];
-              keterangan = value['KETERANGAN'];
-            });
-          },
-          // showClearButton: true,
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                  item['NAMA_BRGX'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                    '${'Harga Beli : ' + myformat.format(item['HRGX_BELI'])} - Harga Jual : ' +
-                        myformat.format(item['HRGX_JUAL']),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(
-                    '${'Stok : ' + item['STOK_BRGX'].toString()} - ' +
-                        item['NAMA_STAN'],
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['NAMA_BRGX']
-              : "Produk belum Dipilih"),
-          dropdownSearchDecoration: const InputDecoration(
-              border: InputBorder.none, filled: true, fillColor: Colors.white),
-          validator: (value) {
-            if (value == null) {
-              return "Produk masih kosong !";
-            }
-          }),
+  Widget inputId() {
+    return TextFormField(
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Kode Grup Barang',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+      initialValue: "Auto Generate",
     );
   }
 
-  Widget inputBanyak() {
+  Widget inputNamaGrupBarang() {
     return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Banyak Barang Dalam Grup',
-          filled: true,
-          fillColor: Colors.white,
-          hoverColor: Colors.white),
+        labelText: 'Nama Grup Barang',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+      onChanged: ((value) {
+        namaGrupBarang = value;
+      }),
+      // onChanged: (value) {
+
+      // },
+    );
+  }
+
+  Widget inputKeterangan() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Keterangan',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
       onChanged: (value) {
-        quantity = value;
+        Keterangan = value;
       },
     );
   }
 
   fncSaveData() {
-    HttpGrupBarang.saveGrupBarangDetail(widget.idGrup, kodeBarang, quantity)
+    // print("NAMA GRUP BARANG : $namaGrupBarang");
+    // print("KETERANGAN : $Keterangan");
+
+    HttpGrupBarang.saveGrupBarangHeader(namaGrupBarang, Keterangan)
         .then((value) {
       if (value.status == true) {
         showDialog(
@@ -172,9 +134,13 @@ class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Column(
                     children: [
-                      inputBarang(),
+                      // inputBarang(),
                       const SizedBox(height: 8),
-                      inputBanyak(),
+                      inputId(),
+                      const SizedBox(height: 8),
+                      inputNamaGrupBarang(),
+                      const SizedBox(height: 8),
+                      inputKeterangan(),
                     ],
                   ),
                 )),

@@ -3,7 +3,8 @@ import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:flutter_web_course/comp/modal_delete_success.dart';
-import 'package:flutter_web_course/models/http_controller.dart';
+import 'package:flutter_web_course/models/http_agency.dart';
+import 'package:flutter_web_course/models/http_jamaah.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
@@ -50,7 +51,7 @@ class ModalHapusJamaah extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        HttpController.deleteJamaah(idJamaah).then(
+                        HttpJamaah.deleteJamaah(idJamaah).then(
                           (value) {
                             if (value.status == true) {
                               showDialog(

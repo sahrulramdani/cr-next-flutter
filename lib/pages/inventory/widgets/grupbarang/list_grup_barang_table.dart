@@ -1,17 +1,20 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/models/http_grup_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_list_grup.dart';
+
+import '../../../../comp/modal_delete_success.dart';
+import '../../../../constants/controllers.dart';
 // import 'package:flutter_web_course/pages/marketing/widgets/modal_konfirmasi_pemberangkatan.dart';
 
 class ListGrupBarangTable extends StatelessWidget {
   List<Map<String, dynamic>> listBarangGrupTable;
-  String namaGrup;
+  // String namaGrup;
 
-  ListGrupBarangTable(
-      {Key key, @required this.listBarangGrupTable, @required this.namaGrup})
+  ListGrupBarangTable({Key key, @required this.listBarangGrupTable})
       : super(key: key);
 
   @override
@@ -72,27 +75,36 @@ class ListGrupBarangTable extends StatelessWidget {
                         fontSize: 16))),
           ],
           rows: listBarangGrupTable.map((data) {
-            // int x = 1;
             return DataRow(cells: [
-              const DataCell(Text('-')),
-              DataCell(Text(data['kode_barang'])),
-              DataCell(Text(data['nama_barang'])),
-              DataCell(Text(data['qty'])),
-              DataCell(Text(data['satuan'])),
-              DataCell(Text(data['keterangan'])),
+              DataCell(Text("-")),
+              DataCell(Text(data['KDXX_BRGX'].toString())),
+              DataCell(Text(data['NAMA_BRGX'].toString())),
+              DataCell(Text(data['QTYX_BRGX'].toString())),
+              DataCell(Text(data['NAMA_STAN'].toString())),
+              DataCell(Text(data['KETERANGAN'].toString())),
               DataCell(IconButton(
                 icon: Icon(
                   Icons.delete_outline,
                   color: myBlue,
                 ),
                 onPressed: () {
-                  listBarangGrup.removeWhere(
-                      (item) => item['kode_barang'] == data['kode_barang']);
-
                   Navigator.pop(context);
-                  showDialog(
-                      context: context,
-                      builder: (context) => ModalListGrup(namaGrup: namaGrup));
+                  HttpGrupBarang.deleteGrupBarangDetail(
+                          data['KDXX_GRUP'].toString(),
+                          data['KDXX_BRGX'].toString())
+                      .then((value) {
+                    if (value.status == true) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => const ModalDeleteSuccess());
+                      // menuController.changeActiveitemTo('Grup Barang');
+                      // navigationController.navigateTo('/inventory/grup-barang');
+                    }
+                  });
+                  // Http
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) => ModalListGrup(namaGrup: namaGrup));
                 },
               )),
             ]);
