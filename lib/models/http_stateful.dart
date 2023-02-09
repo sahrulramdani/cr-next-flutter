@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_web_course/constants/style.dart';
 import "package:http/http.dart" as http;
 
 class HttpStateful {
@@ -10,7 +11,7 @@ class HttpStateful {
 
   static Future<HttpStateful> connectAPI(
       String user, String pass, String company) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/signin");
+    Uri urlApi = Uri.parse("$urlAddress/signin");
 
     var hasilResponse = await http.post(
       urlApi,

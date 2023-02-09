@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class FinancePenerbanganPage extends StatefulWidget {
   const FinancePenerbanganPage({Key key}) : super(key: key);
@@ -15,6 +18,24 @@ class FinancePenerbanganPage extends StatefulWidget {
 }
 
 class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
+  List<Map<String, dynamic>> listProfitJadwal = [];
+
+  void getProfitPenerbangan() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/finance/penerbangan/get-profit"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listProfitJadwal = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    getProfitPenerbangan();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -98,7 +119,9 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
                     ),
                   ],
                 ),
-                const TablePenerbangan(),
+                TablePenerbangan(
+                  dataProfit: listProfitJadwal,
+                ),
               ],
             ),
           )

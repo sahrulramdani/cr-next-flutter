@@ -81,6 +81,7 @@ class _TableTourleaderState extends State<TableTourleader> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
+          columnSpacing: 15,
           columns: [
             DataColumn(
                 label: Text('No.',

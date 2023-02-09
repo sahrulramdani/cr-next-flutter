@@ -157,8 +157,9 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputNIK() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration:
-          const InputDecoration(labelText: 'NIK', hintText: '32xxxxxxxxxxx'),
+      decoration: const InputDecoration(
+          label: Text('NIK', style: TextStyle(color: Colors.red)),
+          hintText: '327xxxxxxxx'),
       onChanged: (value) {
         nik = value;
       },
@@ -174,7 +175,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputNama() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Nama Lengkap'),
+      decoration: const InputDecoration(
+          label: Text('Nama Lengkap', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         namaJamaah = value;
       },
@@ -207,7 +209,9 @@ class _JamaahFormState extends State<JamaahForm> {
             jk = value;
           }
         },
-        selectedItem: jk ?? "Pilih Jenis Kelamin",
+        dropdownBuilder: (context, selectedItem) => Text(
+            jk ?? "Pilih Jenis Kelamin",
+            style: TextStyle(color: jk == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -222,7 +226,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputTempatLahir() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Tempat Lahir'),
+      decoration: const InputDecoration(
+          label: Text('Tempat Lahir', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         tempatLahir = value;
       },
@@ -238,7 +243,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputTglLahir() {
     return TextFormField(
       controller: dateLahir,
-      decoration: const InputDecoration(labelText: 'Tanggal Lahir'),
+      decoration: const InputDecoration(
+          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red))),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -262,7 +268,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputAlamat() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Alamat'),
+      decoration: const InputDecoration(
+          label: Text('Alamat', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         alamat = value;
       },
@@ -300,8 +307,10 @@ class _JamaahFormState extends State<JamaahForm> {
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(item['name'].toString()),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaProvinsi ?? "Nama Provinsi belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaProvinsi ?? "Nama Provinsi belum Dipilih",
+              style: TextStyle(
+                  color: namaProvinsi == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == "Nama Provinsi belum Dipilih") {
               return "Provinsi masih kosong !";
@@ -337,8 +346,10 @@ class _JamaahFormState extends State<JamaahForm> {
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(item['name'].toString()),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaKota ?? "Nama Kota belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaKota ?? "Nama Kota belum Dipilih",
+              style: TextStyle(
+                  color: namaKota == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == "Nama Kota belum Dipilih") {
               return "Kota masih kosong !";
@@ -374,8 +385,10 @@ class _JamaahFormState extends State<JamaahForm> {
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(item['name'].toString()),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaKec ?? "Nama Kecamatan belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaKec ?? "Nama Kecamatan belum Dipilih",
+              style: TextStyle(
+                  color: namaKec == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == "Nama Kecamatan belum Dipilih") {
               return "Kecamatan masih kosong !";
@@ -410,8 +423,10 @@ class _JamaahFormState extends State<JamaahForm> {
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(item['name'].toString()),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaKel ?? "Nama Kelurahan belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaKel ?? "Nama Kelurahan belum Dipilih",
+              style: TextStyle(
+                  color: namaKel == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == "Nama Kelurahan belum Dipilih") {
               return "Kelurahan masih kosong !";
@@ -425,7 +440,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputKodePos() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Kode Pos'),
+      decoration: const InputDecoration(
+          label: Text('Kode Pos', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         kodePos = value;
       },
@@ -480,8 +496,10 @@ class _JamaahFormState extends State<JamaahForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaMenikah ?? "Status menikah belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaMenikah ?? "Status menikah belum Dipilih",
+            style: TextStyle(
+                color: namaMenikah == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Status menikah belum Dipilih") {
             return "Status menikah masih kosong !";
@@ -512,8 +530,10 @@ class _JamaahFormState extends State<JamaahForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPendidikan ?? "Pendidikan terakhir Belum dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaPendidikan ?? "Pendidikan terakhir Belum dipilih",
+            style: TextStyle(
+                color: namaPendidikan == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Pendidikan terakhir Belum dipilih") {
             return "Pendidikan masih kosong !";
@@ -544,8 +564,10 @@ class _JamaahFormState extends State<JamaahForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPekerjaan ?? "Pekerjaan Belum dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaPekerjaan ?? "Pekerjaan Belum dipilih",
+            style: TextStyle(
+                color: namaPekerjaan == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Pekerjaan Belum dipilih") {
             return "Pekerjaan masih kosong !";

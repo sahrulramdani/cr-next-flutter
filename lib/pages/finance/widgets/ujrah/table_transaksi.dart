@@ -90,6 +90,7 @@ class _TableTransaksiState extends State<TableTransaksi> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
+          columnSpacing: 8,
           columns: [
             DataColumn(
                 label: Text('No.',

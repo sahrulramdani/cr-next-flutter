@@ -4,11 +4,12 @@ import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:flutter_web_course/constants/dummy_pelanggan.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class JamaahPelangganPage extends StatefulWidget {
   const JamaahPelangganPage({Key key}) : super(key: key);
@@ -18,10 +19,26 @@ class JamaahPelangganPage extends StatefulWidget {
 }
 
 class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
+  List<Map<String, dynamic>> listPelanggan = [];
+  void getPelanggan() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/jamaah/all-pelanggan"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listPelanggan = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    getPelanggan();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    List<Map<String, dynamic>> listPelanggan = dummyPelangganTable;
 
     return SingleChildScrollView(
       child: Column(
@@ -145,14 +162,12 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
                                   hintText: 'Cari Berdasarkan Nama'),
                               onChanged: (value) {
                                 if (value == '') {
-                                  setState(() {
-                                    listPelanggan = dummyPelangganTable;
-                                  });
+                                  getPelanggan();
                                 } else {
                                   setState(() {
-                                    listPelanggan = dummyPelangganTable
+                                    listPelanggan = listPelanggan
                                         .where(((element) =>
-                                            element['nama_lengkap']
+                                            element['NAMA_LGKP']
                                                 .toString()
                                                 .toUpperCase()
                                                 .contains(value.toUpperCase())))

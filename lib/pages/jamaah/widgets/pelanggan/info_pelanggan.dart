@@ -1,9 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
 
-class InfoPelanggan extends StatelessWidget {
-  const InfoPelanggan({Key key}) : super(key: key);
+class InfoPelanggan extends StatefulWidget {
+  String idPelanggan;
+  InfoPelanggan({Key key, @required this.idPelanggan}) : super(key: key);
+
+  @override
+  State<InfoPelanggan> createState() => _InfoPelangganState();
+}
+
+class _InfoPelangganState extends State<InfoPelanggan> {
+  List<Map<String, dynamic>> detailPelanggan = [];
+
+  void pelangganDet() async {
+    var id = widget.idPelanggan;
+    var response = await http
+        .get(Uri.parse("$urlAddress/jamaah/jamaah/detail/info-pelanggan/$id"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      detailPelanggan = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    pelangganDet();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,98 +43,136 @@ class InfoPelanggan extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DataTable(columns: const [
-              DataColumn(label: Text('NIK')),
-              DataColumn(label: Text(':')),
-              DataColumn(label: Text('3275022011680002')),
-            ], rows: const [
+            DataTable(columns: [
+              const DataColumn(label: Text('NIK')),
+              const DataColumn(label: Text(':')),
+              DataColumn(
+                  label: Text(detailPelanggan.isNotEmpty
+                      ? detailPelanggan[0]['NOXX_IDNT'].toString()
+                      : '')),
+            ], rows: [
               DataRow(cells: [
-                DataCell(Text('Nama Lengkap')),
-                DataCell(Text(':')),
-                DataCell(Text('Nanim Sumartini')),
+                const DataCell(Text('Nama Lengkap')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['NAMA_LGKP']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Jenis Kelamin')),
-                DataCell(Text(':')),
-                DataCell(Text('P')),
+                const DataCell(Text('Jenis Kelamin')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['KELAMIN']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Tempat Lahir')),
-                DataCell(Text(':')),
-                DataCell(Text('Subang')),
+                const DataCell(Text('Tempat Lahir')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['TMPT_LHIR']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Tanggal Lahir')),
-                DataCell(Text(':')),
-                DataCell(Text('20 November 1968')),
+                const DataCell(Text('Tanggal Lahir')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? fncGetTanggal(detailPelanggan[0]['KELAHIRAN'])
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Alamat')),
-                DataCell(Text(':')),
-                DataCell(Text('Dusun Simpang RT02/11')),
+                const DataCell(Text('Alamat')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['ALAMAT']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Kelurahan')),
-                DataCell(Text(':')),
-                DataCell(Text('TAMBAKMEKAR')),
+                const DataCell(Text('Kelurahan')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['KDXX_KELX']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Kecamatan')),
-                DataCell(Text(':')),
-                DataCell(Text('JALANCAGAK')),
+                const DataCell(Text('Kecamatan')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['KDXX_KECX']
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Kab/Kota')),
-                DataCell(Text(':')),
-                DataCell(Text('SUBANG')),
+                const DataCell(Text('Kab/Kota')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['KDXX_KOTA']
+                    : '')),
               ]),
             ]),
             const SizedBox(width: 10),
-            DataTable(columns: const [
-              DataColumn(label: Text('Provinsi')),
-              DataColumn(label: Text(':')),
-              DataColumn(label: Text('JAWA BARAT')),
-            ], rows: const [
+            DataTable(columns: [
+              const DataColumn(label: Text('Provinsi')),
+              const DataColumn(label: Text(':')),
+              DataColumn(
+                  label: Text(detailPelanggan.isNotEmpty
+                      ? detailPelanggan[0]['KDXX_PROV']
+                      : '')),
+            ], rows: [
               DataRow(cells: [
-                DataCell(Text('Kode Pos')),
-                DataCell(Text(':')),
-                DataCell(Text('41281')),
+                const DataCell(Text('Kode Pos')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['KDXX_POSX'].toString()
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Telepon')),
-                DataCell(Text(':')),
-                DataCell(Text('08886637198')),
+                const DataCell(Text('Telepon')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['NOXX_TELP'].toString()
+                    : '')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Nama Paspor')),
-                DataCell(Text(':')),
-                DataCell(Text('Belum Tersedia')),
+                const DataCell(Text('Nama Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['NAMA_PSPR']
+                    : 'Belum Tersedia')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Nomor Paspor')),
-                DataCell(Text(':')),
-                DataCell(Text('-')),
+                const DataCell(Text('Nomor Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['NOXX_PSPR'].toString()
+                    : '-')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Issued Paspor')),
-                DataCell(Text(':')),
-                DataCell(Text('-')),
+                const DataCell(Text('Issued Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(detailPelanggan[0]['TGLX_KLUR']))
+                    : '-')),
               ]),
               DataRow(cells: [
-                DataCell(Text('Expire Paspor')),
-                DataCell(Text(':')),
-                DataCell(Text('-')),
+                const DataCell(Text('Expire Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(detailPelanggan[0]['TGLX_EXPX']))
+                    : '-')),
               ]),
               DataRow(cells: [
-                DataCell(Text('User Input')),
-                DataCell(Text(':')),
-                DataCell(Text('Sahrul Ramdani')),
+                const DataCell(Text('Nama Ayah')),
+                const DataCell(Text(':')),
+                DataCell(Text(detailPelanggan.isNotEmpty
+                    ? detailPelanggan[0]['NAMA_AYAH']
+                    : '')),
               ]),
-              DataRow(cells: [
-                DataCell(Text('Tanggal Input')),
-                DataCell(Text(':')),
-                DataCell(Text('06-01-2023 15:34')),
-              ]),
+              // DataRow(cells: [
+              //   DataCell(Text('Tanggal Input')),
+              //   DataCell(Text(':')),
+              //   DataCell(Text('06-01-2023 15:34')),
+              // ]),
             ]),
           ],
         ),

@@ -23,9 +23,13 @@ class _DetailKTPAgencyState extends State<DetailKTPAgency> {
     });
     List<Map<String, dynamic>> dataAgen =
         List.from(json.decode(response.body) as List);
+
     setState(() {
-      fotoKtp = dataAgen[0]['FOTO_KTPX'];
+      fotoKtp =
+          dataAgen[0]['FOTO_KTPX'] == '' ? null : dataAgen[0]['FOTO_KTPX'];
     });
+
+    print(fotoKtp);
   }
 
   @override

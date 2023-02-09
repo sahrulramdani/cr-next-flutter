@@ -14,7 +14,11 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class DetailModalLainnya extends StatefulWidget {
-  const DetailModalLainnya({Key key}) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  DetailModalLainnya(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   State<DetailModalLainnya> createState() => _DetailModalLainnyaState();
@@ -51,7 +55,7 @@ class _DetailModalLainnyaState extends State<DetailModalLainnya> {
                     ),
                     const SizedBox(width: 10),
                     FittedBox(
-                      child: Text('Pelanggan Nanim Sumartini',
+                      child: Text('Pelanggan ${widget.namaPelanggan}',
                           style: TextStyle(
                               color: myGrey, fontWeight: FontWeight.bold)),
                     ),
@@ -168,7 +172,9 @@ class _DetailModalLainnyaState extends State<DetailModalLainnya> {
                     ),
                     Visibility(
                       visible: enableKwitansi,
-                      child: const SizedBox(child: LainnyaKwitansi()),
+                      child: SizedBox(
+                          child:
+                              LainnyaKwitansi(idPelanggan: widget.idPelanggan)),
                     ),
                     Visibility(
                       visible: enableFasilitas,

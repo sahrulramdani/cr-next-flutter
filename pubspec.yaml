@@ -72,8 +72,23 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/icons/
-    - assets/images/
+    - assets/icons/logo.png
+    - assets/icons/top-icon.png
+    - assets/images/box-background.png
+    - assets/images/craudhah_logo_icon.png
+    - assets/images/craudhah_logo_landscape.png
+    - assets/images/error.png
+    - assets/images/hero-alert-fail.png
+    - assets/images/hero-dashboard-2.png
+    - assets/images/hero-dashboard.png
+    - assets/images/hero-login.png
+    - assets/images/logo-1.png
+    - assets/images/nametag.png
+    - assets/images/NO_IMAGE.jpg
+    - assets/images/profile-none.jpg
+    - assets/images/profile-pict.jpg
+    - assets/images/profile.jpg
+    - assets/images/Screenshot (523).png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

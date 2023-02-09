@@ -37,7 +37,7 @@ class MyData extends DataTableSource {
       DataCell(Text(dataAlumni[index]['nama_lengkap'])),
       DataCell(Text(dataAlumni[index]['jenis_kelamin'])),
       DataCell(Text(
-          '${dataAlumni[index]['identitas']}, ${dataAlumni[index]['in_tanggallahir']}')),
+          '${dataAlumni[index]['tempat_lahir']}, ${dataAlumni[index]['in_tanggallahir']}')),
       DataCell(Text(dataAlumni[index]['tg_berangkat'])),
       DataCell(Text(dataAlumni[index]['alamat'])),
       DataCell(Text(dataAlumni[index]['nama_marketing'])),
@@ -84,6 +84,7 @@ class _TableAlumniState extends State<TableAlumni> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 15,
           source: myTable,
           columns: [
             DataColumn(

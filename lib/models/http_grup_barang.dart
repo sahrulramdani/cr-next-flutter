@@ -13,7 +13,7 @@ class HttpGrupBarang {
 
   static Future<HttpGrupBarang> saveGrupBarangHeader(
       String namaGrupBarang, String Keterangan) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/grupbrg/save");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/save");
     var hasilResponse = await http.post(urlApi, body: {
       "NAMA_GRUP": namaGrupBarang,
       "KETERANGAN": Keterangan,
@@ -27,8 +27,7 @@ class HttpGrupBarang {
 
   static Future<HttpGrupBarang> saveGrupBarangDetail(
       String idGrupHeader, String idBarang, String quantity) async {
-    Uri urlApi =
-        Uri.parse("http://localhost:3000/inventory/grupbrg/saveDetail");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/saveDetail");
     var hasilResponse = await http.post(urlApi, body: {
       "KDXX_GRUP": idGrupHeader,
       "KDXX_BRGX": idBarang,
@@ -42,8 +41,7 @@ class HttpGrupBarang {
   }
 
   static Future<HttpGrupBarang> deleteGrupBarang(String idGrup) async {
-    Uri urlApi =
-        Uri.parse("http://localhost:3000/inventory/grupbrg/deleteGrupBarang");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/deleteGrupBarang");
     var hasilResponse = await http.post(urlApi, body: {
       "KDXX_GRUP": idGrup,
     });
@@ -56,8 +54,8 @@ class HttpGrupBarang {
 
   static Future<HttpGrupBarang> deleteGrupBarangDetail(
       String idGrup, String idBarang) async {
-    Uri urlApi = Uri.parse(
-        "http://localhost:3000/inventory/grupbrg/deleteGrupBarangDetail");
+    Uri urlApi =
+        Uri.parse("$urlAddress/inventory/grupbrg/deleteGrupBarangDetail");
     var hasilResponse = await http.post(urlApi, body: {
       "KDXX_GRUP": idGrup,
       "KDXX_BRGX": idBarang,

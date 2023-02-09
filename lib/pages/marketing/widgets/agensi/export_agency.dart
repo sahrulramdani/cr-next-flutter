@@ -34,18 +34,20 @@ class ExportAgency extends StatelessWidget {
     for (var i = 0; i < listAgency.length; i++) {
       sheet
           .getRangeByName('A$x')
-          .setText(listAgency[i]['id_marketing'].toString());
+          .setText(listAgency[i]['KDXX_MRKT'].toString());
       sheet
           .getRangeByName('B$x')
-          .setText(listAgency[i]['nama_lengkap'].toString());
-      sheet.getRangeByName('C$x').setText(listAgency[i]['mk'].toString());
+          .setText(listAgency[i]['NAMA_LGKP'].toString());
+      sheet.getRangeByName('C$x').setText(listAgency[i]['FEE'].toString());
       sheet
           .getRangeByName('D$x')
-          .setText(listAgency[i]['periode_pelanggan'].toString());
+          .setText(listAgency[i]['PERD_JMAH'].toString());
       sheet
           .getRangeByName('E$x')
-          .setText(listAgency[i]['total_pelanggan'].toString());
-      sheet.getRangeByName('F$x').setText(listAgency[i]['poin'].toString());
+          .setText(listAgency[i]['TOTL_JMAH'].toString());
+      sheet
+          .getRangeByName('F$x')
+          .setText(listAgency[i]['TOTL_POIN'].toString());
       x++;
     }
 

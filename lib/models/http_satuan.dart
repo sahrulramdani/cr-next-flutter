@@ -10,7 +10,7 @@ class HttpSatuan {
   HttpSatuan({this.status});
 
   static Future<HttpSatuan> saveSatuan(String satuan) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/satuan/save");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/save");
     var hasilResponse = await http.post(urlApi, body: {
       "IDXX_STAN": fncRandomId(10),
       "NAMA_STAN": satuan,
@@ -24,7 +24,7 @@ class HttpSatuan {
 
   static Future<HttpSatuan> updateSatuan(
       String idSatuan, String namaSatuan) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/satuan/update");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/update");
     var hasilResponse = await http.post(urlApi, body: {
       "IDXX_STAN": idSatuan,
       "NAMA_STAN": namaSatuan,
@@ -37,7 +37,7 @@ class HttpSatuan {
   }
 
   static Future<HttpSatuan> deleteSatuan(String idSatuan) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/satuan/delete");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/delete");
     var hasilResponse = await http.post(
       urlApi,
       body: {

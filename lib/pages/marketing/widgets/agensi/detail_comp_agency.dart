@@ -62,8 +62,11 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            image: NetworkImage(
-                                '$urlAddress/uploads/' + data['FOTO_AGEN']),
+                            image: data['FOTO_AGEN'] != ''
+                                ? NetworkImage(
+                                    '$urlAddress/uploads/' + data['FOTO_AGEN'])
+                                : const AssetImage(
+                                    'assets/images/NO_IMAGE.jpg'),
                             fit: BoxFit.fill),
                       ),
                     ),

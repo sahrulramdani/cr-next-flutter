@@ -230,8 +230,10 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                         fncGetTanggal(item['TGLX_PLNG']),
                     textAlign: TextAlign.center),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(paket ?? "Produk belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              paket ?? "Jadwal Belum dipilih",
+              style:
+                  TextStyle(color: paket == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == null) {
               return "Jadwal Produk masih kosong !";
@@ -266,7 +268,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                 ktp = value['FOTO_KTPX'] != '' ? 'KTP' : 'Belum';
                 kk = 'Belum';
                 lampiran = 'Belum';
-                ktpPelanggan = value['FOTO_KTPX'];
+                ktpPelanggan =
+                    value['FOTO_KTPX'] == '' ? null : value['FOTO_KTPX'];
               });
             } else {
               setState(() {
@@ -297,7 +300,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                     textAlign: TextAlign.center),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
-              selectedItem != null ? namaPelanggan : "Pelanggan belum Dipilih"),
+              namaPelanggan ?? "Pelanggan Belum dipilih",
+              style: TextStyle(
+                  color: namaPelanggan == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == null) {
               return "Nama Pelanggan masih kosong !";
@@ -325,7 +330,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           onChanged: (value) {
             ktp = value;
           },
-          selectedItem: ktp ?? "Pilih Status KTP",
+          dropdownBuilder: (context, selectedItem) => Text(
+              ktp ?? "Pilih Status KTP",
+              style: TextStyle(color: ktp == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -348,7 +355,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           onChanged: (value) {
             kk = value;
           },
-          selectedItem: kk ?? "Pilih Status KK",
+          dropdownBuilder: (context, selectedItem) => Text(
+              kk ?? "Pilih Status KK",
+              style: TextStyle(color: kk == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -373,7 +382,10 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           onChanged: (value) {
             lampiran = value;
           },
-          selectedItem: lampiran ?? "Pilih Lampiran",
+          dropdownBuilder: (context, selectedItem) => Text(
+              lampiran ?? "Lampiran",
+              style: TextStyle(
+                  color: lampiran == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -419,7 +431,10 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "Telah Diterima Dikantor",
             "Proses Sendiri / Pending Paspor",
           ],
-          selectedItem: "Pilih Paspor",
+          dropdownBuilder: (context, selectedItem) => Text(
+              pembuatan ?? "Pilih Paspor",
+              style: TextStyle(
+                  color: pembuatan == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -461,59 +476,62 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
             "Kolektif Kantor",
             "Proses Sendiri",
           ],
-          selectedItem: "Pilih Vaksin",
+          dropdownBuilder: (context, selectedItem) => Text(
+              vaksin ?? "Pilih Vaksin",
+              style:
+                  TextStyle(color: vaksin == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
   }
 
-  Widget inputStatusHandling() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          label: "Status Handling",
-          mode: Mode.MENU,
-          items: const [
-            "Diterima Lengkap",
-            "Diterima Sebagian",
-            "Belum Diterima",
-            "Tidak Dengan Handling",
-          ],
-          onChanged: (value) {
-            handling = value;
-          },
-          selectedItem: "Pilih Status Handling",
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
+  // Widget inputStatusHandling() {
+  //   return Container(
+  //     height: 50,
+  //     decoration: const BoxDecoration(
+  //         border: Border(
+  //             bottom: BorderSide(
+  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+  //     child: DropdownSearch(
+  //         label: "Status Handling",
+  //         mode: Mode.MENU,
+  //         items: const [
+  //           "Diterima Lengkap",
+  //           "Diterima Sebagian",
+  //           "Belum Diterima",
+  //           "Tidak Dengan Handling",
+  //         ],
+  //         onChanged: (value) {
+  //           handling = value;
+  //         },
+  //         selectedItem: "Pilih Status Handling",
+  //         dropdownSearchDecoration:
+  //             const InputDecoration(border: InputBorder.none)),
+  //   );
+  // }
 
-  Widget inputHandling() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          enabled: false,
-          label: "Handling",
-          mode: Mode.BOTTOM_SHEET,
-          items: const [
-            "Tidak Ada Keterangan",
-            "Tidak Ada Keterangan",
-            "Tidak Ada Keterangan",
-          ],
-          onChanged: print,
-          selectedItem: "Pilih Handling",
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
+  // Widget inputHandling() {
+  //   return Container(
+  //     height: 50,
+  //     decoration: const BoxDecoration(
+  //         border: Border(
+  //             bottom: BorderSide(
+  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+  //     child: DropdownSearch(
+  //         enabled: false,
+  //         label: "Handling",
+  //         mode: Mode.BOTTOM_SHEET,
+  //         items: const [
+  //           "Tidak Ada Keterangan",
+  //           "Tidak Ada Keterangan",
+  //           "Tidak Ada Keterangan",
+  //         ],
+  //         onChanged: print,
+  //         selectedItem: "Pilih Handling",
+  //         dropdownSearchDecoration:
+  //             const InputDecoration(border: InputBorder.none)),
+  //   );
+  // }
 
   // Widget inputBiayaFasilitas() {
   //   return TextFormField(
@@ -572,7 +590,10 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
               });
             }
           },
-          selectedItem: "Pilih Refrensi",
+          dropdownBuilder: (context, selectedItem) => Text(
+              refrensi ?? "Pilih Refrensi",
+              style: TextStyle(
+                  color: refrensi == null ? Colors.red : Colors.black)),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -880,9 +901,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       lampiran,
       pembuatan,
       vaksin,
-      handling,
+      handling = 'Belum Diterima',
       refrensi,
-      namaAgency,
+      namaAgency ?? '',
       totalEst,
       fncJatuhTempo(tglBerangkat).toString(),
       fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
@@ -893,8 +914,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       if (value.status == true) {
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());
-        menuController.changeActiveitemTo('Pelanggan');
-        navigationController.navigateTo('/jamaah/pelanggan');
+        menuController.changeActiveitemTo('Pendaftaran');
+        navigationController.navigateTo('/jamaah/pendaftaran');
       } else {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());
@@ -1053,17 +1074,17 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                     // inputPaspor(),
                                     // inputVaksin(),
                                     // const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 300,
-                                            child: inputStatusHandling()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 360, child: inputHandling()),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
+                                    // Row(
+                                    //   children: [
+                                    //     SizedBox(
+                                    //         width: 300,
+                                    //         child: inputStatusHandling()),
+                                    //     const SizedBox(width: 20),
+                                    //     SizedBox(
+                                    //         width: 360, child: inputHandling()),
+                                    //   ],
+                                    // ),
+                                    // const SizedBox(height: 8),
                                     // inputHandling(),
                                     // inputStatusHandling(),
                                     // const SizedBox(height: 8),
@@ -1086,7 +1107,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                     // const SizedBox(height: 8),
                                     Container(
                                       width: 680,
-                                      height: 200,
+                                      height: 260,
                                       decoration: BoxDecoration(
                                           border:
                                               Border.all(color: Colors.grey)),

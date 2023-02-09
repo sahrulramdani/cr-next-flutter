@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/dummy_jadwal.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 // import 'package:flutter_web_course/pages/inventory/widgets/modal_hapus_barang.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jadwal.dart';
 // import 'package:url_launcher/url_launcher.dart';
@@ -15,28 +16,34 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:intl/intl.dart';
 
 class MyData extends DataTableSource {
+  final List<Map<String, dynamic>> dataProfit;
+  MyData(this.dataProfit);
   @override
   DataRow getRow(int index) {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(dummyJadwalTable[index]['rute_penerbangan'] +
+      DataCell(Text(dataProfit[index]['RUTE_AWAL'] +
           ' - ' +
-          dummyJadwalTable[index]['tipena'] +
+          dataProfit[index]['namaPaket'] +
           ' ' +
-          dummyJadwalTable[index]['tg_berangkat'])),
-      DataCell(Text(dummyJadwalTable[index]['biaya_rp'])),
-      DataCell(Text(dummyJadwalTable[index]['jumlah_seat'])),
-      DataCell(Text((myFormat.format(
-              int.parse(dummyJadwalTable[index]['jumlah_seat']) *
-                  int.parse(dummyJadwalTable[index]['biaya'])))
-          .toString())),
-      DataCell(Text((myFormat.format(
-              int.parse(dummyJadwalTable[index]['jumlah_seat']) *
-                  int.parse(dummyJadwalTable[index]['biaya'])))
-          .toString())),
-      const DataCell(Text('0')),
+          fncGetTanggal(dataProfit[index]['TGLX_BGKT']))),
+      DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']))),
+      DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString())),
+      DataCell(Text(myFormat.format(dataProfit[index]['EST_PROFIT']))),
+      DataCell(Text(myFormat.format(dataProfit[index]['TLH_MASUK']))),
+      DataCell(Text(myFormat.format(((dataProfit[index]['EST_PROFIT']) -
+              (dataProfit[index]['TLH_MASUK'])) *
+          1))),
+
+      // DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']))),
+      // DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString())),
+      // DataCell(Text(myFormat.format(dataProfit[index]['EST_PROFIT']))),
+      // DataCell(Text(myFormat.format(dataProfit[index]['TLH_MASUK']))),
+      // DataCell(Text(myFormat.format(((dataProfit[index]['EST_PROFIT']) -
+      //         (dataProfit[index]['TLH_MASUK'])) *
+      //     1))),
     ]);
   }
 
@@ -44,14 +51,15 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => dummyJadwalTable.length;
+  int get rowCount => dataProfit.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
 class TablePenerbangan extends StatefulWidget {
-  const TablePenerbangan({Key key}) : super(key: key);
+  List<Map<String, dynamic>> dataProfit;
+  TablePenerbangan({Key key, @required this.dataProfit}) : super(key: key);
 
   @override
   State<TablePenerbangan> createState() => _TablePenerbanganState();
@@ -62,7 +70,7 @@ class _TablePenerbanganState extends State<TablePenerbangan> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final DataTableSource myTable = MyData();
+    final DataTableSource myTable = MyData(widget.dataProfit);
 
     return SizedBox(
       width: screenWidth,
@@ -70,6 +78,7 @@ class _TablePenerbanganState extends State<TablePenerbangan> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 10,
           source: myTable,
           columns: [
             DataColumn(

@@ -1,15 +1,23 @@
 // ignore_for_file: missing_return, deprecated_member_use, prefer_interpolation_to_compose_strings
 // import 'package:http/http.dart' as http;
+import 'dart:html';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/models/http_pembayaran.dart';
+import 'package:flutter_web_course/pages/finance/widgets/pembayaran/modal_bayar_kurang.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PembayaranForm extends StatefulWidget {
   const PembayaranForm({Key key}) : super(key: key);
@@ -25,11 +33,107 @@ class _PembayaranFormState extends State<PembayaranForm> {
   String namaPelanggan;
   String nik;
   String namaJadwal;
+  String idPendaftaran;
+  String idBank;
+  String namaBank;
+  String metodePembayaran;
+  String keterangan;
+
   String stringTotal;
+  String stringTagihan;
   bool cekAll = false;
   bool disabledCekAll = true;
   String uangDiterima;
   String uangKembali;
+
+  List<Map<String, dynamic>> listJamaah = [];
+  List<Map<String, dynamic>> listJadwal = [];
+  List<Map<String, dynamic>> listTagihan = [];
+  List<Map<String, dynamic>> listBank = [];
+  List<Map<String, dynamic>> detailTagihan = [];
+
+  void getList() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/finance/pembayaran/get-jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listJamaah = dataStatus;
+    });
+  }
+
+  getBank() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/banks"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listBank = dataStatus;
+    });
+  }
+
+  getJadwal(id) async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/finance/pembayaran/get-jadwal/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listJadwal = dataStatus;
+    });
+  }
+
+  getTagihan(id) async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/finance/pembayaran/get-tagihan/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listTagihan = [];
+    });
+
+    for (var i = 0; i < dataStatus.length; i++) {
+      var tagihan = {
+        "NOXX_TGIH": dataStatus[i]['NOXX_TGIH'].toString(),
+        "KDXX_DFTR": dataStatus[i]['KDXX_DFTR'].toString(),
+        "JENS_TGIH": dataStatus[i]['JENS_TGIH'].toString(),
+        "TOTL_TGIH": dataStatus[i]['SISA_TGIH'].toString(),
+        "JMLX_BYAR": dataStatus[i]['SISA_TGIH'].toString(),
+        "SISA_TGIH": '0',
+        "STS_LUNAS": dataStatus[i]['STS_LUNAS'].toString(),
+        "CEK": false,
+      };
+      listTagihan.add(tagihan);
+    }
+
+    int ttl = 0;
+    for (var i = 0; i < listTagihan.length; i++) {
+      if (listTagihan[i]['STS_LUNAS'] != 'LUNAS') {
+        ttl += int.parse(
+            listTagihan[i]['TOTL_TGIH'].toString().replaceAll(',', ''));
+      }
+    }
+
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    setState(() {
+      stringTagihan = myFormat.format(ttl).toString();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getList();
+    getBank();
+  }
 
   Widget inputPilihJamaah() {
     return Container(
@@ -41,38 +145,49 @@ class _PembayaranFormState extends State<PembayaranForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Pilih Jamaah",
-          items: listPelanggan,
+          items: listJamaah,
           onChanged: (value) {
             if (value != null) {
               setState(() {
-                namaPelanggan = value["nama"];
-                nik = value["nik"];
+                namaPelanggan = value["NAMA_LGKP"];
+                nik = value["NOXX_IDNT"];
               });
+              getJadwal(value["NOXX_IDNT"]);
             } else {
               setState(() {
                 namaPelanggan = null;
                 nik = null;
               });
+              getJadwal('cek');
             }
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(
-                    item['nama'] + ' - ' + item['jk'] + ' - ' + item['umur'],
+                    item['NAMA_LGKP'] +
+                        ' - ' +
+                        item['UMUR'].toString() +
+                        ' Tahun, ' +
+                        item['JENS_KLMN'],
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                leading: const CircleAvatar(),
+                leading: CircleAvatar(
+                  backgroundImage: item['FOTO_JMAH'] != ''
+                      ? NetworkImage('$urlAddress/uploads/${item['FOTO_JMAH']}')
+                      : const AssetImage('assets/images/NO_IMAGE.jpg'),
+                ),
                 subtitle: Text(
-                    item['nik'] +
+                    item['NOXX_IDNT'] +
                         ' - No Telp : ' +
-                        item['telp'] +
+                        item['NOXX_TELP'].toString() +
                         ' - TTL : ' +
-                        item['ttl'],
+                        item['TMPT_LHIR'] +
+                        ', ' +
+                        fncGetTanggal(item['LAHIR']),
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(item['alamat']),
+                trailing: Text(item['ALAMAT']),
               ),
-          dropdownBuilder: (context, selectedItem) => Text(namaPelanggan != null
-              ? '$nik - $namaPelanggan'
-              : "Jamaah belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaPelanggan != null ? '$nik - $namaPelanggan' : "Nama Jamaah"),
           validator: (value) {
             if (value == null) {
               return "Nama Jamaah masih kosong !";
@@ -84,6 +199,8 @@ class _PembayaranFormState extends State<PembayaranForm> {
   }
 
   Widget inputNamaJadwal() {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -93,47 +210,54 @@ class _PembayaranFormState extends State<PembayaranForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Jadwal",
-          items: listJadwalProduk,
+          items: listJadwal,
           onChanged: (value) {
             if (value != null) {
               setState(() {
-                namaJadwal = value['paket'] +
+                namaJadwal = value['namaPaket'] +
                     ' - ' +
-                    value['jenis'] +
+                    value['jenisPaket'] +
                     ' - ' +
-                    value['keterangan'];
+                    value['KETERANGAN'];
                 disabledCekAll = false;
+                idPendaftaran = value['KDXX_DFTR'];
               });
+              getTagihan(value['KDXX_DFTR']);
             } else {
               setState(() {
                 namaJadwal = null;
                 disabledCekAll = true;
               });
+              getTagihan('cek');
+              idPendaftaran = null;
             }
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(
-                  item['paket'] +
+                  item['namaPaket'] +
                       ' - ' +
-                      item['jenis'] +
+                      item['jenisPaket'] +
                       ' - ' +
-                      item['keterangan'],
+                      item['KETERANGAN'],
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                    item['uang'] +
+                    item['MATA_UANG'] +
                         ' ' +
-                        item['tarif'] +
+                        myformat.format(item['TARIF_PKET']) +
                         ' - ' +
                         'Sisa Seat : ' +
-                        item['sisa'],
+                        item['SISA'].toString(),
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(item['berangkat'] + ' - ' + item['pulang'],
+                trailing: Text(
+                    fncGetTanggal(item['BERANGKAT']) +
+                        ' - ' +
+                        fncGetTanggal(item['PULANG']),
                     textAlign: TextAlign.center),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaJadwal ?? "Produk belum Dipilih"),
+              Text(namaJadwal ?? "Pilih Jadwal"),
           validator: (value) {
             if (value == null) {
               return "Jadwal Produk masih kosong !";
@@ -152,7 +276,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
       decoration: const InputDecoration(
         labelText: 'Jumlah Tagihan',
       ),
-      initialValue: stringTotal ?? '0',
+      initialValue: stringTagihan ?? '0',
     );
   }
 
@@ -234,7 +358,13 @@ class _PembayaranFormState extends State<PembayaranForm> {
           "Transfer",
           "Virtual Account",
         ],
-        selectedItem: "Pilih Metode Pembayaran",
+        onChanged: (value) {
+          metodePembayaran = value;
+        },
+        dropdownBuilder: (context, selectedItem) => Text(
+            metodePembayaran ?? "Pilih Metode Pembayaran",
+            style: TextStyle(
+                color: metodePembayaran == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -255,15 +385,18 @@ class _PembayaranFormState extends State<PembayaranForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         label: "Rekening Tabungan",
-        mode: Mode.MENU,
-        items: const [
-          "Bank BRI",
-          "Bank BTN",
-          "Bank BNI",
-          "Bank Mandiri",
-          "Bank CimbNiaga",
-        ],
-        selectedItem: "Pilih Rekening Tabungan",
+        mode: Mode.BOTTOM_SHEET,
+        items: listBank,
+        onChanged: (value) {
+          idBank = value['CODD_VALU'];
+          namaBank = value['CODD_DESC'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaBank ?? "Bank Belum dipilih"),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -278,7 +411,11 @@ class _PembayaranFormState extends State<PembayaranForm> {
   Widget inputKeterangan() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Keterangan'),
+      decoration: const InputDecoration(labelText: 'Keterangan Referal'),
+      onChanged: (value) {
+        keterangan = value;
+      },
+      initialValue: keterangan ?? '',
     );
   }
 
@@ -301,7 +438,10 @@ class _PembayaranFormState extends State<PembayaranForm> {
 
   Widget buttonRefresh() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        menuController.changeActiveitemTo('Pembayaran');
+        navigationController.navigateTo('/finance/pembayaran-jamaah');
+      },
       icon: const Icon(Icons.refresh_outlined),
       label: const Text(
         'Batal',
@@ -318,22 +458,27 @@ class _PembayaranFormState extends State<PembayaranForm> {
 
   fncCekAll() {
     for (var i = 0; i < listTagihan.length; i++) {
-      setState(() {
-        listTagihan[i]['cek'] = cekAll;
-      });
+      if (listTagihan[i]['STS_LUNAS'] != 'LUNAS') {
+        setState(() {
+          listTagihan[i]['CEK'] = cekAll;
+        });
+      }
     }
   }
 
   fncTotal() {
     int ttl = 0;
     for (var i = 0; i < listTagihan.length; i++) {
-      if (listTagihan[i]['cek'] == true) {
-        ttl += int.parse(
-            listTagihan[i]['jml_tagihan'].toString().replaceAll(',', ''));
+      if (listTagihan[i]['STS_LUNAS'] != 'LUNAS') {
+        if (listTagihan[i]['CEK'] == true) {
+          ttl += int.parse(
+              listTagihan[i]['JMLX_BYAR'].toString().replaceAll(',', ''));
+        }
       }
     }
 
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+
     setState(() {
       stringTotal = myFormat.format(ttl).toString();
       uangKembali = '0';
@@ -352,9 +497,70 @@ class _PembayaranFormState extends State<PembayaranForm> {
     });
   }
 
-  fncSaveData() {
-    showDialog(
-        context: context, builder: (context) => const ModalSaveSuccess());
+  fncSaveData() async {
+    if (int.parse(uangDiterima.replaceAll(',', '')) <
+        int.parse(stringTotal.replaceAll(',', ''))) {
+      return showDialog(
+          context: context, builder: (context) => const ModalBayarKurang());
+    }
+
+    // GET NOMOR FAKTUR
+    var response1 = await http
+        .get(Uri.parse("$urlAddress/finance/pembayaran/no-faktur"), headers: {
+      'pte-token': kodeToken,
+    });
+    dynamic body1 = json.decode(response1.body);
+    String noFaktur = body1['idFaktur'];
+
+    // GET DETAIL BARANG
+    for (var i = 0; i < listTagihan.length; i++) {
+      if (listTagihan[i]['STS_LUNAS'] != 'LUNAS') {
+        if (listTagihan[i]['CEK'] == true) {
+          var tagihan = {
+            '"NOXX_TGIH"': '"${listTagihan[i]['NOXX_TGIH']}"',
+            '"KDXX_DFTR"': '"${listTagihan[i]['KDXX_DFTR']}"',
+            '"JENS_TGIH"': '"${listTagihan[i]['JENS_TGIH']}"',
+            '"TOTL_TGIH"': '"${listTagihan[i]['TOTL_TGIH']}"',
+            '"JMLX_BYAR"': '"${listTagihan[i]['JMLX_BYAR']}"',
+            '"SISA_TGIH"': '"${listTagihan[i]['SISA_TGIH']}"',
+            '"STS_LUNAS"': '"${listTagihan[i]['STS_LUNAS']}"',
+          };
+          detailTagihan.add(tagihan);
+        }
+      }
+    }
+
+    // print(idPendaftaran);
+    // print(stringTotal.replaceAll(',', ''));
+    // print(metodePembayaran);
+    // print(idBank);
+    // print(keterangan);
+    // print(uangDiterima.replaceAll(',', ''));
+    // print(detailTagihan);
+
+    HttpPembayaran.savePendaftaran(
+      noFaktur,
+      idPendaftaran,
+      stringTotal.replaceAll(',', ''),
+      metodePembayaran,
+      idBank ?? '',
+      keterangan,
+      uangDiterima.replaceAll(',', ''),
+      '$detailTagihan',
+    ).then((value) {
+      if (value.status == true) {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveSuccess());
+        menuController.changeActiveitemTo('Pembayaran');
+        navigationController.navigateTo('/finance/pembayaran-jamaah');
+      } else {
+        showDialog(
+            context: context, builder: (context) => const ModalSaveFail());
+      }
+    });
+
+    // showDialog(
+    //     context: context, builder: (context) => const ModalSaveSuccess());
 
     // menuController.changeActiveitemTo('Pengeluaran');
     // navigationController.navigateTo('/inventory/pengeluaran');
@@ -363,8 +569,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     int x = 1;
 
     return Form(
@@ -438,8 +643,8 @@ class _PembayaranFormState extends State<PembayaranForm> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            buttonCari(),
-                            const SizedBox(width: 5),
+                            // buttonCari(),
+                            // const SizedBox(width: 5),
                             buttonRefresh()
                           ],
                         ))
@@ -465,6 +670,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
                               dataRowHeight: 35,
+                              columnSpacing: 30,
                               headingTextStyle:
                                   const TextStyle(fontWeight: FontWeight.bold),
                               border: TableBorder.all(color: Colors.grey[200]),
@@ -494,22 +700,77 @@ class _PembayaranFormState extends State<PembayaranForm> {
                                       return DataRow(cells: [
                                         DataCell(Text((x++).toString())),
                                         DataCell(Checkbox(
-                                          value: e['cek'],
+                                          value: e['CEK'],
                                           onChanged: (bool value) {
-                                            setState(() {
-                                              e['cek'] = !e['cek'];
-                                            });
-                                            fncTotal();
+                                            if (e['STS_LUNAS'] == 'BELUM') {
+                                              setState(() {
+                                                e['CEK'] = !e['CEK'];
+                                              });
+                                              fncTotal();
+                                            }
                                           },
                                         )),
-                                        DataCell(Text(e['nama_tagihan'])),
-                                        DataCell(Text(e['jml_tagihan'])),
-                                        DataCell(Text(e['cek'] == false
-                                            ? '0'
-                                            : e['jml_tagihan'])),
-                                        DataCell(Text(e['cek'] == false
-                                            ? e['jml_tagihan']
-                                            : '0')),
+                                        DataCell(Text(
+                                          e['JENS_TGIH'],
+                                        )),
+                                        DataCell(Text(
+                                          myFormat.format(
+                                              int.parse(e['TOTL_TGIH'])),
+                                        )),
+                                        // DataCell(Text(
+                                        //     myFormat.format(
+                                        //         int.parse(e['JMLX_BYAR'])),
+                                        //     style: TextStyle(
+                                        //         color: e['STS_LUNAS'] == 'LUNAS'
+                                        //             ? Colors.green[900]
+                                        //             : Colors.black))),
+                                        DataCell(TextFormField(
+                                          readOnly:
+                                              e['CEK'] == true ? false : true,
+                                          textAlign: TextAlign.right,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            ThousandsFormatter()
+                                          ],
+                                          decoration: const InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 19)),
+                                          style: const TextStyle(
+                                              fontFamily: 'Gilroy',
+                                              fontSize: 15),
+                                          initialValue: e['CEK'] == true
+                                              ? myFormat.format(
+                                                  int.parse(e['JMLX_BYAR']))
+                                              : '0',
+                                          onFieldSubmitted: (value) {
+                                            setState(() {
+                                              e['SISA_TGIH'] =
+                                                  (int.parse(e['TOTL_TGIH']) -
+                                                          int.parse(
+                                                              value.replaceAll(
+                                                                  ',', '')))
+                                                      .toString();
+                                            });
+
+                                            fncTotal();
+                                          },
+                                          onChanged: (value) {
+                                            e['JMLX_BYAR'] =
+                                                value.replaceAll(',', '');
+                                          },
+                                        )),
+                                        // --------------------------
+                                        // --------------------------
+                                        // --------------------------
+                                        // --------------------------
+                                        DataCell(Text(
+                                          e['CEK'] == true
+                                              ? myFormat.format(
+                                                  int.parse(e['SISA_TGIH']))
+                                              : myFormat.format(
+                                                  int.parse(e['TOTL_TGIH'])),
+                                        )),
                                       ]);
                                     }).toList(),
                             ),

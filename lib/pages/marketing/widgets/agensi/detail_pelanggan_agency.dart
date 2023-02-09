@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy_pelanggan.dart';
@@ -72,6 +74,7 @@ class _DetailPelangganAgencyState extends State<DetailPelangganAgency> {
             : Column(
                 children: [
                   DataTable(
+                      columnSpacing: 15,
                       columns: [
                         DataColumn(
                             label: Text('No.',
@@ -146,13 +149,15 @@ class _DetailPelangganAgencyState extends State<DetailPelangganAgency> {
                           )),
                           DataCell(Text(data['KDXX_JMAH'])),
                           DataCell(Text(data['NAMA_LGKP'])),
-                          DataCell(Text(
-                              data['JENS_PKET'] + ' - ' + data['NAMA_PKET'])),
+                          DataCell(
+                              Text(data['JENISNA'] + ' - ' + data['PAKETNA'])),
                           DataCell(Text(fncGetTanggal(DateFormat("dd-MM-yyyy")
-                              .format(DateTime.parse(data['TGLX_LHIR']))))),
+                              .format(DateTime.parse(data['TGLX_BGKT']))))),
                           DataCell(Text(data['NAMA_KNTR'])),
                           DataCell(Text((jmah--).toString())),
-                          DataCell(Text(data['STAS_BYAR'])),
+                          DataCell(Text(data['STAS_BYAR'].toString() == '1'
+                              ? 'Lunas'
+                              : 'Belum Lunas')),
                         ]);
                       }).toList()),
                 ],

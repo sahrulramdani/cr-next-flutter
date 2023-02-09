@@ -127,7 +127,7 @@ class _DetailBankAgencyState extends State<DetailBankAgency> {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       initialValue: namaRekening ?? '',
       decoration: const InputDecoration(
-          labelText: 'Nama Rekening',
+          labelText: 'Atas Nama Rekening',
           hintText: 'Nama',
           filled: true,
           fillColor: Colors.white,

@@ -94,9 +94,9 @@ class PrintAgency extends StatelessWidget {
                                 'No.',
                                 'ID Marketing',
                                 'Nama',
-                                'Fee Level',
-                                'Periode',
-                                'Total',
+                                'Fee',
+                                'Per',
+                                'Ttl',
                                 'Poin',
                               ],
                               data: <List>[
@@ -105,13 +105,12 @@ class PrintAgency extends StatelessWidget {
                                     i++)
                                   [
                                     (x++).toString(),
-                                    listAgency[i]['id_marketing'].toString(),
-                                    listAgency[i]['nama_lengkap'].toString(),
-                                    listAgency[i]['mk'].toString(),
-                                    listAgency[i]['periode_pelanggan']
-                                        .toString(),
-                                    listAgency[i]['total_pelanggan'].toString(),
-                                    listAgency[i]['poin'].toString(),
+                                    listAgency[i]['KDXX_MRKT'].toString(),
+                                    listAgency[i]['NAMA_LGKP'].toString(),
+                                    listAgency[i]['FEE'].toString(),
+                                    listAgency[i]['PERD_JMAH'].toString(),
+                                    listAgency[i]['TOTL_JMAH'].toString(),
+                                    listAgency[i]['TOTL_POIN'].toString(),
                                   ]
                               ]),
                         ],
@@ -229,6 +228,7 @@ class PrintAgency extends StatelessWidget {
         // print(listAgency);
         // getPDF();
         _createPDF();
+        // print('wkwkwk');
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(

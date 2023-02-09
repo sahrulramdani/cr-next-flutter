@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/info_estimasi_bayar.dart';
@@ -11,7 +13,11 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 
 class DetailModalDetail extends StatefulWidget {
-  const DetailModalDetail({Key key}) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  DetailModalDetail(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   State<DetailModalDetail> createState() => _DetailModalDetailState();
@@ -46,7 +52,7 @@ class _DetailModalDetailState extends State<DetailModalDetail> {
                     ),
                     const SizedBox(width: 10),
                     FittedBox(
-                      child: Text('Detail Nanim Sumartini',
+                      child: Text('Detail ${widget.namaPelanggan}',
                           style: TextStyle(
                               color: myGrey, fontWeight: FontWeight.bold)),
                     ),
@@ -123,19 +129,27 @@ class _DetailModalDetailState extends State<DetailModalDetail> {
                   child: Column(children: [
                     Visibility(
                       visible: enablePaket,
-                      child: const SizedBox(child: InfoPaket()),
+                      child: SizedBox(
+                          child: InfoPaket(idPelanggan: widget.idPelanggan)),
                     ),
                     Visibility(
                       visible: enableDetail,
-                      child: const SizedBox(child: InfoPelanggan()),
+                      child: SizedBox(
+                          child:
+                              InfoPelanggan(idPelanggan: widget.idPelanggan)),
                     ),
                     Visibility(
                       visible: enablePembayaran,
-                      child: const SizedBox(child: InfoEstimasiBayar()),
+                      child: SizedBox(
+                          child: InfoEstimasiBayar(
+                              idPelanggan: widget.idPelanggan)),
                     ),
                     Visibility(
                       visible: enableRiwayat,
-                      child: const SizedBox(child: InfoRiwayatBayar()),
+                      child: SizedBox(
+                          child: InfoRiwayatBayar(
+                        idPelanggan: widget.idPelanggan,
+                      )),
                     ),
                   ]),
                 ),

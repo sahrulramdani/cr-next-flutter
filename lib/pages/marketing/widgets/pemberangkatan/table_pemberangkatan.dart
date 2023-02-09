@@ -122,6 +122,7 @@ class _TablePemberangkatanState extends State<TablePemberangkatan> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 15,
           source: myTable,
           columns: [
             DataColumn(

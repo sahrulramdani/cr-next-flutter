@@ -15,7 +15,11 @@ import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/modal_menu_pel
 // import 'package:intl/intl.dart';
 
 class ButtonEdit extends StatelessWidget {
-  const ButtonEdit({Key key}) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  ButtonEdit(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,11 @@ class ButtonEdit extends StatelessWidget {
       ),
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const ModalMenuPelanggan());
+            context: context,
+            builder: (context) => ModalMenuPelanggan(
+                  idPelanggan: idPelanggan,
+                  namaPelanggan: namaPelanggan,
+                ));
       },
     );
   }
@@ -41,25 +49,33 @@ class MyData extends DataTableSource {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      const DataCell(Icon(Icons.check, color: Colors.green)),
-      DataCell(Text(dataPelanggan[index]['id_pelanggan'])),
-      DataCell(Text(dataPelanggan[index]['nama_lengkap'])),
-      DataCell(Text(dataPelanggan[index]['jenis_kelamin'])),
-      DataCell(Text(dataPelanggan[index]['umur'])),
-      DataCell(Text(dataPelanggan[index]['tgi_berangkat'])),
-      DataCell(Text(dataPelanggan[index]['syarat'])),
-      DataCell(Text(dataPelanggan[index]['sh'])),
-      DataCell(Text(dataPelanggan[index]['telepon'])),
+      DataCell(Icon(
+          dataPelanggan[index]['STS_BRGKT'] == 0
+              ? Icons.punch_clock_outlined
+              : Icons.check,
+          color: dataPelanggan[index]['STS_BRGKT'] == 0
+              ? Colors.orange[800]
+              : Colors.green)),
+      DataCell(Text(dataPelanggan[index]['KDXX_DFTR'].toString())),
+      DataCell(Text(dataPelanggan[index]['NAMA_LGKP'])),
+      DataCell(Text(dataPelanggan[index]['JENS_KLMN'])),
+      DataCell(Text(dataPelanggan[index]['UMUR'].toString())),
+      DataCell(Text(dataPelanggan[index]['BERANGKAT'])),
       DataCell(Text(
-          myFormat.format(int.parse(dataPelanggan[index]['rp_uang_masuk'])))),
-      DataCell(Text(
-          myFormat.format(int.parse(dataPelanggan[index]['estimasisisa'])))),
-      DataCell(Text(dataPelanggan[index]['nama_marketing'])),
+          dataPelanggan[index]['PASPORAN'] == 'BELUM' ? 'BELUM' : 'PASPORAN')),
+      DataCell(Text(dataPelanggan[index]['HANDLING'])),
+      DataCell(Text(dataPelanggan[index]['NOXX_TELP'].toString())),
+      DataCell(Text(myFormat.format(dataPelanggan[index]['UANG_MASUK']))),
+      DataCell(Text(myFormat.format(dataPelanggan[index]['SISA']))),
+      DataCell(Text(dataPelanggan[index]['NAMA_MRKT'])),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            ButtonEdit(),
+          children: [
+            ButtonEdit(
+              idPelanggan: dataPelanggan[index]['KDXX_DFTR'].toString(),
+              namaPelanggan: dataPelanggan[index]['NAMA_LGKP'],
+            ),
           ],
         ),
       )),
@@ -98,6 +114,7 @@ class _TablePelangganState extends State<TablePelanggan> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
+          columnSpacing: 17,
           source: myTable,
           columns: [
             DataColumn(

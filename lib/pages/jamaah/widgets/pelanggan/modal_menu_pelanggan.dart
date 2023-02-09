@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
@@ -21,14 +21,20 @@ import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/detail_modal_u
 // import 'package:intl/intl.dart';
 
 class ButtonDetail extends StatelessWidget {
-  const ButtonDetail({Key key}) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  ButtonDetail(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const DetailModalDetail());
+            context: context,
+            builder: (context) => DetailModalDetail(
+                idPelanggan: idPelanggan, namaPelanggan: namaPelanggan));
       },
       icon: const Icon(Icons.info_outline_rounded),
       label: const Text(
@@ -232,14 +238,20 @@ class ButtonBatal extends StatelessWidget {
 }
 
 class ButtonLainnya extends StatelessWidget {
-  const ButtonLainnya({Key key}) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  ButtonLainnya(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
         showDialog(
-            context: context, builder: (context) => const DetailModalLainnya());
+            context: context,
+            builder: (context) => DetailModalLainnya(
+                idPelanggan: idPelanggan, namaPelanggan: namaPelanggan));
       },
       icon: const Icon(Icons.manage_accounts_outlined),
       label: const Text(
@@ -257,9 +269,11 @@ class ButtonLainnya extends StatelessWidget {
 }
 
 class ModalMenuPelanggan extends StatefulWidget {
-  const ModalMenuPelanggan({
-    Key key,
-  }) : super(key: key);
+  String idPelanggan;
+  String namaPelanggan;
+  ModalMenuPelanggan(
+      {Key key, @required this.idPelanggan, @required this.namaPelanggan})
+      : super(key: key);
 
   @override
   State<ModalMenuPelanggan> createState() => _ModalMenuPelangganState();
@@ -288,7 +302,7 @@ class _ModalMenuPelangganState extends State<ModalMenuPelanggan> {
                         color: Colors.amber[900],
                       ),
                       const SizedBox(width: 10),
-                      Text('Pelanggan Nanim Sumartini',
+                      Text('Pelanggan ${widget.namaPelanggan}',
                           style: TextStyle(
                               color: myGrey,
                               fontWeight: FontWeight.bold,
@@ -304,17 +318,20 @@ class _ModalMenuPelangganState extends State<ModalMenuPelanggan> {
                       children: [
                         SizedBox(
                           child: Column(
-                            children: const [
-                              ButtonDetail(),
-                              SizedBox(height: 10),
-                              ButtonPembayaran(),
-                              SizedBox(height: 10),
-                              ButtonPaspor(),
-                              SizedBox(height: 10),
-                              ButtonHandling(),
-                              SizedBox(height: 10),
-                              ButtonLunas(),
-                              SizedBox(height: 10),
+                            children: [
+                              ButtonDetail(
+                                idPelanggan: widget.idPelanggan,
+                                namaPelanggan: widget.namaPelanggan,
+                              ),
+                              const SizedBox(height: 10),
+                              // const ButtonPembayaran(),
+                              // const SizedBox(height: 10),
+                              const ButtonPaspor(),
+                              const SizedBox(height: 10),
+                              const ButtonHandling(),
+                              const SizedBox(height: 10),
+                              const ButtonLunas(),
+                              const SizedBox(height: 10),
                             ],
                           ),
                         ),
@@ -323,14 +340,17 @@ class _ModalMenuPelangganState extends State<ModalMenuPelanggan> {
                         ),
                         SizedBox(
                           child: Column(
-                            children: const [
-                              ButtonJadwal(),
-                              SizedBox(height: 10),
-                              ButtonFasilitas(),
-                              SizedBox(height: 10),
-                              ButtonBatal(),
-                              SizedBox(height: 10),
-                              ButtonLainnya(),
+                            children: [
+                              const ButtonJadwal(),
+                              const SizedBox(height: 10),
+                              const ButtonFasilitas(),
+                              const SizedBox(height: 10),
+                              const ButtonBatal(),
+                              const SizedBox(height: 10),
+                              ButtonLainnya(
+                                idPelanggan: widget.idPelanggan,
+                                namaPelanggan: widget.namaPelanggan,
+                              ),
                             ],
                           ),
                         ),

@@ -19,7 +19,7 @@ class HttpBarang {
     String HRGX_JUAL,
     String KETERANGAN,
   ) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/barang/save");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/barang/save");
     var hargaBeli = HRGX_BELI.replaceAll(",", "").toString();
     var hargaJual = HRGX_JUAL.replaceAll(",", "").toString();
     var hasilResponse = await http.post(urlApi, body: {
@@ -47,7 +47,7 @@ class HttpBarang {
     String STAT_BRG,
     String KETERANGAN,
   ) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/barang/update");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/barang/update");
     var hargaBeli = HRGX_BELI.replaceAll(",", "").toString();
     var hargaJual = HRGX_JUAL.replaceAll(",", "").toString();
     var hasilResponse = await http.post(urlApi, body: {
@@ -69,7 +69,7 @@ class HttpBarang {
 
   static Future<HttpBarang> updateStokBarang(
       String idBarang, String stokBarang, String stokAwal) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/barang/updateStok");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/barang/updateStok");
     var hasilResponse = await http.post(urlApi, body: {
       "KDXX_BRGX": idBarang,
       "STOK_TABH": stokBarang,
@@ -83,7 +83,7 @@ class HttpBarang {
   }
 
   static Future<HttpBarang> deleteBarang(String idBarang) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/inventory/barang/delete");
+    Uri urlApi = Uri.parse("$urlAddress/inventory/barang/delete");
     var hasilResponse = await http.post(
       urlApi,
       body: {

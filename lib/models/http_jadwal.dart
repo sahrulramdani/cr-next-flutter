@@ -25,7 +25,7 @@ class HttpJadwal {
     String tglBerangkat,
     String tglPulang,
   ) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/marketing/jadwal/save");
+    Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/save");
     var Tarif = tarif.replaceAll(",", "").toString();
     var hasilResponse = await http.post(urlApi, body: {
       "KDXX_JDWL": fncRandomId(15),
@@ -67,7 +67,7 @@ class HttpJadwal {
     String tglBerangkat,
     String tglPulang,
   ) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/marketing/jadwal/update");
+    Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/update");
     var Tarif = tarif.replaceAll(",", "").toString();
     var hasilResponse = await http.post(urlApi, body: {
       "IDXX_JDWL": idJadwal,
@@ -93,7 +93,7 @@ class HttpJadwal {
   }
 
   static Future<HttpJadwal> deleteJadwal(String idJadwal) async {
-    Uri urlApi = Uri.parse("http://localhost:3000/marketing/jadwal/delete");
+    Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/delete");
 
     var hasilResponse = await http.post(
       urlApi,

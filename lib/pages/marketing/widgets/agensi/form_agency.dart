@@ -279,8 +279,9 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputNIK() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration:
-          const InputDecoration(labelText: 'NIK', hintText: '32xxxxxxxxxxx'),
+      decoration: const InputDecoration(
+          label: Text('NIK', style: TextStyle(color: Colors.red)),
+          hintText: '32xxxxxxxxxxx'),
       onChanged: (value) {
         nik = value;
       },
@@ -296,7 +297,8 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputNama() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Nama Lengkap'),
+      decoration: const InputDecoration(
+          label: Text('Nama Lengkap', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         namaAgency = value;
       },
@@ -329,7 +331,9 @@ class _AgencyFormState extends State<AgencyForm> {
             jk = value;
           }
         },
-        selectedItem: jk ?? "Pilih Jenis Kelamin",
+        dropdownBuilder: (context, selectedItem) => Text(
+            jk ?? "Pilih Jenis Kelamin",
+            style: TextStyle(color: jk == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -344,7 +348,8 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputTempatLahir() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Tempat Lahir'),
+      decoration: const InputDecoration(
+          label: Text('Tempat Lahir', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         tempatLahir = value;
       },
@@ -360,7 +365,8 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputTglLahir() {
     return TextFormField(
       controller: dateLahir,
-      decoration: const InputDecoration(labelText: 'Tanggal Lahir'),
+      decoration: const InputDecoration(
+          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red))),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -384,7 +390,8 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputAlamat() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Alamat'),
+      decoration: const InputDecoration(
+          label: Text('Alamat', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         alamat = value;
       },
@@ -417,10 +424,9 @@ class _AgencyFormState extends State<AgencyForm> {
           title: Text(item['NAMA_KNTR'].toString()),
         ),
         dropdownBuilder: (context, selectedItem) => Text(
-          namaKantor ?? "Nama Kantor belum Dipilih",
-          style:
-              TextStyle(color: namaKantor == null ? Colors.red : Colors.black),
-        ),
+            namaKantor ?? "Nama Kantor belum Dipilih",
+            style: TextStyle(
+                color: namaKantor == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Nama Kantor belum Dipilih") {
             return "Kantor masih kosong !";
@@ -457,8 +463,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['name'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaProvinsi ?? "Nama Provinsi belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaProvinsi ?? "Nama Provinsi belum Dipilih",
+            style: TextStyle(
+                color: namaProvinsi == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Nama Provinsi belum Dipilih") {
             return "Provinsi masih kosong !";
@@ -495,8 +503,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['name'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaKota ?? "Nama Kota belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaKota ?? "Nama Kota belum Dipilih",
+            style:
+                TextStyle(color: namaKota == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Nama Kota belum Dipilih") {
             return "Kota masih kosong !";
@@ -533,8 +543,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['name'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaKec ?? "Nama Kecamatan belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaKec ?? "Nama Kecamatan belum Dipilih",
+            style:
+                TextStyle(color: namaKec == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Nama Kecamatan belum Dipilih") {
             return "Kecamatan masih kosong !";
@@ -570,8 +582,10 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['name'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaKel ?? "Nama Kelurahan belum Dipilih"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaKel ?? "Nama Kelurahan belum Dipilih",
+            style:
+                TextStyle(color: namaKel == null ? Colors.red : Colors.black)),
         validator: (value) {
           if (value == "Nama Kelurahan belum Dipilih") {
             return "Kelurahan masih kosong !";
@@ -586,7 +600,8 @@ class _AgencyFormState extends State<AgencyForm> {
   Widget inputKodePos() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Kode Pos'),
+      decoration: const InputDecoration(
+          label: Text('Kode Pos', style: TextStyle(color: Colors.red))),
       onChanged: (value) {
         kodePos = value;
       },
@@ -1134,8 +1149,7 @@ class _AgencyFormState extends State<AgencyForm> {
                                       onPressed: () {
                                         fncBersih();
                                       },
-                                      icon: const Icon(
-                                          Icons.cleaning_services_outlined),
+                                      icon: const Icon(Icons.clear),
                                       label: const Text(
                                         'Clear',
                                         style: TextStyle(fontFamily: 'Gilroy'),
