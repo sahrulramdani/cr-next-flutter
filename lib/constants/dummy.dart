@@ -174,7 +174,7 @@ List<Map<String, String>> listCardJamaah = [
   },
   {
     "title": "Lunas Reschedule",
-    "total": '113',
+    "total": '21',
   },
   {
     "title": "Alumni",

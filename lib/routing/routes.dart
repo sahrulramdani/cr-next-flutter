@@ -22,6 +22,15 @@ const mrktPemberangkatanPageRoute = "/mrkt/pemberangkatan";
 const mrktTourleadPageDisplayName = "Tour Leader";
 const mrktTourleadPageRoute = "/mrkt/tourlead";
 
+const mrktTransitPageDisplayName = "Master Transit";
+const mrktTransitPageRoute = "/mrkt/transit";
+
+const mrktPesawatPageDisplayName = "Master Maskapai";
+const mrktPesawatPageRoute = "/mrkt/maskapai";
+
+const mrktHotelPageDisplayName = "Master Hotel";
+const mrktHotelPageRoute = "/mrkt/hotel";
+
 const jamaahPageDisplayName = "Jamaah";
 const jamaahPageRoute = "/jamaah";
 

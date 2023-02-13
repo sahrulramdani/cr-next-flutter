@@ -48,6 +48,24 @@ List dataSubMenuMarketing = [
     "title": "Tour Leader",
     "route": "/mrkt/tourlead"
   },
+  {
+    "level": 0,
+    "icon": Icons.transit_enterexit,
+    "title": "Master Transit",
+    "route": "/mrkt/transit"
+  },
+  {
+    "level": 0,
+    "icon": Icons.flight,
+    "title": "Master Maskapai",
+    "route": "/mrkt/maskapai"
+  },
+  {
+    "level": 0,
+    "icon": Icons.hotel,
+    "title": "Master Hotel",
+    "route": "/mrkt/hotel"
+  }
 ];
 
 List dataSubMenuJamaah = [

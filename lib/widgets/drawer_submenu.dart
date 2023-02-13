@@ -30,71 +30,78 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
                       ? dataSubMenuMarketing
                       : menuController.activeItem.value == "Tour Leader"
                           ? dataSubMenuMarketing
-                          : menuController.activeItem.value == "Jamaah"
-                              ? dataSubMenuJamaah
-                              : menuController.activeItem.value == "Data Jamaah"
-                                  ? dataSubMenuJamaah
+                          : menuController.activeItem.value == "Master Transit"
+                              ? dataSubMenuMarketing
+                              : menuController.activeItem.value ==
+                                      "Master Hotel"
+                                  ? dataSubMenuMarketing
                                   : menuController.activeItem.value ==
-                                          "Pendaftaran"
-                                      ? dataSubMenuJamaah
+                                          "Master Maskapai"
+                                      ? dataSubMenuMarketing
                                       : menuController.activeItem.value ==
-                                              "Pelanggan"
+                                              "Jamaah"
                                           ? dataSubMenuJamaah
                                           : menuController.activeItem.value ==
-                                                  "Alumni"
+                                                  "Data Jamaah"
                                               ? dataSubMenuJamaah
                                               : menuController
                                                           .activeItem.value ==
-                                                      "Inventory"
-                                                  ? dataSubMenuInventory
+                                                      "Pendaftaran"
+                                                  ? dataSubMenuJamaah
                                                   : menuController.activeItem
                                                               .value ==
-                                                          "Satuan"
-                                                      ? dataSubMenuInventory
+                                                          "Pelanggan"
+                                                      ? dataSubMenuJamaah
                                                       : menuController
                                                                   .activeItem
                                                                   .value ==
-                                                              "Barang"
-                                                          ? dataSubMenuInventory
+                                                              "Alumni"
+                                                          ? dataSubMenuJamaah
                                                           : menuController
                                                                       .activeItem
                                                                       .value ==
-                                                                  "Pengeluaran"
+                                                                  "Inventory"
                                                               ? dataSubMenuInventory
                                                               : menuController
                                                                           .activeItem
                                                                           .value ==
-                                                                      "Grup Barang"
+                                                                      "Satuan"
                                                                   ? dataSubMenuInventory
                                                                   : menuController
                                                                               .activeItem
                                                                               .value ==
-                                                                          "Kirim Barang"
+                                                                          "Barang"
                                                                       ? dataSubMenuInventory
                                                                       : menuController.activeItem.value ==
-                                                                              "Finance"
-                                                                          ? dataSubMenuFinance
-                                                                          : menuController.activeItem.value == "Pembayaran"
-                                                                              ? dataSubMenuFinance
-                                                                              : menuController.activeItem.value == "Ujrah"
-                                                                                  ? dataSubMenuFinance
-                                                                                  : menuController.activeItem.value == "Penerbangan"
+                                                                              "Pengeluaran"
+                                                                          ? dataSubMenuInventory
+                                                                          : menuController.activeItem.value == "Grup Barang"
+                                                                              ? dataSubMenuInventory
+                                                                              : menuController.activeItem.value == "Kirim Barang"
+                                                                                  ? dataSubMenuInventory
+                                                                                  : menuController.activeItem.value == "Finance"
                                                                                       ? dataSubMenuFinance
-                                                                                      : menuController.activeItem.value == "HR"
-                                                                                          ? dataSubMenuHR
-                                                                                          : menuController.activeItem.value == "Karyawan"
-                                                                                              ? dataSubMenuHR
-                                                                                              : menuController.activeItem.value == "PPIC"
-                                                                                                  ? DataSubMenu_PPIC
-                                                                                                  : menuController.activeItem.value == "Purchasing"
-                                                                                                      ? DataSubMenu_Purchasing
-                                                                                                      : menuController.activeItem.value == "Warehouse"
-                                                                                                          ? DataSubMenu_Warehouse
-                                                                                                          : menuController.activeItem.value == "Produksi"
-                                                                                                              ? DataSubMenu_Produksi
-                                                                                                              : menuController.activeItem.value == "PM"
-                                                                                                                  ? DataSubMenu_PM
-                                                                                                                  : DataSubMenu_QC;
+                                                                                      : menuController.activeItem.value == "Pembayaran"
+                                                                                          ? dataSubMenuFinance
+                                                                                          : menuController.activeItem.value == "Ujrah"
+                                                                                              ? dataSubMenuFinance
+                                                                                              : menuController.activeItem.value == "Penerbangan"
+                                                                                                  ? dataSubMenuFinance
+                                                                                                  : menuController.activeItem.value == "HR"
+                                                                                                      ? dataSubMenuHR
+                                                                                                      : menuController.activeItem.value == "Karyawan"
+                                                                                                          ? dataSubMenuHR
+                                                                                                          : menuController.activeItem.value == "PPIC"
+                                                                                                              ? DataSubMenu_PPIC
+                                                                                                              : menuController.activeItem.value == "Purchasing"
+                                                                                                                  ? DataSubMenu_Purchasing
+                                                                                                                  : menuController.activeItem.value == "Warehouse"
+                                                                                                                      ? DataSubMenu_Warehouse
+                                                                                                                      : menuController.activeItem.value == "Produksi"
+                                                                                                                          ? DataSubMenu_Produksi
+                                                                                                                          : menuController.activeItem.value == "PM"
+                                                                                                                              ? DataSubMenu_PM
+                                                                                                                              : DataSubMenu_QC;
 
   @override
   void initState() {

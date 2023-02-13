@@ -41,6 +41,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   String tujuan;
   String tarif;
   String pesawat;
+  String namaPesawat;
   String rute;
   String jumlahSeat;
   String keterangan;
@@ -50,6 +51,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   String rute3;
   String mataUang;
   String idMataUang;
+  String idHotel;
+  String namaHotel;
 
   TextEditingController dateBerangkat = TextEditingController();
   TextEditingController datePulang = TextEditingController();
@@ -60,6 +63,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   List<Map<String, dynamic>> listMataUang = [];
   List<Map<String, dynamic>> listTransit = [];
   List<Map<String, dynamic>> listBandara = dummyDataBandara;
+  List<Map<String, dynamic>> listMaskapai = [];
+  List<Map<String, dynamic>> listHotel = [];
 
   void getDetail() async {
     var id = widget.idJadwal;
@@ -77,6 +82,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       tujuan = data[0]['TJAN_PKET'].toString();
       jumlahHari = data[0]['JMLX_HARI'].toString();
       pesawat = data[0]['JENS_PSWT'].toString();
+      namaPesawat = data[0]['NAMA_PSWT'].toString();
       rute = data[0]['RUTE_AWAL'].toString();
       rute2 = data[0]['RUTE_TRNS'].toString();
       rute3 = data[0]['RUTE_AKHR'].toString();
@@ -87,10 +93,13 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       datePulang.text = data[0]['TGLX_PLNG'].toString();
       mataUang = data[0]['MataUang'];
       idMataUang = data[0]['MATA_UANG'];
-      namaTransit = data[0]['NAMA_NEGR'];
+      namaTransit =
+          data[0]['NAMA_NEGR'].toString() == 'null' ? "" : data[0]['NAMA_NEGR'];
+      idHotel = data[0]['JENS_HOTL'].toString();
+      namaHotel = data[0]['NAMA_HTLX'].toString();
     });
 
-    // print(data);
+    // print(rute2);
     // print(rute3);
   }
 
@@ -135,6 +144,26 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     });
   }
 
+  void getMaskapai() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listMaskapai = data;
+    });
+  }
+
+  void getHotel() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotel = data;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -143,6 +172,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     getPaket();
     getMataUang();
     getTransit();
+    getMaskapai();
+    getHotel();
   }
 
   Widget inputIDPaket() {
@@ -220,6 +251,39 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     );
   }
 
+  Widget inputHotel() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Hotel",
+          items: listHotel,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            idHotel = value['IDXX_HTLX'];
+            namaHotel = value['NAMA_HTLX'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title:
+                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(namaHotel ?? "Hotel belum Dipilih"),
+          validator: (value) {
+            if (value == null) {
+              return "Hotel masih kosong !";
+            }
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, filled: true, fillColor: Colors.white)),
+    );
+  }
+
   Widget inputTujuan() {
     return TextFormField(
       initialValue: tujuan ?? "",
@@ -233,11 +297,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       onChanged: (value) {
         tujuan = value;
       },
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Tujuan masih kosong !";
-        }
-      },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     return "Tujuan masih kosong !";
+      //   }
+      // },
     );
   }
 
@@ -283,12 +347,21 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           datePulang.text = formattedDate;
         }
+        setState(() {
+          var tglAwal = fncTanggal(dateBerangkat.text);
+          var tglAkhir = fncTanggal(datePulang.text);
+          DateTime formattgl1 = DateTime.parse(tglAwal);
+          DateTime formattgl2 = DateTime.parse(tglAkhir);
+          var difference = formattgl2.difference(formattgl1).inDays;
+          jumlahHari = difference.toString();
+        });
       },
     );
   }
 
   Widget inputJumlahHari() {
     return TextFormField(
+      readOnly: true,
       initialValue: jumlahHari ?? "",
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
@@ -309,22 +382,34 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   Widget inputPesawat() {
-    return TextFormField(
-      initialValue: pesawat ?? "",
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          labelText: 'Pesawat',
-          filled: true,
-          fillColor: Colors.white,
-          hoverColor: Colors.white),
-      onChanged: (value) {
-        pesawat = value;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Pesawat masih kosong !";
-        }
-      },
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Pesawat",
+          items: listMaskapai,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            pesawat = value['IDXX_PSWT'];
+            namaPesawat = value['NAMA_PSWT'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['NAMA_PSWT']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(namaPesawat ?? "Maskapai belum Dipilih"),
+          validator: (value) {
+            if (value == null) {
+              return "Maskapai masih kosong !";
+            }
+          },
+          dropdownSearchDecoration: const InputDecoration(
+              border: InputBorder.none, filled: true, fillColor: Colors.white)),
     );
   }
 
@@ -534,6 +619,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       idpaket,
       idjenis,
       tujuan,
+      idHotel,
       jumlahHari,
       pesawat,
       rute,
@@ -605,17 +691,17 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                               children: [
                                 inputIDPaket(),
                                 const SizedBox(height: 8),
-                                inputPaket(),
-                                const SizedBox(height: 8),
-                                inputJenisPaket(),
-                                const SizedBox(height: 8),
-                                inputTujuan(),
-                                const SizedBox(height: 8),
                                 inputTglBerangkat(),
                                 const SizedBox(height: 8),
                                 inputTanggalPulang(),
                                 const SizedBox(height: 8),
                                 inputJumlahHari(),
+                                const SizedBox(height: 8),
+                                inputTujuan(),
+                                const SizedBox(height: 8),
+                                inputJenisPaket(),
+                                const SizedBox(height: 8),
+                                inputHotel(),
                                 const SizedBox(height: 8),
                                 inputPesawat(),
                                 const SizedBox(height: 8),

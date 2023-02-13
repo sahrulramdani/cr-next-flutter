@@ -135,40 +135,47 @@ class _InfoPelangganState extends State<InfoPelanggan> {
                 const DataCell(Text('Nama Paspor')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPelanggan.isNotEmpty
-                    ? detailPelanggan[0]['NAMA_PSPR']
+                    ? (detailPelanggan[0]['NAMA_PSPR'] ?? '-')
                     : 'Belum Tersedia')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Nomor Paspor')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPelanggan.isNotEmpty
-                    ? detailPelanggan[0]['NOXX_PSPR'].toString()
+                    ? (detailPelanggan[0]['NOXX_PSPR'] ?? '-')
                     : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Issued Paspor')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPelanggan.isNotEmpty
-                    ? DateFormat("dd-MM-yyyy")
-                        .format(DateTime.parse(detailPelanggan[0]['TGLX_KLUR']))
+                    ? (detailPelanggan[0]['TGLX_KLUR'] == null
+                        ? '-'
+                        : DateFormat("dd-MM-yyyy").format(
+                            DateTime.parse(detailPelanggan[0]['TGLX_KLUR'])))
                     : '-')),
               ]),
+
+              // DateFormat("dd-MM-yyyy")
+              //           .format(DateTime.parse(detailPelanggan[0]['TGLX_KLUR']))
               DataRow(cells: [
                 const DataCell(Text('Expire Paspor')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPelanggan.isNotEmpty
-                    ? DateFormat("dd-MM-yyyy")
-                        .format(DateTime.parse(detailPelanggan[0]['TGLX_EXPX']))
+                    ? (detailPelanggan[0]['TGLX_EXPX'] == null
+                        ? '-'
+                        : DateFormat("dd-MM-yyyy").format(
+                            DateTime.parse(detailPelanggan[0]['TGLX_EXPX'])))
                     : '-')),
               ]),
-              DataRow(cells: [
-                const DataCell(Text('Nama Ayah')),
-                const DataCell(Text(':')),
-                DataCell(Text(detailPelanggan.isNotEmpty
-                    ? detailPelanggan[0]['NAMA_AYAH']
-                    : '')),
-              ]),
               // DataRow(cells: [
+              //   const DataCell(Text('Nama Ayah')),
+              //   const DataCell(Text(':')),
+              //   DataCell(Text(detailPelanggan.isNotEmpty
+              //       ? detailPelanggan[0]['NAMA_AYAH']
+              //       : '')),
+              // ]),
+              // eeDataRow(cells: [
               //   DataCell(Text('Tanggal Input')),
               //   DataCell(Text(':')),
               //   DataCell(Text('06-01-2023 15:34')),

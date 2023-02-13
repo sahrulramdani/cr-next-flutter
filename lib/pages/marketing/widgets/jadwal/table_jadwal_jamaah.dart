@@ -108,10 +108,7 @@ class MyData extends DataTableSource {
       DataCell(Text(myformat
           .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())))),
       DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
-      DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString())),
-      DataCell(Text(dataJadwal[index]['SISA'] == 0
-          ? 'Full'
-          : dataJadwal[index]['SISA'].toString())),
+      DataCell(Text("0")),
       DataCell(Text(dataJadwal[index]['KETERANGAN'])),
       DataCell(Center(
         child: Row(
@@ -166,7 +163,7 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
-          columnSpacing: 35,
+          columnSpacing: 5.0,
           source: myTable,
           columns: [
             DataColumn(
@@ -227,13 +224,6 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
                         fontSize: 16))),
             DataColumn(
                 label: Text('MU',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Seat',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,

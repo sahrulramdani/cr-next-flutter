@@ -4,6 +4,7 @@ import 'package:flutter_web_course/pages/clients/clients.dart';
 import 'package:flutter_web_course/pages/finance/finance_dash.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembayaran.dart';
 import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
+import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
 import 'package:flutter_web_course/pages/hr/hr_dash.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_barang.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_dash.dart';
@@ -23,7 +24,9 @@ import 'package:flutter_web_course/pages/marketing/marketing_agency.dart';
 import 'package:flutter_web_course/pages/hr/hr_karyawan.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_pemberangkatan.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_tourlead.dart';
-import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_trasit.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_maskapai.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_hotel.dart';
 // import 'package:flutter_web_course/pages/marketing/marketing_02dealtrack.dart';
 import 'package:flutter_web_course/pages/overview/overview.dart';
 // import 'package:flutter_web_course/pages/pm/pm.dart';
@@ -50,6 +53,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const MarketingBerangkatPage());
     case mrktTourleadPageRoute:
       return _getPageRoute(const MarketingTourleadPage());
+    case mrktTransitPageRoute:
+      return _getPageRoute(const MarketingTransitPage());
+    case mrktPesawatPageRoute:
+      return _getPageRoute(const MarketingMaskapai());
+    case mrktHotelPageRoute:
+      return _getPageRoute(const MarketingHotel());
     case jamaahPageRoute:
       return _getPageRoute(const JamaahDashboardPage());
     case jmahDataPageRoute:

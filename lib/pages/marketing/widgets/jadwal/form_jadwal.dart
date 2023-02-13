@@ -13,6 +13,7 @@ import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:intl/intl.dart';
 
 class JadwalForm extends StatefulWidget {
@@ -30,6 +31,7 @@ class _JadwalFormState extends State<JadwalForm> {
   String tujuan;
   String jumlahHari;
   String pesawat;
+  String namaPesawat;
   String rute;
   String namaRute;
   String rute2;
@@ -40,6 +42,8 @@ class _JadwalFormState extends State<JadwalForm> {
   String mataUang;
   String idMataUang;
   String keterangan;
+  String idHotel;
+  String namaHotel;
 
   String tglBerangkat;
   String tglPulang;
@@ -51,6 +55,8 @@ class _JadwalFormState extends State<JadwalForm> {
   List<Map<String, dynamic>> listMataUang = [];
   List<Map<String, dynamic>> listTransit = [];
   List<Map<String, dynamic>> listBandara = dummyDataBandara;
+  List<Map<String, dynamic>> listMaskapai = [];
+  List<Map<String, dynamic>> listHotel = [];
 
   void getJenisPaket() async {
     var response =
@@ -93,12 +99,34 @@ class _JadwalFormState extends State<JadwalForm> {
     });
   }
 
+  void getMaskapai() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listMaskapai = data;
+    });
+  }
+
+  void getHotel() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotel = data;
+    });
+  }
+
   @override
   void initState() {
     getJenisPaket();
     getPaket();
     getMataUang();
     getTransit();
+    getMaskapai();
+    getHotel();
     super.initState();
   }
 
@@ -117,18 +145,21 @@ class _JadwalFormState extends State<JadwalForm> {
           namaPaket = value["CODD_DESC"];
           idpaket = value["CODD_VALU"];
         },
-        selectedItem: "Pilih Paket",
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPaket ?? "Pilih Paket"),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaPaket ?? "Pilih Paket",
+          style:
+              TextStyle(color: namaPaket == null ? Colors.red : Colors.black),
+        ),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
           if (value == "Pilih Paket") {
             return "Paket masih kosong !";
           }
+          return null;
         },
       ),
     );
@@ -149,12 +180,14 @@ class _JadwalFormState extends State<JadwalForm> {
           namaJenis = value["CODD_DESC"];
           idjenis = value["CODD_VALU"];
         },
-        selectedItem: "Pilih Jenis Paket",
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaJenis ?? "Pilih Jenis Paket"),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaJenis ?? "Pilih Jenis Paket",
+          style:
+              TextStyle(color: namaJenis == null ? Colors.red : Colors.black),
+        ),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -166,18 +199,51 @@ class _JadwalFormState extends State<JadwalForm> {
     );
   }
 
+  Widget inputHotel() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Hotel",
+          items: listHotel,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            idHotel = value['IDXX_HTLX'];
+            namaHotel = value['NAMA_HTLX'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title:
+                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaHotel ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotel == null ? Colors.red : Colors.black),
+              ),
+          validator: (value) {
+            if (value == null) {
+              return "Hotel masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
   Widget inputTujuan() {
     return TextFormField(
+      initialValue: tujuan ?? "",
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration:
-          const InputDecoration(labelText: 'Tujuan Paket', hintText: 'tujuan'),
+      decoration: const InputDecoration(
+          label: Text("Tujuan Paket", style: TextStyle(color: Colors.red)),
+          hintText: 'tujuan'),
       onChanged: (value) {
         tujuan = value;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Tujuan masih kosong !";
-        }
       },
     );
   }
@@ -185,7 +251,9 @@ class _JadwalFormState extends State<JadwalForm> {
   Widget inputTglBerangkat() {
     return TextField(
       controller: dateBerangkat,
-      decoration: const InputDecoration(labelText: 'Tanggal Berangkat'),
+      decoration: const InputDecoration(
+          label:
+              Text("Tanggal Berangkat", style: TextStyle(color: Colors.red))),
       onChanged: (String value) {
         tglBerangkat = value;
       },
@@ -207,9 +275,13 @@ class _JadwalFormState extends State<JadwalForm> {
   Widget inputTanggalPulang() {
     return TextField(
       controller: datePulang,
-      decoration: const InputDecoration(labelText: 'Tanggal Pulang'),
+      decoration: const InputDecoration(
+          label: Text("Tanggal Pulang", style: TextStyle(color: Colors.red))),
       onChanged: (String value) {
-        tglPulang = value;
+        // tglPulang = value;
+        // setState(() {
+        //   var tglAwal = tglBerangkat;
+        // });
       },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
@@ -222,38 +294,72 @@ class _JadwalFormState extends State<JadwalForm> {
           String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           datePulang.text = formattedDate;
         }
+        setState(() {
+          var tglAwal = fncTanggal(dateBerangkat.text);
+          var tglAkhir = fncTanggal(datePulang.text);
+          DateTime formattgl1 = DateTime.parse(tglAwal);
+          DateTime formattgl2 = DateTime.parse(tglAkhir);
+          var difference = formattgl2.difference(formattgl1).inDays;
+          jumlahHari = difference.toString();
+        });
       },
     );
   }
 
   Widget inputJumlahHari() {
     return TextFormField(
+      initialValue: jumlahHari,
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Jumlah Hari'),
-      onChanged: (value) {
-        jumlahHari = value;
-      },
+      decoration: const InputDecoration(
+          label: Text(
+        "Jumlah Hari",
+        style: TextStyle(color: Colors.red),
+      )),
+      // onChanged: (value) {
+      //   jumlahHari = value;
+      // },
       validator: (value) {
         if (value.isEmpty) {
           return "Jumlah Hari masih kosong !";
         }
       },
+      readOnly: true,
     );
   }
 
   Widget inputPesawat() {
-    return TextFormField(
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Pesawat'),
-      onChanged: (value) {
-        pesawat = value;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Pesawat masih kosong !";
-        }
-      },
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Pesawat",
+          items: listMaskapai,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            pesawat = value['IDXX_PSWT'];
+            namaPesawat = value['NAMA_PSWT'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['NAMA_PSWT']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaPesawat ?? "Maskapai belum Dipilih",
+                style: TextStyle(
+                    color: namaPesawat == null ? Colors.red : Colors.black),
+              ),
+          validator: (value) {
+            if (value == null) {
+              return "Maskapai masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
     );
   }
 
@@ -277,8 +383,11 @@ class _JadwalFormState extends State<JadwalForm> {
                 title: Text("${item['iata_code']} - ${item['municipality']}"),
                 trailing: Text(item['name']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(rute ?? "Rute Awal belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+                rute ?? "Rute Awal belum Dipilih",
+                style:
+                    TextStyle(color: rute == null ? Colors.red : Colors.black),
+              ),
           validator: (value) {
             if (value == null) {
               return "Rute Awal masih kosong !";
@@ -310,11 +419,6 @@ class _JadwalFormState extends State<JadwalForm> {
               ),
           dropdownBuilder: (context, selectedItem) =>
               Text(namaTransit ?? "Rute Transit belum Dipilih"),
-          validator: (value) {
-            if (value == null) {
-              return "Rute Transit kosong !";
-            }
-          },
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -340,8 +444,11 @@ class _JadwalFormState extends State<JadwalForm> {
                 title: Text("${item['iata_code']} - ${item['municipality']}"),
                 trailing: Text(item['name']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(rute3 ?? "Rute Akhir belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+                rute3 ?? "Rute Akhir belum Dipilih",
+                style:
+                    TextStyle(color: rute3 == null ? Colors.red : Colors.black),
+              ),
           validator: (value) {
             if (value == null) {
               return "Rute Akhir masih kosong !";
@@ -358,7 +465,11 @@ class _JadwalFormState extends State<JadwalForm> {
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Tarif'),
+      decoration: const InputDecoration(
+          label: Text(
+        "Tarif",
+        style: TextStyle(color: Colors.red),
+      )),
       onChanged: (value) {
         tarif = value;
       },
@@ -374,7 +485,11 @@ class _JadwalFormState extends State<JadwalForm> {
     return TextFormField(
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Jumlah Seat'),
+      decoration: const InputDecoration(
+          label: Text(
+        "Jumlah Seat",
+        style: TextStyle(color: Colors.red),
+      )),
       onChanged: (value) {
         jumlahSeat = value;
       },
@@ -405,8 +520,10 @@ class _JadwalFormState extends State<JadwalForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(mataUang ?? "Pilih Mata Uang"),
+        dropdownBuilder: (context, selectedItem) => Text(
+          mataUang ?? "Pilih Mata Uang",
+          style: TextStyle(color: rute3 == null ? Colors.red : Colors.black),
+        ),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -433,6 +550,7 @@ class _JadwalFormState extends State<JadwalForm> {
     // print("ID PAKET : $idpaket");
     // print("ID JENIS : $idjenis");
     // print("TUJUAN : $tujuan");
+    // print("JENIS HOTEL : $idHotel");
     // print("JUMLAH HARI : $jumlahHari");
     // print("PESAWAT : $pesawat");
     // print("RUTE 1 : $rute");
@@ -448,10 +566,11 @@ class _JadwalFormState extends State<JadwalForm> {
             idpaket,
             idjenis,
             tujuan,
+            idHotel,
             jumlahHari,
             pesawat,
             rute,
-            rute2,
+            rute2 ?? '',
             rute3,
             tarif,
             jumlahSeat,
@@ -564,15 +683,17 @@ class _JadwalFormState extends State<JadwalForm> {
                             children: [
                               inputPaket(),
                               const SizedBox(height: 8),
-                              inputJenisPaket(),
-                              const SizedBox(height: 8),
-                              inputTujuan(),
-                              const SizedBox(height: 8),
                               inputTglBerangkat(),
                               const SizedBox(height: 8),
                               inputTanggalPulang(),
                               const SizedBox(height: 8),
                               inputJumlahHari(),
+                              const SizedBox(height: 8),
+                              inputTujuan(),
+                              const SizedBox(height: 8),
+                              inputJenisPaket(),
+                              const SizedBox(height: 8),
+                              inputHotel(),
                               const SizedBox(height: 8),
                               inputPesawat(),
                             ],
