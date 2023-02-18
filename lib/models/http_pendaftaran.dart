@@ -24,9 +24,9 @@ class HttpPendaftaran {
     String namaAgency,
     String estimasi,
     String jatuhTempo,
+    String listTagihan,
     String kkBase,
     String dokumenBase,
-    String listTagihan,
     // String idTagihan,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save");

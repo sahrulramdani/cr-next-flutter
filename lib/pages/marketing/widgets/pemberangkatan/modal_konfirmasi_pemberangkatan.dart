@@ -1,8 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ModalKonfirmasiBerangkat extends StatelessWidget {
-  const ModalKonfirmasiBerangkat({Key key}) : super(key: key);
+class ModalKonfirmasiBerangkat extends StatefulWidget {
+  String idDaftar;
+  ModalKonfirmasiBerangkat({Key key, @required this.idDaftar})
+      : super(key: key);
+
+  @override
+  State<ModalKonfirmasiBerangkat> createState() =>
+      _ModalKonfirmasiBerangkatState();
+}
+
+class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
+  List<Map<String, dynamic>> detPel = [];
+
+  void getJamaahPemberangkatan() async {
+    var id = widget.idDaftar;
+    var response = await http.get(Uri.parse(
+        "$urlAddress/marketing/pemberangkatan/detail-jamaah-berangkat/$id"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      detPel = data;
+    });
+  }
+
+  @override
+  void initState() {
+    getJamaahPemberangkatan();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,60 +73,82 @@ class ModalKonfirmasiBerangkat extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          DataTable(columns: const [
-                            DataColumn(label: Text('ID Pelanggan')),
-                            DataColumn(label: Text(':')),
-                            DataColumn(label: Text('P0102201121')),
-                          ], rows: const [
+                          DataTable(columns: [
+                            const DataColumn(label: Text('ID Pelanggan')),
+                            const DataColumn(label: Text(':')),
+                            DataColumn(
+                                label: Text(detPel.isNotEmpty
+                                    ? detPel[0]['KDXX_DFTR']
+                                    : '')),
+                          ], rows: [
                             DataRow(cells: [
-                              DataCell(Text('Nama Pelanggan')),
-                              DataCell(Text(':')),
-                              DataCell(Text('Salwa Masar')),
+                              const DataCell(Text('Nama Pelanggan')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? detPel[0]['NAMA_JMAH']
+                                  : '')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Pendaftaran Via')),
-                              DataCell(Text(':')),
-                              DataCell(Text('Pusat')),
+                              const DataCell(Text('Pendaftaran Via')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? detPel[0]['DAFTAR_VIA']
+                                  : '')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Berangkat')),
-                              DataCell(Text(':')),
-                              DataCell(Text('2 Januari 2023')),
+                              const DataCell(Text('Berangkat')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? fncGetTanggal(detPel[0]['TGLX_BGKT'])
+                                  : '')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Telp Pelanggan')),
-                              DataCell(Text(':')),
-                              DataCell(Text('082227381993')),
+                              const DataCell(Text('Telp Pelanggan')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? detPel[0]['TELP_JMAH']
+                                  : '')),
                             ]),
                           ])
                         ],
                       ),
                       Column(
                         children: [
-                          DataTable(columns: const [
-                            DataColumn(label: Text('ID Marketing')),
-                            DataColumn(label: Text(':')),
-                            DataColumn(label: Text('MRQ10220001')),
-                          ], rows: const [
+                          DataTable(columns: [
+                            const DataColumn(label: Text('ID Marketing')),
+                            const DataColumn(label: Text(':')),
+                            DataColumn(
+                                label: Text(detPel.isNotEmpty
+                                    ? (detPel[0]['KDXX_MRKT'] ?? '-')
+                                    : '')),
+                          ], rows: [
                             DataRow(cells: [
-                              DataCell(Text('Nama Marketing')),
-                              DataCell(Text(':')),
-                              DataCell(Text('Hasan Basri')),
+                              const DataCell(Text('Nama Marketing')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? (detPel[0]['NAMA_MRKT'] ?? '-')
+                                  : '')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Level Agency')),
-                              DataCell(Text(':')),
-                              DataCell(Text('Umroh')),
+                              const DataCell(Text('Level Agency')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? (detPel[0]['FIRST_LEVEL'] ?? '-')
+                                  : '')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Jenis')),
-                              DataCell(Text(':')),
-                              DataCell(Text('Reguler B3')),
+                              const DataCell(Text('Jenis')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? detPel[0]['JENIS_PAKET']
+                                  : '-')),
                             ]),
                             DataRow(cells: [
-                              DataCell(Text('Telp Marketing')),
-                              DataCell(Text(':')),
-                              DataCell(Text('0896477182392')),
+                              const DataCell(Text('Telp Marketing')),
+                              const DataCell(Text(':')),
+                              DataCell(Text(detPel.isNotEmpty
+                                  ? (detPel[0]['TELP_MRKT'] ?? '-')
+                                  : '')),
                             ]),
                           ])
                         ],
@@ -111,19 +165,33 @@ class ModalKonfirmasiBerangkat extends StatelessWidget {
                                 DataColumn(label: Text('Upline')),
                                 DataColumn(label: Text('SVB')),
                               ],
-                              rows: const [
-                                DataRow(cells: [
-                                  DataCell(Text('1')),
-                                  DataCell(Text('Maulana Ibrahim')),
-                                  DataCell(
-                                      Icon(Icons.check, color: Colors.green)),
-                                ]),
-                                DataRow(cells: [
-                                  DataCell(Text('2')),
-                                  DataCell(Text('Prasetyo Gunawan')),
-                                  DataCell(
-                                      Icon(Icons.check, color: Colors.green)),
-                                ]),
+                              rows: [
+                                if (detPel.isNotEmpty &&
+                                    detPel[0]['LEAD_FIRST'] != null)
+                                  DataRow(cells: [
+                                    const DataCell(Text('1')),
+                                    DataCell(Text(detPel[0]['LEAD_FIRST'])),
+                                    DataCell(Icon(
+                                        detPel[0]['SVB_FIRST'] != null
+                                            ? Icons.check
+                                            : Icons.add_alert_outlined,
+                                        color: detPel[0]['SVB_FIRST'] != null
+                                            ? Colors.green
+                                            : Colors.red)),
+                                  ]),
+                                if (detPel.isNotEmpty &&
+                                    detPel[0]['LEAD_SECOND'] != null)
+                                  DataRow(cells: [
+                                    const DataCell(Text('2')),
+                                    DataCell(Text(detPel[0]['LEAD_SECOND'])),
+                                    DataCell(Icon(
+                                        detPel[0]['SVB_SECOND'] != null
+                                            ? Icons.check
+                                            : Icons.add_alert_outlined,
+                                        color: detPel[0]['SVB_SECOND'] != null
+                                            ? Colors.green
+                                            : Colors.red)),
+                                  ]),
                               ],
                             ),
                           )

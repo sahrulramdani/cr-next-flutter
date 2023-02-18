@@ -8,6 +8,9 @@ import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/pemberangkatan/table_pemberangkatan.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_web_course/constants/style.dart';
 
 class MarketingBerangkatPage extends StatefulWidget {
   const MarketingBerangkatPage({Key key}) : super(key: key);
@@ -17,7 +20,24 @@ class MarketingBerangkatPage extends StatefulWidget {
 }
 
 class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
-  List<Map<String, dynamic>> listPemberangkatan = dummyJadwalTable;
+  List<Map<String, dynamic>> listPemberangkatan = [];
+
+  void getAllPemberangkatan() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/pemberangkatan/all-pemberangkatan"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPemberangkatan = data;
+    });
+  }
+
+  @override
+  void initState() {
+    getAllPemberangkatan();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,16 +126,14 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
                             style: const TextStyle(
                                 fontFamily: 'Gilroy', fontSize: 14),
                             decoration: const InputDecoration(
-                                hintText: 'Cari Berdasarkan Nama Paket'),
+                                hintText: 'Cari Berdasarkan Jenis Paket'),
                             onChanged: (value) {
                               if (value == '') {
-                                setState(() {
-                                  listPemberangkatan = dummyJadwalTable;
-                                });
+                                getAllPemberangkatan();
                               } else {
                                 setState(() {
-                                  listPemberangkatan = dummyJadwalTable
-                                      .where(((element) => element['tipe']
+                                  listPemberangkatan = listPemberangkatan
+                                      .where(((element) => element['jenisPaket']
                                           .toString()
                                           .toUpperCase()
                                           .contains(value.toUpperCase())))

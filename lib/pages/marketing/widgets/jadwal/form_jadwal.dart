@@ -1,4 +1,4 @@
-// ignore_for_file: missing_return, deprecated_member_use, avoid_print, unused_local_variable, must_call_super, dead_code, prefer_interpolation_to_compose_strings
+// ignore_for_file: missing_return, deprecated_member_use, avoid_print, unused_local_variable, must_call_super, dead_code, prefer_interpolation_to_compose_strings, sized_box_for_whitespace, prefer_const_constructors, duplicate_import
 import 'dart:convert';
 
 import 'package:flutter_web_course/constants/dummy_jadwal.dart';
@@ -29,21 +29,38 @@ class _JadwalFormState extends State<JadwalForm> {
   String idjenis;
   String namaJenis;
   String tujuan;
+  String namaTujuan;
   String jumlahHari;
-  String pesawat;
-  String namaPesawat;
-  String rute;
-  String namaRute;
-  String rute2;
-  String namaTransit;
-  String rute3;
   String tarif;
   String jumlahSeat;
   String mataUang;
   String idMataUang;
   String keterangan;
-  String idHotel;
-  String namaHotel;
+
+  String rute;
+  String rute2;
+  String rute3;
+  String namaTransit;
+  String ruteAwalPlng;
+  String ruteTransitPlng;
+  String namaRuteTransitPlng;
+  String ruteAkhirPlng;
+
+  String pesawatBerangkat;
+  String namaPesawatBerangkat;
+  String pesawatPulang;
+  String namaPesawatPulang;
+
+  String idHotelMek;
+  String namaHotelMek;
+  String idHotelMad;
+  String namaHotelMad;
+  String idHotelJed;
+  String namaHotelJed;
+  String idHotelTra;
+  String namaHotelTra;
+
+  bool enableTujuan = false;
 
   String tglBerangkat;
   String tglPulang;
@@ -57,6 +74,7 @@ class _JadwalFormState extends State<JadwalForm> {
   List<Map<String, dynamic>> listBandara = dummyDataBandara;
   List<Map<String, dynamic>> listMaskapai = [];
   List<Map<String, dynamic>> listHotel = [];
+  List<Map<String, dynamic>> listTujuan = [];
 
   void getJenisPaket() async {
     var response =
@@ -119,6 +137,15 @@ class _JadwalFormState extends State<JadwalForm> {
     });
   }
 
+  void getTujuan() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listTujuan = data;
+    });
+  }
+
   @override
   void initState() {
     getJenisPaket();
@@ -127,6 +154,7 @@ class _JadwalFormState extends State<JadwalForm> {
     getTransit();
     getMaskapai();
     getHotel();
+    getTujuan();
     super.initState();
   }
 
@@ -179,6 +207,17 @@ class _JadwalFormState extends State<JadwalForm> {
         onChanged: (value) {
           namaJenis = value["CODD_DESC"];
           idjenis = value["CODD_VALU"];
+          if (value['CODD_VALU'] == '02' || value['CODD_VALU'] == '04') {
+            setState(() {
+              enableTujuan = true;
+            });
+          } else {
+            setState(() {
+              enableTujuan = false;
+              tujuan = null;
+              namaTujuan = null;
+            });
+          }
         },
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
@@ -199,7 +238,7 @@ class _JadwalFormState extends State<JadwalForm> {
     );
   }
 
-  Widget inputHotel() {
+  Widget inputHotelMek() {
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -208,12 +247,12 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Hotel",
+          label: "Hotel Mekkah",
           items: listHotel,
           onChanged: (value) {
             // print(value['iata_code']);
-            idHotel = value['IDXX_HTLX'];
-            namaHotel = value['NAMA_HTLX'];
+            idHotelMek = value['IDXX_HTLX'];
+            namaHotelMek = value['NAMA_HTLX'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
@@ -221,30 +260,133 @@ class _JadwalFormState extends State<JadwalForm> {
                     Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
-                namaHotel ?? "Hotel belum Dipilih",
+                namaHotelMek ?? "Hotel belum Dipilih",
                 style: TextStyle(
-                    color: namaHotel == null ? Colors.red : Colors.black),
+                    color: namaHotelMek == null ? Colors.red : Colors.black),
               ),
-          validator: (value) {
-            if (value == null) {
-              return "Hotel masih kosong !";
-            }
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputHotelMad() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Hotel Madinah",
+          items: listHotel,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            idHotelMad = value['IDXX_HTLX'];
+            namaHotelMad = value['NAMA_HTLX'];
           },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title:
+                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaHotelMad ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotelMad == null ? Colors.red : Colors.black),
+              ),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputHotelJed() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Hotel Jeddah",
+          items: listHotel,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            idHotelJed = value['IDXX_HTLX'];
+            namaHotelJed = value['NAMA_HTLX'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title:
+                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaHotelJed ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotelJed == null ? Colors.red : Colors.black),
+              ),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputHotelTra() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Hotel Transit",
+          items: listHotel,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            idHotelTra = value['IDXX_HTLX'];
+            namaHotelTra = value['NAMA_HTLX'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title:
+                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaHotelTra ?? "Hotel belum Dipilih",
+              ),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
   }
 
   Widget inputTujuan() {
-    return TextFormField(
-      initialValue: tujuan ?? "",
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-          label: Text("Tujuan Paket", style: TextStyle(color: Colors.red)),
-          hintText: 'tujuan'),
-      onChanged: (value) {
-        tujuan = value;
-      },
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          enabled: enableTujuan,
+          mode: Mode.BOTTOM_SHEET,
+          label: "Tujuan",
+          items: listTujuan,
+          onChanged: (value) {
+            tujuan = value['KDXX_VALU'];
+            namaTujuan = value['KDXX_DESC'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['KDXX_DESC']),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaTujuan ?? 'Tujuan Hanya Untuk Jenis Plus',
+                style: TextStyle(
+                    color: tujuan == null ? Colors.red : Colors.black),
+              ),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
     );
   }
 
@@ -252,8 +394,8 @@ class _JadwalFormState extends State<JadwalForm> {
     return TextField(
       controller: dateBerangkat,
       decoration: const InputDecoration(
-          label:
-              Text("Tanggal Berangkat", style: TextStyle(color: Colors.red))),
+          label: Text("Tanggal Berangkat", style: TextStyle(color: Colors.red)),
+          hintText: "DD-MM-YYYY"),
       onChanged: (String value) {
         tglBerangkat = value;
       },
@@ -276,13 +418,9 @@ class _JadwalFormState extends State<JadwalForm> {
     return TextField(
       controller: datePulang,
       decoration: const InputDecoration(
-          label: Text("Tanggal Pulang", style: TextStyle(color: Colors.red))),
-      onChanged: (String value) {
-        // tglPulang = value;
-        // setState(() {
-        //   var tglAwal = tglBerangkat;
-        // });
-      },
+          label: Text("Tanggal Pulang", style: TextStyle(color: Colors.red)),
+          hintText: "DD-MM-YYYY"),
+      onChanged: (String value) {},
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -299,7 +437,17 @@ class _JadwalFormState extends State<JadwalForm> {
           var tglAkhir = fncTanggal(datePulang.text);
           DateTime formattgl1 = DateTime.parse(tglAwal);
           DateTime formattgl2 = DateTime.parse(tglAkhir);
-          var difference = formattgl2.difference(formattgl1).inDays;
+          var difference = formattgl2.difference(formattgl1).inDays + 1;
+          jumlahHari = difference.toString();
+        });
+      },
+      onSubmitted: (value) {
+        setState(() {
+          var tglAwal = fncTanggal(dateBerangkat.text);
+          var tglAkhir = fncTanggal(datePulang.text);
+          DateTime formattgl1 = DateTime.parse(tglAwal);
+          DateTime formattgl2 = DateTime.parse(tglAkhir);
+          var difference = formattgl2.difference(formattgl1).inDays + 1;
           jumlahHari = difference.toString();
         });
       },
@@ -328,7 +476,7 @@ class _JadwalFormState extends State<JadwalForm> {
     );
   }
 
-  Widget inputPesawat() {
+  Widget inputPesawatBerangkat() {
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -337,21 +485,59 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Pesawat",
+          label: "Maskapai Berangkat",
           items: listMaskapai,
           onChanged: (value) {
             // print(value['iata_code']);
-            pesawat = value['IDXX_PSWT'];
-            namaPesawat = value['NAMA_PSWT'];
+            pesawatBerangkat = value['IDXX_PSWT'];
+            namaPesawatBerangkat = value['NAMA_PSWT'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text("${item['NAMA_PSWT']}"),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
-                namaPesawat ?? "Maskapai belum Dipilih",
+                namaPesawatBerangkat ?? "Maskapai belum Dipilih",
                 style: TextStyle(
-                    color: namaPesawat == null ? Colors.red : Colors.black),
+                    color: namaPesawatBerangkat == null
+                        ? Colors.red
+                        : Colors.black),
+              ),
+          validator: (value) {
+            if (value == null) {
+              return "Maskapai masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputPesawatPulang() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Maskapai Pulang",
+          items: listMaskapai,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            pesawatPulang = value['IDXX_PSWT'];
+            namaPesawatPulang = value['NAMA_PSWT'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['NAMA_PSWT']}"),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaPesawatPulang ?? "Maskapai belum Dipilih",
+                style: TextStyle(
+                    color:
+                        namaPesawatPulang == null ? Colors.red : Colors.black),
               ),
           validator: (value) {
             if (value == null) {
@@ -372,7 +558,7 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Rute Awal",
+          label: "Rute Awal Berangkat",
           items: listBandara,
           onChanged: (value) {
             // print(value['iata_code']);
@@ -384,13 +570,13 @@ class _JadwalFormState extends State<JadwalForm> {
                 trailing: Text(item['name']),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
-                rute ?? "Rute Awal belum Dipilih",
+                rute ?? "Rute Awal Berangkat belum Dipilih",
                 style:
                     TextStyle(color: rute == null ? Colors.red : Colors.black),
               ),
           validator: (value) {
             if (value == null) {
-              return "Rute Awal masih kosong !";
+              return "Rute Awal Berangkat masih kosong !";
             }
           },
           dropdownSearchDecoration:
@@ -407,7 +593,7 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Rute Transit",
+          label: "Rute Transit Berangkat",
           items: listTransit,
           onChanged: (value) {
             rute2 = value['IDXX_RTS'];
@@ -418,7 +604,7 @@ class _JadwalFormState extends State<JadwalForm> {
                 title: Text(item['NAMA_NEGR']),
               ),
           dropdownBuilder: (context, selectedItem) =>
-              Text(namaTransit ?? "Rute Transit belum Dipilih"),
+              Text(namaTransit ?? "Rute Transit Berangkat belum Dipilih"),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -433,7 +619,7 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Rute Akhir",
+          label: "Rute Akhir Berangkat",
           items: listBandara,
           onChanged: (value) {
             // print(value['iata_code']);
@@ -445,13 +631,105 @@ class _JadwalFormState extends State<JadwalForm> {
                 trailing: Text(item['name']),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
-                rute3 ?? "Rute Akhir belum Dipilih",
+                rute3 ?? "Rute Akhir Berangkat belum Dipilih",
                 style:
                     TextStyle(color: rute3 == null ? Colors.red : Colors.black),
               ),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputRuteAwalPlng() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Awal Pulang",
+          items: listBandara,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            ruteAwalPlng = value['iata_code'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['iata_code']} - ${item['municipality']}"),
+                trailing: Text(item['name']),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                ruteAwalPlng ?? "Rute Awal Pulang belum Dipilih",
+                style: TextStyle(
+                    color: ruteAwalPlng == null ? Colors.red : Colors.black),
+              ),
           validator: (value) {
             if (value == null) {
-              return "Rute Akhir masih kosong !";
+              return "Rute Awal Pulang masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputRuteTransitPlng() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Transit Pulang",
+          items: listTransit,
+          onChanged: (value) {
+            ruteTransitPlng = value['IDXX_RTS'];
+            namaRuteTransitPlng = value['NAMA_NEGR'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_NEGR']),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                namaRuteTransitPlng ?? "Rute Transit Pulang belum Dipilih",
+              ),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputRuteAkhirPlng() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Rute Akhir Pulang",
+          items: listBandara,
+          onChanged: (value) {
+            // print(value['iata_code']);
+            ruteAkhirPlng = value['iata_code'];
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text("${item['iata_code']} - ${item['municipality']}"),
+                trailing: Text(item['name']),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+                ruteAkhirPlng ?? "Rute Akhir Pulang belum Dipilih",
+                style: TextStyle(
+                    color: ruteAkhirPlng == null ? Colors.red : Colors.black),
+              ),
+          validator: (value) {
+            if (value == null) {
+              return "Rute Akhir Pulang masih kosong !";
             }
           },
           dropdownSearchDecoration:
@@ -522,7 +800,7 @@ class _JadwalFormState extends State<JadwalForm> {
         ),
         dropdownBuilder: (context, selectedItem) => Text(
           mataUang ?? "Pilih Mata Uang",
-          style: TextStyle(color: rute3 == null ? Colors.red : Colors.black),
+          style: TextStyle(color: mataUang == null ? Colors.red : Colors.black),
         ),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
@@ -546,16 +824,22 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   fncSaveData() {
-    // print("ID JADWAL : ${widget.idJadwal}");
     // print("ID PAKET : $idpaket");
     // print("ID JENIS : $idjenis");
     // print("TUJUAN : $tujuan");
-    // print("JENIS HOTEL : $idHotel");
+    // print("HOTEL MEK : $idHotelMek");
+    // print("HOTEL MAD : $idHotelMad");
+    // print("HOTEL JED : $idHotelJed");
+    // print("HOTEL TRA : $idHotelTra");
     // print("JUMLAH HARI : $jumlahHari");
-    // print("PESAWAT : $pesawat");
-    // print("RUTE 1 : $rute");
-    // print("RUTE 2 : $rute2");
-    // print("RUTE 3 : $rute3");
+    // print("PESAWAT BRGKT : $pesawatBerangkat");
+    // print("PESAWAT PLANG : $pesawatPulang");
+    // print("RUTE AWAL BERANGKAT : $rute");
+    // print("RUTE TRANSIT BERANGKAT : $rute2");
+    // print("RUTE PULANG BERANGKAT : $rute3");
+    // print("RUTE AWAL PULANG : $ruteAwalPlng ");
+    // print("RUTE TRANSIT PULANG : $ruteTransitPlng ");
+    // print("RUTE AKHIR PULANG : $ruteAkhirPlng ");
     // print("TARIF : $tarif");
     // print("JUMLAH SEAT : $jumlahSeat");
     // print("MATA UANG : $idMataUang");
@@ -565,13 +849,20 @@ class _JadwalFormState extends State<JadwalForm> {
     HttpJadwal.saveJadwal(
             idpaket,
             idjenis,
-            tujuan,
-            idHotel,
+            tujuan ?? '',
+            idHotelMek ?? '',
+            idHotelMad ?? '',
+            idHotelJed ?? '',
+            idHotelTra ?? '',
             jumlahHari,
-            pesawat,
+            pesawatBerangkat ?? '',
+            pesawatPulang ?? '',
             rute,
-            rute2 ?? '',
+            rute2 ?? "",
             rute3,
+            ruteAwalPlng,
+            ruteTransitPlng ?? "",
+            ruteAkhirPlng,
             tarif,
             jumlahSeat,
             idMataUang,
@@ -584,7 +875,7 @@ class _JadwalFormState extends State<JadwalForm> {
             context: context, builder: (context) => const ModalSaveSuccess());
         menuController.changeActiveitemTo('Jadwal');
         navigationController.navigateTo('/mrkt/jadwal');
-      } else {
+      } else if (value.status == false) {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());
       }
@@ -673,6 +964,10 @@ class _JadwalFormState extends State<JadwalForm> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: <Widget>[
+                    Divider(
+                      color: myBlue,
+                      thickness: 10,
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -683,19 +978,13 @@ class _JadwalFormState extends State<JadwalForm> {
                             children: [
                               inputPaket(),
                               const SizedBox(height: 8),
+                              inputJenisPaket(),
+                              const SizedBox(height: 8),
                               inputTglBerangkat(),
                               const SizedBox(height: 8),
                               inputTanggalPulang(),
                               const SizedBox(height: 8),
                               inputJumlahHari(),
-                              const SizedBox(height: 8),
-                              inputTujuan(),
-                              const SizedBox(height: 8),
-                              inputJenisPaket(),
-                              const SizedBox(height: 8),
-                              inputHotel(),
-                              const SizedBox(height: 8),
-                              inputPesawat(),
                             ],
                           ),
                         ),
@@ -706,11 +995,7 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 525,
                           child: Column(
                             children: [
-                              inputRute(),
-                              const SizedBox(height: 8),
-                              inputRute2(),
-                              const SizedBox(height: 8),
-                              inputRute3(),
+                              inputTujuan(),
                               const SizedBox(height: 8),
                               inputTarif(),
                               const SizedBox(height: 8),
@@ -725,6 +1010,217 @@ class _JadwalFormState extends State<JadwalForm> {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Maskapai Berangkat",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputPesawatBerangkat()
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Maskapai Pulang",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputPesawatPulang()
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Rute Berangkat",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputRute(),
+                              const SizedBox(height: 8),
+                              inputRute2(),
+                              const SizedBox(height: 8),
+                              inputRute3(),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Rute Pulang",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputRuteAwalPlng(),
+                              const SizedBox(height: 8),
+                              inputRuteTransitPlng(),
+                              const SizedBox(height: 8),
+                              inputRuteAkhirPlng(),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Pilihan Hotel",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputHotelMek(),
+                              const SizedBox(height: 8),
+                              inputHotelMad(),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        SizedBox(
+                          width: 525,
+                          child: Column(
+                            children: [
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              Text(
+                                "Pilihan Hotel",
+                                style: TextStyle(
+                                  color: myBlue,
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                color: myBlue,
+                                thickness: 1.5,
+                                height: 30,
+                              ),
+                              inputHotelJed(),
+                              const SizedBox(height: 8),
+                              inputHotelTra(),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

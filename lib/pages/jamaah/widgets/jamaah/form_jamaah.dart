@@ -244,7 +244,8 @@ class _JamaahFormState extends State<JamaahForm> {
     return TextFormField(
       controller: dateLahir,
       decoration: const InputDecoration(
-          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red))),
+          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red)),
+          hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -629,7 +630,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputTglKeluar() {
     return TextField(
       controller: dateKeluar,
-      decoration: const InputDecoration(labelText: 'Tanggal Dikeluarkan'),
+      decoration: const InputDecoration(
+          labelText: 'Tanggal Dikeluarkan', hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -659,7 +661,8 @@ class _JamaahFormState extends State<JamaahForm> {
   Widget inputTglExp() {
     return TextField(
       controller: dateExp,
-      decoration: const InputDecoration(labelText: 'Berlaku Hingga'),
+      decoration: const InputDecoration(
+          labelText: 'Berlaku Hingga', hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -744,12 +747,12 @@ class _JamaahFormState extends State<JamaahForm> {
       idMenikah,
       idPendidikan,
       idPekerjaan,
-      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
-      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
       noPaspor,
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
+      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
     ).then(
       (value) {
         if (value.status == true) {

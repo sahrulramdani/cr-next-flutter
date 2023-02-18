@@ -1,4 +1,5 @@
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_pemberangkatan_tourlead.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
@@ -34,12 +35,16 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
     );
   }
 
-  Widget cmdRekap() {
+  Widget cmdTlBerangkat() {
     return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.print_outlined),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => const ModalPemberangkatanTourlead());
+      },
+      icon: const Icon(Icons.list_alt_outlined),
       label: const Text(
-        'Rekapitulasi TL',
+        'Pemberangkatan TL',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
@@ -71,7 +76,7 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                 //---------------------------------
                 spacePemisah(),
                 //---------------------------------
-                cmdRekap(),
+                cmdTlBerangkat(),
               ],
             ),
           ],

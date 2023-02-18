@@ -55,9 +55,12 @@ class MyCardInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  total,
-                  style: const TextStyle(fontSize: 30, color: Colors.white),
+                FittedBox(
+                  child: Text(
+                    total,
+                    maxLines: 2,
+                    style: const TextStyle(fontSize: 30, color: Colors.white),
+                  ),
                 )
               ],
             ),

@@ -7,36 +7,36 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-class DetailUplineAgency extends StatefulWidget {
+class DetailDownlineAgency extends StatefulWidget {
   String idAgency;
-  DetailUplineAgency({Key key, @required this.idAgency}) : super(key: key);
+  DetailDownlineAgency({Key key, @required this.idAgency}) : super(key: key);
 
   @override
-  State<DetailUplineAgency> createState() => _DetailUplineAgencyState();
+  State<DetailDownlineAgency> createState() => _DetailDownlineAgencyState();
 }
 
-class _DetailUplineAgencyState extends State<DetailUplineAgency> {
-  List<Map<String, dynamic>> listUpline = [];
+class _DetailDownlineAgencyState extends State<DetailDownlineAgency> {
+  List<Map<String, dynamic>> listDownline = [];
 
-  void getDetailUpline() async {
+  void getDetailDownline() async {
     String id = widget.idAgency;
     var response = await http.get(
-        Uri.parse("$urlAddress/marketing/agency/detail/upline/$id"),
+        Uri.parse("$urlAddress/marketing/agency/detail/downline/$id"),
         headers: {
           'pte-token': kodeToken,
         });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
-      if (dataStatus[0]['KDXX_MRKT'] != null) {
-        listUpline = dataStatus;
-      }
+      listDownline = dataStatus;
     });
+
+    print(listDownline);
   }
 
   @override
   void initState() {
-    getDetailUpline();
+    getDetailDownline();
     super.initState();
   }
 
@@ -48,7 +48,7 @@ class _DetailUplineAgencyState extends State<DetailUplineAgency> {
       scrollDirection: Axis.horizontal,
       child: Container(
           padding: const EdgeInsets.all(10),
-          child: listUpline.isEmpty
+          child: listDownline.isEmpty
               ? SizedBox(
                   height: 400,
                   child: Column(
@@ -63,7 +63,7 @@ class _DetailUplineAgencyState extends State<DetailUplineAgency> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text('Agensi Tidak Memiliki Upline :(')
+                      Text('Agensi Belum Memiliki Downline :(')
                     ],
                   ),
                 )
@@ -141,23 +141,20 @@ class _DetailUplineAgencyState extends State<DetailUplineAgency> {
                                     fontFamily: 'Gilroy',
                                     fontSize: 16))),
                       ],
-                      rows: listUpline.map((data) {
-                        if (data['KDXX_MRKT'] != null) {
-                          return DataRow(cells: [
-                            DataCell(Text((x++).toString())),
-                            DataCell(Text(data['KDXX_MRKT'])),
-                            DataCell(Text(data['NAMA_LGKP'])),
-                            DataCell(Text(data['FEE'])),
-                            DataCell(Text(data['PERD_JMAH'].toString())),
-                            DataCell(Text(data['TOTL_JMAH'].toString())),
-                            DataCell(Text(data['TOTL_POIN'].toString())),
-                            DataCell(Text(data['STAS_AGEN'] == 1
-                                ? 'Aktif'
-                                : 'Non Aktif')),
-                            DataCell(Text(data['NOXX_TELP'])),
-                            DataCell(Text(data['NAMA_KNTR'])),
-                          ]);
-                        }
+                      rows: listDownline.map((data) {
+                        return DataRow(cells: [
+                          DataCell(Text((x++).toString())),
+                          DataCell(Text(data['KDXX_MRKT'])),
+                          DataCell(Text(data['NAMA_LGKP'])),
+                          DataCell(Text(data['FEE'])),
+                          DataCell(Text(data['PERD_JMAH'].toString())),
+                          DataCell(Text(data['TOTL_JMAH'].toString())),
+                          DataCell(Text(data['TOTL_POIN'].toString())),
+                          DataCell(Text(
+                              data['STAS_AGEN'] == 1 ? 'Aktif' : 'Non Aktif')),
+                          DataCell(Text(data['NOXX_TELP'])),
+                          DataCell(Text(data['NAMA_KNTR'])),
+                        ]);
                       }).toList()),
                 ])),
     );

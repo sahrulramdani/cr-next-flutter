@@ -85,7 +85,7 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Profit & Loss Per Flight',
+                            'Jumlah Pembayaran Penerbangan',
                             style: TextStyle(
                                 fontFamily: 'Gilroy',
                                 fontWeight: FontWeight.bold,

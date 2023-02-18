@@ -219,6 +219,7 @@ class _AgencyFormState extends State<AgencyForm> {
         items: listJamaah,
         onChanged: (value) {
           if (value != null) {
+            print(value);
             setState(() {
               nik = value['NOXX_IDNT'];
               namaAgency = value['NAMA_LGKP'];
@@ -246,12 +247,16 @@ class _AgencyFormState extends State<AgencyForm> {
               ktpCalonAgen = value['FOTO_KTPX'];
               fileKtp = value['FOTO_KTPX'];
               cekpaspor = value['NOXX_PSPR'] != null ? 'Ada' : 'Belum Ada';
-              noPaspor = value['NOXX_PSPR'];
-              dikeluarkanDi = value['KLUR_DIXX'];
-              dateKeluar.text = DateFormat("dd-MM-yyyy")
-                  .format(DateTime.parse(value['TGLX_KLUR']));
-              dateExp.text = DateFormat("dd-MM-yyyy")
-                  .format(DateTime.parse(value['TGLX_EXPX']));
+              noPaspor = value['NOXX_PSPR'] ?? '';
+              dikeluarkanDi = value['KLUR_DIXX'] ?? '';
+              dateKeluar.text = value['TGLX_KLUR'] != null
+                  ? DateFormat("dd-MM-yyyy")
+                      .format(DateTime.parse(value['TGLX_KLUR']))
+                  : '';
+              dateExp.text = value['TGLX_EXPX'] != null
+                  ? DateFormat("dd-MM-yyyy")
+                      .format(DateTime.parse(value['TGLX_EXPX']))
+                  : '';
             });
           }
         },
@@ -366,7 +371,8 @@ class _AgencyFormState extends State<AgencyForm> {
     return TextFormField(
       controller: dateLahir,
       decoration: const InputDecoration(
-          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red))),
+          label: Text('Tanggal Lahir', style: TextStyle(color: Colors.red)),
+          hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -670,7 +676,7 @@ class _AgencyFormState extends State<AgencyForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
         mode: Mode.BOTTOM_SHEET,
-        label: "Fee Level",
+        label: "Kategori Marketing",
         items: listFee,
         onChanged: (value) {
           namaFee = value['CODD_DESC'];
@@ -681,12 +687,12 @@ class _AgencyFormState extends State<AgencyForm> {
           title: Text(item['CODD_DESC'].toString()),
         ),
         dropdownBuilder: (context, selectedItem) => Text(
-            namaFee ?? "Fee Level belum Dipilih",
+            namaFee ?? "Kategori Marketing belum Dipilih",
             style:
                 TextStyle(color: namaFee == null ? Colors.red : Colors.black)),
         validator: (value) {
-          if (value == "Fee Level belum Dipilih") {
-            return "Fee Level masih kosong !";
+          if (value == "Kategori Marketing belum Dipilih") {
+            return "Kategori Marketing masih kosong !";
           }
         },
         dropdownSearchDecoration:
@@ -871,8 +877,7 @@ class _AgencyFormState extends State<AgencyForm> {
     return TextField(
       controller: dateKeluar,
       decoration: const InputDecoration(
-        labelText: 'Tanggal Dikeluarkan',
-      ),
+          labelText: 'Tanggal Dikeluarkan', hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -892,8 +897,7 @@ class _AgencyFormState extends State<AgencyForm> {
     return TextField(
       controller: dateExp,
       decoration: const InputDecoration(
-        labelText: 'Berlaku Hingga',
-      ),
+          labelText: 'Berlaku Hingga', hintText: 'DD-MM-YYYY'),
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
           context: context,
@@ -986,12 +990,12 @@ class _AgencyFormState extends State<AgencyForm> {
       idMenikah,
       idPendidikan,
       idPekerjaan,
-      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
-      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
       noPaspor,
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
+      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
       fotoCalonAgen,
       ktpCalonAgen,
     ).then(

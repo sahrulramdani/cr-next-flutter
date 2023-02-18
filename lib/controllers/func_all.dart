@@ -14,10 +14,10 @@ fncGetID(nama, tgl) {
 
 fncGetIDAgensi(nama, tgl) {
   String tahun = new DateTime.now().year.toString();
-  String ref = tahun.substring(3, 4).toString();
+  String ref = tahun.substring(2, 4).toString();
   String name = nama.substring(0, 3).toString().toUpperCase();
   String tanggal = tgl.replaceAll('-', '').toString().substring(2, 8);
-  String id = '0$ref$name${tanggal}0001';
+  String id = '$ref$name${tanggal}0001';
 
   return id;
 }

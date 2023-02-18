@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/pemberangkatan/modal_edit_pemberangkatan.dart';
 
 /// BUTTON HAPUS
@@ -57,28 +58,30 @@ class MyData extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
       DataCell(Icon(
-        dataPemberangkatan[index]['status_berangkat'] == 'a'
+        dataPemberangkatan[index]['STATUS'] == 1
             ? Icons.check
             : Icons.punch_clock_outlined,
-        color: dataPemberangkatan[index]['status_berangkat'] == 'a'
+        color: dataPemberangkatan[index]['STATUS'] == 1
             ? Colors.green
             : Colors.red,
         size: 20,
       )),
-      DataCell(Text(dataPemberangkatan[index]['tipe'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['tg_berangkat'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['jumlah_hari'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['jumlah_seat'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['via_marketing'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['via_kantor'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['status_konfirmasi'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['sisa_seat'].toString())),
+      DataCell(Text(
+          '${dataPemberangkatan[index]['jenisPaket']}, ${dataPemberangkatan[index]['KETERANGAN']}')),
+      DataCell(Text(
+          fncGetTanggal(dataPemberangkatan[index]['TGLX_BGKT'].toString()))),
+      DataCell(Text(dataPemberangkatan[index]['JMLX_HARI'].toString())),
+      DataCell(Text(dataPemberangkatan[index]['JMLX_SEAT'].toString())),
+      DataCell(Text(dataPemberangkatan[index]['JAMAAH_AGEN'].toString())),
+      DataCell(Text(dataPemberangkatan[index]['JAMAAH_KNTR'].toString())),
+      DataCell(Text('0/${dataPemberangkatan[index]['TOTL_KONFIRMASI']}')),
+      DataCell(Text(dataPemberangkatan[index]['SISA'].toString())),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ButtonEdit(
-              idJadwal: dataPemberangkatan[index]['id_jadwal'],
+              idJadwal: dataPemberangkatan[index]['IDXX_JDWL'],
             ),
             // SizedBox(
             //   width: 5,

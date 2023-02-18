@@ -53,12 +53,12 @@ class RevenueMarketingLarge extends StatelessWidget {
               Row(
                 children: const [
                   RevenueInfo(
-                    title: "Karyawan",
-                    amount: "240",
+                    title: "Pusat",
+                    amount: "46",
                   ),
                   RevenueInfo(
                     title: "Agen",
-                    amount: "114",
+                    amount: "215",
                   )
                 ],
               ),
@@ -69,11 +69,11 @@ class RevenueMarketingLarge extends StatelessWidget {
                 children: const [
                   RevenueInfo(
                     title: "Cabang",
-                    amount: "80",
+                    amount: "183",
                   ),
                   RevenueInfo(
                     title: "Tour Leader",
-                    amount: "42",
+                    amount: "40",
                   )
                 ],
               ),

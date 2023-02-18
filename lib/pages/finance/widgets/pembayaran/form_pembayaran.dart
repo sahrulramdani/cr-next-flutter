@@ -74,18 +74,18 @@ class _PembayaranFormState extends State<PembayaranForm> {
     });
   }
 
-  getJadwal(id) async {
-    var response = await http.get(
-        Uri.parse("$urlAddress/finance/pembayaran/get-jadwal/$id"),
-        headers: {
-          'pte-token': kodeToken,
-        });
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listJadwal = dataStatus;
-    });
-  }
+  // getJadwal(id) async {
+  //   var response = await http.get(
+  //       Uri.parse("$urlAddress/finance/pembayaran/get-jadwal/$id"),
+  //       headers: {
+  //         'pte-token': kodeToken,
+  //       });
+  //   List<Map<String, dynamic>> dataStatus =
+  //       List.from(json.decode(response.body) as List);
+  //   setState(() {
+  //     listJadwal = dataStatus;
+  //   });
+  // }
 
   getTagihan(id) async {
     var response = await http.get(
@@ -144,27 +144,41 @@ class _PembayaranFormState extends State<PembayaranForm> {
       height: 50,
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Pilih Jamaah",
+          label: "Pilih No Pendaftaran",
           items: listJamaah,
           onChanged: (value) {
             if (value != null) {
               setState(() {
                 namaPelanggan = value["NAMA_LGKP"];
                 nik = value["NOXX_IDNT"];
+                namaJadwal = value['namaPaket'] +
+                    ' - ' +
+                    value['jenisPaket'] +
+                    ' - ' +
+                    value['KETERANGAN'];
+                disabledCekAll = false;
+                idPendaftaran = value['KDXX_DFTR'];
               });
-              getJadwal(value["NOXX_IDNT"]);
+              // getJadwal(value["KDXX_DFTR"]);
+              getTagihan(value['KDXX_DFTR']);
             } else {
               setState(() {
                 namaPelanggan = null;
                 nik = null;
+                namaJadwal = null;
+                disabledCekAll = true;
+                idPendaftaran = null;
               });
-              getJadwal('cek');
+              // getJadwal('cek');
+              getTagihan('cek');
             }
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
                 title: Text(
-                    item['NAMA_LGKP'] +
+                    item['KDXX_DFTR'] +
+                        ' - ' +
+                        item['NAMA_LGKP'] +
                         ' - ' +
                         item['UMUR'].toString() +
                         ' Tahun, ' +
@@ -199,74 +213,87 @@ class _PembayaranFormState extends State<PembayaranForm> {
   }
 
   Widget inputNamaJadwal() {
-    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
-
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Jadwal",
-          items: listJadwal,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                namaJadwal = value['namaPaket'] +
-                    ' - ' +
-                    value['jenisPaket'] +
-                    ' - ' +
-                    value['KETERANGAN'];
-                disabledCekAll = false;
-                idPendaftaran = value['KDXX_DFTR'];
-              });
-              getTagihan(value['KDXX_DFTR']);
-            } else {
-              setState(() {
-                namaJadwal = null;
-                disabledCekAll = true;
-              });
-              getTagihan('cek');
-              idPendaftaran = null;
-            }
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                  item['namaPaket'] +
-                      ' - ' +
-                      item['jenisPaket'] +
-                      ' - ' +
-                      item['KETERANGAN'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                    item['MATA_UANG'] +
-                        ' ' +
-                        myformat.format(item['TARIF_PKET']) +
-                        ' - ' +
-                        'Sisa Seat : ' +
-                        item['SISA'].toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(
-                    fncGetTanggal(item['BERANGKAT']) +
-                        ' - ' +
-                        fncGetTanggal(item['PULANG']),
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaJadwal ?? "Pilih Jadwal"),
-          validator: (value) {
-            if (value == null) {
-              return "Jadwal Produk masih kosong !";
-            }
-          },
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 14),
+      decoration: const InputDecoration(labelText: 'Jadwal Jamaah'),
+      // onChanged: (value) {
+      //   keterangan = value;
+      // },
+      readOnly: true,
+      initialValue: namaJadwal ?? 'Jadwal Jamaah',
     );
   }
+
+  // Widget inputNamaJadwal() {
+  //   NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+
+  //   return Container(
+  //     height: 50,
+  //     decoration: const BoxDecoration(
+  //         border: Border(
+  //             bottom: BorderSide(
+  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+  //     child: DropdownSearch(
+  //         enabled: true,
+  //         mode: Mode.BOTTOM_SHEET,
+  //         label: "Jadwal",
+  //         items: listJadwal,
+  //         onChanged: (value) {
+  //           // if (value != null) {
+  //           //   setState(() {
+  //           //     namaJadwal = value['namaPaket'] +
+  //           //         ' - ' +
+  //           //         value['jenisPaket'] +
+  //           //         ' - ' +
+  //           //         value['KETERANGAN'];
+  //           //     disabledCekAll = false;
+  //           //     idPendaftaran = value['KDXX_DFTR'];
+  //           //   });
+  //           //   getTagihan(value['KDXX_DFTR']);
+  //           // } else {
+  //           //   setState(() {
+  //           //     namaJadwal = null;
+  //           //     disabledCekAll = true;
+  //           //   });
+  //           //   getTagihan('cek');
+  //           //   idPendaftaran = null;
+  //           // }
+  //         },
+  //         showSearchBox: true,
+  //         popupItemBuilder: (context, item, isSelected) => ListTile(
+  //               title: Text(
+  //                 item['namaPaket'] +
+  //                     ' - ' +
+  //                     item['jenisPaket'] +
+  //                     ' - ' +
+  //                     item['KETERANGAN'],
+  //                 style: const TextStyle(fontWeight: FontWeight.bold),
+  //               ),
+  //               subtitle: Text(
+  //                   item['MATA_UANG'] +
+  //                       ' ' +
+  //                       myformat.format(item['TARIF_PKET']) +
+  //                       ' - ' +
+  //                       'Sisa Seat : ' +
+  //                       item['SISA'].toString(),
+  //                   style: const TextStyle(fontWeight: FontWeight.bold)),
+  //               trailing: Text(
+  //                   fncGetTanggal(item['BERANGKAT']) +
+  //                       ' - ' +
+  //                       fncGetTanggal(item['PULANG']),
+  //                   textAlign: TextAlign.center),
+  //             ),
+  //         dropdownBuilder: (context, selectedItem) =>
+  //             Text(namaJadwal ?? "Pilih Jadwal"),
+  //         validator: (value) {
+  //           if (value == null) {
+  //             return "Jadwal Produk masih kosong !";
+  //           }
+  //         },
+  //         dropdownSearchDecoration:
+  //             const InputDecoration(border: InputBorder.none)),
+  //   );
+  // }
 
   Widget inputJumlahTagihan() {
     return TextFormField(
@@ -516,16 +543,18 @@ class _PembayaranFormState extends State<PembayaranForm> {
     for (var i = 0; i < listTagihan.length; i++) {
       if (listTagihan[i]['STS_LUNAS'] != 'LUNAS') {
         if (listTagihan[i]['CEK'] == true) {
-          var tagihan = {
-            '"NOXX_TGIH"': '"${listTagihan[i]['NOXX_TGIH']}"',
-            '"KDXX_DFTR"': '"${listTagihan[i]['KDXX_DFTR']}"',
-            '"JENS_TGIH"': '"${listTagihan[i]['JENS_TGIH']}"',
-            '"TOTL_TGIH"': '"${listTagihan[i]['TOTL_TGIH']}"',
-            '"JMLX_BYAR"': '"${listTagihan[i]['JMLX_BYAR']}"',
-            '"SISA_TGIH"': '"${listTagihan[i]['SISA_TGIH']}"',
-            '"STS_LUNAS"': '"${listTagihan[i]['STS_LUNAS']}"',
-          };
-          detailTagihan.add(tagihan);
+          if (listTagihan[i]['JMLX_BYAR'] != '0') {
+            var tagihan = {
+              '"NOXX_TGIH"': '"${listTagihan[i]['NOXX_TGIH']}"',
+              '"KDXX_DFTR"': '"${listTagihan[i]['KDXX_DFTR']}"',
+              '"JENS_TGIH"': '"${listTagihan[i]['JENS_TGIH']}"',
+              '"TOTL_TGIH"': '"${listTagihan[i]['TOTL_TGIH']}"',
+              '"JMLX_BYAR"': '"${listTagihan[i]['JMLX_BYAR']}"',
+              '"SISA_TGIH"': '"${listTagihan[i]['SISA_TGIH']}"',
+              '"STS_LUNAS"': '"${listTagihan[i]['STS_LUNAS']}"',
+            };
+            detailTagihan.add(tagihan);
+          }
         }
       }
     }
@@ -544,15 +573,16 @@ class _PembayaranFormState extends State<PembayaranForm> {
       stringTotal.replaceAll(',', ''),
       metodePembayaran,
       idBank ?? '',
-      keterangan,
+      keterangan ?? '',
       uangDiterima.replaceAll(',', ''),
       '$detailTagihan',
     ).then((value) {
       if (value.status == true) {
+        menuController.changeActiveitemTo('Form Bayar');
+        navigationController.navigateTo('/finance/form-bayar');
+
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());
-        menuController.changeActiveitemTo('Pembayaran');
-        navigationController.navigateTo('/finance/pembayaran-jamaah');
       } else {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());

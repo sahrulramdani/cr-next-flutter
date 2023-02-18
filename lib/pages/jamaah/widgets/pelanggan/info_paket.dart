@@ -103,17 +103,17 @@ class _InfoPaketState extends State<InfoPaket> {
                     : '')),
               ]),
               DataRow(cells: [
-                const DataCell(Text('Rute Awal')),
+                const DataCell(Text('Jumlah Seat')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPaketPelanggan.isNotEmpty
-                    ? detailPaketPelanggan[0]['RUTE_AWAL']
+                    ? detailPaketPelanggan[0]['JMLX_SEAT'].toString()
                     : '')),
               ]),
               DataRow(cells: [
-                const DataCell(Text('Rute Akhir')),
+                const DataCell(Text('Jumlah Hari')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailPaketPelanggan.isNotEmpty
-                    ? detailPaketPelanggan[0]['RUTE_AKHR']
+                    ? detailPaketPelanggan[0]['JMLX_HARI'].toString()
                     : '')),
               ]),
             ]),

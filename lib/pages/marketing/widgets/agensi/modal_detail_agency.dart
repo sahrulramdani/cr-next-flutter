@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_ktp_agency.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_upline_agency.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_comp_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_pelanggan_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_bank_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_card_agency.dart';
-import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_upline_agency.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_downline_agency.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 // import 'package:flutter_web_course/comp/modal_delete_success.dart';
 // import 'package:http/http.dart' as http;
@@ -29,6 +30,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
   bool enableTransaksi = false;
   bool enableBank = false;
   bool enableUpline = false;
+  bool enableDownline = false;
   bool enableCard = false;
 
   @override
@@ -66,6 +68,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enableTransaksi = false;
                           enableBank = false;
                           enableUpline = false;
+                          enableDownline = false;
                           enableCard = false;
                         });
                       },
@@ -80,6 +83,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enableTransaksi = false;
                           enableBank = false;
                           enableUpline = false;
+                          enableDownline = false;
                           enableCard = false;
                         });
                       },
@@ -94,6 +98,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enableTransaksi = true;
                           enableBank = false;
                           enableUpline = false;
+                          enableDownline = false;
                           enableCard = false;
                         });
                       },
@@ -108,6 +113,22 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enableTransaksi = false;
                           enableBank = true;
                           enableUpline = false;
+                          enableDownline = false;
+                          enableCard = false;
+                        });
+                      },
+                    ),
+                    GButton(
+                      icon: Icons.co_present_outlined,
+                      text: 'Upline',
+                      onPressed: () {
+                        setState(() {
+                          enableDetail = false;
+                          enablePelanggan = false;
+                          enableTransaksi = false;
+                          enableBank = false;
+                          enableUpline = true;
+                          enableDownline = false;
                           enableCard = false;
                         });
                       },
@@ -121,7 +142,8 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enablePelanggan = false;
                           enableTransaksi = false;
                           enableBank = false;
-                          enableUpline = true;
+                          enableUpline = false;
+                          enableDownline = true;
                           enableCard = false;
                         });
                       },
@@ -136,6 +158,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                           enableTransaksi = false;
                           enableBank = false;
                           enableUpline = false;
+                          enableDownline = false;
                           enableCard = true;
                         });
                       },
@@ -182,6 +205,12 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                       visible: enableUpline,
                       child: SizedBox(
                         child: DetailUplineAgency(idAgency: idAgen),
+                      ),
+                    ),
+                    Visibility(
+                      visible: enableDownline,
+                      child: SizedBox(
+                        child: DetailDownlineAgency(idAgency: idAgen),
                       ),
                     ),
                     Visibility(

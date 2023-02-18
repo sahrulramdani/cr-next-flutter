@@ -13,17 +13,43 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_p
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_web_course/constants/style.dart';
 
 class ModalDetailJadwal extends StatefulWidget {
   String idJadwal;
-  ModalDetailJadwal({Key key, @required this.idJadwal}) : super(key: key);
+  String keberangkatan;
+  ModalDetailJadwal(
+      {Key key, @required this.idJadwal, @required this.keberangkatan})
+      : super(key: key);
 
   @override
   State<ModalDetailJadwal> createState() => _ModalDetailJadwalState();
 }
 
 class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
-  List<Map<String, dynamic>> listJadwalPelanggan = dummyJadwalJamaahTable;
+  List<Map<String, dynamic>> listJadwalPelanggan = [];
+
+  void getPelangganJadwal() async {
+    var id = widget.idJadwal;
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getDetail-jamaah/$id"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJadwalPelanggan = data;
+    });
+  }
+
+  @override
+  void initState() {
+    // getProvinsi();
+    getPelangganJadwal();
+    super.initState();
+  }
 
   Widget cmdBentukNama() {
     return ElevatedButton.icon(
@@ -470,13 +496,11 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         decoration: const InputDecoration(hintText: 'Cari Berdasarkan Nama'),
         onChanged: (value) {
           if (value == '') {
-            setState(() {
-              listJadwalPelanggan = list;
-            });
+            getPelangganJadwal();
           } else {
             setState(() {
               listJadwalPelanggan = list
-                  .where(((element) => element['nama_lengkap']
+                  .where(((element) => element['NAMA_LGKP']
                       .toString()
                       .toUpperCase()
                       .contains(value.toUpperCase())))
@@ -567,11 +591,6 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    List<Map<String, dynamic>> listPelangganJadwalDummy = dummyPelangganTable
-        .where((element) =>
-            element['id_jadwal'].toString().contains(widget.idJadwal))
-        .toList();
-
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Stack(children: [
@@ -592,7 +611,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                       const SizedBox(width: 10),
                       FittedBox(
                         child: Text(
-                            'Jadwal Pelanggan Keberangkatan 06 Januari 2023',
+                            'Jadwal Pelanggan Keberangkatan ${widget.keberangkatan}',
                             style: TextStyle(
                                 color: myGrey, fontWeight: FontWeight.bold)),
                       ),
@@ -611,10 +630,10 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                           SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: menuButton()),
-                          inputCari(listPelangganJadwalDummy),
+                          inputCari(listJadwalPelanggan),
                           const SizedBox(height: 10),
                           TableJadwalPelanggan(
-                              dataJadwalPel: listPelangganJadwalDummy)
+                              dataJadwalPel: listJadwalPelanggan)
                         ],
                       ),
                     ),

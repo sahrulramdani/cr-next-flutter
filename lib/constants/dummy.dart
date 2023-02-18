@@ -25,12 +25,16 @@ List<Map<String, String>> listCardMarketing = [
     "total": '514',
   },
   {
+    "title": "Pusat",
+    "total": '46',
+  },
+  {
     "title": "Agen",
-    "total": '58',
+    "total": '215',
   },
   {
     "title": "Cabang",
-    "total": '31',
+    "total": '183',
   },
   {
     "title": "Tour Leader",
@@ -42,7 +46,7 @@ List<Map<String, String>> listCardAgency = [
   //menu data item
   {
     "title": "Agensi",
-    "total": '110',
+    "total": '118',
   },
   {
     "title": "Agen",
@@ -55,6 +59,10 @@ List<Map<String, String>> listCardAgency = [
   {
     "title": "Tour Leader",
     "total": '40',
+  },
+  {
+    "title": "Pos",
+    "total": '8',
   },
 ];
 
@@ -82,38 +90,46 @@ List<Map<String, String>> listCardPemberangkatan = [
   //menu data item
   {
     "title": "Berangkat",
-    "total": '89',
-  },
-  {
-    "title": "Reguler",
-    "total": '42',
-  },
-  {
-    "title": "Premium",
     "total": '18',
   },
   {
-    "title": "Bintang",
-    "total": '20',
+    "title": "Bulan Ini",
+    "total": '4',
+  },
+  {
+    "title": "Bulan Depan",
+    "total": '3',
+  },
+  {
+    "title": "Sudah Full",
+    "total": '6',
   },
 ];
 
 List<Map<String, String>> listCardTourleader = [
   //menu data item
   {
-    "title": "Umroh",
-    "total": '21',
+    "title": "Siap Berangkat",
+    "total": '7',
   },
   {
-    "title": "Cahaya",
+    "title": "Pemula",
+    "total": '8',
+  },
+  {
+    "title": "Dasar",
     "total": '11',
   },
   {
-    "title": "Raudhah",
+    "title": "Terampil",
     "total": '18',
   },
   {
-    "title": "R1",
+    "title": "Mahir",
+    "total": '6',
+  },
+  {
+    "title": "Ahli",
     "total": '5',
   },
 ];
@@ -185,20 +201,20 @@ List<Map<String, String>> listCardJamaah = [
 List<Map<String, String>> listCardFinance = [
   //menu data item
   {
+    "title": "Keberangkatan Bulan Ini",
+    "total": '4',
+  },
+  {
     "title": "Tagihan",
-    "total": '312',
+    "total": '324,800,000',
   },
   {
-    "title": "Pembayaran",
-    "total": '221',
+    "title": "Diterima",
+    "total": '185,660,000',
   },
   {
-    "title": "Penerimaan",
-    "total": '214',
-  },
-  {
-    "title": "Account",
-    "total": '54',
+    "title": "Sisa",
+    "total": '139,140,000',
   },
 ];
 
@@ -615,69 +631,69 @@ List<Map<String, String>> detailSelectPemberangkatan = [
 
 List<Map<String, String>> listKelolaTourLead = [
   {
-    "id_lead": "AGMR010201",
+    "id_lead": "23BIL8811300001",
     "nama": 'Billy Syahputra',
-    "level": 'Umroh',
-    "sukses": "40",
+    "level": 'Mahir',
+    "sukses": "92",
     "pending": "0",
-    "2022": "9",
+    "2022": "31",
     "naik": "20",
-    "total": "49",
+    "total": "112",
   },
   {
-    "id_lead": "AGMR010202",
+    "id_lead": "23RAK0002230001",
     "nama": 'Raka Raharjo',
-    "level": 'Raudhah',
-    "sukses": "42",
-    "pending": "1",
-    "2022": "4",
+    "level": 'Terampil',
+    "sukses": "58",
+    "pending": "3",
+    "2022": "8",
     "naik": "18",
-    "total": "46",
+    "total": "72",
   },
   {
-    "id_lead": "AGMR010203",
+    "id_lead": "23SUT7704280001",
     "nama": 'Suningsih',
-    "level": 'Cahaya',
+    "level": 'Dasar',
     "sukses": "30",
     "pending": "2",
     "2022": "3",
     "naik": "17",
-    "total": "33",
+    "total": "52",
   },
   {
-    "id_lead": "AGMR010204",
+    "id_lead": "23DAU0007200001",
     "nama": 'Daud Salam',
-    "level": 'Cahaya',
-    "sukses": "50",
+    "level": 'Ahli',
+    "sukses": "121",
     "pending": "0",
-    "2022": "0",
+    "2022": "33",
     "naik": "22",
-    "total": "50",
+    "total": "143",
   },
   {
-    "id_lead": "AGMR010205",
+    "id_lead": "23SUW6808100001",
     "nama": 'Suwarna',
-    "level": 'Raudhah',
-    "sukses": "42",
+    "level": 'Mahir',
+    "sukses": "83",
     "pending": "1",
-    "2022": "4",
+    "2022": "12",
     "naik": "18",
-    "total": "46",
+    "total": "98",
   },
   {
-    "id_lead": "AGMR010206",
+    "id_lead": "23TIT1120030001",
     "nama": 'Titi Kamala',
-    "level": 'Jamaah',
-    "sukses": "18",
+    "level": 'Pemula',
+    "sukses": "33",
     "pending": "1",
-    "2022": "1",
+    "2022": "5",
     "naik": "5",
-    "total": "19",
+    "total": "40",
   },
   {
-    "id_lead": "AGMR010207",
+    "id_lead": "23RAF0301170001",
     "nama": 'Rafli Ahmad',
-    "level": 'R1',
+    "level": 'Pemula',
     "sukses": "10",
     "pending": "0",
     "2022": "1",
@@ -685,44 +701,54 @@ List<Map<String, String>> listKelolaTourLead = [
     "total": "11",
   },
   {
-    "id_lead": "AGMR010208",
+    "id_lead": "23PUS2301270001",
     "nama": 'Puspa Sari',
-    "level": 'Umroh',
-    "sukses": "42",
+    "level": 'Mahir',
+    "sukses": "86",
     "pending": "1",
-    "2022": "4",
+    "2022": "18",
     "naik": "18",
-    "total": "46",
+    "total": "97",
   },
   {
-    "id_lead": "AGMR010209",
+    "id_lead": "23SUS8811100001",
     "nama": 'Susilo',
-    "level": 'Raudhah',
-    "sukses": "42",
+    "level": 'Mahir',
+    "sukses": "90",
     "pending": "1",
-    "2022": "4",
+    "2022": "21",
     "naik": "18",
-    "total": "46",
+    "total": "103",
   },
   {
-    "id_lead": "AGMR010210",
+    "id_lead": "23JAM7712170001",
     "nama": 'Jamaludin',
-    "level": 'Cahaya',
-    "sukses": "30",
+    "level": 'Terampil',
+    "sukses": "62",
     "pending": "2",
-    "2022": "3",
+    "2022": "18",
     "naik": "17",
-    "total": "33",
+    "total": "76",
   },
   {
-    "id_lead": "AGMR010211",
+    "id_lead": "23END2301270001",
     "nama": 'Endah Prawendi',
-    "level": 'Cahaya',
-    "sukses": "50",
-    "pending": "0",
-    "2022": "0",
+    "level": 'Ahli',
+    "sukses": "126",
+    "pending": "8",
+    "2022": "38",
     "naik": "22",
-    "total": "50",
+    "total": "132",
+  },
+  {
+    "id_lead": "23DED2101470001",
+    "nama": 'Dedi Kusna',
+    "level": 'Pemula',
+    "sukses": "21",
+    "pending": "3",
+    "2022": "38",
+    "naik": "22",
+    "total": "40",
   },
 ];
 

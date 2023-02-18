@@ -20,23 +20,18 @@ class MyData extends DataTableSource {
           onChanged: (bool value) {},
         ),
       ),
-      DataCell(Text(dataJadwalPel[index]['nama_lengkap'].toString())),
-      DataCell(Text(dataJadwalPel[index]['jenis_kelamin'].toString())),
-      DataCell(Text(dataJadwalPel[index]['umur'].toString())),
-      DataCell(Text(dataJadwalPel[index]['an_paspor'] == 'a' ? 'REDY' : 'NON')),
-      DataCell(
-          Text(dataJadwalPel[index]['status_vaksin'] == 'a' ? 'KOL' : 'NON')),
-      DataCell(
-          Text(dataJadwalPel[index]['status_handling'] == 'a' ? 'LKP' : 'BLM')),
-      DataCell(Text(dataJadwalPel[index]['telepon'].toString())),
-      DataCell(Text(
-          myFormat.format(int.parse(dataJadwalPel[index]['estimasitotal'])))),
-      DataCell(Text(
-          myFormat.format(int.parse(dataJadwalPel[index]['dpe_uangmasuk'])))),
-      DataCell(Text(
-          myFormat.format(int.parse(dataJadwalPel[index]['estimasisisa'])))),
-      DataCell(Text(dataJadwalPel[index]['dpe_status'].toString())),
-      DataCell(Text(dataJadwalPel[index]['syarat'].toString())),
+      DataCell(Text(dataJadwalPel[index]['NAMA_LGKP'].toString())),
+      DataCell(Text(dataJadwalPel[index]['JENS_KLMN'].toString())),
+      DataCell(Text(dataJadwalPel[index]['UMUR'].toString())),
+      DataCell(Text(dataJadwalPel[index]['PEMB_PSPR'])),
+      DataCell(Text(dataJadwalPel[index]['PRSS_VKSN'])),
+      DataCell(Text(dataJadwalPel[index]['HANDLING'])),
+      DataCell(Text(dataJadwalPel[index]['NOXX_TELP'].toString())),
+      DataCell(Text(myFormat.format(dataJadwalPel[index]['EST_TOTAL']))),
+      DataCell(Text(myFormat.format(dataJadwalPel[index]['MASUK']))),
+      DataCell(Text(myFormat.format(dataJadwalPel[index]['SISA']))),
+      DataCell(Text(dataJadwalPel[index]['STATUS_BAYAR'].toString())),
+      const DataCell(Text('Pending')),
     ]);
   }
 
@@ -73,6 +68,7 @@ class _TableJadwalPelangganState extends State<TableJadwalPelanggan> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
+          columnSpacing: 10,
           columns: [
             DataColumn(
                 label: Text('No.',

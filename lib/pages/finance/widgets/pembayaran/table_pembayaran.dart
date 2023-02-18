@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_web_course/constants/dummy_jadwal.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/constants/controllers.dart';
+
 // import 'package:flutter_web_course/pages/inventory/widgets/modal_hapus_barang.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jadwal.dart';
 // import 'package:url_launcher/url_launcher.dart';
@@ -16,73 +16,61 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:intl/intl.dart';
 
 class MyData extends DataTableSource {
-  final List<Map<String, dynamic>> dataProfit;
-  MyData(this.dataProfit);
+  final List<Map<String, dynamic>> dataPembayaran;
+  MyData(this.dataPembayaran);
   @override
   DataRow getRow(int index) {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
-    return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(dataProfit[index]['namaPaket'] +
-          ' - ' +
-          dataProfit[index]['KETERANGAN'] +
-          ' ' +
-          fncGetTanggal(dataProfit[index]['TGLX_BGKT']))),
-      DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']))),
-      DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString())),
-      DataCell(Text(dataProfit[index]['TERISI'].toString())),
-      DataCell(Text(
-          ((dataProfit[index]['JMLX_SEAT']) - (dataProfit[index]['TERISI']))
-              .toString())),
-      DataCell(Text(myFormat.format(dataProfit[index]['EST_PROFIT']))),
-      DataCell(Text(myFormat.format(dataProfit[index]['TLH_MASUK']))),
-      DataCell(Text(myFormat.format(((dataProfit[index]['EST_PROFIT']) -
-              (dataProfit[index]['TLH_MASUK'])) *
-          1))),
-
-      // DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']))),
-      // DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString())),
-      // DataCell(Text(myFormat.format(dataProfit[index]['EST_PROFIT']))),
-      // DataCell(Text(myFormat.format(dataProfit[index]['TLH_MASUK']))),
-      // DataCell(Text(myFormat.format(((dataProfit[index]['EST_PROFIT']) -
-      //         (dataProfit[index]['TLH_MASUK'])) *
-      //     1))),
-    ]);
+    return DataRow(
+        onLongPress: () {
+          menuController.changeActiveitemTo('Form Bayar');
+          navigationController.navigateTo('/finance/form-bayar');
+        },
+        cells: [
+          DataCell(Text((index + 1).toString())),
+          DataCell(Text(dataPembayaran[index]['NAMA_KNTR'])),
+          DataCell(Text(dataPembayaran[index]['ALMT_KNTR'])),
+          DataCell(Text(dataPembayaran[index]['JML_DFTAR'].toString())),
+          DataCell(Text(myFormat.format(dataPembayaran[index]['TOTL_TGIH']))),
+          DataCell(Text(myFormat.format(dataPembayaran[index]['JML_BYAR']))),
+          DataCell(Text(myFormat.format((dataPembayaran[index]['TOTL_TGIH']) -
+              (dataPembayaran[index]['JML_BYAR'])))),
+        ]);
   }
 
   @override
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => dataProfit.length;
+  int get rowCount => dataPembayaran.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
-class TablePenerbangan extends StatefulWidget {
-  List<Map<String, dynamic>> dataProfit;
-  TablePenerbangan({Key key, @required this.dataProfit}) : super(key: key);
+class TablePembayaran extends StatefulWidget {
+  List<Map<String, dynamic>> dataPembayaran;
+  TablePembayaran({Key key, @required this.dataPembayaran}) : super(key: key);
 
   @override
-  State<TablePenerbangan> createState() => _TablePenerbanganState();
+  State<TablePembayaran> createState() => _TablePembayaranState();
 }
 
-class _TablePenerbanganState extends State<TablePenerbangan> {
+class _TablePembayaranState extends State<TablePembayaran> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final DataTableSource myTable = MyData(widget.dataProfit);
+    final DataTableSource myTable = MyData(widget.dataPembayaran);
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.72,
+      height: screenHeight * 0.38,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
-          columnSpacing: 10,
+          columnSpacing: 8,
           source: myTable,
           columns: [
             DataColumn(
@@ -93,49 +81,35 @@ class _TablePenerbanganState extends State<TablePenerbangan> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Penerbangan',
+                label: Text('Cabang',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Tarif',
+                label: Text('Lokasi',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Seat',
+                label: Text('Daftar',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Terisi',
+                label: Text('Tagihan',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Sisa',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Estimasi',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Telah Masuk',
+                label: Text('Pembayaran',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,

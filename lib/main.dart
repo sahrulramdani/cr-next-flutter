@@ -8,8 +8,11 @@ import 'package:flutter_web_course/pages/404/error_page.dart';
 import 'package:flutter_web_course/pages/authentication/authentication.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 import 'package:get/get.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   Get.put(MenuController());
   Get.put(NavigationController());
   runApp(const MyApp());

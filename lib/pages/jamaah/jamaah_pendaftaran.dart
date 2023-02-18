@@ -609,7 +609,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       child: DropdownSearch(
           enabled: enableMarket,
           mode: Mode.BOTTOM_SHEET,
-          label: "Nama Leader",
+          label: "Nama Marketing",
           items: listAgency,
           onChanged: (value) {
             if (value != null) {
@@ -633,7 +633,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
               ? selectedItem['NAMA_LGKP']
-              : "Leader belum Dipilih"),
+              : "Marketing belum Dipilih"),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -906,9 +906,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       namaAgency ?? '',
       totalEst,
       fncJatuhTempo(tglBerangkat).toString(),
+      '$listTagihan',
       fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
       fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK',
-      '$listTagihan',
       // idTagihan
     ).then((value) {
       if (value.status == true) {

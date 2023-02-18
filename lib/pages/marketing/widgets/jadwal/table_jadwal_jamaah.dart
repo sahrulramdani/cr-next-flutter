@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_edit_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_hapus_jadwal.dart';
@@ -14,7 +15,8 @@ import 'package:intl/intl.dart';
 
 class ButtonDetail extends StatelessWidget {
   String idJadwal;
-  ButtonDetail({Key key, this.idJadwal}) : super(key: key);
+  String keberangkatan;
+  ButtonDetail({Key key, this.idJadwal, this.keberangkatan}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,10 @@ class ButtonDetail extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            builder: (context) => ModalDetailJadwal(idJadwal: idJadwal));
+            builder: (context) => ModalDetailJadwal(
+                  idJadwal: idJadwal,
+                  keberangkatan: keberangkatan,
+                ));
       },
     );
   }
@@ -108,7 +113,10 @@ class MyData extends DataTableSource {
       DataCell(Text(myformat
           .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())))),
       DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
-      DataCell(Text("0")),
+      DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString())),
+      DataCell(Text(dataJadwal[index]['SISA'] == 0
+          ? 'Full'
+          : dataJadwal[index]['SISA'].toString())),
       DataCell(Text(dataJadwal[index]['KETERANGAN'])),
       DataCell(Center(
         child: Row(
@@ -116,6 +124,8 @@ class MyData extends DataTableSource {
           children: [
             ButtonDetail(
               idJadwal: dataJadwal[index]['IDXX_JDWL'],
+              keberangkatan:
+                  fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()),
             ),
             const SizedBox(width: 5),
             ButtonEdit(
@@ -223,7 +233,14 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('MU',
+                label: Text('Kurs',
+                    style: TextStyle(
+                        color: myGrey,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Gilroy',
+                        fontSize: 16))),
+            DataColumn(
+                label: Text('Seat',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,

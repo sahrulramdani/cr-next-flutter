@@ -91,6 +91,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     });
     List<Map<String, dynamic>> dataAgen =
         List.from(json.decode(response.body) as List);
+
     setState(() {
       dataAgensi = dataAgen;
       nik = dataAgen[0]['NOXX_IDNT'];
@@ -303,6 +304,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
           fillColor: Colors.white,
           hoverColor: Colors.white),
       initialValue: nama ?? '',
+      onChanged: (value) {
+        nama = value;
+      },
       validator: (value) {
         if (value.isEmpty) {
           return "Nama masih kosong !";
@@ -1092,23 +1096,22 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       idMenikah,
       idPendidikan,
       idPekerjaan,
-      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
-      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
       noPaspor,
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
       idStatus,
+      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
+      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
       fotoLamaAgen,
       fotoLamaKtpAgen,
     ).then(
       (value) {
         if (value.status == true) {
+          menuController.changeActiveitemTo('Agency');
+          navigationController.navigateTo('/mrkt/agency');
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
-
-          // menuController.changeActiveitemTo('Agency');
-          // navigationController.navigateTo('/mrkt/agency');
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());

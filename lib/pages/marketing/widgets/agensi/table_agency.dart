@@ -126,13 +126,6 @@ class MyData extends DataTableSource {
                 : Colors.black),
       )),
       DataCell(Text(
-        dataAgency[index]['PERD_JMAH'].toString(),
-        style: TextStyle(
-            color: dataAgency[index]['STAS_AGEN'] == 0
-                ? Colors.red
-                : Colors.black),
-      )),
-      DataCell(Text(
         dataAgency[index]['TOTL_JMAH'].toString(),
         style: TextStyle(
             color: dataAgency[index]['STAS_AGEN'] == 0
@@ -140,7 +133,21 @@ class MyData extends DataTableSource {
                 : Colors.black),
       )),
       DataCell(Text(
+        dataAgency[index]['PERD_JMAH'].toString(),
+        style: TextStyle(
+            color: dataAgency[index]['STAS_AGEN'] == 0
+                ? Colors.red
+                : Colors.black),
+      )),
+      DataCell(Text(
         dataAgency[index]['TOTL_POIN'].toString(),
+        style: TextStyle(
+            color: dataAgency[index]['STAS_AGEN'] == 0
+                ? Colors.red
+                : Colors.black),
+      )),
+      DataCell(Text(
+        (20 - dataAgency[index]['TOTL_POIN']).toString(),
         style: TextStyle(
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
@@ -220,14 +227,14 @@ class _TableAgencyState extends State<TableAgency> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Fee Level',
+                label: Text('Kategori Marketing',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('First Level',
+                label: Text('Level',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
@@ -241,14 +248,14 @@ class _TableAgencyState extends State<TableAgency> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Periode',
+                label: Text('Total',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Pelanggan',
+                label: Text('Musim',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
@@ -256,6 +263,13 @@ class _TableAgencyState extends State<TableAgency> {
                         fontSize: 16))),
             DataColumn(
                 label: Text('Poin',
+                    style: TextStyle(
+                        color: myGrey,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Gilroy',
+                        fontSize: 16))),
+            DataColumn(
+                label: Text('Kurang Poin',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,

@@ -76,6 +76,9 @@ const financePageRoute = "/finance";
 const fincPembayaranPageDisplayName = "Pembayaran";
 const fincPembayaranPageRoute = "/finance/pembayaran-jamaah";
 
+const fincBayarFormPageDisplayName = "Form Bayar";
+const fincBayarFormPageRoute = "/finance/form-bayar";
+
 const fincUjrahPageDisplayName = "Ujrah";
 const fincUjrahPageRoute = "/finance/pembayaran-ujrah";
 

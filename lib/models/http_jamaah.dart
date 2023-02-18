@@ -27,12 +27,12 @@ class HttpJamaah {
     String menikah,
     String pendidikan,
     String pekerjaan,
-    String fotoJamaah,
-    String fotoKtpJamaah,
     String noPaspor,
     String dikeluarkanDi,
     String tglKeluar,
     String tglExpire,
+    String fotoJamaah,
+    String fotoKtpJamaah,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/jamaah/jamaah/save");
 
@@ -87,12 +87,12 @@ class HttpJamaah {
     String menikah,
     String pendidikan,
     String pekerjaan,
-    String fotoJamaah,
-    String fotoKtpJamaah,
     String noPaspor,
     String dikeluarkanDi,
     String tglKeluar,
     String tglExpire,
+    String fotoJamaah,
+    String fotoKtpJamaah,
     String fotoLamaJamaah,
     String fotoLamaKtpJamaah,
   ) async {

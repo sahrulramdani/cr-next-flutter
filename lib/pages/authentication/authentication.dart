@@ -30,6 +30,77 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     });
   }
 
+  fncLogin(formKey) {
+    if (formKey.currentState.validate()) {
+      HttpStateful.connectAPI(_userEmail.text, _userPass.text, "01").then(
+        (value) {
+          setState(() {
+            loginRespon = value;
+            kodeToken = loginRespon.userToken;
+          });
+          if (loginRespon.status == true) {
+            Get.offAllNamed(rootRoute);
+          } else {
+            showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Stack(children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          width: 300,
+                          height: 400,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Image(
+                                width: 200,
+                                fit: BoxFit.cover,
+                                image: AssetImage('images/hero-alert-fail.png'),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const FittedBox(
+                                child: Text('Kamu Gagal Login Nih!',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const FittedBox(
+                                child: Text(
+                                    'Periksa kembali username dan password mu dengan benar',
+                                    style: TextStyle(fontSize: 10)),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _userEmail.clear();
+                                    _userPass.clear();
+                                    nodeFirst.requestFocus();
+                                  },
+                                  child: const Text('Kembali'))
+                            ],
+                          ),
+                        )
+                      ]),
+                    ));
+          }
+        },
+      );
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -194,116 +265,29 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                   ),
                                 ),
                                 hintText: 'passwordku'),
+                            onFieldSubmitted: (value) {
+                              fncLogin(formKey);
+                            },
                           ),
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
+                          // Container(
+                          //   width: screenWidth,
+                          //   padding: const EdgeInsets.only(left: 5),
+                          //   child: Row(
+                          //     children: [
+                          //       Checkbox(value: true, onChanged: (value) {}),
+                          //       const Text('Remember Me')
+                          //     ],
+                          //   ),
+                          // ),
                           const SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            width: screenWidth,
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Row(
-                              children: [
-                                Checkbox(value: true, onChanged: (value) {}),
-                                const Text('Remember Me')
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 40,
+                            height: 70,
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              if (formKey.currentState.validate()) {
-                                HttpStateful.connectAPI(
-                                        _userEmail.text, _userPass.text, "01")
-                                    .then(
-                                  (value) {
-                                    setState(() {
-                                      loginRespon = value;
-                                      kodeToken = loginRespon.userToken;
-
-                                      print(kodeToken);
-                                    });
-                                    if (loginRespon.status == true) {
-                                      Get.offAllNamed(rootRoute);
-                                    } else {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => Dialog(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4)),
-                                                child: Stack(children: [
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    width: 300,
-                                                    height: 400,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const Image(
-                                                          width: 200,
-                                                          fit: BoxFit.cover,
-                                                          image: AssetImage(
-                                                              'images/hero-alert-fail.png'),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-                                                        const FittedBox(
-                                                          child: Text(
-                                                              'Kamu Gagal Login Nih!',
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      20)),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        const FittedBox(
-                                                          child: Text(
-                                                              'Periksa kembali username dan password mu dengan benar',
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      10)),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 50,
-                                                        ),
-                                                        ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              _userEmail
-                                                                  .clear();
-                                                              _userPass.clear();
-                                                              nodeFirst
-                                                                  .requestFocus();
-                                                            },
-                                                            child: const Text(
-                                                                'Kembali'))
-                                                      ],
-                                                    ),
-                                                  )
-                                                ]),
-                                              ));
-                                    }
-                                  },
-                                );
-                              } else {
-                                return null;
-                              }
+                              fncLogin(formKey);
                             },
                             child: Container(
                               alignment: Alignment.center,

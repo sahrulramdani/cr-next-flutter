@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/form_pembayaran.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_info_large.dart';
+import 'package:flutter_web_course/pages/finance/widgets/pembayaran/table_pembayaran.dart';
+import 'package:flutter_web_course/pages/overview/widgets/overview_card_small.dart';
+import 'package:flutter_web_course/pages/overview/widgets/overview_cards_large.dart';
+import 'package:flutter_web_course/pages/overview/widgets/overview_cards_medium.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FinancePembayaranPage extends StatefulWidget {
   const FinancePembayaranPage({Key key}) : super(key: key);
@@ -13,9 +22,28 @@ class FinancePembayaranPage extends StatefulWidget {
 }
 
 class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
+  List<Map<String, dynamic>> listPembayaranCabang = [];
+
+  getPembayaranCabang() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/finance/info-data/list-cabang"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listPembayaranCabang = dataStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPembayaranCabang();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return SingleChildScrollView(
       child: Column(
@@ -36,8 +64,12 @@ class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
           const SizedBox(
             height: 10,
           ),
+          const PembayaranInfoLarge(),
+          const SizedBox(
+            height: 10,
+          ),
           Container(
-              padding: const EdgeInsets.only(bottom: 15, right: 15),
+              padding: const EdgeInsets.only(bottom: 20),
               width: screenWidth,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -50,7 +82,25 @@ class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
                   ),
                 ],
               ),
-              child: const PembayaranForm()),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Text(
+                      'Pembayaran Berdasarkan Cabang',
+                      style: TextStyle(
+                          fontFamily: 'Gilroy',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: myBlue),
+                    ),
+                  ),
+                  TablePembayaran(dataPembayaran: listPembayaranCabang),
+                ],
+              ))
         ],
       ),
     );

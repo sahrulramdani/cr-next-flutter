@@ -5,6 +5,7 @@ import 'package:flutter_web_course/pages/finance/finance_dash.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembayaran.dart';
 import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
 import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
+import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_page.dart';
 import 'package:flutter_web_course/pages/hr/hr_dash.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_barang.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_dash.dart';
@@ -85,6 +86,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const FinanceDashboardPage());
     case fincPembayaranPageRoute:
       return _getPageRoute(const FinancePembayaranPage());
+    case fincBayarFormPageRoute:
+      return _getPageRoute(const PembayaranFormPage());
     case fincUjrahPageRoute:
       return _getPageRoute(const FinanceUjrahPage());
     case fincPenerbanganPageRoute:
