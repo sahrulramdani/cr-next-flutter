@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/dashboard/bar_chart_marketing.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/dashboard/revenue_marketing_large.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/dashboard/revenue_marketing_small.dart';
 
@@ -49,7 +50,7 @@ class MarketingDashboardPage extends StatelessWidget {
             height: 20,
           ),
           if (!ResponsiveWidget.isSmallScreen(context))
-            const RevenueMarketingLarge()
+            const ChartMarketingDash()
           else
             const RevenueMarketingSmall(),
           const SizedBox(

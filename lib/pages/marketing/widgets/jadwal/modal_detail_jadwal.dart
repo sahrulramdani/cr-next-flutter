@@ -9,6 +9,13 @@ import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_sipatuh.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_sp.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_absen_kesehatan.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_identitas.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_rekompas.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_riwayat_bayar.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_suku.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_pelanggan.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
@@ -21,8 +28,14 @@ import 'package:flutter_web_course/constants/style.dart';
 class ModalDetailJadwal extends StatefulWidget {
   String idJadwal;
   String keberangkatan;
+  String jenisPaket;
+  String harga;
   ModalDetailJadwal(
-      {Key key, @required this.idJadwal, @required this.keberangkatan})
+      {Key key,
+      @required this.idJadwal,
+      @required this.keberangkatan,
+      @required this.jenisPaket,
+      @required this.harga})
       : super(key: key);
 
   @override
@@ -30,6 +43,8 @@ class ModalDetailJadwal extends StatefulWidget {
 }
 
 class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
+  bool cekAll = false;
+
   List<Map<String, dynamic>> listJadwalPelanggan = [];
 
   void getPelangganJadwal() async {
@@ -38,6 +53,13 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         .get(Uri.parse("$urlAddress/marketing/jadwal/getDetail-jamaah/$id"));
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
+
+    for (var i = 0; i < data.length; i++) {
+      var tagihan = {
+        "CEK": false,
+      };
+      data[i].addAll(tagihan);
+    }
 
     setState(() {
       listJadwalPelanggan = data;
@@ -103,20 +125,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdImportSipatuh() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.import_export_rounded),
-      label: const Text(
-        'Import Sipatuh',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return ImportSipatuh(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdImportSiskopatuh() {
@@ -243,7 +252,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
       onPressed: () {},
       icon: const Icon(Icons.badge_outlined),
       label: const Text(
-        'NameTag 1',
+        'NameTag Koper',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
@@ -255,29 +264,29 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     );
   }
 
-  Widget cmdNameTag2() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.badge_outlined),
-      label: const Text(
-        'NameTag 2',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
-  }
+  // Widget cmdNameTag2() {
+  //   return ElevatedButton.icon(
+  //     onPressed: () {},
+  //     icon: const Icon(Icons.badge_outlined),
+  //     label: const Text(
+  //       'NameTag 2',
+  //       style: TextStyle(fontFamily: 'Gilroy'),
+  //     ),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: myBlue,
+  //       minimumSize: const Size(100, 40),
+  //       shadowColor: Colors.grey,
+  //       elevation: 5,
+  //     ),
+  //   );
+  // }
 
   Widget cmdNameTag3() {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.badge_outlined),
       label: const Text(
-        'NameTag 3',
+        'NameTag Paspor',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
@@ -290,37 +299,11 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdSuku() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.filter_frames_outlined),
-      label: const Text(
-        'Suku',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintSuku(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdRekompas() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.recommend_outlined),
-      label: const Text(
-        'Rekompas',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintRekompas(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdAbsenManasik() {
@@ -341,62 +324,40 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdAbsenKesehatan() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.health_and_safety_outlined),
-      label: const Text(
-        'Absen Kesehatan',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+    return PrintAbsenKesehatan(
+      listPelangganJadwal: listJadwalPelanggan,
+      keberangkatan: widget.keberangkatan,
+      jenisPaket: widget.jenisPaket,
     );
   }
 
   Widget cmdRiwayatPembayaran() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.payments_outlined),
-      label: const Text(
-        'Riwayat Pembayaran',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintRiwayatBayar(
+        listPelangganJadwal: listJadwalPelanggan,
+        keberangkatan: widget.keberangkatan,
+        jenisPaket: widget.jenisPaket,
+        harga: widget.harga);
   }
 
   Widget cmdIdentitas() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.insert_drive_file_outlined),
-      label: const Text(
-        'Identitas',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintIdentitas(
+        listPelangganJadwal: listJadwalPelanggan,
+        keberangkatan: widget.keberangkatan,
+        jenisPaket: widget.jenisPaket);
   }
 
   Widget cmdSP() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => ModalSuratPernyataan(
+                  listPelangganJadwal: listJadwalPelanggan,
+                ));
+      },
       icon: const Icon(Icons.sd_card_alert_outlined),
       label: const Text(
-        'SP',
+        'Surat Pernyataan',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
@@ -545,8 +506,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                 cmdNameTagAll(),
                 spacePemisah(),
                 cmdNameTag1(),
-                spacePemisah(),
-                cmdNameTag2(),
+                // spacePemisah(),
+                // cmdNameTag2(),
                 spacePemisah(),
                 cmdNameTag3(),
                 spacePemisah(),
@@ -587,9 +548,20 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         ),
       );
 
+  fncCekAll() {
+    for (var i = 0; i < listJadwalPelanggan.length; i++) {
+      setState(() {
+        listJadwalPelanggan[i]['CEK'] = cekAll;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    int x = 1;
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -632,8 +604,132 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                               child: menuButton()),
                           inputCari(listJadwalPelanggan),
                           const SizedBox(height: 10),
-                          TableJadwalPelanggan(
-                              dataJadwalPel: listJadwalPelanggan)
+                          // TableJadwalPelanggan(
+                          //     dataJadwalPel: listJadwalPelanggan)
+                          SizedBox(
+                            width: screenWidth * 0.7,
+                            height: 0.5 * screenHeight,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                    dataRowHeight: 30,
+                                    headingRowHeight: 30,
+                                    border: TableBorder.all(
+                                        color: Colors.grey[500]),
+                                    columns: [
+                                      const DataColumn(
+                                          label: Text('No.',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      DataColumn(
+                                          label: Checkbox(
+                                        value: cekAll,
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            cekAll = !cekAll;
+                                          });
+                                          fncCekAll();
+                                        },
+                                      )),
+                                      const DataColumn(
+                                          label: Text('Nama',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('JK',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('U',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Pasp',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Vaksin',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Hand',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Telp',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Est. Total',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Uang Masuk',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Sisa Bayar',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Lunas',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                      const DataColumn(
+                                          label: Text('Cetak',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12))),
+                                    ],
+                                    rows: listJadwalPelanggan.map((e) {
+                                      return DataRow(cells: [
+                                        DataCell(Text((x++).toString())),
+                                        DataCell(Checkbox(
+                                          value: e['CEK'],
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              e['CEK'] = !e['CEK'];
+                                            });
+                                          },
+                                        )),
+                                        DataCell(
+                                            Text(e['NAMA_LGKP'].toString())),
+                                        DataCell(
+                                            Text(e['JENS_KLMN'].toString())),
+                                        DataCell(Text(e['UMUR'].toString())),
+                                        DataCell(Text(e['PEMB_PSPR'])),
+                                        DataCell(Text(e['PRSS_VKSN'])),
+                                        DataCell(Text(e['HANDLING'])),
+                                        DataCell(
+                                            Text(e['NOXX_TELP'].toString())),
+                                        DataCell(Text(
+                                            myFormat.format(e['EST_TOTAL']))),
+                                        DataCell(
+                                            Text(myFormat.format(e['MASUK']))),
+                                        DataCell(
+                                            Text(myFormat.format(e['SISA']))),
+                                        DataCell(
+                                            Text(e['STATUS_BAYAR'].toString())),
+                                        const DataCell(Text('Pending')),
+                                      ]);
+                                    }).toList()),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

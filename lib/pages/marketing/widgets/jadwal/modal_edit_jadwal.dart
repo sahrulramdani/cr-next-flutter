@@ -82,7 +82,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   List<Map<String, dynamic>> listTransit = [];
   List<Map<String, dynamic>> listBandara = dummyDataBandara;
   List<Map<String, dynamic>> listMaskapai = [];
-  List<Map<String, dynamic>> listHotel = [];
+  List<Map<String, dynamic>> listHotelMekkah = [];
+  List<Map<String, dynamic>> listHotelMadinah = [];
+  List<Map<String, dynamic>> listHotelPlus = [];
+  List<Map<String, dynamic>> listHotelTransit = [];
   List<Map<String, dynamic>> listTujuan = [];
 
   void getDetail() async {
@@ -186,13 +189,43 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     });
   }
 
-  void getHotel() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
+  void getHotelMekkah() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"));
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
-      listHotel = data;
+      listHotelMekkah = data;
+    });
+  }
+
+  void getHotelMadinah() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelMadinah = data;
+    });
+  }
+
+  void getHotelPlus() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelPlus = data;
+    });
+  }
+
+  void getHotelTransit() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelTransit = data;
     });
   }
 
@@ -214,7 +247,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     getMataUang();
     getTransit();
     getMaskapai();
-    getHotel();
+    getHotelMekkah();
+    getHotelMadinah();
+    getHotelPlus();
+    getHotelTransit();
     getTujuan();
   }
 
@@ -314,7 +350,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Mekkah",
-          items: listHotel,
+          items: listHotelMekkah,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelMek = value['IDXX_HTLX'];
@@ -327,12 +363,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaHotelMek ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotelMek == null ? Colors.red : Colors.black),
               ),
-          validator: (value) {
-            if (value == null) {
-              return "Hotel masih kosong !";
-            }
-          },
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -348,7 +381,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Madinah",
-          items: listHotel,
+          items: listHotelMadinah,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelMad = value['IDXX_HTLX'];
@@ -361,12 +394,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaHotelMad ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotelMad == null ? Colors.red : Colors.black),
               ),
-          validator: (value) {
-            if (value == null) {
-              return "Hotel masih kosong !";
-            }
-          },
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -381,8 +411,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Jeddah",
-          items: listHotel,
+          label: "Hotel Plus",
+          items: listHotelPlus,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelJed = value['IDXX_HTLX'];
@@ -395,12 +425,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaHotelJed ?? "Hotel belum Dipilih",
+                style: TextStyle(
+                    color: namaHotelJed == null ? Colors.red : Colors.black),
               ),
-          validator: (value) {
-            if (value == null) {
-              return "Hotel masih kosong !";
-            }
-          },
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -416,7 +443,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Transit",
-          items: listHotel,
+          items: listHotelTransit,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelTra = value['IDXX_HTLX'];
@@ -430,11 +457,6 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           dropdownBuilder: (context, selectedItem) => Text(
                 namaHotelTra ?? "Hotel belum Dipilih",
               ),
-          validator: (value) {
-            if (value == null) {
-              return "Hotel masih kosong !";
-            }
-          },
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -899,6 +921,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     // print("HOTEL MAD : $idHotelMad");
     // print("HOTEL JED : $idHotelJed");
     // print("HOTEL TRA : $idHotelTra");
+    // print("KOTA TRANSIT : $idTransit");
     // print("JUMLAH HARI : $jumlahHari");
     // print("PESAWAT BRGKT : $pesawatBerangkat");
     // print("PESAWAT PLANG : $pesawatPulang");

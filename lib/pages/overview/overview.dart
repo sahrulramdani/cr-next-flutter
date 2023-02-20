@@ -1,15 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/comp/revenue_info_large.dart';
 import 'package:flutter_web_course/comp/revenue_info_small.dart';
+import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class OverViewPage extends StatelessWidget {
+class OverViewPage extends StatefulWidget {
   const OverViewPage({Key key}) : super(key: key);
+
+  @override
+  State<OverViewPage> createState() => _OverViewPageState();
+}
+
+class _OverViewPageState extends State<OverViewPage> {
+  List<Map<String, dynamic>> listCardDashboard = [];
+
+  void getListCardDashboard() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/main-dashboard"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Jamaah",
+        "total": dataStatus[0]['TOTAL_JAMAAH'].toString(),
+      },
+      {
+        "title": "Telah Berangkat",
+        "total": dataStatus[0]['TLH_BGKT'].toString(),
+      },
+      {
+        "title": "Terjadwal",
+        "total": dataStatus[0]['TERJADWAL'].toString(),
+      },
+      {
+        "title": "Progres",
+        "total": dataStatus[0]['PROGRES'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardDashboard = dataList.toList();
+    });
+  }
+
+  @override
+  void initState() {
+    getListCardDashboard();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

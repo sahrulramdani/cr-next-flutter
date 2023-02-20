@@ -73,8 +73,12 @@ class _JadwalFormState extends State<JadwalForm> {
   List<Map<String, dynamic>> listTransit = [];
   List<Map<String, dynamic>> listBandara = dummyDataBandara;
   List<Map<String, dynamic>> listMaskapai = [];
-  List<Map<String, dynamic>> listHotel = [];
+  List<Map<String, dynamic>> listHotelMekkah = [];
+  List<Map<String, dynamic>> listHotelMadinah = [];
+  List<Map<String, dynamic>> listHotelPlus = [];
+  List<Map<String, dynamic>> listHotelTransit = [];
   List<Map<String, dynamic>> listTujuan = [];
+  List<Map<String, dynamic>> listKota = [];
 
   void getJenisPaket() async {
     var response =
@@ -127,13 +131,43 @@ class _JadwalFormState extends State<JadwalForm> {
     });
   }
 
-  void getHotel() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
+  void getHotelMekkah() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"));
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
-      listHotel = data;
+      listHotelMekkah = data;
+    });
+  }
+
+  void getHotelMadinah() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelMadinah = data;
+    });
+  }
+
+  void getHotelPlus() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelPlus = data;
+    });
+  }
+
+  void getHotelTransit() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelTransit = data;
     });
   }
 
@@ -153,7 +187,10 @@ class _JadwalFormState extends State<JadwalForm> {
     getMataUang();
     getTransit();
     getMaskapai();
-    getHotel();
+    getHotelMekkah();
+    getHotelMadinah();
+    getHotelPlus();
+    getHotelTransit();
     getTujuan();
     super.initState();
   }
@@ -248,7 +285,7 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Mekkah",
-          items: listHotel,
+          items: listHotelMekkah,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelMek = value['IDXX_HTLX'];
@@ -279,7 +316,7 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Madinah",
-          items: listHotel,
+          items: listHotelMadinah,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelMad = value['IDXX_HTLX'];
@@ -309,8 +346,8 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Jeddah",
-          items: listHotel,
+          label: "Hotel Plus",
+          items: listHotelPlus,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelJed = value['IDXX_HTLX'];
@@ -341,7 +378,7 @@ class _JadwalFormState extends State<JadwalForm> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Transit",
-          items: listHotel,
+          items: listHotelTransit,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelTra = value['IDXX_HTLX'];
@@ -858,15 +895,15 @@ class _JadwalFormState extends State<JadwalForm> {
             pesawatBerangkat ?? '',
             pesawatPulang ?? '',
             rute,
-            rute2 ?? "",
+            rute2 ?? '',
             rute3,
             ruteAwalPlng,
-            ruteTransitPlng ?? "",
+            ruteTransitPlng ?? '',
             ruteAkhirPlng,
             tarif,
             jumlahSeat,
             idMataUang,
-            keterangan,
+            keterangan ?? '',
             dateBerangkat.text,
             datePulang.text)
         .then((value) {

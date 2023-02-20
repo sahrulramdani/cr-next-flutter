@@ -88,6 +88,7 @@ flutter:
     - assets/images/NO_IMAGE.jpg
     - assets/images/profile-none.jpg
     - assets/images/profile-pict.jpg
+    - assets/images/direktur.jpg
     - assets/images/profile.jpg
     - assets/images/Screenshot (523).png
   # An image asset can refer to one or more resolution-specific "variants", see

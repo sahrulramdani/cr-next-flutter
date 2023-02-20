@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors, avoid_print, unused_import, unused_local_variable, non_constant_identifier_names
+// ignore_for_file: must_be_immutable, prefer_const_constructors, avoid_print, unused_import, unused_local_variable, non_constant_identifier_names, prefer_if_null_operators
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -16,7 +16,11 @@ import 'package:intl/intl.dart';
 class ButtonDetail extends StatelessWidget {
   String idJadwal;
   String keberangkatan;
-  ButtonDetail({Key key, this.idJadwal, this.keberangkatan}) : super(key: key);
+  String jenisPaket;
+  String harga;
+  ButtonDetail(
+      {Key key, this.idJadwal, this.keberangkatan, this.jenisPaket, this.harga})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,8 @@ class ButtonDetail extends StatelessWidget {
             builder: (context) => ModalDetailJadwal(
                   idJadwal: idJadwal,
                   keberangkatan: keberangkatan,
+                  jenisPaket: jenisPaket,
+                  harga: harga,
                 ));
       },
     );
@@ -101,8 +107,8 @@ class MyData extends DataTableSource {
             : Colors.orange[800],
         size: 20,
       )),
-      DataCell(Text(dataJadwal[index]['namaPaket'].toString())),
       DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
+      // DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
       DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString())),
       DataCell(Text(dataJadwal[index]['TGLX_BGKT'] == null
           ? "00-00-0000"
@@ -110,9 +116,15 @@ class MyData extends DataTableSource {
       DataCell(Text(dataJadwal[index]["TGLX_PLNG"] == null
           ? "00-00-0000"
           : dataJadwal[index]["TGLX_PLNG"].toString())),
+      DataCell(Text(dataJadwal[index]['NAME_PESWT_BGKT'] == null
+          ? "-"
+          : dataJadwal[index]['NAME_PESWT_BGKT'].toString())),
+      DataCell(Text(dataJadwal[index]['NAME_PESWT_PLNG'] == null
+          ? "-"
+          : dataJadwal[index]['NAME_PESWT_PLNG'].toString())),
       DataCell(Text(myformat
           .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())))),
-      DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
+      // DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
       DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString())),
       DataCell(Text(dataJadwal[index]['SISA'] == 0
           ? 'Full'
@@ -126,6 +138,8 @@ class MyData extends DataTableSource {
               idJadwal: dataJadwal[index]['IDXX_JDWL'],
               keberangkatan:
                   fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()),
+              jenisPaket: dataJadwal[index]['jenisPaket'].toString(),
+              harga: dataJadwal[index]['TARIF_PKET'].toString(),
             ),
             const SizedBox(width: 5),
             ButtonEdit(
@@ -197,13 +211,13 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
-            DataColumn(
-                label: Text('Jenis',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Jenis',
+            //         style: TextStyle(
+            //             color: myGrey,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
             DataColumn(
                 label: Text('Hari',
                     style: TextStyle(
@@ -226,19 +240,33 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Tarif',
+                label: Text('Pesawat Berangkat',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Kurs',
+                label: Text('Pesawat Pulang',
                     style: TextStyle(
                         color: myGrey,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
+            DataColumn(
+                label: Text('Tarif',
+                    style: TextStyle(
+                        color: myGrey,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Gilroy',
+                        fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Kurs',
+            //         style: TextStyle(
+            //             color: myGrey,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
             DataColumn(
                 label: Text('Seat',
                     style: TextStyle(
