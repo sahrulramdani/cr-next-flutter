@@ -31,7 +31,7 @@ class SideMenu extends StatelessWidget {
                       const SizedBox(
                         child: Image(
                             image: AssetImage(
-                                'assets/images/craudhah_logo_landscape.png'),
+                                'assets/images/logo_craudhah_lands.png'),
                             width: 100),
                       ),
                       SizedBox(

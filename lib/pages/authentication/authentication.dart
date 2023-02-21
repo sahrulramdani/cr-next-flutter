@@ -128,36 +128,36 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           image: AssetImage('images/hero-login.png'),
                         ),
                       ),
-                      Container(
-                        height: screenHeight,
-                        width: screenWidth * (screenWidth > 900 ? 0.7 : 1),
-                        padding: (screenWidth > 900
-                            ? const EdgeInsets.fromLTRB(30, 100, 30, 10)
-                            : const EdgeInsets.fromLTRB(30, 20, 30, 10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const FittedBox(
-                              child: Text(
-                                'Haji Dan Umroh',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 60,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Cinzel Decorative'),
-                              ),
-                            ),
-                            Text(
-                              'Berawal dari KBIH Pertama di Subang pada tahun 1990 kemudian berubah menjadi PPIU di tahun 2009 dengan membawa 20 jamaah, hingga saat ini alhamdulillah masih beroperasional dengan baik.',
-                              style: TextStyle(
-                                fontSize: (screenWidth > 900 ? 15 : 12),
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      )
+                      // Container(
+                      //   height: screenHeight,
+                      //   width: screenWidth * (screenWidth > 900 ? 0.7 : 1),
+                      //   padding: (screenWidth > 900
+                      //       ? const EdgeInsets.fromLTRB(30, 100, 30, 10)
+                      //       : const EdgeInsets.fromLTRB(30, 20, 30, 10)),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       const FittedBox(
+                      //         child: Text(
+                      //           'Haji Dan Umroh',
+                      //           style: TextStyle(
+                      //               color: Colors.white,
+                      //               fontSize: 60,
+                      //               fontWeight: FontWeight.bold,
+                      //               fontFamily: 'Cinzel Decorative'),
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'Berawal dari KBIH Pertama di Subang pada tahun 1990 kemudian berubah menjadi PPIU di tahun 2009 dengan membawa 20 jamaah, hingga saat ini alhamdulillah masih beroperasional dengan baik.',
+                      //         style: TextStyle(
+                      //           fontSize: (screenWidth > 900 ? 15 : 12),
+                      //           color: Colors.white,
+                      //         ),
+                      //         textAlign: TextAlign.center,
+                      //       )
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   )),
                   Container(

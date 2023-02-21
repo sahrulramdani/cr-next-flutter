@@ -6,8 +6,38 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 
 class HttpAgency {
   bool status;
+  String foto;
+  String ktpx;
 
-  HttpAgency({this.status});
+  HttpAgency({this.status, this.foto, this.ktpx});
+
+  static Future<HttpAgency> saveFotoAgency(
+    String nik,
+    String fotoAgen,
+    String fotoKtpAgen,
+    String fotoDriJmah,
+    String ktpDriJmah,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/marketing/agency/save-foto");
+
+    var hasilResponse = await http.post(
+      urlApi,
+      body: {
+        "NOXX_IDNT": nik,
+        "FOTO_AGEN": fotoAgen,
+        "FOTO_KTPX": fotoKtpAgen,
+        "FOTO_LMAX": fotoDriJmah,
+        "KTPX_LMAX": ktpDriJmah,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpAgency(
+      status: data["status"],
+      foto: data["foto"],
+      ktpx: data["ktpx"],
+    );
+  }
 
   static Future<HttpAgency> saveAgency(
     String nik,
@@ -33,10 +63,8 @@ class HttpAgency {
     String dikeluarkanDi,
     String tglKeluar,
     String tglExpire,
-    String fotoAgen,
-    String fotoKtpAgen,
-    String fotoDriJmah,
-    String ktpDriJmah,
+    String namaFoto,
+    String namaKtp,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/agency/save");
 
@@ -63,14 +91,12 @@ class HttpAgency {
         "JENS_MNKH": menikah,
         "JENS_PEND": pendidikan,
         "JENS_PKRJ": pekerjaan,
-        "FOTO_AGEN": fotoAgen,
-        "FOTO_KTPX": fotoKtpAgen,
         "NOXX_PSPR": noPaspor ?? '',
         "KLUR_DIXX": dikeluarkanDi ?? '',
         "TGLX_KLUR": tglKeluar ?? '',
         "TGLX_EXPX": tglExpire ?? '',
-        "FOTO_LMAX": fotoDriJmah,
-        "KTPX_LMAX": ktpDriJmah,
+        "NAMA_FOTO": namaFoto,
+        "NAMA_KTPX": namaKtp,
       },
     );
 
@@ -106,6 +132,34 @@ class HttpAgency {
     );
   }
 
+  static Future<HttpAgency> updateFotoAgency(
+    String nik,
+    String fotoAgen,
+    String fotoKtpAgen,
+    String fotoLamaAgen,
+    String fotoLamaKtpAgen,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/marketing/agency/update-foto");
+
+    var hasilResponse = await http.post(
+      urlApi,
+      body: {
+        "NOXX_IDNT": nik,
+        "FOTO_AGEN": fotoAgen,
+        "FOTO_KTPX": fotoKtpAgen,
+        "FOTO_LAMA": fotoLamaAgen,
+        "KTPX_LAMA": fotoLamaKtpAgen,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpAgency(
+      status: data["status"],
+      foto: data["foto"],
+      ktpx: data["ktpx"],
+    );
+  }
+
   static Future<HttpAgency> updateAgency(
     String id,
     String nik,
@@ -132,10 +186,8 @@ class HttpAgency {
     String tglKeluar,
     String tglExpire,
     String status,
-    String fotoAgen,
-    String fotoKtpAgen,
-    String fotoLamaAgen,
-    String fotoLamaKtpAgen,
+    String namaFoto,
+    String namaKtp,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/agency/update");
 
@@ -162,15 +214,13 @@ class HttpAgency {
         "JENS_MNKH": menikah,
         "JENS_PEND": pendidikan,
         "JENS_PKRJ": pekerjaan,
-        "FOTO_AGEN": fotoAgen,
-        "FOTO_KTPX": fotoKtpAgen,
         "NOXX_PSPR": noPaspor ?? '',
         "KLUR_DIXX": dikeluarkanDi ?? '',
         "TGLX_KLUR": tglKeluar ?? '',
         "TGLX_EXPX": tglExpire ?? '',
         "STAS_AGEN": status,
-        "FOTO_LAMA": fotoLamaAgen,
-        "KTPX_LAMA": fotoLamaKtpAgen,
+        "NAMA_FOTO": namaFoto,
+        "NAMA_KTPX": namaKtp,
       },
     );
 

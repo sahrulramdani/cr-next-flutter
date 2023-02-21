@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return
+// ignore_for_file: deprecated_member_use, missing_return, avoid_print
 
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
@@ -763,7 +763,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     } else {
       if (ktpPelanggan != null) {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$ktpPelanggan'),
+          image: NetworkImage('$urlAddress/uploads/ktp/$ktpPelanggan'),
           height: 100,
         );
       } else {
@@ -833,7 +833,21 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     }
   }
 
-  fncSaveData() async {
+  fncSaveFoto() {
+    HttpPendaftaran.saveFotoPendaftaran(
+      nik,
+      fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
+      fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK',
+    ).then((value) {
+      if (value.status == true) {
+        fncSaveData(value.namaKk, value.namaDok);
+      } else {
+        print('UPLOAD FOTO GAGAL');
+      }
+    });
+  }
+
+  fncSaveData(namaKk, namaDok) async {
     // GET ID PELANGGAN
     var response1 = await http
         .get(Uri.parse("$urlAddress/jamaah/pendaftaran/kode"), headers: {
@@ -842,15 +856,6 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     dynamic body1 = json.decode(response1.body);
     String idPelanggan = body1['idPelanggan'];
 
-    // // GET ID TAGIHAN
-    // var response2 = await http
-    //     .get(Uri.parse("$urlAddress/jamaah/pendaftaran/tagihan"), headers: {
-    //   'pte-token': kodeToken,
-    // });
-    // dynamic body2 = json.decode(response2.body);
-    // String idTagihan = body2['idTagihan'];
-
-    // MEMBUAT TAGIHAN
     var tagihan = {
       {
         '"nama_tagihan"': '"Paket Umroh"',
@@ -873,24 +878,6 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     };
     listTagihan.addAll(tagihan);
 
-    // print(idPelanggan);
-    // print(idKantor);
-    // print(nik);
-    // print(idProduk);
-    // print(ktp);
-    // print(kk);
-    // print(lampiran);
-    // print(pembuatan);
-    // print(vaksin);
-    // print(handling);
-    // print(refrensi);
-    // print(namaAgency);
-    // print(totalEst);
-    // print(fncJatuhTempo(tglBerangkat));
-    // print(fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK');
-    // print(fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK');
-    // print('$listTagihan');
-
     HttpPendaftaran.savePendaftaran(
       idPelanggan,
       idKantor,
@@ -907,9 +894,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       totalEst,
       fncJatuhTempo(tglBerangkat).toString(),
       '$listTagihan',
-      fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
-      fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK',
-      // idTagihan
+      namaKk,
+      namaDok,
     ).then((value) {
       if (value.status == true) {
         showDialog(
@@ -990,7 +976,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () {
-                            fncSaveData();
+                            fncSaveFoto();
                           },
                           icon: const Icon(Icons.save),
                           label: const Text(

@@ -10,6 +10,11 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_sipatuh.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_album.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_daftar_foto.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_all.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_koper.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_paspor.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_sp.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_absen_kesehatan.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_identitas.dart';
@@ -30,13 +35,15 @@ class ModalDetailJadwal extends StatefulWidget {
   String keberangkatan;
   String jenisPaket;
   String harga;
-  ModalDetailJadwal(
-      {Key key,
-      @required this.idJadwal,
-      @required this.keberangkatan,
-      @required this.jenisPaket,
-      @required this.harga})
-      : super(key: key);
+  String tglBgkt;
+  ModalDetailJadwal({
+    Key key,
+    @required this.idJadwal,
+    @required this.keberangkatan,
+    @required this.jenisPaket,
+    @required this.harga,
+    @required this.tglBgkt,
+  }) : super(key: key);
 
   @override
   State<ModalDetailJadwal> createState() => _ModalDetailJadwalState();
@@ -82,7 +89,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -99,7 +106,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.green,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -116,7 +123,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -137,7 +144,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.green,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -146,20 +153,9 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdAlbum() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.album_outlined),
-      label: const Text(
-        'Album',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintAlbum(
+        listPelangganJadwal: listJadwalPelanggan,
+        keberangkatan: widget.tglBgkt);
   }
 
   Widget cmdAlbumItem() {
@@ -171,7 +167,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -188,7 +184,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -205,7 +201,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -222,7 +218,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -231,71 +227,15 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdNameTagAll() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.badge_outlined),
-      label: const Text(
-        'NameTag All',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintNameTagAll(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdNameTag1() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.badge_outlined),
-      label: const Text(
-        'NameTag Koper',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintNametagKoper(listPelangganJadwal: listJadwalPelanggan);
   }
 
-  // Widget cmdNameTag2() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {},
-  //     icon: const Icon(Icons.badge_outlined),
-  //     label: const Text(
-  //       'NameTag 2',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
   Widget cmdNameTag3() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.badge_outlined),
-      label: const Text(
-        'NameTag Paspor',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintNametagPaspor(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdSuku() {
@@ -315,7 +255,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.green,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -378,7 +318,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.green,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -387,20 +327,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdDaftarFoto() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.image_aspect_ratio_outlined),
-      label: const Text(
-        'Daftar Foto',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintDaftarFoto(listPelangganJadwal: listJadwalPelanggan);
   }
 
   Widget cmdDownloadFoto() {
@@ -412,7 +339,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -429,7 +356,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: Colors.red,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -569,7 +496,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         Form(
           child: Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth > 400 ? screenWidth * 0.7 : screenWidth * 0.9,
+            width: screenWidth * 0.9,
             height: 700,
             child: Column(
               children: [
@@ -604,10 +531,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                               child: menuButton()),
                           inputCari(listJadwalPelanggan),
                           const SizedBox(height: 10),
-                          // TableJadwalPelanggan(
-                          //     dataJadwalPel: listJadwalPelanggan)
                           SizedBox(
-                            width: screenWidth * 0.7,
+                            width: screenWidth * 0.9,
                             height: 0.5 * screenHeight,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
@@ -616,8 +541,6 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                 child: DataTable(
                                     dataRowHeight: 30,
                                     headingRowHeight: 30,
-                                    border: TableBorder.all(
-                                        color: Colors.grey[500]),
                                     columns: [
                                       const DataColumn(
                                           label: Text('No.',

@@ -6,8 +6,30 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 
 class HttpPendaftaran {
   bool status;
+  String namaKk;
+  String namaDok;
 
-  HttpPendaftaran({this.status});
+  HttpPendaftaran({this.status, this.namaKk, this.namaDok});
+
+  static Future<HttpPendaftaran> saveFotoPendaftaran(
+    String nik,
+    String kkBase,
+    String dokumenBase,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save-foto");
+    var hasilResponse = await http.post(urlApi, body: {
+      "NOXX_IDNT": nik,
+      "FOTO_KKXX": kkBase,
+      "FOTO_DOCX": dokumenBase,
+    });
+
+    var data = json.decode(hasilResponse.body);
+    return HttpPendaftaran(
+      status: data["status"],
+      namaKk: data["kkxx"],
+      namaDok: data["dokx"],
+    );
+  }
 
   static Future<HttpPendaftaran> savePendaftaran(
     String idPelanggan,
@@ -25,9 +47,8 @@ class HttpPendaftaran {
     String estimasi,
     String jatuhTempo,
     String listTagihan,
-    String kkBase,
-    String dokumenBase,
-    // String idTagihan,
+    String namaKk,
+    String namaDok,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save");
     var hasilResponse = await http.post(urlApi, body: {
@@ -45,10 +66,9 @@ class HttpPendaftaran {
       "KDXX_MRKT": namaAgency,
       "ESTX_TOTL": estimasi,
       "JTUH_TEMP": jatuhTempo,
-      "FOTO_KKXX": kkBase,
-      "FOTO_DOCX": dokumenBase,
+      "NAMA_KKXX": namaKk,
+      "NAMA_DOCX": namaDok,
       "TAGIHAN": listTagihan,
-      // "NOXX_TGIH": idTagihan,
     });
 
     var data = json.decode(hasilResponse.body);

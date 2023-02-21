@@ -18,9 +18,15 @@ class ButtonDetail extends StatelessWidget {
   String keberangkatan;
   String jenisPaket;
   String harga;
-  ButtonDetail(
-      {Key key, this.idJadwal, this.keberangkatan, this.jenisPaket, this.harga})
-      : super(key: key);
+  String tglBgkt;
+  ButtonDetail({
+    Key key,
+    this.idJadwal,
+    this.keberangkatan,
+    this.jenisPaket,
+    this.harga,
+    this.tglBgkt,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class ButtonDetail extends StatelessWidget {
                   keberangkatan: keberangkatan,
                   jenisPaket: jenisPaket,
                   harga: harga,
+                  tglBgkt: tglBgkt,
                 ));
       },
     );
@@ -140,6 +147,7 @@ class MyData extends DataTableSource {
                   fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()),
               jenisPaket: dataJadwal[index]['jenisPaket'].toString(),
               harga: dataJadwal[index]['TARIF_PKET'].toString(),
+              tglBgkt: dataJadwal[index]['TGLX_BGKT'].toString(),
             ),
             const SizedBox(width: 5),
             ButtonEdit(

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable
+// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable, avoid_print
 
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
@@ -768,7 +768,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     } else {
       if (fotoJamaah != '') {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$fotoJamaah'),
+          image: NetworkImage('$urlAddress/uploads/foto/$fotoJamaah'),
           width: 150,
         );
       } else {
@@ -789,7 +789,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     } else {
       if (fotoKtpJamaah != "") {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$fotoKtpJamaah'),
+          image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtpJamaah'),
           width: 150,
         );
       } else {
@@ -831,28 +831,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     }
   }
 
-  fncSaveData() {
-    HttpJamaah.updateJamaah(
-      // nik,
-      // namaJamaah,
-      // jenisKelamin,
-      // tempatLahir,
-      // fncTanggal(dateLhir.text),
-      // alamat,
-      // namaProvinsi,
-      // namaKota,
-      // namaKec,
-      // namaKel,
-      // kodePos,
-      // namaAyah,
-      // noTelp,
-      // idMenikah,
-      // idPendidikan,
-      // idPekerjaan,
-      // noPaspor,
-      // dikeluarkanDi,
-      // dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
-      // dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+  fncSaveFoto() {
+    HttpJamaah.updateFotoJamaah(
+      nik,
       fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
       fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
       fotoLamaJamaah,
@@ -860,6 +841,44 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     ).then(
       (value) {
         if (value.status == true) {
+          fncSaveData(value.foto, value.ktpx);
+        } else {
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
+
+  fncSaveData(namaFoto, namaKtp) {
+    HttpJamaah.updateJamaah(
+      nik,
+      namaJamaah,
+      jenisKelamin,
+      tempatLahir,
+      fncTanggal(dateLhir.text),
+      alamat,
+      namaProvinsi,
+      namaKota,
+      namaKec,
+      namaKel,
+      kodePos,
+      namaAyah,
+      noTelp,
+      idMenikah,
+      idPendidikan,
+      idPekerjaan,
+      noPaspor,
+      dikeluarkanDi,
+      dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
+      dateExp.text != '' ? fncTanggal(dateExp.text) : null,
+      namaFoto,
+      namaKtp,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          menuController.changeActiveitemTo('Data Jamaah');
+          navigationController.navigateTo('/jamaah/master');
+
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
         } else {
@@ -1053,7 +1072,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          fncSaveFoto();
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

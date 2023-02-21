@@ -52,6 +52,7 @@ dependencies:
   firebase_storage: ^3.1.5
   consolelog: ^0.0.2
   url_strategy: ^0.2.0
+  flutter_image: ^4.1.5
   # image_picker_web: ^1.0.9
 
 dev_dependencies:
@@ -78,6 +79,7 @@ flutter:
     - assets/images/box-background.png
     - assets/images/craudhah_logo_icon.png
     - assets/images/craudhah_logo_landscape.png
+    - assets/images/logo_craudhah_lands.png
     - assets/images/error.png
     - assets/images/hero-alert-fail.png
     - assets/images/hero-dashboard-2.png
@@ -91,6 +93,8 @@ flutter:
     - assets/images/direktur.jpg
     - assets/images/profile.jpg
     - assets/images/Screenshot (523).png
+    - assets/images/nametag_paspor_background.png
+    - assets/images/nametag_koper_background.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
@@ -113,6 +117,9 @@ flutter:
     - family: Montserrat
       fonts:
         - asset: assets/fonts/open-sans.ttf
+    - family: Script MT Bold
+      fonts:
+        - asset: assets/fonts/ScriptMTBold.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

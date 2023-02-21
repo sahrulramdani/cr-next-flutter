@@ -37,7 +37,7 @@ class _ModalUploadFotoAgencyState extends State<ModalUploadFotoAgency> {
     } else {
       if (fotoCalonAgen != "") {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$fotoCalonAgen'),
+          image: NetworkImage('$urlAddress/uploads/foto/$fotoCalonAgen'),
           width: 220,
         );
       } else {

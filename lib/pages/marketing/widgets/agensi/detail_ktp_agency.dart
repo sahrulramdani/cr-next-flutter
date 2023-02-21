@@ -49,7 +49,7 @@ class _DetailKTPAgencyState extends State<DetailKTPAgency> {
           children: [
             fotoKtp != null
                 ? Image(
-                    image: NetworkImage('$urlAddress/uploads/$fotoKtp'),
+                    image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtp'),
                     width: 450,
                   )
                 : const Image(

@@ -1,4 +1,4 @@
-// ignore_for_file: missing_return, deprecated_member_use
+// ignore_for_file: missing_return, deprecated_member_use, avoid_print
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/dummy_data_bandara.dart';
 import 'package:flutter_web_course/constants/public_variable.dart';
@@ -700,36 +700,43 @@ class _JamaahFormState extends State<JamaahForm> {
     );
   }
 
-  fncSaveData() {
-    // print(nik);
-    // print(namaJamaah);
-    // print(jenisKelamin);
-    // print(tempatLahir);
-    // print(fncTanggal(dateLahir.text));
-    // print(alamat);
-    // print(namaProvinsi);
-    // print(namaKota);
-    // print(namaKec);
-    // print(namaKel);
-    // print(kodePos);
-    // print(namaAyah);
-    // print(noTelp);
-    // print(namaMenikah);
-    // print(namaPendidikan);
-    // print(namaPekerjaan);
-    // print(fotoJamaah);
-    // print(fotoKtpAgencyBase);
-    // print(noPaspor);
-    // print(dikeluarkanDi);
-    // print(dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null);
-    // print(dateExp.text != '' ? fncTanggal(dateExp.text) : null);
+  fncSaveFoto() {
+    HttpJamaah.saveFotoJamaah(
+      nik,
+      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
+      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
+    ).then(
+      (value) {
+        if (value.status == true) {
+          setState(() {
+            fotoJamaah = '';
+            fotoJamaahBase = '';
+            fotoJamaahByte = null;
 
-    // showDialog(
-    //     context: context, builder: (context) => const ModalSaveSuccess());
+            fotoKtpJamaah = '';
+            fotoKtpJamaahBase = '';
+            fotoKtpJamaahByte = null;
+          });
 
-    // menuController.changeActiveitemTo('Data Jamaah');
-    // navigationController.navigateTo('/jamaah/master');
+          fncSaveData(value.foto, value.ktpx);
+        } else {
+          setState(() {
+            fotoJamaah = '';
+            fotoJamaahBase = '';
+            fotoJamaahByte = null;
 
+            fotoKtpJamaah = '';
+            fotoKtpJamaahBase = '';
+            fotoKtpJamaahByte = null;
+          });
+
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
+
+  fncSaveData(namaFoto, namaKtp) {
     HttpJamaah.saveJamaah(
       nik,
       namaJamaah,
@@ -751,8 +758,8 @@ class _JamaahFormState extends State<JamaahForm> {
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
-      fotoJamaahBase != '' ? fotoJamaahBase : 'TIDAK',
-      fotoKtpJamaahBase != '' ? fotoKtpJamaahBase : 'TIDAK',
+      namaFoto,
+      namaKtp,
     ).then(
       (value) {
         if (value.status == true) {
@@ -761,29 +768,9 @@ class _JamaahFormState extends State<JamaahForm> {
 
           menuController.changeActiveitemTo('Data Jamaah');
           navigationController.navigateTo('/jamaah/master');
-
-          setState(() {
-            fotoJamaah = '';
-            fotoJamaahBase = '';
-            fotoJamaahByte = null;
-
-            fotoKtpJamaah = '';
-            fotoKtpJamaahBase = '';
-            fotoKtpJamaahByte = null;
-          });
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());
-
-          setState(() {
-            fotoJamaah = '';
-            fotoJamaahBase = '';
-            fotoJamaahByte = null;
-
-            fotoKtpJamaah = '';
-            fotoKtpJamaahBase = '';
-            fotoKtpJamaahByte = null;
-          });
         }
       },
     );
@@ -825,7 +812,7 @@ class _JamaahFormState extends State<JamaahForm> {
               ElevatedButton.icon(
                 onPressed: () {
                   if (formKey.currentState.validate()) {
-                    fncSaveData();
+                    fncSaveFoto();
                   } else {
                     return null;
                   }

@@ -47,7 +47,7 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
     int urut = 1;
     // Jumlah Halaman
     // angka kedua maksimal data dalam satu halaman
-    int pages = (listPelanggan.length / 25).toInt() + 1;
+    int pages = (listPelanggan.length / 15).toInt() + 1;
     // index data dimulai
     int arrData = 0;
     // Maksimal index data
@@ -55,7 +55,7 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: PdfPageFormat.a3,
+        pageFormat: PdfPageFormat.a4,
         orientation: pw.PageOrientation.landscape,
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         build: (pw.Context context) {
@@ -64,7 +64,7 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
               pw.Wrap(
                 children: <pw.Widget>[
                   pw.Container(
-                      width: PdfPageFormat.a3.height,
+                      width: PdfPageFormat.a4.height,
                       child: pw.Container(
                           child: pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -106,8 +106,8 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
                                 'CATATAN',
                               ],
                               data: <List>[
-                                for (var i = (arrData + ((a - 1) * 25));
-                                    i < (a != pages ? (a * 25) : maxData);
+                                for (var i = (arrData + ((a - 1) * 15));
+                                    i < (a != pages ? (a * 15) : maxData);
                                     i++)
                                   [
                                     (urut++).toString(),

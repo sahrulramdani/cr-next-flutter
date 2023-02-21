@@ -14,9 +14,9 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Image(
-                      image: AssetImage(
-                          'assets/images/craudhah_logo_landscape.png'),
-                      width: 120),
+                      image:
+                          AssetImage('assets/images/logo_craudhah_lands.png'),
+                      width: 200),
                 ],
               ),
             )
@@ -42,37 +42,37 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
       title: Row(
         children: [
           Expanded(child: Container()),
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: myBlue,
-            ),
-            onPressed: () {},
-          ),
-          Stack(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.notifications,
-                  color: myBlue,
-                ),
-                onPressed: () {
-                  Positioned(
-                      top: 7,
-                      right: 7,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: active,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: light, width: 2)),
-                      ));
-                },
-              )
-            ],
-          ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.settings,
+          //     color: myBlue,
+          //   ),
+          //   onPressed: () {},
+          // ),
+          // Stack(
+          //   children: [
+          //     IconButton(
+          //       icon: Icon(
+          //         Icons.notifications,
+          //         color: myBlue,
+          //       ),
+          //       onPressed: () {
+          //         Positioned(
+          //             top: 7,
+          //             right: 7,
+          //             child: Container(
+          //               width: 12,
+          //               height: 12,
+          //               padding: const EdgeInsets.all(4),
+          //               decoration: BoxDecoration(
+          //                   color: active,
+          //                   borderRadius: BorderRadius.circular(30),
+          //                   border: Border.all(color: light, width: 2)),
+          //             ));
+          //       },
+          //     )
+          //   ],
+          // ),
           SizedBox(
             width: !ResponsiveWidget.isSmallScreen(context) ? 24 : 0,
           ),
@@ -82,7 +82,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       CustomText(
-                        text: 'sahrul ramdani',
+                        text: 'superadmin',
                         color: myGrey,
                       ),
                     ],
@@ -99,11 +99,11 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               padding: const EdgeInsets.all(2),
               margin: const EdgeInsets.all(2),
               child: const CircleAvatar(
-                // backgroundColor: light,
+                // backgroundColor: Colors.grey,
                 // backgroundImage: Image(
                 //     image: AssetImage('assets/images/profile-pict.jpg'),
                 //     width: 20),
-                backgroundImage: AssetImage('assets/images/profile-pict.jpg'),
+                backgroundImage: AssetImage('assets/images/profile-none.jpg'),
               ),
             ),
           )

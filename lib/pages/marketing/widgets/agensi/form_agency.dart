@@ -1,4 +1,4 @@
-// ignore_for_file: missing_return, deprecated_member_use
+// ignore_for_file: missing_return, deprecated_member_use, avoid_print
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/public_variable.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
@@ -969,7 +969,51 @@ class _AgencyFormState extends State<AgencyForm> {
     });
   }
 
-  fncSaveData() {
+  fncSaveFoto() {
+    HttpAgency.saveFotoAgency(
+      nik,
+      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
+      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
+      fotoCalonAgen,
+      ktpCalonAgen,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          setState(() {
+            fotoAgency = '';
+            fotoAgencyBase = '';
+            fotoAgencyByte = null;
+
+            fotoKtpAgency = '';
+            fotoKtpAgencyBase = '';
+            fotoKtpAgencyByte = null;
+
+            fotoCalonAgen = '';
+            ktpCalonAgen = '';
+          });
+
+          fncSaveData(value.foto, value.ktpx);
+        } else {
+          setState(() {
+            fotoAgency = '';
+            fotoAgencyBase = '';
+            fotoAgencyByte = null;
+
+            fotoKtpAgency = '';
+            fotoKtpAgencyBase = '';
+            fotoKtpAgencyByte = null;
+
+            fotoCalonAgen = '';
+            ktpCalonAgen = '';
+          });
+
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
+
+  fncSaveData(String namaFoto, String namaKtp) {
     HttpAgency.saveAgency(
       nik,
       namaAgency,
@@ -994,10 +1038,8 @@ class _AgencyFormState extends State<AgencyForm> {
       dikeluarkanDi,
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
-      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
-      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
-      fotoCalonAgen,
-      ktpCalonAgen,
+      namaFoto,
+      namaKtp,
     ).then(
       (value) {
         if (value.status == true) {
@@ -1006,35 +1048,9 @@ class _AgencyFormState extends State<AgencyForm> {
 
           menuController.changeActiveitemTo('Agency');
           navigationController.navigateTo('/mrkt/agency');
-
-          setState(() {
-            fotoAgency = '';
-            fotoAgencyBase = '';
-            fotoAgencyByte = null;
-
-            fotoKtpAgency = '';
-            fotoKtpAgencyBase = '';
-            fotoKtpAgencyByte = null;
-
-            fotoCalonAgen = '';
-            ktpCalonAgen = '';
-          });
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());
-
-          setState(() {
-            fotoAgency = '';
-            fotoAgencyBase = '';
-            fotoAgencyByte = null;
-
-            fotoKtpAgency = '';
-            fotoKtpAgencyBase = '';
-            fotoKtpAgencyByte = null;
-
-            fotoCalonAgen = '';
-            ktpCalonAgen = '';
-          });
         }
       },
     );
@@ -1076,7 +1092,7 @@ class _AgencyFormState extends State<AgencyForm> {
               ElevatedButton.icon(
                 onPressed: () {
                   if (formKey.currentState.validate()) {
-                    fncSaveData();
+                    fncSaveFoto();
                   } else {
                     return null;
                   }

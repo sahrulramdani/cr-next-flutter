@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable
+// ignore_for_file: deprecated_member_use, missing_return, must_be_immutable, avoid_print
 
 // import 'package:flutter_web_course/constants/public_variable.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
@@ -979,7 +979,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     } else {
       if (fotoAgency != "") {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$fotoAgency'),
+          image: NetworkImage('$urlAddress/uploads/foto/$fotoAgency'),
           width: 150,
         );
       } else {
@@ -1000,7 +1000,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     } else {
       if (fotoKtpAgency != "") {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$fotoKtpAgency'),
+          image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtpAgency'),
           width: 150,
         );
       } else {
@@ -1042,39 +1042,25 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     }
   }
 
-  fncSaveData() {
-    // print(widget.idAgency);
-    // print(nik);
-    // print(nama);
-    // print(jenisKelamin);
-    // print(tempatLahir);
-    // print(fncTanggal(dateLhir.text));
-    // print(alamat);
-    // print(idKantor);
-    // print(namaProvinsi);
-    // print(namaKota);
-    // print(namaKec);
-    // print(namaKel);
-    // print(kodePos);
-    // print(idLeader);
-    // print(idFee);
-    // print(namaAyah);
-    // print(telepon);
-    // print(idMenikah);
-    // print(idPendidikan);
-    // print(idPekerjaan);
-    // print(fotoAgencyBase != '' ? fotoAgencyBase : 'ADA');
-    // print(fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'ADA');
-    // print(noPaspor);
-    // print(dikeluarkanDi);
-    // print(dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null);
-    // print(dateExp.text != '' ? fncTanggal(dateExp.text) : null);
-    // showDialog(
-    //     context: context, builder: (context) => const ModalSaveSuccess());
+  fncSaveFoto() {
+    HttpAgency.updateFotoAgency(
+      nik,
+      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
+      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
+      fotoLamaAgen,
+      fotoLamaKtpAgen,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          fncSaveData(value.foto, value.ktpx);
+        } else {
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
 
-    // menuController.changeActiveitemTo('Data Jamaah');
-    // navigationController.navigateTo('/jamaah/master');
-
+  fncSaveData(namaFoto, namaKtp) {
     HttpAgency.updateAgency(
       widget.idAgency,
       nik,
@@ -1101,17 +1087,17 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       dateKeluar.text != '' ? fncTanggal(dateKeluar.text) : null,
       dateExp.text != '' ? fncTanggal(dateExp.text) : null,
       idStatus,
-      fotoAgencyBase != '' ? fotoAgencyBase : 'TIDAK',
-      fotoKtpAgencyBase != '' ? fotoKtpAgencyBase : 'TIDAK',
-      fotoLamaAgen,
-      fotoLamaKtpAgen,
+      namaFoto,
+      namaKtp,
     ).then(
       (value) {
         if (value.status == true) {
           menuController.changeActiveitemTo('Agency');
           navigationController.navigateTo('/mrkt/agency');
+
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
+          setState(() {});
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());
@@ -1313,7 +1299,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          fncSaveFoto();
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

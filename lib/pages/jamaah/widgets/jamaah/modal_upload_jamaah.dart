@@ -98,7 +98,7 @@ class _ModalUploadJamaahState extends State<ModalUploadJamaah> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                          '$urlAddress/uploads/$fotoJamaah'),
+                                          '$urlAddress/uploads/foto/$fotoJamaah'),
                                       fit: BoxFit.cover)),
                             ),
                       const SizedBox(height: 15),

@@ -37,7 +37,7 @@ class _ModalUploadKtpAgencyState extends State<ModalUploadKtpAgency> {
     } else {
       if (ktpCalonAgen != "") {
         return Image(
-          image: NetworkImage('$urlAddress/uploads/$ktpCalonAgen'),
+          image: NetworkImage('$urlAddress/uploads/ktp/$ktpCalonAgen'),
           width: 220,
         );
       } else {
