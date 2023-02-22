@@ -19,8 +19,10 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class ModalSuratPernyataan extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
+  String tglBgkt;
 
-  const ModalSuratPernyataan({Key key, @required this.listPelangganJadwal})
+  ModalSuratPernyataan(
+      {Key key, @required this.listPelangganJadwal, @required this.tglBgkt})
       : super(key: key);
   @override
   State<ModalSuratPernyataan> createState() => _ModalSuratPernyataanState();
@@ -376,7 +378,7 @@ class _ModalSuratPernyataanState extends State<ModalSuratPernyataan> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "surat_pernyataan.pdf")
+      ..setAttribute("download", "surat_pernyataan_${widget.tglBgkt}.pdf")
       ..click();
   }
 
@@ -550,7 +552,7 @@ class _ModalSuratPernyataanState extends State<ModalSuratPernyataan> {
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(
-                          'Simpan Data',
+                          'Print Data',
                           style: TextStyle(fontFamily: 'Gilroy'),
                         ),
                         style: ElevatedButton.styleFrom(

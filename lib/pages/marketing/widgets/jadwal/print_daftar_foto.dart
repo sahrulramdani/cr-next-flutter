@@ -14,8 +14,10 @@ import 'package:pdf/widgets.dart' as pw;
 
 class PrintDaftarFoto extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
+  final String tglBgkt;
 
-  const PrintDaftarFoto({Key key, @required this.listPelangganJadwal})
+  const PrintDaftarFoto(
+      {Key key, @required this.listPelangganJadwal, @required this.tglBgkt})
       : super(key: key);
 
   @override
@@ -119,7 +121,7 @@ class _PrintDaftarFotoState extends State<PrintDaftarFoto> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "nametag_paspor.pdf")
+      ..setAttribute("download", "daftar_foto_${widget.tglBgkt}.pdf")
       ..click();
   }
 

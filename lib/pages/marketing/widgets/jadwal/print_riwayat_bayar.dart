@@ -21,6 +21,7 @@ class PrintRiwayatBayar extends StatefulWidget {
   final String keberangkatan;
   final String jenisPaket;
   final String harga;
+  final String tglBgkt;
   final List<Map<String, dynamic>> listPelangganJadwal;
 
   const PrintRiwayatBayar({
@@ -29,6 +30,7 @@ class PrintRiwayatBayar extends StatefulWidget {
     @required this.keberangkatan,
     @required this.jenisPaket,
     @required this.harga,
+    @required this.tglBgkt,
   }) : super(key: key);
   @override
   State<PrintRiwayatBayar> createState() => _PrintRiwayatBayarState();
@@ -141,7 +143,7 @@ class _PrintRiwayatBayarState extends State<PrintRiwayatBayar> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "riwayat_pembayaran.pdf")
+      ..setAttribute("download", "riwayat_pembayaran_${widget.tglBgkt}.pdf")
       ..click();
   }
 

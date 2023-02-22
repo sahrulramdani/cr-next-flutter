@@ -1,34 +1,33 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter_web_course/constants/dummy_jadwal_jamaah.dart';
-import 'package:flutter_web_course/constants/dummy_pelanggan.dart';
 import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
-import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/excel_manifest.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_sipatuh.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_siskopatuh.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_absen_manasik.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_album.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_album_item.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_daftar_foto.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_koper.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_nametag_paspor.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_pelanggan.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_sampul_album.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_sertifikat.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_sp.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_absen_kesehatan.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_identitas.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_rekompas.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_riwayat_bayar.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_suku.dart';
-import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_pelanggan.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_web_course/constants/style.dart';
 
 class ModalDetailJadwal extends StatefulWidget {
   String idJadwal;
@@ -36,6 +35,7 @@ class ModalDetailJadwal extends StatefulWidget {
   String jenisPaket;
   String harga;
   String tglBgkt;
+  String tglPlng;
   ModalDetailJadwal({
     Key key,
     @required this.idJadwal,
@@ -43,6 +43,7 @@ class ModalDetailJadwal extends StatefulWidget {
     @required this.jenisPaket,
     @required this.harga,
     @required this.tglBgkt,
+    @required this.tglPlng,
   }) : super(key: key);
 
   @override
@@ -98,20 +99,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdExcelManifest() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.file_copy_outlined),
-      label: const Text(
-        'Excel Manifest',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return ExcelManifest(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdExcelAsuransi() {
@@ -132,42 +121,41 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdImportSipatuh() {
-    return ImportSipatuh(listPelangganJadwal: listJadwalPelanggan);
+    return ImportSipatuh(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdImportSiskopatuh() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.import_export_rounded),
-      label: const Text(
-        'Import Siskopatuh',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return ImportSiskopatuh(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdAlbum() {
     return PrintAlbum(
-        listPelangganJadwal: listJadwalPelanggan,
-        keberangkatan: widget.tglBgkt);
+      listPelangganJadwal: listJadwalPelanggan,
+      tglBgkt: widget.tglBgkt,
+      tglPlng: widget.tglPlng,
+    );
   }
 
   Widget cmdAlbumItem() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => ModalAlbumItem(
+                  listPelangganJadwal: listJadwalPelanggan,
+                  tglBgkt: widget.tglBgkt,
+                  tglPlng: widget.tglPlng,
+                ));
+      },
       icon: const Icon(Icons.list),
       label: const Text(
         'Album Items',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
+        backgroundColor: myBlue,
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -176,37 +164,16 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdAlbumSampul() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.local_post_office_outlined),
-      label: const Text(
-        'Sampul Album',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintSampulAlbum(
+        tglBgkt: widget.tglBgkt, jenisPaket: widget.jenisPaket);
   }
 
   Widget cmdSertifikat() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.credit_score_outlined),
-      label: const Text(
-        'Sertifikat',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-    );
+    return PrintSertifikat(
+        listPelangganJadwal: listJadwalPelanggan,
+        jenisPaket: widget.jenisPaket,
+        tglBgkt: widget.tglBgkt,
+        tglPlng: widget.tglPlng);
   }
 
   Widget cmdIDCard() {
@@ -227,39 +194,36 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdNameTagAll() {
-    return PrintNameTagAll(listPelangganJadwal: listJadwalPelanggan);
+    return PrintNameTagAll(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdNameTag1() {
-    return PrintNametagKoper(listPelangganJadwal: listJadwalPelanggan);
+    return PrintNametagKoper(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdNameTag3() {
-    return PrintNametagPaspor(listPelangganJadwal: listJadwalPelanggan);
+    return PrintNametagPaspor(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdSuku() {
-    return PrintSuku(listPelangganJadwal: listJadwalPelanggan);
+    return PrintSuku(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdRekompas() {
-    return PrintRekompas(listPelangganJadwal: listJadwalPelanggan);
+    return PrintRekompas(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdAbsenManasik() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.library_add_check_outlined),
-      label: const Text(
-        'Absen Manasik',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+    return PrintAbsenManasik(
+      listPelangganJadwal: listJadwalPelanggan,
+      keberangkatan: widget.keberangkatan,
+      jenisPaket: widget.jenisPaket,
+      tglBgkt: widget.tglBgkt,
     );
   }
 
@@ -268,22 +232,27 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
       listPelangganJadwal: listJadwalPelanggan,
       keberangkatan: widget.keberangkatan,
       jenisPaket: widget.jenisPaket,
+      tglBgkt: widget.tglBgkt,
     );
   }
 
   Widget cmdRiwayatPembayaran() {
     return PrintRiwayatBayar(
-        listPelangganJadwal: listJadwalPelanggan,
-        keberangkatan: widget.keberangkatan,
-        jenisPaket: widget.jenisPaket,
-        harga: widget.harga);
+      listPelangganJadwal: listJadwalPelanggan,
+      keberangkatan: widget.keberangkatan,
+      jenisPaket: widget.jenisPaket,
+      harga: widget.harga,
+      tglBgkt: widget.tglBgkt,
+    );
   }
 
   Widget cmdIdentitas() {
     return PrintIdentitas(
-        listPelangganJadwal: listJadwalPelanggan,
-        keberangkatan: widget.keberangkatan,
-        jenisPaket: widget.jenisPaket);
+      listPelangganJadwal: listJadwalPelanggan,
+      keberangkatan: widget.keberangkatan,
+      jenisPaket: widget.jenisPaket,
+      tglBgkt: widget.tglBgkt,
+    );
   }
 
   Widget cmdSP() {
@@ -293,6 +262,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
             context: context,
             builder: (context) => ModalSuratPernyataan(
                   listPelangganJadwal: listJadwalPelanggan,
+                  tglBgkt: widget.tglBgkt,
                 ));
       },
       icon: const Icon(Icons.sd_card_alert_outlined),
@@ -310,24 +280,17 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdNamaPelanggan() {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.list_alt),
-      label: const Text(
-        'Nama Pelanggan',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+    return PrintNamaPelanggan(
+      listPelangganJadwal: listJadwalPelanggan,
+      keberangkatan: widget.keberangkatan,
+      jenisPaket: widget.jenisPaket,
+      tglBgkt: widget.tglBgkt,
     );
   }
 
   Widget cmdDaftarFoto() {
-    return PrintDaftarFoto(listPelangganJadwal: listJadwalPelanggan);
+    return PrintDaftarFoto(
+        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
   }
 
   Widget cmdDownloadFoto() {

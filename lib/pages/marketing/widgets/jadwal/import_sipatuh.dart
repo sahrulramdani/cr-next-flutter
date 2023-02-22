@@ -17,10 +17,12 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 class ImportSipatuh extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
+  String tglBgkt;
 
-  const ImportSipatuh({
+  ImportSipatuh({
     Key key,
     @required this.listPelangganJadwal,
+    @required this.tglBgkt,
   }) : super(key: key);
 
   @override
@@ -118,7 +120,7 @@ class _ImportSipatuhState extends State<ImportSipatuh> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "import_sipatuh.xlsx")
+      ..setAttribute("download", "import_sipatuh_${widget.tglBgkt}.xlsx")
       ..click();
   }
 

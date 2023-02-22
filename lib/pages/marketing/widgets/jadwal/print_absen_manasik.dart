@@ -1,14 +1,12 @@
-// ignore_for_file: division_optimization
+// ignore_for_file: division_optimization, unused_element, unnecessary_string_interpolations
 
 import 'dart:io';
 import 'dart:convert';
 import 'dart:html';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
-import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -17,27 +15,27 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-class PrintAbsenKesehatan extends StatefulWidget {
+class PrintAbsenManasik extends StatefulWidget {
+  final List<Map<String, dynamic>> listPelangganJadwal;
   final String keberangkatan;
   final String jenisPaket;
   final String tglBgkt;
-  final List<Map<String, dynamic>> listPelangganJadwal;
 
-  const PrintAbsenKesehatan(
-      {Key key,
-      @required this.listPelangganJadwal,
-      @required this.keberangkatan,
-      @required this.tglBgkt,
-      @required this.jenisPaket})
-      : super(key: key);
+  const PrintAbsenManasik({
+    Key key,
+    @required this.listPelangganJadwal,
+    @required this.keberangkatan,
+    @required this.jenisPaket,
+    @required this.tglBgkt,
+  }) : super(key: key);
 
   @override
-  State<PrintAbsenKesehatan> createState() => _PrintAbsenKesehatanState();
+  State<PrintAbsenManasik> createState() => _PrintAbsenManasikState();
 }
 
-class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
+class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
   List<Map<String, dynamic>> listPelanggan = [];
-
+  // void getPDF() async {
   Future<void> _createPDF() async {
     ByteData byteData =
         await rootBundle.load('assets/images/craudhah_logo_landscape.png');
@@ -45,15 +43,12 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
     final netImage = pw.MemoryImage(logoByte);
 
     final pdf = pw.Document();
-    // Nomor Urut
-    int urut = 1;
-    // Jumlah Halaman
-    // angka kedua maksimal data dalam satu halaman
-    int pages = (listPelanggan.length / 15).toInt() + 1;
-    // index data dimulai
+
+    int x = 1;
+    int ttd = 1;
+    int pages = (widget.listPelangganJadwal.length / 20).toInt() + 1;
     int arrData = 0;
-    // Maksimal index data
-    int maxData = listPelanggan.length;
+    int maxData = widget.listPelangganJadwal.length;
 
     pdf.addPage(
       pw.MultiPage(
@@ -76,12 +71,12 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
                             width: 100,
                             child: pw.Image(netImage),
                           ),
-                          pw.Text('ABSEN KESEHATAN',
+                          pw.Text('ABSENSI MANASIK KEDUA',
                               style: pw.TextStyle(
                                   fontSize: 15,
                                   fontWeight: pw.FontWeight.bold)),
                           pw.Text(
-                              "PEMBERANGKATAN ${widget.keberangkatan} ${widget.jenisPaket}",
+                              'PEMBERANGKATAN ${widget.keberangkatan} ${widget.jenisPaket}',
                               style: pw.TextStyle(
                                   fontSize: 15,
                                   fontWeight: pw.FontWeight.bold)),
@@ -90,34 +85,31 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
                           pw.SizedBox(height: 20),
                           pw.Table.fromTextArray(
                               cellPadding: const pw.EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 3),
-                              columnWidths: {
-                                0: const pw.FlexColumnWidth(1),
-                                1: const pw.FlexColumnWidth(4),
-                                2: const pw.FlexColumnWidth(2),
-                                3: const pw.FlexColumnWidth(2),
-                                4: const pw.FlexColumnWidth(6),
-                                5: const pw.FlexColumnWidth(6),
-                              },
+                                  horizontal: 2, vertical: 1),
                               headers: [
-                                'NO.',
-                                'NAMA',
-                                'BERAT BADAN',
-                                'TENSI',
-                                'RIWAYAT PENYAKIT',
-                                'CATATAN',
+                                'No.',
+                                'Nama',
+                                'Alamat',
+                                'No HP/WA',
+                                'No Sandal',
+                                'Tanda Tangan',
                               ],
                               data: <List>[
-                                for (var i = (arrData + ((a - 1) * 15));
-                                    i < (a != pages ? (a * 15) : maxData);
+                                for (var i = (arrData + ((a - 1) * 20));
+                                    i < (a != pages ? (a * 20) : maxData);
                                     i++)
                                   [
-                                    (urut++).toString(),
-                                    listPelanggan[i]['NAMA_LGKP'].toString(),
-                                    '',
-                                    '',
-                                    '',
-                                    '',
+                                    (x++).toString(),
+                                    widget.listPelangganJadwal[i]['NAMA_LGKP']
+                                        .toString(),
+                                    widget.listPelangganJadwal[i]['ALAMAT']
+                                        .toString(),
+                                    widget.listPelangganJadwal[i]['NOXX_TELP']
+                                        .toString(),
+                                    ('-').toString(),
+                                    i % 2 == 0
+                                        ? '${(ttd++).toString()}'
+                                        : '                            ${(ttd++).toString()}',
                                   ]
                               ]),
                         ],
@@ -135,7 +127,7 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "absen_kesehatan_${widget.tglBgkt}.pdf")
+      ..setAttribute("download", "absen_manasik_${widget.tglBgkt}.pdf")
       ..click();
   }
 
@@ -156,7 +148,6 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
     return ElevatedButton.icon(
       onPressed: () async {
         await fncGetCek();
-
         if (listPelanggan.isNotEmpty) {
           _createPDF();
         } else {
@@ -164,9 +155,9 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.health_and_safety_outlined),
+      icon: const Icon(Icons.library_add_check_outlined),
       label: const Text(
-        'Absen Kesehatan',
+        'Absen Manasik',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(

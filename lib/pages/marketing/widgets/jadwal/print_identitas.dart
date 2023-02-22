@@ -21,6 +21,7 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 class PrintIdentitas extends StatefulWidget {
   final String keberangkatan;
   final String jenisPaket;
+  final String tglBgkt;
   final List<Map<String, dynamic>> listPelangganJadwal;
 
   const PrintIdentitas({
@@ -28,6 +29,7 @@ class PrintIdentitas extends StatefulWidget {
     @required this.listPelangganJadwal,
     @required this.keberangkatan,
     @required this.jenisPaket,
+    @required this.tglBgkt,
   }) : super(key: key);
   @override
   State<PrintIdentitas> createState() => _PrintIdentitasState();
@@ -138,7 +140,7 @@ class _PrintIdentitasState extends State<PrintIdentitas> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "identitas_jamaah.pdf")
+      ..setAttribute("download", "identitas_jamaah_${widget.tglBgkt}.pdf")
       ..click();
   }
 

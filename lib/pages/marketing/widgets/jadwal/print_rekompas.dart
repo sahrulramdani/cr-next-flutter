@@ -1,25 +1,23 @@
-import 'dart:io';
+// ignore_for_file: duplicate_import, avoid_web_libraries_in_flutter, must_be_immutable
+
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PrintRekompas extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
+  String tglBgkt;
 
-  const PrintRekompas({Key key, @required this.listPelangganJadwal})
+  PrintRekompas(
+      {Key key, @required this.listPelangganJadwal, @required this.tglBgkt})
       : super(key: key);
 
   @override
@@ -109,6 +107,11 @@ class _PrintRekompasState extends State<PrintRekompas> {
                                     pw.Table.fromTextArray(
                                         border: pw.TableBorder.all(
                                             color: PdfColors.white),
+                                        columnWidths: {
+                                          0: const pw.FlexColumnWidth(2),
+                                          1: const pw.FlexColumnWidth(0.5),
+                                          2: const pw.FlexColumnWidth(5),
+                                        },
                                         data: <List>[
                                           [
                                             "",
@@ -137,6 +140,11 @@ class _PrintRekompasState extends State<PrintRekompas> {
                                     pw.Table.fromTextArray(
                                         border: pw.TableBorder.all(
                                             color: PdfColors.white),
+                                        columnWidths: {
+                                          0: const pw.FlexColumnWidth(2),
+                                          1: const pw.FlexColumnWidth(0.5),
+                                          2: const pw.FlexColumnWidth(5),
+                                        },
                                         data: <List>[
                                           [
                                             "",
@@ -225,7 +233,7 @@ class _PrintRekompasState extends State<PrintRekompas> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "rekompas.pdf")
+      ..setAttribute("download", "rekomendasi_paspor_${widget.tglBgkt}.pdf")
       ..click();
   }
 

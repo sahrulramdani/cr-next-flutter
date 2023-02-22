@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_new
+// ignore_for_file: unnecessary_new, unused_local_variable
 import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -101,4 +101,74 @@ fncJatuhTempo(tgl) {
   final jatuhTempo = tanggalDapat.subtract(Duration(days: tempoHari));
 
   return jatuhTempo;
+}
+
+fncInfoPeriode(tglAwal, tglAkhir) {
+  String tanggalAwalAll = tglAwal.replaceAll('-', '');
+  String tanggalAwal = tanggalAwalAll.substring(0, 2);
+  String bulanAwal = tanggalAwalAll.substring(2, 4);
+  String tahunAwal = tanggalAwalAll.substring(4, 8);
+  String namaBulanAwal;
+
+  String tanggalAkhirAll = tglAkhir.replaceAll('-', '');
+  String tanggalAkhir = tanggalAkhirAll.substring(0, 2);
+  String bulanAkhir = tanggalAkhirAll.substring(2, 4);
+  String tahunAkhir = tanggalAkhirAll.substring(4, 8);
+  String namaBulanAkhir;
+
+  if (bulanAwal == '01') {
+    namaBulanAwal = 'JAN';
+  } else if (bulanAwal == '02') {
+    namaBulanAwal = 'FEB';
+  } else if (bulanAwal == '03') {
+    namaBulanAwal = 'MAR';
+  } else if (bulanAwal == '04') {
+    namaBulanAwal = 'APR';
+  } else if (bulanAwal == '05') {
+    namaBulanAwal = 'MEI';
+  } else if (bulanAwal == '06') {
+    namaBulanAwal = 'JUN';
+  } else if (bulanAwal == '07') {
+    namaBulanAwal = 'JUL';
+  } else if (bulanAwal == '08') {
+    namaBulanAwal = 'AGU';
+  } else if (bulanAwal == '09') {
+    namaBulanAwal = 'SEP';
+  } else if (bulanAwal == '10') {
+    namaBulanAwal = 'OKT';
+  } else if (bulanAwal == '11') {
+    namaBulanAwal = 'NOV';
+  } else if (bulanAwal == '12') {
+    namaBulanAwal = 'DES';
+  }
+
+  if (bulanAkhir == '01') {
+    namaBulanAkhir = 'JAN';
+  } else if (bulanAkhir == '02') {
+    namaBulanAkhir = 'FEB';
+  } else if (bulanAkhir == '03') {
+    namaBulanAkhir = 'MAR';
+  } else if (bulanAkhir == '04') {
+    namaBulanAkhir = 'APR';
+  } else if (bulanAkhir == '05') {
+    namaBulanAkhir = 'MEI';
+  } else if (bulanAkhir == '06') {
+    namaBulanAkhir = 'JUN';
+  } else if (bulanAkhir == '07') {
+    namaBulanAkhir = 'JUL';
+  } else if (bulanAkhir == '08') {
+    namaBulanAkhir = 'AGU';
+  } else if (bulanAkhir == '09') {
+    namaBulanAkhir = 'SEP';
+  } else if (bulanAkhir == '10') {
+    namaBulanAkhir = 'OKT';
+  } else if (bulanAkhir == '11') {
+    namaBulanAkhir = 'NOV';
+  } else if (bulanAkhir == '12') {
+    namaBulanAkhir = 'DES';
+  }
+
+  var hasil =
+      '${tanggalAwal} ${namaBulanAwal} ${tahunAwal == tahunAkhir ? '' : tahunAwal} s/d ${tanggalAkhir} ${namaBulanAkhir} ${tahunAkhir}';
+  return hasil;
 }

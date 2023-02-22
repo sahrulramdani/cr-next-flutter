@@ -14,8 +14,10 @@ import 'package:pdf/widgets.dart' as pw;
 
 class PrintNametagPaspor extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
+  String tglBgkt;
 
-  const PrintNametagPaspor({Key key, @required this.listPelangganJadwal})
+  PrintNametagPaspor(
+      {Key key, @required this.listPelangganJadwal, @required this.tglBgkt})
       : super(key: key);
 
   @override
@@ -178,7 +180,7 @@ class _PrintNametagPasporState extends State<PrintNametagPaspor> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "nametag_paspor.pdf")
+      ..setAttribute("download", "nametag_paspor_${widget.tglBgkt}.pdf")
       ..click();
   }
 

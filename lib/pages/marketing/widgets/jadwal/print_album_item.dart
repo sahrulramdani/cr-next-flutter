@@ -1,4 +1,6 @@
-// ignore_for_file: unused_local_variable, avoid_web_libraries_in_flutter, use_build_context_synchronously, division_optimization
+// ignore_for_file: unused_local_variable, missing_return, use_build_context_synchronously, division_optimization
+
+import 'dart:io';
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
@@ -7,30 +9,37 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'package:intl/intl.dart';
-import 'dart:async';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pw;
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-class PrintAlbum extends StatefulWidget {
+class ModalAlbumItem extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
   String tglBgkt;
   String tglPlng;
 
-  PrintAlbum({
-    Key key,
-    @required this.listPelangganJadwal,
-    @required this.tglBgkt,
-    @required this.tglPlng,
-  }) : super(key: key);
-
+  ModalAlbumItem(
+      {Key key,
+      @required this.listPelangganJadwal,
+      @required this.tglBgkt,
+      @required this.tglPlng})
+      : super(key: key);
   @override
-  State<PrintAlbum> createState() => _PrintAlbumState();
+  State<ModalAlbumItem> createState() => _ModalAlbumItemState();
 }
 
-class _PrintAlbumState extends State<PrintAlbum> {
+class _ModalAlbumItemState extends State<ModalAlbumItem> {
   List<Map<String, dynamic>> listPelanggan = [];
+  TextEditingController dateKeluar = TextEditingController();
+  String kotaKeluar;
+  String noUrut = '1';
+  bool enableOne = false;
+  bool enableTwo = false;
   List<pw.MemoryImage> gambarPelanggan = [];
 
   Future<void> _loadImages() async {
@@ -66,7 +75,7 @@ class _PrintAlbumState extends State<PrintAlbum> {
     final ttf2 = pw.Font.ttf(font2);
 
     int pages = (listPelanggan.length / 8).toInt() + 1;
-    int urut = 1;
+    int urut = int.parse(noUrut);
     // Maksimal index data
     int maxData = listPelanggan.length;
     int maxSide = (listPelanggan.length / 4).toInt() + 1;
@@ -74,9 +83,6 @@ class _PrintAlbumState extends State<PrintAlbum> {
 
     int arrB = 0;
     int arrData = 0;
-
-    print(widget.tglBgkt);
-    print(widget.tglPlng);
 
     pdf.addPage(
       pw.MultiPage(
@@ -245,8 +251,10 @@ class _PrintAlbumState extends State<PrintAlbum> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "album_${widget.tglBgkt}.pdf")
+      ..setAttribute("download", "album_items_${widget.tglBgkt}.pdf")
       ..click();
+
+    Navigator.pop(context);
   }
 
   fncGetCek() {
@@ -261,32 +269,119 @@ class _PrintAlbumState extends State<PrintAlbum> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () async {
-        await fncGetCek();
-
-        await _loadImages();
-
-        if (listPelanggan.isNotEmpty) {
-          _createPDF();
-        } else {
-          showDialog(
-              context: context, builder: (context) => const ModalDataFail());
+  Widget inputNoUrut() {
+    return TextFormField(
+      initialValue: noUrut ?? "1",
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          labelText: 'Masukan No Urut Lanjutan',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      onChanged: (value) {
+        noUrut = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "No Urut Tidak Boleh Kosong";
         }
       },
-      icon: const Icon(Icons.album_outlined),
-      label: const Text(
-        'Album',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final formKey = GlobalKey<FormState>();
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: Stack(children: [
+        Form(
+          key: formKey,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            width: 350,
+            height: 150,
+            child: Column(
+              children: [
+                SizedBox(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.corporate_fare_rounded,
+                        color: Colors.amber[900],
+                      ),
+                      const SizedBox(width: 10),
+                      FittedBox(
+                        child: Text('Print Album Item',
+                            style: TextStyle(
+                                color: myGrey, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SizedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          inputNoUrut(),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          await fncGetCek();
+
+                          await _loadImages();
+
+                          if (listPelanggan.isNotEmpty) {
+                            _createPDF();
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) => const ModalDataFail());
+                          }
+                        },
+                        icon: const Icon(Icons.save),
+                        label: const Text(
+                          'Print Data',
+                          style: TextStyle(fontFamily: 'Gilroy'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: myBlue,
+                          shadowColor: Colors.grey,
+                          elevation: 5,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Kembali'))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      ]),
     );
   }
 }
