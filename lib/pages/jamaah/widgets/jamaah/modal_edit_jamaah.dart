@@ -1,5 +1,5 @@
 // ignore_for_file: deprecated_member_use, missing_return, must_be_immutable, avoid_print
-
+import 'package:flutter/services.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/models/http_jamaah.dart';
@@ -876,6 +876,8 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     ).then(
       (value) {
         if (value.status == true) {
+          imageCache.clear();
+
           menuController.changeActiveitemTo('Data Jamaah');
           navigationController.navigateTo('/jamaah/master');
 

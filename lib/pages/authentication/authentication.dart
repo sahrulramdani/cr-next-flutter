@@ -37,6 +37,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           setState(() {
             loginRespon = value;
             kodeToken = loginRespon.userToken;
+            namaUser = loginRespon.namaUser;
+            fotoUser = loginRespon.fotoUser;
           });
           if (loginRespon.status == true) {
             Get.offAllNamed(rootRoute);

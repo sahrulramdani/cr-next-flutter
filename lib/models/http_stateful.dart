@@ -6,8 +6,10 @@ import "package:http/http.dart" as http;
 class HttpStateful {
   bool status;
   String userToken;
+  String namaUser;
+  String fotoUser;
 
-  HttpStateful({this.status, this.userToken});
+  HttpStateful({this.status, this.userToken, this.namaUser, this.fotoUser});
 
   static Future<HttpStateful> connectAPI(
       String user, String pass, String company) async {
@@ -29,6 +31,8 @@ class HttpStateful {
     return HttpStateful(
       status: data["status"],
       userToken: data["token"],
+      namaUser: data["namaUser"],
+      fotoUser: data["fotoUser"],
     );
   }
 }

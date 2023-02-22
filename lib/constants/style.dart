@@ -11,6 +11,9 @@ Color myGrey = Colors.grey[700];
 //Token
 
 String kodeToken = "";
+String namaUser = "";
+String fotoUser = "";
+
 bool enableForm = false;
 
 //Url Aplikasi

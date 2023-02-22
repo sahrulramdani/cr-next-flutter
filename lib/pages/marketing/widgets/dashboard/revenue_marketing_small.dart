@@ -1,11 +1,109 @@
+// ignore_for_file: non_constant_identifier_names, unused_element
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter_web_course/widgets/revenue_info.dart';
 import 'package:flutter_web_course/comp/chart_example.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
-class RevenueMarketingSmall extends StatelessWidget {
+class RevenueMarketingSmall extends StatefulWidget {
   const RevenueMarketingSmall({Key key}) : super(key: key);
+
+  @override
+  State<RevenueMarketingSmall> createState() => _RevenueMarketingSmallState();
+}
+
+class _RevenueMarketingSmallState extends State<RevenueMarketingSmall> {
+  int BULAN_JAN;
+  int BULAN_FEB;
+  int BULAN_MAR;
+  int BULAN_APR;
+  int BULAN_MEI;
+  int BULAN_JUNI;
+  int BULAN_JULI;
+  int BULAN_AGUS;
+  int BULAN_SEP;
+  int BULAN_OKT;
+  int BULAN_NOV;
+  int BULAN_DES;
+
+  String Agen = '0';
+  String Cabang = '0';
+  String Pusat = '0';
+  String TourLeader = '0';
+
+  void getChart() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/chart/dashboard/marketing"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      BULAN_JAN = data[0]['BULAN_JAN'];
+      BULAN_FEB = data[0]['BULAN_FEB'];
+      BULAN_MAR = data[0]['BULAN_MAR'];
+      BULAN_APR = data[0]['BULAN_APR'];
+      BULAN_MEI = data[0]['BULAN_MEI'];
+      BULAN_JUNI = data[0]['BULAN_JUNI'];
+      BULAN_JULI = data[0]['BULAN_JULI'];
+      BULAN_AGUS = data[0]['BULAN_AGUS'];
+      BULAN_SEP = data[0]['BULAN_SEP'];
+      BULAN_OKT = data[0]['BULAN_OKT'];
+      BULAN_NOV = data[0]['BULAN_NOV'];
+      BULAN_DES = data[0]['BULAN_DES'];
+    });
+  }
+
+  void getAgensi() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/data/dashboard/marketing"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      Agen = data[0]['AGENSI'].toString();
+      Cabang = data[0]['CABANG'].toString();
+      Pusat = data[0]['PUSAT'].toString();
+      TourLeader = data[0]['TOUR_LEADER'].toString();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getChart();
+    getAgensi();
+  }
+
+  List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    final data = [
+      OrdinalSales('Jan', BULAN_JAN),
+      OrdinalSales('Feb', BULAN_FEB),
+      OrdinalSales('Mar', BULAN_MAR),
+      OrdinalSales('Apr', BULAN_APR),
+      OrdinalSales('Mei', BULAN_MEI),
+      OrdinalSales('Jun', BULAN_JUNI),
+      OrdinalSales('Jul', BULAN_JULI),
+      OrdinalSales('Agu', BULAN_AGUS),
+      OrdinalSales('Sep', BULAN_SEP),
+      OrdinalSales('Okt', BULAN_OKT),
+      OrdinalSales('Nov', BULAN_NOV),
+      OrdinalSales('Des', BULAN_DES),
+    ];
+
+    return [
+      charts.Series<OrdinalSales, String>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +127,8 @@ class RevenueMarketingSmall extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomText(
-                  text: "Alumni Jamaah 2022",
+                  text:
+                      "Perolehan Jamaah ${DateFormat("yyyy").format(DateTime.now())}",
                   size: 20,
                   weight: FontWeight.bold,
                   color: myBlue,
@@ -37,7 +136,10 @@ class RevenueMarketingSmall extends StatelessWidget {
                 SizedBox(
                   width: 600,
                   height: 200,
-                  child: MyCharts.withSampleData(),
+                  child: charts.BarChart(
+                    _createSampleData(),
+                    animate: true,
+                  ),
                 ),
               ],
             ),
@@ -53,14 +155,14 @@ class RevenueMarketingSmall extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
-                  children: const [
+                  children: [
                     RevenueInfo(
-                      title: "Bulan Ini",
-                      amount: "29",
+                      title: "Pusat",
+                      amount: Pusat,
                     ),
                     RevenueInfo(
-                      title: "Bulan Lalu",
-                      amount: "32",
+                      title: "Agen",
+                      amount: Agen,
                     )
                   ],
                 ),
@@ -68,14 +170,14 @@ class RevenueMarketingSmall extends StatelessWidget {
                   height: 30,
                 ),
                 Row(
-                  children: const [
+                  children: [
                     RevenueInfo(
-                      title: "6 Bulan",
-                      amount: "114",
+                      title: "Cabang",
+                      amount: Cabang,
                     ),
                     RevenueInfo(
-                      title: "Tahun Ini",
-                      amount: "240",
+                      title: "Tour Leader",
+                      amount: TourLeader,
                     )
                   ],
                 ),

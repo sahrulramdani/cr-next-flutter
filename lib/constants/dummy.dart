@@ -241,19 +241,19 @@ List<Map<String, String>> listCardDataJamaah = [
 List<Map<String, String>> listCardJadwal = [
   //menu data item
   {
-    "title": "Haji",
+    "title": "Haji Furoda",
     "total": '13',
   },
   {
-    "title": "Umroh",
+    "title": "Haji Plus",
     "total": '68',
   },
   {
-    "title": "Domestik",
+    "title": "Umroh Reguler",
     "total": '31',
   },
   {
-    "title": "Internasional",
+    "title": "Umroh Plus",
     "total": '20',
   },
 ];

@@ -87,7 +87,12 @@ class _JadwalFormState extends State<JadwalForm> {
         List.from(json.decode(response.body) as List);
 
     setState(() {
-      listJenisPaket = data;
+      listJenisPaket = data
+          .where(((element) => element['CODD_DESC']
+              .toString()
+              .toUpperCase()
+              .contains(namaPaket.toUpperCase())))
+          .toList();
     });
   }
 
@@ -182,7 +187,7 @@ class _JadwalFormState extends State<JadwalForm> {
 
   @override
   void initState() {
-    getJenisPaket();
+    // getJenisPaket();
     getPaket();
     getMataUang();
     getTransit();
@@ -209,6 +214,8 @@ class _JadwalFormState extends State<JadwalForm> {
         onChanged: (value) {
           namaPaket = value["CODD_DESC"];
           idpaket = value["CODD_VALU"];
+
+          getJenisPaket();
         },
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),

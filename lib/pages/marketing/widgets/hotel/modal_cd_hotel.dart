@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return, unused_local_variable, avoid_print, must_be_immutable
+// ignore_for_file: deprecated_member_use, missing_return, unused_local_variable, avoid_print, must_be_immutable, unnecessary_brace_in_string_interps
 
 import 'dart:convert';
 
@@ -36,8 +36,11 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
   String namaHotel;
   String bintang;
   String idBintang;
+  String idKategori;
+  String namaKategori;
 
   List<Map<String, dynamic>> listBintgHtl = [];
+  List<Map<String, dynamic>> listKategori = [];
 
   void getDetailSatuan() async {
     var id = widget.idHotel;
@@ -51,6 +54,8 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
       namaHotel = data[0]['NAMA_HTLX'];
       bintang = data[0]['CODD_DESC'].toString();
       idBintang = data[0]['BINTG_HTLX'].toString();
+      idKategori = data[0]['KTGR_HTLX'].toString();
+      namaKategori = data[0]['namaKota'].toString();
     });
   }
 
@@ -65,6 +70,17 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
     });
   }
 
+  void getKategori() async {
+    var response =
+        await http.get(Uri.parse('$urlAddress/marketing/hotel/getKategori'));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listKategori = data;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +89,7 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
     }
 
     getBintangHtl();
+    getKategori();
   }
 
   Widget inputSatuan() {
@@ -122,12 +139,44 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
     );
   }
 
+  Widget inputKategori() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        label: "Kategori",
+        mode: Mode.MENU,
+        items: listKategori,
+        onChanged: (value) {
+          namaKategori = value["CODD_DESC"];
+          idKategori = value["CODD_VALU"];
+        },
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaKategori ?? "Pilih Kategori"),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+        validator: (value) {
+          if (value == "Pilih Kategori") {
+            return "Kategori kosong !";
+          }
+        },
+      ),
+    );
+  }
+
   fncSaveData() {
     // print("NAMA HOTEL : $namaHotel");
     // print("BINTANG : $idBintang");
+    // print("KATEGORI : ${idKategori}");
 
     if (widget.tambah == true) {
-      HttpHotel.saveHotel(namaHotel, idBintang).then((value) {
+      HttpHotel.saveHotel(namaHotel, idBintang, idKategori).then((value) {
         if (value.status == true) {
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
@@ -140,7 +189,8 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
         }
       });
     } else {
-      HttpHotel.updateHotel(idHotel, namaHotel, idBintang).then((value) {
+      HttpHotel.updateHotel(idHotel, namaHotel, idBintang, idKategori)
+          .then((value) {
         if (value.status == true) {
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
@@ -202,6 +252,10 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
                         height: 8,
                       ),
                       inputBintangHotel(),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      inputKategori(),
                     ],
                   ),
                 )),

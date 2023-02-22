@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, missing_return, must_be_immutable, avoid_print
 
 // import 'package:flutter_web_course/constants/public_variable.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:http/http.dart' as http;
@@ -1092,6 +1093,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     ).then(
       (value) {
         if (value.status == true) {
+          imageCache.clear();
+
           menuController.changeActiveitemTo('Agency');
           navigationController.navigateTo('/mrkt/agency');
 

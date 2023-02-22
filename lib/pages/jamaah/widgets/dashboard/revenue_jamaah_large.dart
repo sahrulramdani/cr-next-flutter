@@ -1,11 +1,111 @@
+// ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations
+
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter_web_course/widgets/revenue_info.dart';
 import 'package:flutter_web_course/comp/chart_example.dart';
+import 'package:http/http.dart' as http;
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_web_course/constants/style.dart';
 
-class RevenueJamaahLarge extends StatelessWidget {
+class RevenueJamaahLarge extends StatefulWidget {
   const RevenueJamaahLarge({Key key}) : super(key: key);
+
+  @override
+  State<RevenueJamaahLarge> createState() => _RevenueJamaahLargeState();
+}
+
+class _RevenueJamaahLargeState extends State<RevenueJamaahLarge> {
+  int BULAN_JAN;
+  int BULAN_FEB;
+  int BULAN_MAR;
+  int BULAN_APR;
+  int BULAN_MEI;
+  int BULAN_JUNI;
+  int BULAN_JULI;
+  int BULAN_AGUS;
+  int BULAN_SEP;
+  int BULAN_OKT;
+  int BULAN_NOV;
+  int BULAN_DES;
+
+  String Bulanini = '0';
+  String BulanLalu = '0';
+  String Enam_Bulan = '0';
+  String Tahun_ini = '0';
+
+  void getChart() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/chart/dashboard/jamaah"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      BULAN_JAN = data[0]['BULAN_JAN'];
+      BULAN_FEB = data[0]['BULAN_FEB'];
+      BULAN_MAR = data[0]['BULAN_MAR'];
+      BULAN_APR = data[0]['BULAN_APR'];
+      BULAN_MEI = data[0]['BULAN_MEI'];
+      BULAN_JUNI = data[0]['BULAN_JUNI'];
+      BULAN_JULI = data[0]['BULAN_JULI'];
+      BULAN_AGUS = data[0]['BULAN_AGUS'];
+      BULAN_SEP = data[0]['BULAN_SEP'];
+      BULAN_OKT = data[0]['BULAN_OKT'];
+      BULAN_NOV = data[0]['BULAN_NOV'];
+      BULAN_DES = data[0]['BULAN_DES'];
+    });
+  }
+
+  void dataJamaah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/data/dashboard/jamaah"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      Bulanini = data[0]['BULAN_INI'].toString();
+      BulanLalu = data[0]['BULAN_LALU'].toString();
+      Enam_Bulan = data[0]['ENAM_BULAN'].toString();
+      Tahun_ini = data[0]['TAHUN_INI'].toString();
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+    getChart();
+    dataJamaah();
+  }
+
+  List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    final data = [
+      OrdinalSales('Jan', BULAN_JAN),
+      OrdinalSales('Feb', BULAN_FEB),
+      OrdinalSales('Mar', BULAN_MAR),
+      OrdinalSales('Apr', BULAN_APR),
+      OrdinalSales('Mei', BULAN_MEI),
+      OrdinalSales('Jun', BULAN_JUNI),
+      OrdinalSales('Jul', BULAN_JULI),
+      OrdinalSales('Agu', BULAN_AGUS),
+      OrdinalSales('Sep', BULAN_SEP),
+      OrdinalSales('Okt', BULAN_OKT),
+      OrdinalSales('Nov', BULAN_NOV),
+      OrdinalSales('Des', BULAN_DES),
+    ];
+
+    return [
+      charts.Series<OrdinalSales, String>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +128,8 @@ class RevenueJamaahLarge extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CustomText(
-                text: "Alumni Jamaah 2022",
+                text:
+                    "Alumni Jamaah ${DateFormat("yyyy").format(DateTime.now())}",
                 size: 20,
                 weight: FontWeight.bold,
                 color: myBlue,
@@ -36,7 +137,10 @@ class RevenueJamaahLarge extends StatelessWidget {
               SizedBox(
                 width: 600,
                 height: 200,
-                child: MyCharts.withSampleData(),
+                child: charts.BarChart(
+                  _createSampleData(),
+                  animate: true,
+                ),
               )
             ],
           )),
@@ -50,14 +154,14 @@ class RevenueJamaahLarge extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                children: const [
+                children: [
                   RevenueInfo(
                     title: "Bulan Ini",
-                    amount: "29",
+                    amount: "$Bulanini",
                   ),
                   RevenueInfo(
                     title: "Bulan Lalu",
-                    amount: "32",
+                    amount: "$BulanLalu",
                   )
                 ],
               ),
@@ -65,14 +169,14 @@ class RevenueJamaahLarge extends StatelessWidget {
                 height: 30,
               ),
               Row(
-                children: const [
+                children: [
                   RevenueInfo(
                     title: "6 Bulan",
-                    amount: "114",
+                    amount: "$Enam_Bulan",
                   ),
                   RevenueInfo(
                     title: "Tahun Ini",
-                    amount: "240",
+                    amount: "$Tahun_ini",
                   )
                 ],
               ),

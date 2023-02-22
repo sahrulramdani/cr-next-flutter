@@ -9,11 +9,13 @@ class HttpHotel {
 
   HttpHotel({this.status});
 
-  static Future<HttpHotel> saveHotel(String namaHotel, String idbintang) async {
+  static Future<HttpHotel> saveHotel(
+      String namaHotel, String idbintang, String idKategori) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/hotel/save");
     var hasilResponse = await http.post(urlApi, body: {
       "NAMA_HTLX": namaHotel,
       "BINTG_HTLX": idbintang,
+      'KTGR_HTLX': idKategori,
     });
 
     var data = json.decode(hasilResponse.body);
@@ -22,13 +24,14 @@ class HttpHotel {
     );
   }
 
-  static Future<HttpHotel> updateHotel(
-      String idHotel, String namaHotel, String idbintang) async {
+  static Future<HttpHotel> updateHotel(String idHotel, String namaHotel,
+      String idbintang, String idKategori) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/hotel/update");
     var hasilResponse = await http.post(urlApi, body: {
       "IDXX_HTLX": idHotel,
       "NAMA_HTLX": namaHotel,
       "BINTG_HTLX": idbintang,
+      "KTGR_HTLX": idKategori,
     });
     var data = json.decode(hasilResponse.body);
     return HttpHotel(
