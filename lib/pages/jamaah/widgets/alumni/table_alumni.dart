@@ -32,16 +32,34 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(dataAlumni[index]['identitas'])),
-      DataCell(Text(dataAlumni[index]['nama_lengkap'])),
-      DataCell(Text(dataAlumni[index]['jenis_kelamin'])),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['identitas'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['nama_lengkap'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['jenis_kelamin'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Text(
-          '${dataAlumni[index]['tempat_lahir']}, ${dataAlumni[index]['in_tanggallahir']}')),
-      DataCell(Text(dataAlumni[index]['tg_berangkat'])),
-      DataCell(Text(dataAlumni[index]['alamat'])),
-      DataCell(Text(dataAlumni[index]['nama_marketing'])),
-      DataCell(Text(dataAlumni[index]['telepon'])),
+          '${dataAlumni[index]['tempat_lahir']}, ${dataAlumni[index]['in_tanggallahir']}',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['tg_berangkat'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['alamat'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['nama_marketing'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataAlumni[index]['telepon'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -86,67 +104,67 @@ class _TableAlumniState extends State<TableAlumni> {
         child: PaginatedDataTable(
           columnSpacing: 15,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('NIK',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama Lengkap',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('JK',
+                label: Text('Jenis Kelamin',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tempat, Tanggal Lahir',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Berangkat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Alamat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Agency',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Telepon',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -156,7 +174,7 @@ class _TableAlumniState extends State<TableAlumni> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

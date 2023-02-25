@@ -107,39 +107,67 @@ class MyData extends DataTableSource {
     NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     var Tanggal = (DateFormat("dd-MM-yyyy").format(DateTime.now())).toString();
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Icon(
         dataJadwal[index]['status'] == 1
             ? Icons.check
-            : Icons.access_time_outlined,
+            : Icons.access_alarm_outlined,
         color: dataJadwal[index]['status'] == 1
             ? Colors.green
             : Colors.orange[800],
         size: 20,
       )),
-      DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
+      DataCell(Text(dataJadwal[index]['jenisPaket'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       // DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
-      DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString())),
-      DataCell(Text(dataJadwal[index]['TGLX_BGKT'] == null
-          ? "00-00-0000"
-          : dataJadwal[index]['TGLX_BGKT'].toString())),
-      DataCell(Text(dataJadwal[index]["TGLX_PLNG"] == null
-          ? "00-00-0000"
-          : dataJadwal[index]["TGLX_PLNG"].toString())),
-      DataCell(Text(dataJadwal[index]['NAME_PESWT_BGKT'] == null
-          ? "-"
-          : dataJadwal[index]['NAME_PESWT_BGKT'].toString())),
-      DataCell(Text(dataJadwal[index]['NAME_PESWT_PLNG'] == null
-          ? "-"
-          : dataJadwal[index]['NAME_PESWT_PLNG'].toString())),
-      DataCell(Text(myformat
-          .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())))),
+      DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJadwal[index]['TGLX_BGKT'] == null
+              ? "00-00-0000"
+              : dataJadwal[index]['TGLX_BGKT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJadwal[index]["TGLX_PLNG"] == null
+              ? "00-00-0000"
+              : dataJadwal[index]["TGLX_PLNG"].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJadwal[index]['PSWT_BGKT'] == null
+              ? "-"
+              : dataJadwal[index]['PSWT_BGKT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJadwal[index]['PSWT_PLNG'] == null
+              ? "-"
+              : dataJadwal[index]['PSWT_PLNG'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          myformat
+              .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       // DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
-      DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString())),
-      DataCell(Text(dataJadwal[index]['SISA'] == 0
-          ? 'Full'
-          : dataJadwal[index]['SISA'].toString())),
-      DataCell(Text(dataJadwal[index]['KETERANGAN'])),
+      DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJadwal[index]['SISA'] == 0
+              ? 'Full'
+              : dataJadwal[index]['SISA'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJadwal[index]['KETERANGAN'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -199,104 +227,104 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
-          columnSpacing: 5.0,
+          columnSpacing: 15,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('#',
+                label: Text(' ',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Paket',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             // DataColumn(
             //     label: Text('Jenis',
             //         style: TextStyle(
-            //             color: myGrey,
+            //             color: Colors.black,
             //             fontWeight: FontWeight.bold,
             //             fontFamily: 'Gilroy',
             //             fontSize: 16))),
             DataColumn(
                 label: Text('Hari',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Berangkat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Pulang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Pesawat Berangkat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Pesawat Pulang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tarif',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             // DataColumn(
             //     label: Text('Kurs',
             //         style: TextStyle(
-            //             color: myGrey,
+            //             color: Colors.black,
             //             fontWeight: FontWeight.bold,
             //             fontFamily: 'Gilroy',
             //             fontSize: 16))),
             DataColumn(
                 label: Text('Seat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Sisa',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Keterangan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -306,7 +334,7 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

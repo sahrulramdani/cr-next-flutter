@@ -109,7 +109,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           //           margin: const EdgeInsets.all(2),
           //           child: CircleAvatar(
           //             backgroundImage:
-          //                 NetworkImage('$urlAddress/uploads/foto/$fotoUser'),
+          //                 NetworkImage('$urlAddress/uploads/profil/$fotoUser'),
           //           ),
           //         ),
           // )

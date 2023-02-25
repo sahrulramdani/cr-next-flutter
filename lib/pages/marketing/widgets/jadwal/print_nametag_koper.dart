@@ -217,7 +217,7 @@ class _PrintNametagKoperState extends State<PrintNametagKoper> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.badge_outlined),
+      icon: const Icon(Icons.cases_outlined),
       label: const Text(
         'NameTag Koper',
         style: TextStyle(fontFamily: 'Gilroy'),

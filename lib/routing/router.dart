@@ -24,6 +24,7 @@ import 'package:flutter_web_course/pages/marketing/marketing_dash.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_agency.dart';
 import 'package:flutter_web_course/pages/hr/hr_karyawan.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_pemberangkatan.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_perolehan_tahun.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_tourlead.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_trasit.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_maskapai.dart';
@@ -54,6 +55,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const MarketingBerangkatPage());
     case mrktTourleadPageRoute:
       return _getPageRoute(const MarketingTourleadPage());
+    case mrktPerolehanTahunPageRoute:
+      return _getPageRoute(const MarketingPerolehanTahunan());
     case mrktTransitPageRoute:
       return _getPageRoute(const MarketingTransitPage());
     case mrktPesawatPageRoute:

@@ -60,10 +60,10 @@ List<Map<String, String>> listCardAgency = [
     "title": "Tour Leader",
     "total": '40',
   },
-  {
-    "title": "Pos",
-    "total": '8',
-  },
+  // {
+  //   "title": "Pos",
+  //   "total": '8',
+  // },
 ];
 
 List<Map<String, String>> listCardKaryawan = [
@@ -265,7 +265,7 @@ List<Map<String, String>> listCardPelanggan = [
     "total": '412',
   },
   {
-    "title": "Pasporan",
+    "title": "Paspor",
     "total": '68',
   },
   {

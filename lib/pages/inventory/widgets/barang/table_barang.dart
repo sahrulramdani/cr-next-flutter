@@ -111,14 +111,30 @@ class MyData extends DataTableSource {
               : Colors.transparent;
         }),
         cells: [
-          DataCell(Text((index + 1).toString())),
-          DataCell(Text(dataBarang[index]['KDXX_BRGX'].toString())),
-          DataCell(Text(dataBarang[index]['NAMA_BRGX'].toString())),
-          DataCell(Text(dataBarang[index]['STOK_BRGX'].toString())),
-          DataCell(Text(dataBarang[index]['NAMA_STAN'].toString())),
-          DataCell(Text(myformat.format(dataBarang[index]['HRGX_BELI']))),
-          DataCell(Text(myformat.format(dataBarang[index]['HRGX_JUAL']))),
-          DataCell(Text(dataBarang[index]['KETERANGAN'].toString())),
+          DataCell(Text((index + 1).toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataBarang[index]['KDXX_BRGX'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataBarang[index]['NAMA_BRGX'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataBarang[index]['STOK_BRGX'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataBarang[index]['NAMA_STAN'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(myformat.format(dataBarang[index]['HRGX_BELI']),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(myformat.format(dataBarang[index]['HRGX_JUAL']),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataBarang[index]['KETERANGAN'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
           DataCell(Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -174,60 +190,60 @@ class _TableBarangState extends State<TableBarang> {
         child: PaginatedDataTable(
           columnSpacing: 5.0,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Kode Barang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama Barang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Stok',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Satuan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Harga Beli',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Harga Jual',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Keterangan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -236,7 +252,7 @@ class _TableBarangState extends State<TableBarang> {
               child: Center(
                 child: Text('Aksi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16)),

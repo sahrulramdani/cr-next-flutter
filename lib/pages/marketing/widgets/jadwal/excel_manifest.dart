@@ -104,7 +104,7 @@ class _ExcelManifestState extends State<ExcelManifest> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.file_copy_outlined),
+      icon: const Icon(Icons.system_update_tv),
       label: const Text(
         'Excel Manifest',
         style: TextStyle(fontFamily: 'Gilroy'),

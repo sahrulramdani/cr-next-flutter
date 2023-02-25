@@ -169,7 +169,7 @@ class _PrintIdentitasState extends State<PrintIdentitas> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.insert_drive_file_outlined),
+      icon: const Icon(Icons.assignment_ind_outlined),
       label: const Text(
         'Identitas',
         style: TextStyle(fontFamily: 'Gilroy'),

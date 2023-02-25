@@ -72,11 +72,14 @@ class _PrintAlbumState extends State<PrintAlbum> {
     int maxSide = (listPelanggan.length / 4).toInt() + 1;
     int j = 0;
 
+    if (widget.tglPlng == 'null') {
+      setState(() {
+        widget.tglPlng = '00-12-0000';
+      });
+    }
+
     int arrB = 0;
     int arrData = 0;
-
-    print(widget.tglBgkt);
-    print(widget.tglPlng);
 
     pdf.addPage(
       pw.MultiPage(
@@ -171,6 +174,7 @@ class _PrintAlbumState extends State<PrintAlbum> {
                                                 ),
                                               ),
                                             ),
+                                            pw.SizedBox(width: 10),
                                             pw.SizedBox(
                                                 width: 200,
                                                 child: pw.Table.fromTextArray(
@@ -204,8 +208,8 @@ class _PrintAlbumState extends State<PrintAlbum> {
                                                         "NO. PASPOR",
                                                         ":",
                                                         listPelanggan[c]
-                                                                ['NOXX_PSPR']
-                                                            .toString()
+                                                                ['NOXX_PSPR'] ??
+                                                            '-'.toString()
                                                       ],
                                                       [
                                                         "TMPT TGL LHR",
@@ -276,7 +280,7 @@ class _PrintAlbumState extends State<PrintAlbum> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.album_outlined),
+      icon: const Icon(Icons.photo_library_outlined),
       label: const Text(
         'Album',
         style: TextStyle(fontFamily: 'Gilroy'),

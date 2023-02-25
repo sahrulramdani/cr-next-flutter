@@ -130,7 +130,7 @@ class _PrintSampulAlbumState extends State<PrintSampulAlbum> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "album_${widget.tglBgkt}.pdf")
+      ..setAttribute("download", "sampul_album_${widget.tglBgkt}.pdf")
       ..click();
   }
 
@@ -161,7 +161,7 @@ class _PrintSampulAlbumState extends State<PrintSampulAlbum> {
         //       context: context, builder: (context) => const ModalDataFail());
         // }
       },
-      icon: const Icon(Icons.local_post_office_outlined),
+      icon: const Icon(Icons.photo_camera_front_outlined),
       label: const Text(
         'Sampul Album',
         style: TextStyle(fontFamily: 'Gilroy'),

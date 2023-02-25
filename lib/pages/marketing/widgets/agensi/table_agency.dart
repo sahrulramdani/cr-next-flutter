@@ -84,74 +84,84 @@ class MyData extends DataTableSource {
       DataCell(Text(
         (index + 1).toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['KDXX_MRKT'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['NAMA_LGKP'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['FEE'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['FIRST_LVL'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         DateFormat("dd-MM-yyyy")
             .format(DateTime.parse(dataAgency[index]['TGLX_GBNG'])),
         textAlign: TextAlign.center,
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['TOTL_JMAH'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['PERD_JMAH'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         dataAgency[index]['TOTL_POIN'].toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Text(
         (20 - dataAgency[index]['TOTL_POIN']).toString(),
         style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: dataAgency[index]['STAS_AGEN'] == 0
                 ? Colors.red
-                : Colors.black),
+                : Colors.grey[800]),
       )),
       DataCell(Center(
         child: Row(
@@ -204,74 +214,74 @@ class _TableAgencyState extends State<TableAgency> {
         child: PaginatedDataTable(
           columnSpacing: 5.0,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('ID Agency',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama Agen',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Kategori Marketing',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Level',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tgl. Bergabung',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Total',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Musim',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Poin',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Kurang Poin',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -281,7 +291,7 @@ class _TableAgencyState extends State<TableAgency> {
               child: Center(
                 child: Text('Aksi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16)),

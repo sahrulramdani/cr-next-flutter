@@ -143,16 +143,17 @@ class _DetailPemberangkatanJamaahState
                   rows: listPelangganPemberangkatan.map((data) {
                     return DataRow(cells: [
                       DataCell(Text((x++).toString())),
-                      DataCell(Text(data['KDXX_DFTR'])),
-                      DataCell(Text(data['NAMA_JMAH'])),
-                      DataCell(Text(
-                          data['KDXX_MRKT'] == '' ? '-' : data['KDXX_MRKT'])),
+                      DataCell(Text(data['KDXX_DFTR'] ?? '-')),
+                      DataCell(Text(data['NAMA_JMAH'] ?? '-')),
+                      DataCell(Text(data['KDXX_MRKT'] == ''
+                          ? '-'
+                          : data['KDXX_MRKT'] ?? '-')),
                       DataCell(Text(data['NAMA_MRKT'] ?? '-')),
-                      DataCell(Text(data['JENIS_DAFTAR'])),
+                      DataCell(Text(data['JENIS_DAFTAR'] ?? '-')),
                       DataCell(Text(data['FIRST_LEVEL'] ?? '-')),
-                      DataCell(Text(data['DAFTAR_VIA'])),
+                      DataCell(Text(data['DAFTAR_VIA'] ?? '-')),
                       DataCell(Text((y--).toString())),
-                      DataCell(Text(data['BIAYA'])),
+                      DataCell(Text(data['BIAYA'] ?? '-')),
                       DataCell(Icon(
                         data['VB'] == '1'
                             ? Icons.check

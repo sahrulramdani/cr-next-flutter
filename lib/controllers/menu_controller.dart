@@ -29,15 +29,15 @@ class MenuController extends GetxController {
       case jamaahPageDisplayName:
         return _customIcon(Icons.people_alt_outlined, itemName);
       case inventoryPageDisplayName:
-        return _customIcon(Icons.all_inbox_outlined, itemName);
+        return _customIcon(Icons.view_module_outlined, itemName);
       case financePageDisplayName:
         return _customIcon(Icons.calculate_outlined, itemName);
       case purchasingPageDisplayName:
-        return _customIcon(Icons.shop_2_outlined, itemName);
+        return _customIcon(Icons.price_change_outlined, itemName);
       case crmPageDisplayName:
         return _customIcon(Icons.list_alt_outlined, itemName);
       case hrPageDisplayName:
-        return _customIcon(Icons.person_add_alt_1_outlined, itemName);
+        return _customIcon(Icons.contact_page_outlined, itemName);
         // case ppicPageDisplayName:
         //   return _customIcon(Icons.list_alt_outlined, itemName);
         // case orderPageDisplayName:

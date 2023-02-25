@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:flutter_web_course/constants/dummy_jadwal.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy_jadwal.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -21,6 +21,7 @@ class MarketingBerangkatPage extends StatefulWidget {
 
 class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
   List<Map<String, dynamic>> listPemberangkatan = [];
+  List<Map<String, dynamic>> listCardPemberangkatan = [];
 
   void getAllPemberangkatan() async {
     var response = await http.get(
@@ -33,9 +34,40 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
     });
   }
 
+  void getListCardPemberangkatan() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/pemberangkatan"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Berangkat",
+        "total": dataStatus[0]['TOTAL_PEMBERANGKATAN'].toString(),
+      },
+      {
+        "title": "Bulan Ini",
+        "total": dataStatus[0]['BULAN_INI'].toString(),
+      },
+      {
+        "title": "Bulan Depan",
+        "total": dataStatus[0]['BULAN_DEPAN'].toString(),
+      },
+      {
+        "title": "Sudah full",
+        "total": dataStatus[0]['SUDAH_FULL'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardPemberangkatan = dataList.toList();
+    });
+  }
+
   @override
   void initState() {
     getAllPemberangkatan();
+    getListCardPemberangkatan();
     super.initState();
   }
 

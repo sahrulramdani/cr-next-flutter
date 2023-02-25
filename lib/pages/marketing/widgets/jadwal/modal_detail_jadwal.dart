@@ -209,13 +209,51 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   }
 
   Widget cmdSuku() {
-    return PrintSuku(
-        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
+    return ElevatedButton.icon(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => ModalSuratKuasa(
+                  listPelangganJadwal: listJadwalPelanggan,
+                  tglBgkt: widget.tglBgkt,
+                ));
+      },
+      icon: const Icon(Icons.assignment_sharp),
+      label: const Text(
+        'Surat Kuasa',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 5,
+      ),
+    );
   }
 
   Widget cmdRekompas() {
-    return PrintRekompas(
-        listPelangganJadwal: listJadwalPelanggan, tglBgkt: widget.tglBgkt);
+    return ElevatedButton.icon(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) => ModalRekompas(
+                  listPelangganJadwal: listJadwalPelanggan,
+                  tglBgkt: widget.tglBgkt,
+                ));
+      },
+      icon: const Icon(Icons.recommend_outlined),
+      label: const Text(
+        'Rekomendasi Paspor',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 5,
+      ),
+    );
   }
 
   Widget cmdAbsenManasik() {
@@ -265,7 +303,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                   tglBgkt: widget.tglBgkt,
                 ));
       },
-      icon: const Icon(Icons.sd_card_alert_outlined),
+      icon: const Icon(Icons.assignment_late_outlined),
       label: const Text(
         'Surat Pernyataan',
         style: TextStyle(fontFamily: 'Gilroy'),
@@ -528,17 +566,17 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('JK',
+                                          label: Text('Jenis Kelamin',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('U',
+                                          label: Text('Umur',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('Pasp',
+                                          label: Text('Paspor',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
@@ -548,17 +586,17 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('Hand',
+                                          label: Text('Handling',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('Telp',
+                                          label: Text('Telepon',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),
                                       const DataColumn(
-                                          label: Text('Est. Total',
+                                          label: Text('Total',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12))),

@@ -18,14 +18,30 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(listKirimBarang[index]['tanggal'])),
-      DataCell(Text(listKirimBarang[index]['dari'])),
-      DataCell(Text(listKirimBarang[index]['ke'])),
-      DataCell(Text(listKirimBarang[index]['barang'])),
-      DataCell(Text(listKirimBarang[index]['qty'])),
-      DataCell(Text(listKirimBarang[index]['biaya'])),
-      DataCell(Text(listKirimBarang[index]['pengirim'])),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['tanggal'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['dari'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['ke'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['barang'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['qty'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['biaya'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listKirimBarang[index]['pengirim'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
     ]);
   }
 
@@ -60,60 +76,60 @@ class _TableKirimBarangState extends State<TableKirimBarang> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tanggal',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Dari',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Ke',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Barang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Qty',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Biaya',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Pengirim',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),

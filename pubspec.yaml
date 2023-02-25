@@ -53,6 +53,7 @@ dependencies:
   consolelog: ^0.0.2
   url_strategy: ^0.2.0
   flutter_image: ^4.1.5
+  flutter_easyloading: ^3.0.5
   # image_picker_web: ^1.0.9
 
 dev_dependencies:
@@ -80,6 +81,9 @@ flutter:
     - assets/images/craudhah_logo_icon.png
     - assets/images/craudhah_logo_landscape.png
     - assets/images/logo_craudhah_lands.png
+    - assets/images/hero-login-new-2.png
+    - assets/images/logo_craudhah_depan.png
+    - assets/images/logo_craudhah_pot.png
     - assets/images/error.png
     - assets/images/hero-alert-fail.png
     - assets/images/hero-dashboard-2.png
@@ -95,6 +99,8 @@ flutter:
     - assets/images/Screenshot (523).png
     - assets/images/nametag_paspor_background.png
     - assets/images/nametag_koper_background.png
+    - assets/images/ktp_pict.jpg
+    - assets/images/kartu_keluarga.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

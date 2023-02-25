@@ -104,7 +104,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                       },
                     ),
                     GButton(
-                      icon: Icons.wallet_membership_outlined,
+                      icon: Icons.request_quote_outlined,
                       text: 'Bank',
                       onPressed: () {
                         setState(() {
@@ -119,7 +119,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                       },
                     ),
                     GButton(
-                      icon: Icons.co_present_outlined,
+                      icon: Icons.keyboard_double_arrow_up,
                       text: 'Upline',
                       onPressed: () {
                         setState(() {
@@ -134,7 +134,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                       },
                     ),
                     GButton(
-                      icon: Icons.personal_injury_outlined,
+                      icon: Icons.keyboard_double_arrow_down,
                       text: 'Downline',
                       onPressed: () {
                         setState(() {

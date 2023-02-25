@@ -128,7 +128,7 @@ class _PrintSertifikatState extends State<PrintSertifikat> {
     AnchorElement(
         href:
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-      ..setAttribute("download", "sertifikat.pdf")
+      ..setAttribute("download", "sertifikat_${widget.tglBgkt}.pdf")
       ..click();
   }
 
@@ -157,7 +157,7 @@ class _PrintSertifikatState extends State<PrintSertifikat> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.credit_score_outlined),
+      icon: const Icon(Icons.quick_contacts_mail),
       label: const Text(
         'Sertifikat',
         style: TextStyle(fontFamily: 'Gilroy'),

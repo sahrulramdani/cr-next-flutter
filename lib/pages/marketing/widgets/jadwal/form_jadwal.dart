@@ -384,7 +384,7 @@ class _JadwalFormState extends State<JadwalForm> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Transit",
+          label: "Hotel Tambahan",
           items: listHotelTransit,
           onChanged: (value) {
             // print(value['iata_code']);

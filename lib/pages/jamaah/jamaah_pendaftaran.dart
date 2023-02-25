@@ -768,7 +768,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
         );
       } else {
         return const Image(
-          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          image: AssetImage('assets/images/ktp_pict.jpg'),
           height: 100,
         );
       }
@@ -783,7 +783,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       );
     } else {
       return const Image(
-        image: AssetImage('assets/images/NO_IMAGE.jpg'),
+        image: AssetImage('assets/images/kartu_keluarga.png'),
         height: 100,
       );
     }

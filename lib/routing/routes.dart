@@ -22,6 +22,9 @@ const mrktPemberangkatanPageRoute = "/mrkt/pemberangkatan";
 const mrktTourleadPageDisplayName = "Tour Leader";
 const mrktTourleadPageRoute = "/mrkt/tourlead";
 
+const mrktPerolehanTahunPageDisplayName = "Perolehan Per Tahun";
+const mrktPerolehanTahunPageRoute = "/mrkt/perolehan-pertahun";
+
 const mrktTransitPageDisplayName = "Master Transit";
 const mrktTransitPageRoute = "/mrkt/transit";
 
@@ -34,16 +37,16 @@ const mrktHotelPageRoute = "/mrkt/hotel";
 const jamaahPageDisplayName = "Jamaah";
 const jamaahPageRoute = "/jamaah";
 
-const jmahDataPageDisplayName = "Data Jamaah";
+const jmahDataPageDisplayName = "Jamaah";
 const jmahDataPageRoute = "/jamaah/master";
 
-const jmahPendaftaranPageDisplayName = "Pendaftaran";
+const jmahPendaftaranPageDisplayName = "Pendaftaran Paket";
 const jmahPendaftaranPageRoute = "/jamaah/pendaftaran";
 
-const jmahPelangganPageDisplayName = "Pelanggan";
+const jmahPelangganPageDisplayName = "Data Pelanggan";
 const jmahPelangganPageRoute = "/jamaah/pelanggan";
 
-const jmahAlumniPageDisplayName = "Alumni";
+const jmahAlumniPageDisplayName = "Data Alumni";
 const jmahAlumniPageRoute = "/jamaah/alumni";
 
 const inventoryPageDisplayName = "Inventory";

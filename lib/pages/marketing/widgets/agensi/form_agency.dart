@@ -47,6 +47,9 @@ class _AgencyFormState extends State<AgencyForm> {
   String kodePos;
   String idLeader;
   String namaLeader;
+  String katMarket;
+  String namaPenanggungJawab;
+  String telpPenanggungJawab;
   String idFee;
   String namaFee;
   String namaAyah;
@@ -75,6 +78,7 @@ class _AgencyFormState extends State<AgencyForm> {
   List<Map<String, dynamic>> listPendidikan = [];
   List<Map<String, dynamic>> listPekerjaan = [];
   List<Map<String, dynamic>> listJamaah = [];
+  var listJenisMarketing = ["Perorangan", "Perusahaan"];
 
   TextEditingController dateLahir = TextEditingController();
   TextEditingController dateKeluar = TextEditingController();
@@ -189,6 +193,18 @@ class _AgencyFormState extends State<AgencyForm> {
     setState(() {
       listPekerjaan = dataStatus;
     });
+  }
+
+  getJenisMarketing() {
+    if (namaFee == "Cabang" || namaFee == "Agen") {
+      setState(() {
+        listJenisMarketing = ["Perorangan", "Perusahaan"];
+      });
+    } else {
+      setState(() {
+        listJenisMarketing = ["Perorangan"];
+      });
+    }
   }
 
   @override
@@ -681,6 +697,12 @@ class _AgencyFormState extends State<AgencyForm> {
         onChanged: (value) {
           namaFee = value['CODD_DESC'];
           idFee = value['CODD_VALU'];
+          if (value['CODD_DESC'] == 'Tourleader') {
+            setState(() {
+              katMarket = 'Perorangan';
+            });
+          }
+          getJenisMarketing();
         },
         showSearchBox: true,
         popupItemBuilder: (context, item, isSelected) => ListTile(
@@ -698,6 +720,70 @@ class _AgencyFormState extends State<AgencyForm> {
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
       ),
+    );
+  }
+
+  Widget inputJenisMarketing() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        label: "Jenis Marketing",
+        mode: Mode.MENU,
+        items: listJenisMarketing,
+        onChanged: (value) {
+          katMarket = value;
+          if (value == 'Perorangan') {
+            setState(() {
+              namaPenanggungJawab = namaAgency;
+            });
+          }
+        },
+        dropdownBuilder: (context, selectedItem) => Text(
+            katMarket ?? "Pilih Kategori Marketing",
+            style: TextStyle(
+                color: katMarket == null ? Colors.red : Colors.black)),
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+        validator: (value) {
+          if (value == "Pilih Kategori Marketing") {
+            return "Kategori Marketing masih kosong !";
+          }
+        },
+      ),
+    );
+  }
+
+  Widget inputPenanggungJawab() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          label: Text('Nama Penanggung Jawab',
+              style: TextStyle(color: Colors.red))),
+      onChanged: (value) {
+        namaPenanggungJawab = value;
+      },
+      initialValue: namaPenanggungJawab,
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Penanggung Jawab masih kosong !";
+        }
+      },
+    );
+  }
+
+  Widget inputTelpPenanggungJawab() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          labelText: 'Telepon Penanggung Jawab', hintText: "08xxxxxxxxxxx"),
+      onChanged: (value) {
+        telpPenanggungJawab = value;
+      },
+      initialValue: telpPenanggungJawab,
     );
   }
 
@@ -1029,6 +1115,9 @@ class _AgencyFormState extends State<AgencyForm> {
       kodePos,
       idLeader,
       idFee,
+      katMarket,
+      namaPenanggungJawab,
+      telpPenanggungJawab,
       namaAyah,
       noTelp,
       idMenikah,
@@ -1208,6 +1297,8 @@ class _AgencyFormState extends State<AgencyForm> {
                               const SizedBox(height: 8),
                               inputKodePos(),
                               const SizedBox(height: 8),
+                              inputNamaLeader(),
+                              const SizedBox(height: 8),
                               Row(
                                 children: [
                                   SizedBox(
@@ -1247,9 +1338,13 @@ class _AgencyFormState extends State<AgencyForm> {
                           width: 525,
                           child: Column(
                             children: [
-                              inputNamaLeader(),
-                              const SizedBox(height: 8),
                               inputFeeLevel(),
+                              const SizedBox(height: 8),
+                              inputJenisMarketing(),
+                              const SizedBox(height: 8),
+                              inputPenanggungJawab(),
+                              const SizedBox(height: 8),
+                              inputTelpPenanggungJawab(),
                               const SizedBox(height: 8),
                               inputNamaAyah(),
                               const SizedBox(height: 8),

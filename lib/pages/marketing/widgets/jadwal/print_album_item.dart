@@ -81,6 +81,10 @@ class _ModalAlbumItemState extends State<ModalAlbumItem> {
     int maxSide = (listPelanggan.length / 4).toInt() + 1;
     int j = 0;
 
+    if (widget.tglPlng == 'null') {
+      widget.tglPlng = '00-12-0000';
+    }
+
     int arrB = 0;
     int arrData = 0;
 
@@ -177,6 +181,7 @@ class _ModalAlbumItemState extends State<ModalAlbumItem> {
                                                 ),
                                               ),
                                             ),
+                                            pw.SizedBox(width: 10),
                                             pw.SizedBox(
                                                 width: 200,
                                                 child: pw.Table.fromTextArray(

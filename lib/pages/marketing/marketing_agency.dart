@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:flutter_web_course/constants/dummy_marketing.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy_marketing.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/export_agency.dart';
@@ -29,6 +29,7 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
 
   bool enableFormL = false;
   List<Map<String, dynamic>> listAgency = [];
+  List<Map<String, dynamic>> listCardAgency = [];
   // List<Map<String, dynamic>> listProvinsi = [];
 
   // List<Map<String, dynamic>> listCalon = [];
@@ -48,6 +49,36 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
         List.from(json.decode(response.body) as List);
     setState(() {
       listAgency = dataAgency;
+    });
+  }
+
+  void getListCardAgency() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/agency"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Agensi",
+        "total": dataStatus[0]['TOTAL_MRKT'].toString(),
+      },
+      {
+        "title": "Agen",
+        "total": dataStatus[0]['TTL_AGEN'].toString(),
+      },
+      {
+        "title": "Cabang",
+        "total": dataStatus[0]['TTL_CABANG'].toString(),
+      },
+      {
+        "title": "Tour Leader",
+        "total": dataStatus[0]['TTL_TOURLEAD'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardAgency = dataList.toList();
     });
   }
 
@@ -90,6 +121,7 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   @override
   void initState() {
     getAgency();
+    getListCardAgency();
     // getCalon();
     // getFee();
     // getLokasi();

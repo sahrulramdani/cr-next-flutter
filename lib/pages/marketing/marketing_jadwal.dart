@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/constants/dummy_jadwal.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
@@ -29,6 +29,7 @@ class MarketingJadwalPage extends StatefulWidget {
 class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listJadwal = [];
+  List<Map<String, dynamic>> listCardJadwal = [];
 
   void getAllJadwal() async {
     var response =
@@ -41,10 +42,41 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
     });
   }
 
+  void getListCardJadwal() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/jadwal"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Umroh Reguler",
+        "total": dataStatus[0]['UMROH_REGULER'].toString(),
+      },
+      {
+        "title": "Umroh Plus",
+        "total": dataStatus[0]['UMROH_PLUS'].toString(),
+      },
+      {
+        "title": "Haji Furoda",
+        "total": dataStatus[0]['HAJI_FURODA'].toString(),
+      },
+      {
+        "title": "Haji Plus",
+        "total": dataStatus[0]['HAJI_PLUS'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardJadwal = dataList.toList();
+    });
+  }
+
   @override
   void initState() {
     // getProvinsi();
     getAllJadwal();
+    getListCardJadwal();
     super.initState();
   }
 

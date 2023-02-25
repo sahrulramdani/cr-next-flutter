@@ -211,7 +211,7 @@ class _PrintNametagPasporState extends State<PrintNametagPaspor> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.badge_outlined),
+      icon: const Icon(Icons.attribution),
       label: const Text(
         'NameTag Paspor',
         style: TextStyle(fontFamily: 'Gilroy'),

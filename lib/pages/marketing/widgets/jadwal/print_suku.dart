@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, must_be_immutable
+// ignore_for_file: avoid_web_libraries_in_flutter, must_be_immutable, missing_return, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 
 import 'dart:convert';
 import 'dart:html';
@@ -12,20 +12,22 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class PrintSuku extends StatefulWidget {
+class ModalSuratKuasa extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
   String tglBgkt;
 
-  PrintSuku(
+  ModalSuratKuasa(
       {Key key, @required this.listPelangganJadwal, @required this.tglBgkt})
       : super(key: key);
 
   @override
-  State<PrintSuku> createState() => _PrintSukuState();
+  State<ModalSuratKuasa> createState() => _ModalSuratKuasaState();
 }
 
-class _PrintSukuState extends State<PrintSuku> {
+class _ModalSuratKuasaState extends State<ModalSuratKuasa> {
   List<Map<String, dynamic>> listPelanggan = [];
+  String NamaKantor = 'Bandung';
+  String Alamat = 'Jl.Surapati No.82';
 
   Future<void> _createPDF() async {
     final pdf = pw.Document();
@@ -66,8 +68,8 @@ class _PrintSukuState extends State<PrintSuku> {
                                   children: [
                                     pw.Text('Kepada Yth :'),
                                     pw.Text('Kepala Kantor Imigrasi'),
-                                    pw.Text('Kelas 1 Bandung'),
-                                    pw.Text('Jl.Surapati No.82'),
+                                    pw.Text('Kelas 1 ${NamaKantor}'),
+                                    pw.Text('${Alamat}'),
                                   ])),
                           pw.SizedBox(height: 30),
                           pw.Container(
@@ -97,8 +99,9 @@ class _PrintSukuState extends State<PrintSuku> {
                                           [
                                             "NIK",
                                             ":",
-                                            listPelanggan[(a - 1)]['NOXX_IDNT']
-                                                .toString(),
+                                            listPelanggan[(a - 1)]
+                                                    ['NOXX_IDNT'] ??
+                                                '-'.toString(),
                                           ],
                                           [
                                             "Nama",
@@ -155,7 +158,7 @@ class _PrintSukuState extends State<PrintSuku> {
                                       pw.CrossAxisAlignment.start,
                                   children: [
                                     pw.Text(
-                                        'Untuk melakukan pengambilan Paspor di Kantor Imigrasi Kelas 1 Bandung. Demikian Surat Ini dibuat untuk dipergunakan sebagaimana mestinya.'),
+                                        'Untuk melakukan pengambilan Paspor di Kantor Imigrasi Kelas 1 ${NamaKantor}. Demikian Surat Ini dibuat untuk dipergunakan sebagaimana mestinya.'),
                                   ])),
                           pw.SizedBox(height: 30),
                           pw.Text(
@@ -236,30 +239,144 @@ class _PrintSukuState extends State<PrintSuku> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () async {
-        await fncGetCek();
-
-        if (listPelanggan.isNotEmpty) {
-          _createPDF();
-        } else {
-          showDialog(
-              context: context, builder: (context) => const ModalDataFail());
+  Widget inputNamaKantor() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          labelText: 'Nama Kota Kantor Imigrasi',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: NamaKantor ?? '',
+      onChanged: (value) {
+        NamaKantor = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Nama Kota Kantor Imigrasi tidak boleh kosong !";
         }
       },
-      icon: const Icon(Icons.filter_frames_outlined),
-      label: const Text(
-        'Surat Kuasa',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+    );
+  }
+
+  Widget inputAlamat() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          labelText: 'Alamat Kantor Imigrasi',
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
+      initialValue: Alamat ?? '',
+      onChanged: (value) {
+        Alamat = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Alamat Kantor Imigrasi tidak boleh kosong !";
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final formKey = GlobalKey<FormState>();
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: Stack(children: [
+        Form(
+          key: formKey,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            width: screenWidth > 600 ? 300 : 300,
+            height: 300,
+            child: Column(
+              children: [
+                SizedBox(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.corporate_fare_rounded,
+                        color: Colors.amber[900],
+                      ),
+                      const SizedBox(width: 10),
+                      FittedBox(
+                        child: Text('Print Surat Pernyataan',
+                            style: TextStyle(
+                                color: myGrey, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SizedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          inputNamaKantor(),
+                          const SizedBox(height: 10),
+                          inputAlamat(),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          if (formKey.currentState.validate()) {
+                            await fncGetCek();
+
+                            if (listPelanggan.isNotEmpty) {
+                              _createPDF();
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => const ModalDataFail());
+                            }
+                          } else {
+                            return null;
+                          }
+                        },
+                        icon: const Icon(Icons.save),
+                        label: const Text(
+                          'Print Data',
+                          style: TextStyle(fontFamily: 'Gilroy'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: myBlue,
+                          shadowColor: Colors.grey,
+                          elevation: 5,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Kembali'))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      ]),
     );
   }
 }

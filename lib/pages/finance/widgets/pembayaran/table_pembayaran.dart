@@ -28,14 +28,29 @@ class MyData extends DataTableSource {
           navigationController.navigateTo('/finance/form-bayar');
         },
         cells: [
-          DataCell(Text((index + 1).toString())),
-          DataCell(Text(dataPembayaran[index]['NAMA_KNTR'])),
-          DataCell(Text(dataPembayaran[index]['ALMT_KNTR'])),
-          DataCell(Text(dataPembayaran[index]['JML_DFTAR'].toString())),
-          DataCell(Text(myFormat.format(dataPembayaran[index]['TOTL_TGIH']))),
-          DataCell(Text(myFormat.format(dataPembayaran[index]['JML_BYAR']))),
-          DataCell(Text(myFormat.format((dataPembayaran[index]['TOTL_TGIH']) -
-              (dataPembayaran[index]['JML_BYAR'])))),
+          DataCell(Text((index + 1).toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataPembayaran[index]['NAMA_KNTR'],
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataPembayaran[index]['ALMT_KNTR'],
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(dataPembayaran[index]['JML_DFTAR'].toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(myFormat.format(dataPembayaran[index]['TOTL_TGIH']),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(myFormat.format(dataPembayaran[index]['JML_BYAR']),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text(
+              myFormat.format((dataPembayaran[index]['TOTL_TGIH']) -
+                  (dataPembayaran[index]['JML_BYAR'])),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
         ]);
   }
 
@@ -72,53 +87,53 @@ class _TablePembayaranState extends State<TablePembayaran> {
         child: PaginatedDataTable(
           columnSpacing: 8,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Cabang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Lokasi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Daftar',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tagihan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Pembayaran',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Selisih',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),

@@ -152,9 +152,9 @@ class _ImportSiskopatuhState extends State<ImportSiskopatuh> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.import_export_rounded),
+      icon: const Icon(Icons.keyboard_double_arrow_down),
       label: const Text(
-        'Import Siskopatuh',
+        'Export Siskopatuh',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(

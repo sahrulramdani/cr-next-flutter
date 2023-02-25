@@ -26,7 +26,9 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Icon(
         dummyListUjrah[index]['status_tm'] == 'p'
             ? Icons.punch_clock_outlined
@@ -36,14 +38,30 @@ class MyData extends DataTableSource {
             : Colors.green,
         size: 20,
       )),
-      DataCell(Text(dummyListUjrah[index]['id_faktur'])),
-      DataCell(Text(dummyListUjrah[index]['nama_lengkap'])),
-      DataCell(Text(dummyListUjrah[index]['co_tr'])),
-      DataCell(Text(dummyListUjrah[index]['ujroh'])),
-      DataCell(Text(dummyListUjrah[index]['status_text'])),
-      const DataCell(Text('-')),
-      const DataCell(Text('-')),
-      DataCell(Text(dummyListUjrah[index]['no_wa'])),
+      DataCell(Text(dummyListUjrah[index]['id_faktur'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dummyListUjrah[index]['nama_lengkap'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dummyListUjrah[index]['co_tr'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dummyListUjrah[index]['ujroh'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dummyListUjrah[index]['status_text'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text('-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text('-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dummyListUjrah[index]['no_wa'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,74 +109,74 @@ class _TableTransaksiState extends State<TableTransaksi> {
         child: PaginatedDataTable(
           source: myTable,
           columnSpacing: 8,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('#',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Faktur',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Marketing',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tr',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Ujroh',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Status Transfer',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Otorisasi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Tranfer',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Telepon',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -168,7 +186,7 @@ class _TableTransaksiState extends State<TableTransaksi> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

@@ -26,7 +26,7 @@ List dataSubMenuMarketing = [
   // },
   {
     "level": 0,
-    "icon": Icons.nature_people_outlined,
+    "icon": Icons.supervised_user_circle,
     "title": "Agency",
     "route": "/mrkt/agency"
   },
@@ -38,7 +38,7 @@ List dataSubMenuMarketing = [
   },
   {
     "level": 0,
-    "icon": Icons.date_range_outlined,
+    "icon": Icons.pin_invoke,
     "title": "Pemberangkatan",
     "route": "/mrkt/pemberangkatan"
   },
@@ -50,22 +50,42 @@ List dataSubMenuMarketing = [
   },
   {
     "level": 0,
-    "icon": Icons.transit_enterexit,
-    "title": "Master Transit",
-    "route": "/mrkt/transit"
+    "icon": Icons.file_copy_outlined,
+    "title": "Laporan",
+    "children": [
+      {
+        "level": 1,
+        "icon": Icons.auto_graph_rounded,
+        "title": "Perolehan Per Tahun",
+        "route": "/mrkt/perolehan-pertahun"
+      },
+    ]
   },
   {
     "level": 0,
-    "icon": Icons.flight,
-    "title": "Master Maskapai",
-    "route": "/mrkt/maskapai"
+    "icon": Icons.manage_history_rounded,
+    "title": "Master",
+    "children": [
+      {
+        "level": 1,
+        "icon": Icons.transit_enterexit,
+        "title": "Master Transit",
+        "route": "/mrkt/transit"
+      },
+      {
+        "level": 1,
+        "icon": Icons.flight,
+        "title": "Master Maskapai",
+        "route": "/mrkt/maskapai"
+      },
+      {
+        "level": 1,
+        "icon": Icons.hotel,
+        "title": "Master Hotel",
+        "route": "/mrkt/hotel"
+      }
+    ]
   },
-  {
-    "level": 0,
-    "icon": Icons.hotel,
-    "title": "Master Hotel",
-    "route": "/mrkt/hotel"
-  }
 ];
 
 List dataSubMenuJamaah = [
@@ -77,25 +97,25 @@ List dataSubMenuJamaah = [
   {
     "level": 0,
     "icon": Icons.people_outline,
-    "title": "Data Jamaah",
+    "title": "Calon Jamaah",
     "route": "/jamaah/master"
   },
   {
     "level": 0,
-    "icon": Icons.file_open_outlined,
-    "title": "Pendaftaran",
+    "icon": Icons.person_add_alt_1,
+    "title": "Pendaftaran Paket",
     "route": "/jamaah/pendaftaran"
   },
   {
     "level": 0,
     "icon": Icons.person_pin_outlined,
-    "title": "Pelanggan",
+    "title": "Daftar Jamaah",
     "route": "/jamaah/pelanggan"
   },
   {
     "level": 0,
-    "icon": Icons.collections_bookmark_outlined,
-    "title": "Alumni",
+    "icon": Icons.person_pin_circle,
+    "title": "Daftar Alumni",
     "route": "/jamaah/alumni"
   },
 ];
@@ -104,7 +124,7 @@ List dataSubMenuInventory = [
   //menu data item
   {
     "level": 0,
-    "icon": Icons.all_inbox_outlined,
+    "icon": Icons.view_module,
     "title": "Inventory",
   },
   {
@@ -144,7 +164,7 @@ List dataSubMenuHR = [
   //menu data item
   {
     "level": 0,
-    "icon": Icons.person_add_alt_1_outlined,
+    "icon": Icons.contact_page,
     "title": "HR",
   },
   {
@@ -443,7 +463,7 @@ List DataSubMenu_Purchasing = [
   },
   {
     "level": 0,
-    "icon": Icons.explore,
+    "icon": Icons.price_change_outlined,
     "title": "Purchasing",
     "children": [
       {

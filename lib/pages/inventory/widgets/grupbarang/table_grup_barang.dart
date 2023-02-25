@@ -64,10 +64,18 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(listData[index]['NAMA_GRUP'].toString())),
-      DataCell(Text(listData[index]['QTY'].toString())),
-      DataCell(Text(listData[index]['KETERANGAN'].toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listData[index]['NAMA_GRUP'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listData[index]['QTY'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(listData[index]['KETERANGAN'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,32 +123,32 @@ class _TableGrupBarangState extends State<TableGrupBarang> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Grup Barang',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Qty Jenis',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Keterangan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -149,7 +157,7 @@ class _TableGrupBarangState extends State<TableGrupBarang> {
               child: Center(
                 child: Text('Aksi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16)),

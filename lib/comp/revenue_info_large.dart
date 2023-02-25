@@ -66,7 +66,7 @@ class _RevenueInfoLargeState extends State<RevenueInfoLarge> {
     setState(() {
       BulanIni = data[0]['BULAN_INI'].toString();
       BulanLalu = data[0]['BULAN_LALU'].toString();
-      SampaiBulanIni = data[0]['SAMPAI_BULANINI'].toString();
+      SampaiBulanIni = data[0]['TOTAL_JAMAAH'].toString();
       TahunLalu = data[0]['TAHUN_LALU'].toString();
     });
   }

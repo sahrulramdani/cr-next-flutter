@@ -48,26 +48,40 @@ class MyData extends DataTableSource {
   DataRow getRow(int index) {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Icon(
           dataPelanggan[index]['STS_BRGKT'] == 0
-              ? Icons.punch_clock_outlined
+              ? Icons.access_alarm_outlined
               : Icons.check,
           color: dataPelanggan[index]['STS_BRGKT'] == 0
               ? Colors.orange[800]
               : Colors.green)),
-      DataCell(Text(dataPelanggan[index]['KDXX_DFTR'].toString())),
-      DataCell(Text(dataPelanggan[index]['NAMA_LGKP'])),
-      DataCell(Text(dataPelanggan[index]['JENS_KLMN'])),
-      DataCell(Text(dataPelanggan[index]['UMUR'].toString())),
-      DataCell(Text(dataPelanggan[index]['BERANGKAT'])),
+      DataCell(Text(dataPelanggan[index]['KDXX_DFTR'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPelanggan[index]['NAMA_LGKP'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPelanggan[index]['JENS_KLMN'],
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPelanggan[index]['UMUR'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPelanggan[index]['BERANGKAT'] ?? '-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Text(
-          dataPelanggan[index]['PASPORAN'] == 'BELUM' ? 'BELUM' : 'PASPORAN')),
-      DataCell(Text(dataPelanggan[index]['HANDLING'])),
-      DataCell(Text(dataPelanggan[index]['NOXX_TELP'].toString())),
-      DataCell(Text(myFormat.format(dataPelanggan[index]['UANG_MASUK']))),
-      DataCell(Text(myFormat.format(dataPelanggan[index]['SISA']))),
-      DataCell(Text(dataPelanggan[index]['NAMA_MRKT'])),
+          dataPelanggan[index]['PASPORAN'] == 'BELUM' ? 'BELUM' : 'PASPORAN',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      // DataCell(Text(dataPelanggan[index]['HANDLING'])),
+      // DataCell(Text(dataPelanggan[index]['NOXX_TELP'].toString())),
+      // DataCell(Text(myFormat.format(dataPelanggan[index]['UANG_MASUK']))),
+      // DataCell(Text(myFormat.format(dataPelanggan[index]['SISA']))),
+      // DataCell(Text(dataPelanggan[index]['NAMA_MRKT'])),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -116,105 +130,105 @@ class _TablePelangganState extends State<TablePelanggan> {
         child: PaginatedDataTable(
           columnSpacing: 17,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('#',
+                label: Text(' ',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('ID',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('JK',
+                label: Text('Jenis Kelamin',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('U',
+                label: Text('Umur',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Berangkat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Persyaratan',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
-            DataColumn(
-                label: Text('Handling',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Telepon',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Uang Masuk',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Estimasi Sisa',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Agency',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Handling',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Telepon',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Uang Masuk',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Estimasi Sisa',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Agency',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

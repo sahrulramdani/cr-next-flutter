@@ -30,7 +30,7 @@ class DetailJadwalPelanggan extends StatelessWidget {
                             fontFamily: 'Gilroy',
                             fontSize: 16))),
                 DataColumn(
-                    label: Text('JK',
+                    label: Text('Jenis Kelamin',
                         style: TextStyle(
                             color: myGrey,
                             fontWeight: FontWeight.bold,

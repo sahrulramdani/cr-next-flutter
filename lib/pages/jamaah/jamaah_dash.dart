@@ -20,7 +20,28 @@ class JamaahDashboardPage extends StatefulWidget {
 }
 
 class _JamaahDashboardPageState extends State<JamaahDashboardPage> {
-  List<Map<String, dynamic>> listCardDashboard = [];
+  List<Map<String, dynamic>> listCardDashboard = {
+    {
+      "title": "Jamaah",
+      "total": "0",
+    },
+    {
+      "title": "Lunas Terjadwal",
+      "total": "0",
+    },
+    {
+      "title": "Belum Lunas",
+      "total": "0",
+    },
+    {
+      "title": "Lunas Reschedule",
+      "total": "0",
+    },
+    {
+      "title": "Alumni",
+      "total": "0",
+    },
+  }.toList();
 
   void getListCardDashboard() async {
     var response =

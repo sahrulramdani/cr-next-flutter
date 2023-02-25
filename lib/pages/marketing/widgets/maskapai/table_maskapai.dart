@@ -64,9 +64,13 @@ class MyData extends DataTableSource {
     // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(listMaskapai[index]['IDXX_PSWT'].toString())),
-      DataCell(Text(listMaskapai[index]['NAMA_PSWT'].toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      // DataCell(Text(listMaskapai[index]['IDXX_PSWT'].toString())),
+      DataCell(Text(listMaskapai[index]['NAMA_PSWT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -118,25 +122,25 @@ class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
-            DataColumn(
-                label: Text('ID',
-                    style: TextStyle(
-                        color: myGrey,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            // DataColumn(
+            //     label: Text('ID',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
             DataColumn(
                 label: Text('Nama',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -146,7 +150,7 @@ class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

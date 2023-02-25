@@ -44,6 +44,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   String namaLeader;
   String idFee;
   String namaFee;
+  String katMarket;
+  String namaPenanggungJawab;
+  String telpPenanggungJawab;
   String namaAyah;
   String telepon;
   String idMenikah;
@@ -79,6 +82,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   List<Map<String, dynamic>> listMenikah = [];
   List<Map<String, dynamic>> listPendidikan = [];
   List<Map<String, dynamic>> listPekerjaan = [];
+  var listJenisMarketing = ["Perorangan", "Perusahaan"];
 
   TextEditingController dateLhir = TextEditingController();
   TextEditingController dateKeluar = TextEditingController();
@@ -118,6 +122,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       namaLeader = dataAgen[0]['UPLINE'];
       idFee = dataAgen[0]['FEEX_LVEL'];
       namaFee = dataAgen[0]['FEE'];
+      katMarket = dataAgen[0]['KATX_MRKT'];
+      namaPenanggungJawab = dataAgen[0]['NAMA_PJWB'];
+      telpPenanggungJawab = dataAgen[0]['TELP_PJWB'];
       namaAyah = dataAgen[0]['NAMA_AYAH'];
       telepon = dataAgen[0]['NOXX_TELP'];
       idMenikah = dataAgen[0]['JENS_MNKH'];
@@ -249,6 +256,18 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     setState(() {
       listPekerjaan = dataStatus;
     });
+  }
+
+  getJenisMarketing() {
+    if (namaFee == "Cabang" || namaFee == "Agen") {
+      setState(() {
+        listJenisMarketing = ["Perorangan", "Perusahaan"];
+      });
+    } else {
+      setState(() {
+        listJenisMarketing = ["Perorangan"];
+      });
+    }
   }
 
   @override
@@ -700,6 +719,12 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
         onChanged: (value) {
           namaFee = value['CODD_DESC'];
           idFee = value['CODD_VALU'];
+          if (value['CODD_DESC'] == 'Tourleader') {
+            setState(() {
+              katMarket = 'Perorangan';
+            });
+          }
+          getJenisMarketing();
         },
         showSearchBox: true,
         popupItemBuilder: (context, item, isSelected) => ListTile(
@@ -715,6 +740,70 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
+    );
+  }
+
+  Widget inputJenisMarketing() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        label: "Jenis Marketing",
+        mode: Mode.MENU,
+        items: listJenisMarketing,
+        onChanged: (value) {
+          katMarket = value;
+          if (value == 'Perorangan') {
+            setState(() {
+              namaPenanggungJawab = nama;
+            });
+          }
+        },
+        dropdownBuilder: (context, selectedItem) => Text(
+            katMarket ?? "Pilih Kategori Marketing",
+            style: TextStyle(
+                color: katMarket == null ? Colors.red : Colors.black)),
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+        validator: (value) {
+          if (value == "Pilih Kategori Marketing") {
+            return "Kategori Marketing masih kosong !";
+          }
+        },
+      ),
+    );
+  }
+
+  Widget inputPenanggungJawab() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          label: Text('Nama Penanggung Jawab',
+              style: TextStyle(color: Colors.red))),
+      onChanged: (value) {
+        namaPenanggungJawab = value;
+      },
+      initialValue: namaPenanggungJawab,
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Penanggung Jawab masih kosong !";
+        }
+      },
+    );
+  }
+
+  Widget inputTelpPenanggungJawab() {
+    return TextFormField(
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+          labelText: 'Telepon Penanggung Jawab', hintText: "08xxxxxxxxxxx"),
+      onChanged: (value) {
+        telpPenanggungJawab = value;
+      },
+      initialValue: telpPenanggungJawab,
     );
   }
 
@@ -1078,6 +1167,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       kodePos,
       idLeader,
       idFee,
+      katMarket,
+      namaPenanggungJawab,
+      telpPenanggungJawab,
       namaAyah,
       telepon,
       idMenikah,
@@ -1178,6 +1270,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                 const SizedBox(height: 8),
                                 inputKel(),
                                 const SizedBox(height: 8),
+                                inputKodePos(),
+                                const SizedBox(height: 8),
+                                inputNamaLeader(),
+                                const SizedBox(height: 8),
                                 inputStatusAgen(),
                                 const SizedBox(height: 8),
                                 Row(
@@ -1225,11 +1321,13 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                             width: 530,
                             child: Column(
                               children: [
-                                inputKodePos(),
-                                const SizedBox(height: 8),
-                                inputNamaLeader(),
-                                const SizedBox(height: 8),
                                 inputFeeLevel(),
+                                const SizedBox(height: 8),
+                                inputJenisMarketing(),
+                                const SizedBox(height: 8),
+                                inputPenanggungJawab(),
+                                const SizedBox(height: 8),
+                                inputTelpPenanggungJawab(),
                                 const SizedBox(height: 8),
                                 inputNamaAyah(),
                                 const SizedBox(height: 8),

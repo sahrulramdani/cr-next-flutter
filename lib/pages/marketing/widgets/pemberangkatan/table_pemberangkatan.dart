@@ -56,26 +56,44 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Icon(
         dataPemberangkatan[index]['STATUS'] == 1
             ? Icons.check
-            : Icons.punch_clock_outlined,
+            : Icons.access_alarm_outlined,
         color: dataPemberangkatan[index]['STATUS'] == 1
             ? Colors.green
-            : Colors.red,
+            : Colors.orange[800],
         size: 20,
       )),
       DataCell(Text(
-          '${dataPemberangkatan[index]['jenisPaket']}, ${dataPemberangkatan[index]['KETERANGAN']}')),
+          '${dataPemberangkatan[index]['jenisPaket']}, ${dataPemberangkatan[index]['KETERANGAN']}',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Text(
-          fncGetTanggal(dataPemberangkatan[index]['TGLX_BGKT'].toString()))),
-      DataCell(Text(dataPemberangkatan[index]['JMLX_HARI'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['JMLX_SEAT'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['JAMAAH_AGEN'].toString())),
-      DataCell(Text(dataPemberangkatan[index]['JAMAAH_KNTR'].toString())),
-      DataCell(Text('0/${dataPemberangkatan[index]['TOTL_KONFIRMASI']}')),
-      DataCell(Text(dataPemberangkatan[index]['SISA'].toString())),
+          fncGetTanggal(dataPemberangkatan[index]['TGLX_BGKT'].toString()),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPemberangkatan[index]['JMLX_HARI'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPemberangkatan[index]['JMLX_SEAT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPemberangkatan[index]['JAMAAH_AGEN'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPemberangkatan[index]['JAMAAH_KNTR'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text('0/${dataPemberangkatan[index]['TOTL_KONFIRMASI']}',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataPemberangkatan[index]['SISA'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,74 +145,74 @@ class _TablePemberangkatanState extends State<TablePemberangkatan> {
         child: PaginatedDataTable(
           columnSpacing: 15,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('#',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Paket',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Berangkat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Hari',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Seat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Agen',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Kantor',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Konfirmasi',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Sisa',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -204,7 +222,7 @@ class _TablePemberangkatanState extends State<TablePemberangkatan> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

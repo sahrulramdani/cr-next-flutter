@@ -149,9 +149,9 @@ class _ImportSipatuhState extends State<ImportSipatuh> {
               context: context, builder: (context) => const ModalDataFail());
         }
       },
-      icon: const Icon(Icons.import_export_rounded),
+      icon: const Icon(Icons.south_outlined),
       label: const Text(
-        'Import Sipatuh',
+        'Export Sipatuh',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(

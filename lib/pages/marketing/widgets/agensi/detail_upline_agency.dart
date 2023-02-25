@@ -145,17 +145,17 @@ class _DetailUplineAgencyState extends State<DetailUplineAgency> {
                         if (data['KDXX_MRKT'] != null) {
                           return DataRow(cells: [
                             DataCell(Text((x++).toString())),
-                            DataCell(Text(data['KDXX_MRKT'])),
-                            DataCell(Text(data['NAMA_LGKP'])),
-                            DataCell(Text(data['FEE'])),
+                            DataCell(Text(data['KDXX_MRKT'] ?? '-')),
+                            DataCell(Text(data['NAMA_LGKP'] ?? '-')),
+                            DataCell(Text(data['FEE'] ?? '-')),
                             DataCell(Text(data['PERD_JMAH'].toString())),
                             DataCell(Text(data['TOTL_JMAH'].toString())),
                             DataCell(Text(data['TOTL_POIN'].toString())),
                             DataCell(Text(data['STAS_AGEN'] == 1
                                 ? 'Aktif'
                                 : 'Non Aktif')),
-                            DataCell(Text(data['NOXX_TELP'])),
-                            DataCell(Text(data['NAMA_KNTR'])),
+                            DataCell(Text(data['NOXX_TELP'] ?? '-')),
+                            DataCell(Text(data['NAMA_KNTR'] ?? '-')),
                           ]);
                         }
                       }).toList()),

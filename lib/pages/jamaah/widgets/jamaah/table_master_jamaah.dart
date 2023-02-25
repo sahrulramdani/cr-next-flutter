@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_adjacent_string_concatenation
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -102,17 +102,35 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString())),
-      DataCell(Text(dataJamaah[index]['NOXX_IDNT'].toString())),
-      DataCell(Text(dataJamaah[index]['NAMA_LGKP'])),
-      DataCell(Text(dataJamaah[index]['NAMA_AYAH'])),
-      DataCell(Text(dataJamaah[index]['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita')),
-      DataCell(Text(dataJamaah[index]['TMPT_LHIR'] +
-          ', ' +
-          DateFormat("dd-MM-yyyy")
-              .format(DateTime.parse(dataJamaah[index]['TGLX_LHIR'])))),
-      DataCell(Text(dataJamaah[index]['ALAMAT'])),
-      DataCell(Text(dataJamaah[index]['NOXX_TELP'].toString())),
+      DataCell(Text((index + 1).toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['NOXX_IDNT'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['NAMA_LGKP'] ?? '-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['NAMA_AYAH'] ?? '-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(
+          dataJamaah[index]['TMPT_LHIR'] ??
+              '-' +
+                  ', ' +
+                  DateFormat("dd-MM-yyyy")
+                      .format(DateTime.parse(dataJamaah[index]['TGLX_LHIR'])),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['ALAMAT'] ?? '-',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text(dataJamaah[index]['NOXX_TELP'].toString(),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -172,60 +190,60 @@ class _TableMasterJamaahState extends State<TableMasterJamaah> {
         child: PaginatedDataTable(
           columnSpacing: 15.0,
           source: myTable,
-          columns: [
+          columns: const [
             DataColumn(
                 label: Text('No.',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('NIK',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama Lengkap',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Nama Ayah',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('JK',
+                label: Text('Jenis Kelamin',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('TTL',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Alamat',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
                 label: Text('Telepon',
                     style: TextStyle(
-                        color: myGrey,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
@@ -235,7 +253,7 @@ class _TableMasterJamaahState extends State<TableMasterJamaah> {
                     child: Center(
                       child: Text('Aksi',
                           style: TextStyle(
-                              color: myGrey,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Gilroy',
                               fontSize: 16)),

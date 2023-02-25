@@ -96,7 +96,7 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Daftar Kepelangganan',
+                            'Daftar Jamaah',
                             style: TextStyle(
                                 fontFamily: 'Gilroy',
                                 fontWeight: FontWeight.bold,
