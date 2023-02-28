@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 import 'package:flutter_web_course/constants/style.dart';
@@ -24,6 +26,7 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_identita
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_rekompas.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_riwayat_bayar.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_suku.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -52,21 +55,27 @@ class ModalDetailJadwal extends StatefulWidget {
 
 class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   bool cekAll = false;
+  Timer _timer;
 
   List<Map<String, dynamic>> listJadwalPelanggan = [];
 
   void getPelangganJadwal() async {
+    EasyLoading.show(status: 'loading...');
     var id = widget.idJadwal;
     var response = await http
         .get(Uri.parse("$urlAddress/marketing/jadwal/getDetail-jamaah/$id"));
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
-
     for (var i = 0; i < data.length; i++) {
       var tagihan = {
         "CEK": false,
       };
       data[i].addAll(tagihan);
+    }
+
+    if (response.statusCode == 200) {
+      EasyLoading.showSuccess('Great Success!');
+      EasyLoading.dismiss();
     }
 
     setState(() {
@@ -77,8 +86,13 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   @override
   void initState() {
     // getProvinsi();
-    getPelangganJadwal();
     super.initState();
+    getPelangganJadwal();
+    EasyLoading.addStatusCallback((status) {
+      if (status == EasyLoadingStatus.dismiss) {
+        _timer?.cancel();
+      }
+    });
   }
 
   Widget cmdBentukNama() {
@@ -634,8 +648,9 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                         )),
                                         DataCell(
                                             Text(e['NAMA_LGKP'].toString())),
-                                        DataCell(
-                                            Text(e['JENS_KLMN'].toString())),
+                                        DataCell(Text(e['JENS_KLMN'] == 'P'
+                                            ? "Pria"
+                                            : "Wanita")),
                                         DataCell(Text(e['UMUR'].toString())),
                                         DataCell(Text(e['PEMB_PSPR'])),
                                         DataCell(Text(e['PRSS_VKSN'])),

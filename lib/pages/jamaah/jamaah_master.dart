@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/form_jamaah.dart';
@@ -21,6 +21,7 @@ class JamaahDataPage extends StatefulWidget {
 class _JamaahDataPageState extends State<JamaahDataPage> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listJamaah = [];
+  List<Map<String, dynamic>> listCardCalonJamaah = [];
 
   // -------------------------------------------------------------------
   // ---------------------------- GET DATA -----------------------------
@@ -34,8 +35,39 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
     });
   }
 
+  void getListCardCalonJamaah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/calon-jamaah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Jamaah",
+        "total": dataStatus[0]['TOTAL'].toString(),
+      },
+      {
+        "title": "Konfirmasi",
+        "total": dataStatus[0]['KONFIRMASI'].toString(),
+      },
+      {
+        "title": "Belum Berangkat",
+        "total": dataStatus[0]['BLM_BGKT'].toString(),
+      },
+      {
+        "title": "Belum Lengkap",
+        "total": dataStatus[0]['BLM_BGKT'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardCalonJamaah = dataList.toList();
+    });
+  }
+
   @override
   void initState() {
+    getListCardCalonJamaah();
     getJamaah();
     super.initState();
   }
@@ -200,7 +232,7 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
             width: screenWidth,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: listCardDataJamaah.map((data) {
+              children: listCardCalonJamaah.map((data) {
                 return MyCardInfo(title: data['title'], total: data['total']);
               }).toList(),
             ),

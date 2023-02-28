@@ -186,7 +186,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                     value['KETERANGAN'];
                 tarif = myformat.format(value['TARIF_PKET']);
                 berangkat = fncGetTanggal(value['TGLX_BGKT']);
-                pulang = fncGetTanggal(value['TGLX_PLNG']);
+                pulang = fncGetTanggal(value['TGLX_PLNG'] ?? '10-12-2023');
                 harga = myformat.format(value['TARIF_PKET']);
                 mataUang = value['MATA_UANG'];
                 tglBerangkat = value['TGLX_BGKT'];
@@ -227,7 +227,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                 trailing: Text(
                     fncGetTanggal(item['TGLX_BGKT']) +
                         ' - ' +
-                        fncGetTanggal(item['TGLX_PLNG']),
+                        fncGetTanggal(item['TGLX_PLNG'] ?? '01-12-2023'),
                     textAlign: TextAlign.center),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
@@ -412,7 +412,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
               } else {
                 setState(() {
                   pembuatan = value;
-                  biayaPaspor = '380,000';
+                  biayaPaspor = '1,000,000';
                 });
               }
               fncTotal();
@@ -460,7 +460,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
               } else {
                 setState(() {
                   vaksin = value;
-                  biayaVaksin = '180,000';
+                  biayaVaksin = '305,000';
                 });
               }
               fncTotal();

@@ -9,6 +9,7 @@ import 'package:flutter_web_course/pages/authentication/authentication.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 import 'package:get/get.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,24 @@ void main() {
   Get.put(MenuController());
   Get.put(NavigationController());
   runApp(const MyApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.white
+    ..backgroundColor = Color.fromARGB(170, 50, 137, 207)
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+  // ..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatelessWidget {
@@ -38,6 +57,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/not-found", page: () => const PageNotFound())
       ],
       debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
       title: "Cahaya-Raudhah",
       theme: ThemeData(
           fontFamily: 'Gilroy',

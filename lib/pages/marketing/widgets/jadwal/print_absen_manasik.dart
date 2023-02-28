@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class PrintAbsenManasik extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;
@@ -35,8 +36,12 @@ class PrintAbsenManasik extends StatefulWidget {
 
 class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
   List<Map<String, dynamic>> listPelanggan = [];
+  bool Status = false;
   // void getPDF() async {
   Future<void> _createPDF() async {
+    if (Status == false) {
+      EasyLoading.show(status: 'loading...');
+    }
     ByteData byteData =
         await rootBundle.load('assets/images/craudhah_logo_landscape.png');
     Uint8List logoByte = byteData.buffer.asUint8List();
@@ -129,6 +134,14 @@ class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
             "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
       ..setAttribute("download", "absen_manasik_${widget.tglBgkt}.pdf")
       ..click();
+
+    setState(() {
+      Status = true;
+    });
+    if (Status == true) {
+      EasyLoading.showSuccess('Great Success!');
+      EasyLoading.dismiss();
+    }
   }
 
   fncGetCek() {
@@ -147,6 +160,9 @@ class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () async {
+        if (Status == false) {
+          EasyLoading.show(status: 'loading...');
+        }
         await fncGetCek();
         if (listPelanggan.isNotEmpty) {
           _createPDF();

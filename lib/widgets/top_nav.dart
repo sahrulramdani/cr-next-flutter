@@ -76,43 +76,43 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           SizedBox(
             width: !ResponsiveWidget.isSmallScreen(context) ? 24 : 0,
           ),
-          // !ResponsiveWidget.isSmallScreen(context)
-          //     ? FittedBox(
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.end,
-          //           children: [
-          //             CustomText(
-          //               text: namaUser ?? 'Admin',
-          //               color: myGrey,
-          //             ),
-          //           ],
-          //         ),
-          //       )
-          //     : const FittedBox(),
-          // const SizedBox(
-          //   width: 16,
-          // ),
-          // Container(
-          //   decoration: BoxDecoration(
-          //       color: Colors.white, borderRadius: BorderRadius.circular(30)),
-          //   child: fotoUser == null
-          //       ? Container(
-          //           padding: const EdgeInsets.all(2),
-          //           margin: const EdgeInsets.all(2),
-          //           child: const CircleAvatar(
-          //             backgroundImage:
-          //                 AssetImage('assets/images/profile-none.jpg'),
-          //           ),
-          //         )
-          //       : Container(
-          //           padding: const EdgeInsets.all(2),
-          //           margin: const EdgeInsets.all(2),
-          //           child: CircleAvatar(
-          //             backgroundImage:
-          //                 NetworkImage('$urlAddress/uploads/profil/$fotoUser'),
-          //           ),
-          //         ),
-          // )
+          !ResponsiveWidget.isSmallScreen(context)
+              ? FittedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomText(
+                        text: namaUser ?? 'Admin',
+                        color: myGrey,
+                      ),
+                    ],
+                  ),
+                )
+              : const FittedBox(),
+          const SizedBox(
+            width: 16,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(30)),
+            child: fotoUser == null
+                ? Container(
+                    padding: const EdgeInsets.all(2),
+                    margin: const EdgeInsets.all(2),
+                    child: const CircleAvatar(
+                      backgroundImage:
+                          AssetImage('assets/images/profile-none.jpg'),
+                    ),
+                  )
+                : Container(
+                    padding: const EdgeInsets.all(2),
+                    margin: const EdgeInsets.all(2),
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage('$urlAddress/uploads/profil/$fotoUser'),
+                    ),
+                  ),
+          )
         ],
       ),
       iconTheme: IconThemeData(color: myBlue),

@@ -3,7 +3,7 @@ import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/table_pelangga
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
+// import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
@@ -19,6 +19,7 @@ class JamaahPelangganPage extends StatefulWidget {
 }
 
 class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
+  List<Map<String, dynamic>> listCardPelanggan = [];
   List<Map<String, dynamic>> listPelanggan = [];
   void getPelanggan() async {
     var response =
@@ -30,8 +31,39 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
     });
   }
 
+  void getListCardDaftarJamaah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/info/dashboard/daftar-jamaah"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    var dataList = {
+      {
+        "title": "Jamaah",
+        "total": dataStatus[0]['TOTAL'].toString(),
+      },
+      {
+        "title": "Paspor",
+        "total": dataStatus[0]['PASPOR'].toString(),
+      },
+      {
+        "title": "Sudah Handling",
+        "total": dataStatus[0]['HANDLING'].toString(),
+      },
+      {
+        "title": "Belum Handling",
+        "total": dataStatus[0]['BLM_HAND'].toString(),
+      },
+    };
+
+    setState(() {
+      listCardPelanggan = dataList.toList();
+    });
+  }
+
   @override
   void initState() {
+    getListCardDaftarJamaah();
     getPelanggan();
     super.initState();
   }

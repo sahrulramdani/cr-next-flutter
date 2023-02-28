@@ -20,7 +20,7 @@ class _TableDetailPencapaianState extends State<TableDetailPencapaian> {
     if (nomor == 1) {
       return MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
-        return Color.fromARGB(255, 255, 217, 0);
+        return const Color.fromARGB(255, 255, 217, 0);
       });
     } else if (nomor == 2) {
       return MaterialStateProperty.resolveWith<Color>(
@@ -40,11 +40,35 @@ class _TableDetailPencapaianState extends State<TableDetailPencapaian> {
     }
   }
 
+  fncGetIcon(nomor) {
+    if (nomor == 1) {
+      return const Image(
+        width: 40,
+        fit: BoxFit.cover,
+        image: AssetImage('images/gold-medal.png'),
+      );
+    } else if (nomor == 2) {
+      return const Image(
+        width: 40,
+        fit: BoxFit.cover,
+        image: AssetImage('images/silver-medal.png'),
+      );
+    } else if (nomor == 3) {
+      return const Image(
+        width: 40,
+        fit: BoxFit.cover,
+        image: AssetImage('images/bronze-medal.png'),
+      );
+    } else {
+      return const Text('');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // final DataTableSource myTable = MyData(widget.listDetailPencapaian, context);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    // final screenHeight = MediaQuery.of(context).size.height;
     int x = 1;
 
     return SizedBox(
@@ -59,13 +83,13 @@ class _TableDetailPencapaianState extends State<TableDetailPencapaian> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
-            // DataColumn(
-            //     label: Text(' ',
-            //         style: TextStyle(
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
+            DataColumn(
+                label: Text(' ',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Gilroy',
+                        fontSize: 16))),
             DataColumn(
                 label: Text('Nama Lengkap',
                     style: TextStyle(
@@ -88,6 +112,7 @@ class _TableDetailPencapaianState extends State<TableDetailPencapaian> {
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
                       fontSize: 16))),
+              DataCell(fncGetIcon(x - 1)),
               DataCell(Text(e['NAMA_LGKP'].toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,

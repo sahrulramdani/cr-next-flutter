@@ -78,6 +78,9 @@ flutter:
     - assets/icons/logo.png
     - assets/icons/top-icon.png
     - assets/images/box-background.png
+    - assets/images/gold-medal.png
+    - assets/images/silver-medal.png
+    - assets/images/bronze-medal.png
     - assets/images/craudhah_logo_icon.png
     - assets/images/craudhah_logo_landscape.png
     - assets/images/logo_craudhah_lands.png
