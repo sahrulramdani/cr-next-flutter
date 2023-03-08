@@ -7,6 +7,9 @@ import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
 import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_page.dart';
 import 'package:flutter_web_course/pages/hr/hr_dash.dart';
+import 'package:flutter_web_course/pages/hr/setting_grup_user.dart';
+import 'package:flutter_web_course/pages/hr/setting_menu.dart';
+import 'package:flutter_web_course/pages/hr/setting_pengguna.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_barang.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_dash.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_grup_barang.dart';
@@ -99,6 +102,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const HumanResourceDashPage());
     case hrKaryawanPageRoute:
       return _getPageRoute(const HrKaryawanPage());
+    case settingGrupUserRoute:
+      return _getPageRoute(const SettingGrupUser());
+    case settingPenggunaRoute:
+      return _getPageRoute(const SettingUser());
+    case settingMenuRoute:
+      return _getPageRoute(const SettingMenu());
       // ------------------
       // case mrktDealTrackPageRoute:
       //   return _getPageRoute(DealTrackPage());

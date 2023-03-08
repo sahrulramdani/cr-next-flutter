@@ -72,6 +72,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             loginRespon = value;
             kodeToken = loginRespon.userToken;
             namaUser = loginRespon.namaUser;
+            username = loginRespon.username;
             fotoUser = loginRespon.fotoUser;
           });
           if (loginRespon.status == true) {

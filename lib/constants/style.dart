@@ -12,6 +12,7 @@ Color myGrey = Colors.grey[700];
 
 String kodeToken = "";
 String namaUser = "";
+String username = "";
 String fotoUser = "";
 
 bool enableForm = false;

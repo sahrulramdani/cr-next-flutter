@@ -96,17 +96,21 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
                                                                                                               ? dataSubMenuHR
                                                                                                               : menuController.activeItem.value == "Karyawan"
                                                                                                                   ? dataSubMenuHR
-                                                                                                                  : menuController.activeItem.value == "PPIC"
-                                                                                                                      ? DataSubMenu_PPIC
-                                                                                                                      : menuController.activeItem.value == "Purchasing"
-                                                                                                                          ? DataSubMenu_Purchasing
-                                                                                                                          : menuController.activeItem.value == "Warehouse"
-                                                                                                                              ? DataSubMenu_Warehouse
-                                                                                                                              : menuController.activeItem.value == "Produksi"
-                                                                                                                                  ? DataSubMenu_Produksi
-                                                                                                                                  : menuController.activeItem.value == "PM"
-                                                                                                                                      ? DataSubMenu_PM
-                                                                                                                                      : DataSubMenu_QC;
+                                                                                                                  : menuController.activeItem.value == "Grup User"
+                                                                                                                      ? dataSubMenuHR
+                                                                                                                      : menuController.activeItem.value == "Daftar Pengguna"
+                                                                                                                          ? dataSubMenuHR
+                                                                                                                          : menuController.activeItem.value == "PPIC"
+                                                                                                                              ? DataSubMenu_PPIC
+                                                                                                                              : menuController.activeItem.value == "Purchasing"
+                                                                                                                                  ? DataSubMenu_Purchasing
+                                                                                                                                  : menuController.activeItem.value == "Warehouse"
+                                                                                                                                      ? DataSubMenu_Warehouse
+                                                                                                                                      : menuController.activeItem.value == "Produksi"
+                                                                                                                                          ? DataSubMenu_Produksi
+                                                                                                                                          : menuController.activeItem.value == "PM"
+                                                                                                                                              ? DataSubMenu_PM
+                                                                                                                                              : DataSubMenu_QC;
 
   @override
   void initState() {

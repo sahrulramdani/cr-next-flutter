@@ -73,6 +73,15 @@ const hrPageRoute = "/hr";
 const hrKaryawanPageDisplayName = "Karyawan";
 const hrKaryawanPageRoute = "/hr/karyawan";
 
+const settingGrupUserDisplayName = "Grup User";
+const settingGrupUserRoute = "/setting/grup-user";
+
+const settingPenggunaDisplayName = "Daftar Pengguna";
+const settingPenggunaRoute = "/setting/daftar-pengguna";
+
+const settingMenuDisplayName = "Daftar Menu";
+const settingMenuRoute = "/setting/daftar-menu";
+
 const financePageDisplayName = "Finance";
 const financePageRoute = "/finance";
 

@@ -7,9 +7,15 @@ class HttpStateful {
   bool status;
   String userToken;
   String namaUser;
+  String username;
   String fotoUser;
 
-  HttpStateful({this.status, this.userToken, this.namaUser, this.fotoUser});
+  HttpStateful(
+      {this.status,
+      this.userToken,
+      this.namaUser,
+      this.fotoUser,
+      this.username});
 
   static Future<HttpStateful> connectAPI(
       String user, String pass, String company) async {
@@ -32,6 +38,7 @@ class HttpStateful {
       status: data["status"],
       userToken: data["token"],
       namaUser: data["namaUser"],
+      username: data["username"],
       fotoUser: data["fotoUser"],
     );
   }

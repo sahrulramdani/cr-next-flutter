@@ -173,6 +173,31 @@ List dataSubMenuHR = [
     "title": "Karyawan",
     "route": "/hr/karyawan"
   },
+  {
+    "level": 0,
+    "icon": Icons.settings_suggest_outlined,
+    "title": "Akses Pengguna",
+    "children": [
+      {
+        "level": 1,
+        "icon": Icons.groups_outlined,
+        "title": "Grup User",
+        "route": "/setting/grup-user"
+      },
+      {
+        "level": 1,
+        "icon": Icons.menu_open_sharp,
+        "title": "Daftar Menu",
+        "route": "/setting/daftar-menu"
+      },
+      {
+        "level": 1,
+        "icon": Icons.person_add_alt_1_outlined,
+        "title": "Daftar Pengguna",
+        "route": "/setting/daftar-pengguna"
+      }
+    ]
+  },
 ];
 
 List dataSubMenuFinance = [
