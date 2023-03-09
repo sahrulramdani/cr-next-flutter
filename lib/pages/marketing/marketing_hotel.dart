@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_cd_hotel.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/hotel/table_hotel.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/maskapai/modal_cd_maskapai.dart';
@@ -25,6 +26,24 @@ class MarketingHotel extends StatefulWidget {
 class _MarketingHotelState extends State<MarketingHotel> {
   List<Map<String, dynamic>> listHotel = [];
 
+  void getAuth() async {
+    var kode = 'MKT12';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getData() async {
     var response =
         await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
@@ -38,8 +57,9 @@ class _MarketingHotelState extends State<MarketingHotel> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getData();
+    super.initState();
   }
 
   bool enableFormL = false;
@@ -48,18 +68,20 @@ class _MarketingHotelState extends State<MarketingHotel> {
     var tambah = true;
     return ElevatedButton.icon(
       onPressed: () async {
-        // setState(() {
-        //   enableFormL = !enableFormL;
-        // });
-        showDialog(
-            context: context,
-            builder: (context) =>
-                ModalCdHotel(idHotel: idHotel, tambah: tambah));
-        // getList();
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) =>
+                    ModalCdHotel(idHotel: idHotel, tambah: tambah))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

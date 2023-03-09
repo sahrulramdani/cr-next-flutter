@@ -1,4 +1,5 @@
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_pemberangkatan_tourlead.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/table_tourleader.dart';
 
@@ -18,16 +21,48 @@ class MarketingTourleadPage extends StatefulWidget {
 }
 
 class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
+  void getAuth() async {
+    var kode = 'MKT08';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
+  @override
+  void initState() {
+    getAuth();
+    super.initState();
+  }
+
   Widget cmdPrint() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
         'Akumulasi TL',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -38,9 +73,15 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
   Widget cmdTlBerangkat() {
     return ElevatedButton.icon(
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => const ModalPemberangkatanTourlead());
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => const ModalPemberangkatanTourlead())
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.list_alt_outlined),
       label: const Text(
@@ -48,7 +89,7 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authInqu == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

@@ -8,6 +8,7 @@ import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy_jadwal.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/form_jadwal.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -30,6 +31,24 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listJadwal = [];
   List<Map<String, dynamic>> listCardJadwal = [];
+
+  void getAuth() async {
+    var kode = 'MKT06';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
 
   void getAllJadwal() async {
     var response =
@@ -74,7 +93,7 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
 
   @override
   void initState() {
-    // getProvinsi();
+    getAuth();
     getAllJadwal();
     getListCardJadwal();
     super.initState();
@@ -87,14 +106,19 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -109,7 +133,13 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   Widget cmdPrint() {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
@@ -117,7 +147,7 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -127,41 +157,28 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
 
   Widget cmdExport() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authExpt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.download_outlined),
       label: const Text(
         'Export',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
       ),
     );
   }
-
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
 
   Widget spacePemisah() {
     return const SizedBox(

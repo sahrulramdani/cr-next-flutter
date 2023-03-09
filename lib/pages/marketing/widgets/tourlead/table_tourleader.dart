@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_edit_tourlead.dart';
 // import 'package:intl/intl.dart';
 
@@ -12,11 +13,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.info_outline,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context, builder: (context) => const ModalEditTourlead());
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => const ModalEditTourlead())
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

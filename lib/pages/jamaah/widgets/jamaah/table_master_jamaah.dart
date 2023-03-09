@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_edit_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_hapus_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_jamaah.dart';
@@ -18,12 +19,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditJamaah(idJamaah: idJamaah));
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditJamaah(idJamaah: idJamaah))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -62,12 +69,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusJamaah(idJamaah: idJamaah));
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusJamaah(idJamaah: idJamaah))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

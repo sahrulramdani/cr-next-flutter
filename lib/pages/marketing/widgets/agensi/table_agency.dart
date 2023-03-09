@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_edit_agency.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_hapus_agency.dart';
@@ -16,14 +17,20 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusAgency(
-                  idAgency: idAgen,
-                ));
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusAgency(
+                      idAgency: idAgen,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -39,14 +46,20 @@ class ButtonDetail extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.info_outline,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalDetailAgency(
-                  idAgency: idAgen,
-                ));
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalDetailAgency(
+                      idAgency: idAgen,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -62,12 +75,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditAgency(idAgency: idAgen));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditAgency(idAgency: idAgen))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

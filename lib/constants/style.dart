@@ -11,9 +11,17 @@ Color myGrey = Colors.grey[700];
 //Token
 
 String kodeToken = "";
-String namaUser = "";
-String username = "";
-String fotoUser = "";
+String namaUser = "Sahrul Ramdani";
+String username = "sahrulramdani20";
+String fotoUser = null;
+
+// AUTH PERMISSION
+dynamic authAddx = '0';
+dynamic authEdit = '0';
+dynamic authDelt = '0';
+dynamic authInqu = '0';
+dynamic authPrnt = '0';
+dynamic authExpt = '0';
 
 bool enableForm = false;
 

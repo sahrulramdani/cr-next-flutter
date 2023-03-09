@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_edit_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_hapus_jadwal.dart';
@@ -35,19 +36,25 @@ class ButtonDetail extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.info_outline,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalDetailJadwal(
-                  idJadwal: idJadwal,
-                  keberangkatan: keberangkatan,
-                  jenisPaket: jenisPaket,
-                  harga: harga,
-                  tglBgkt: tglBgkt,
-                  tglPlng: tglPlng,
-                ));
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalDetailJadwal(
+                      idJadwal: idJadwal,
+                      keberangkatan: keberangkatan,
+                      jenisPaket: jenisPaket,
+                      harga: harga,
+                      tglBgkt: tglBgkt,
+                      tglPlng: tglPlng,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -65,14 +72,20 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditJadwal(
-                  idJadwal: idJadwal,
-                ));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditJadwal(
+                      idJadwal: idJadwal,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -87,12 +100,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusJadwal(idJadwal: idJadwal));
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusJadwal(idJadwal: idJadwal))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

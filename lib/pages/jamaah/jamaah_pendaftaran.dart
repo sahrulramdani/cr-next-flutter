@@ -5,6 +5,7 @@ import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/models/http_pendaftaran.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +80,24 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   List<Map<String, dynamic>> listKantor = [];
   List<Map<String, dynamic>> listJamaah = [];
   List<Map<String, String>> listTagihan = [];
+
+  void getAuth() async {
+    var kode = 'JMH06';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
 
   void getList() async {
     var response =
@@ -976,7 +995,14 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () {
-                            fncSaveFoto();
+                            authInqu == '1'
+                                ? fncSaveFoto()
+                                : showDialog(
+                                    context: context,
+                                    builder: (context) => const ModalInfo(
+                                          deskripsi:
+                                              'Anda Tidak Memiliki Akses',
+                                        ));
                           },
                           icon: const Icon(Icons.save),
                           label: const Text(
@@ -984,7 +1010,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                             style: TextStyle(fontFamily: 'Gilroy'),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: myBlue,
+                            backgroundColor:
+                                authInqu == '1' ? myBlue : Colors.blue[200],
                             minimumSize: const Size(100, 40),
                             shadowColor: Colors.grey,
                             elevation: 5,

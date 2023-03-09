@@ -4,6 +4,7 @@ import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy_marketing.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/export_agency.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
@@ -30,15 +31,28 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listAgency = [];
   List<Map<String, dynamic>> listCardAgency = [];
-  // List<Map<String, dynamic>> listProvinsi = [];
-
-  // List<Map<String, dynamic>> listCalon = [];
-  // List<Map<String, dynamic>> listFee = [];
-  // List<Map<String, dynamic>> listLokasi = [];
 
   // -------------------------------------------------------------------
   // ---------------------------- GET DATA -----------------------------
   // -------------------------------------------------------------------
+
+  void getAuth() async {
+    var kode = 'MKT05';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
 
   void getAgency() async {
     var response =
@@ -82,49 +96,12 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
     });
   }
 
-  // void getCalon() async {
-  //   var response = await http
-  //       .get(Uri.parse("$urlAddress/marketing/calon-agency"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataCalon =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listCalon = dataCalon;
-  //   });
-  // }
-
-  // void getFee() async {
-  //   var response =
-  //       await http.get(Uri.parse("$urlAddress/marketing/fee-level"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataFee =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listFee = dataFee;
-  //   });
-  // }
-
-  // void getLokasi() async {
-  //   var response =
-  //       await http.get(Uri.parse("$urlAddress/marketing/location"), headers: {
-  //     'pte-token': kodeToken,
-  //   });
-  //   List<Map<String, dynamic>> dataLokasi =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listLokasi = dataLokasi;
-  //   });
-  // }
-
   @override
   void initState() {
+    getAuth();
     getAgency();
     getListCardAgency();
-    // getCalon();
-    // getFee();
-    // getLokasi();
+
     super.initState();
   }
 
@@ -135,13 +112,19 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

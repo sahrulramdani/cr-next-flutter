@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -225,10 +226,13 @@ class PrintAgency extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
-        // getPDF();
-        _createPDF();
-        // print('wkwkwk');
+        authPrnt == '1'
+            ? _createPDF()
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
@@ -236,7 +240,7 @@ class PrintAgency extends StatelessWidget {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

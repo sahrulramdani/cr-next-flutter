@@ -3,6 +3,7 @@ import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/form_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/table_master_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -26,6 +27,24 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   // -------------------------------------------------------------------
   // ---------------------------- GET DATA -----------------------------
   // -------------------------------------------------------------------
+  void getAuth() async {
+    var kode = 'JMH05';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getJamaah() async {
     var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
     List<Map<String, dynamic>> dataStatus =
@@ -67,6 +86,7 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
 
   @override
   void initState() {
+    getAuth();
     getListCardCalonJamaah();
     getJamaah();
     super.initState();
@@ -79,14 +99,19 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -101,7 +126,13 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   Widget cmdPrint() {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
@@ -109,7 +140,7 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -119,14 +150,22 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
 
   Widget cmdExport() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authExpt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.download_outlined),
       label: const Text(
         'Export',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

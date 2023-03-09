@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/models/http_agency.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_web_course/constants/style.dart';
 import 'dart:convert';
@@ -217,10 +218,18 @@ class _DetailBankAgencyState extends State<DetailBankAgency> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState.validate()) {
-                        fncSaveData();
+                      if (authEdit == '1') {
+                        if (formKey.currentState.validate()) {
+                          fncSaveData();
+                        } else {
+                          return null;
+                        }
                       } else {
-                        return null;
+                        showDialog(
+                            context: context,
+                            builder: (context) => const ModalInfo(
+                                  deskripsi: 'Anda Tidak Memiliki Akses',
+                                ));
                       }
                     },
                     child: const Text('Simpan Data Bank')),

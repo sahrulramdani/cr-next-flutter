@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/pemberangkatan/detail_pemberangkatan_jamaah.dart';
 
 class ModalEditPemberangkatan extends StatefulWidget {
@@ -37,11 +38,19 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
 
   Widget cmdPrint() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.print),
       label: const Text('Print'),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

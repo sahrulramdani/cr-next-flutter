@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'widgets/transit/table_transit.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,24 @@ class MarketingTransitPage extends StatefulWidget {
 class _MarketingTransitPageState extends State<MarketingTransitPage> {
   List<Map<String, dynamic>> listTransit = [];
 
+  void getAuth() async {
+    var kode = 'MKT10';
+    var response = await http
+        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
+      'pte-token': kodeToken,
+    });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getData() async {
     var response =
         await http.get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"));
@@ -35,8 +54,9 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getData();
+    super.initState();
   }
 
   bool enableFormL = false;
@@ -45,18 +65,20 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
     var tambah = true;
     return ElevatedButton.icon(
       onPressed: () async {
-        // setState(() {
-        //   enableFormL = !enableFormL;
-        // });
-        showDialog(
-            context: context,
-            builder: (context) =>
-                ModalCdTransit(idTransit: idTransit, tambah: tambah));
-        // getList();
+        authAddx == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) =>
+                    ModalCdTransit(idTransit: idTransit, tambah: tambah))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -67,63 +89,6 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
       ),
     );
   }
-
-  // Widget cmdPrint() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       // print(listAgency);
-  //     },
-  //     icon: const Icon(Icons.print_outlined),
-  //     label: const Text(
-  //       'Print',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
-  // Widget cmdExport() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {},
-  //     icon: const Icon(Icons.download_outlined),
-  //     label: const Text(
-  //       'Export',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
 
   Widget spacePemisah() {
     return const SizedBox(
@@ -144,33 +109,8 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     cmdTambah(context),
-                    //---------------------------------
-                    // spacePemisah(),
-                    // //---------------------------------
-                    // cmdPrint(),
-                    // //---------------------------------
-                    // spacePemisah(),
-                    // //---------------------------------
-                    // cmdExport(),
-                    // //---------------------------------
-                    // spacePemisah(),
                   ],
                 )),
-
-            //---------------------------------
-            // Visibility(
-            //   visible: enableFormL,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       // cmdSimpan(),
-            //       //---------------------------------
-            //       // spacePemisah(),
-            //       //---------------------------------
-            //       cmdBatal()
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       );

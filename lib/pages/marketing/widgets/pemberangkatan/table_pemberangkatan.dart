@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/pemberangkatan/modal_edit_pemberangkatan.dart';
 
 /// BUTTON HAPUS
@@ -38,12 +39,19 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.info_outline,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditPemberangkatan(idJadwal: idJadwal));
+        authInqu == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) =>
+                    ModalEditPemberangkatan(idJadwal: idJadwal))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
