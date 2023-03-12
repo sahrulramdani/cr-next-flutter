@@ -6,9 +6,10 @@ import '../constants/style.dart';
 import 'custom_text.dart';
 
 class VerticalMenuItem extends StatelessWidget {
+  final String icon;
   final String itemName;
   final Function onTap;
-  const VerticalMenuItem({Key key, this.itemName, this.onTap})
+  const VerticalMenuItem({Key key, this.icon, this.itemName, this.onTap})
       : super(key: key);
 
   @override
@@ -44,7 +45,10 @@ class VerticalMenuItem extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16),
-                      child: menuController.returnIconFor(itemName),
+                      child: menuController.customIcon(
+                          IconData(int.parse(icon.toString()),
+                              fontFamily: "MaterialIcons"),
+                          itemName),
                     ),
                     if (!menuController.isActive(itemName))
                       Flexible(

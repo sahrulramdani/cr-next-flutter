@@ -14,7 +14,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
-  Get.put(MenuController());
+  Get.put(MenuControler());
   Get.put(NavigationController());
   runApp(const MyApp());
   configLoading();

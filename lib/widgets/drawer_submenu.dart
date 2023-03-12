@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/data_submenu.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../helpers/responsiveness.dart';
 import '../routing/routes.dart';
@@ -16,127 +19,58 @@ class DrawerSubMenu extends StatefulWidget {
 }
 
 class _DrawerSubMenuState extends State<DrawerSubMenu> {
-  List<Menu> data = [];
-  //List dataList = DataSubMenu_Dashboard;
-  List dataList = menuController.activeItem.value == "Dashboard"
-      ? dataSubMenuDashboard
-      : menuController.activeItem.value == "Marketing"
-          ? dataSubMenuMarketing
-          : menuController.activeItem.value == "Agency"
-              ? dataSubMenuMarketing
-              : menuController.activeItem.value == "Jadwal"
-                  ? dataSubMenuMarketing
-                  : menuController.activeItem.value == "Pemberangkatan"
-                      ? dataSubMenuMarketing
-                      : menuController.activeItem.value == "Tour Leader"
-                          ? dataSubMenuMarketing
-                          : menuController.activeItem.value ==
-                                  "Perolehan Per Tahun"
-                              ? dataSubMenuMarketing
-                              : menuController.activeItem.value ==
-                                      "Master Transit"
-                                  ? dataSubMenuMarketing
-                                  : menuController.activeItem.value ==
-                                          "Master Hotel"
-                                      ? dataSubMenuMarketing
-                                      : menuController.activeItem.value ==
-                                              "Master Maskapai"
-                                          ? dataSubMenuMarketing
-                                          : menuController.activeItem.value ==
-                                                  "Jamaah"
-                                              ? dataSubMenuJamaah
-                                              : menuController
-                                                          .activeItem.value ==
-                                                      "Calon Jamaah"
-                                                  ? dataSubMenuJamaah
-                                                  : menuController.activeItem
-                                                              .value ==
-                                                          "Pendaftaran Paket"
-                                                      ? dataSubMenuJamaah
-                                                      : menuController
-                                                                  .activeItem
-                                                                  .value ==
-                                                              "Daftar Jamaah"
-                                                          ? dataSubMenuJamaah
-                                                          : menuController
-                                                                      .activeItem
-                                                                      .value ==
-                                                                  "Daftar Alumni"
-                                                              ? dataSubMenuJamaah
-                                                              : menuController
-                                                                          .activeItem
-                                                                          .value ==
-                                                                      "Inventory"
-                                                                  ? dataSubMenuInventory
-                                                                  : menuController
-                                                                              .activeItem
-                                                                              .value ==
-                                                                          "Satuan"
-                                                                      ? dataSubMenuInventory
-                                                                      : menuController.activeItem.value ==
-                                                                              "Barang"
-                                                                          ? dataSubMenuInventory
-                                                                          : menuController.activeItem.value == "Pengeluaran"
-                                                                              ? dataSubMenuInventory
-                                                                              : menuController.activeItem.value == "Grup Barang"
-                                                                                  ? dataSubMenuInventory
-                                                                                  : menuController.activeItem.value == "Kirim Barang"
-                                                                                      ? dataSubMenuInventory
-                                                                                      : menuController.activeItem.value == "Finance"
-                                                                                          ? dataSubMenuFinance
-                                                                                          : menuController.activeItem.value == "Pembayaran"
-                                                                                              ? dataSubMenuFinance
-                                                                                              : menuController.activeItem.value == "Form Bayar"
-                                                                                                  ? dataSubMenuFinance
-                                                                                                  : menuController.activeItem.value == "Ujrah"
-                                                                                                      ? dataSubMenuFinance
-                                                                                                      : menuController.activeItem.value == "Penerbangan"
-                                                                                                          ? dataSubMenuFinance
-                                                                                                          : menuController.activeItem.value == "Master Biaya"
-                                                                                                              ? dataSubMenuFinance
-                                                                                                              : menuController.activeItem.value == "HR"
-                                                                                                                  ? dataSubMenuHR
-                                                                                                                  : menuController.activeItem.value == "Karyawan"
-                                                                                                                      ? dataSubMenuHR
-                                                                                                                      : menuController.activeItem.value == "Grup User"
-                                                                                                                          ? dataSubMenuHR
-                                                                                                                          : menuController.activeItem.value == "Daftar Pengguna"
-                                                                                                                              ? dataSubMenuHR
-                                                                                                                              : menuController.activeItem.value == "PPIC"
-                                                                                                                                  ? DataSubMenu_PPIC
-                                                                                                                                  : menuController.activeItem.value == "Purchasing"
-                                                                                                                                      ? DataSubMenu_Purchasing
-                                                                                                                                      : menuController.activeItem.value == "Warehouse"
-                                                                                                                                          ? DataSubMenu_Warehouse
-                                                                                                                                          : menuController.activeItem.value == "Produksi"
-                                                                                                                                              ? DataSubMenu_Produksi
-                                                                                                                                              : menuController.activeItem.value == "PM"
-                                                                                                                                                  ? DataSubMenu_PM
-                                                                                                                                                  : DataSubMenu_QC;
+  List listSubmenu = [];
+  List listMenus = [];
+  List<Menu> drawermenu = [];
+
+  void getSubmenu() async {
+    var response = await http.get(Uri.parse(
+        "$urlAddress/menu/getSubMenu/${menuController.activeItem.value}"));
+    List data = List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listSubmenu = data;
+    });
+  }
+
+  void getListMenu() async {
+    var response = await http.get(Uri.parse("$urlAddress/menu/getListMenu"));
+    List listmenu = List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listMenus = listmenu;
+    });
+  }
 
   @override
   void initState() {
-    for (var element in dataList) {
-      data.add(Menu.fromJson(element));
-    }
+    getSubmenu();
+    getListMenu();
     super.initState();
-    data[0].title = menuController.activeItem.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    for (var element in listSubmenu) {
+      for (var element2 in listMenus) {
+        if (element["CODE_SUBMENU"] == element2["SUBMENU_CODE"]) {
+          element["children"].add(element2);
+        }
+      }
+      drawermenu.add(Menu.fromJson(element));
+    }
     return Drawer(child: _buildDrawer());
   }
 
   Widget _buildDrawer() {
     return ListView.separated(
       padding: const EdgeInsets.only(top: 0),
-      itemCount: data.length,
+      itemCount: drawermenu.length,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
-          return _buildDrawerHeader(data[index]);
+          return _buildDrawerHeader(drawermenu[index]);
         }
-        return _buildMenuList(data[index]);
+        return _buildMenuList(drawermenu[index]);
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(
         height: 1,
@@ -265,7 +199,7 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
 //The Menu Model
 class Menu {
   int level = 0;
-  IconData icon = Icons.drive_file_rename_outline;
+  IconData icon;
   String title = "Sub Menu";
   String route = "tes";
   List<Menu> children = [];
@@ -275,18 +209,19 @@ class Menu {
   //one method for  Json data
   Menu.fromJson(Map<String, dynamic> json) {
     //level
-    if (json["level"] != null) {
-      level = json["level"];
+    if (json["LEVEL"] != null) {
+      level = int.parse(json["LEVEL"]);
     }
     //icon
-    if (json["icon"] != null) {
-      icon = json["icon"];
+    if (json['ICON'] != null) {
+      icon = IconData(int.parse(json['ICON'].toString()),
+          fontFamily: 'MaterialIcons');
     }
     //title
-    title = json['title'];
+    title = json['NAME'];
 
     //route
-    route = json['route'];
+    route = json['PATH'];
 
     //children
     if (json['children'] != null) {

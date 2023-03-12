@@ -17,10 +17,10 @@ import 'package:flutter_web_course/constants/controllers.dart';
 // import 'dart:convert';
 
 class ModalListUserGrup extends StatefulWidget {
-  // final String idsatuan;
+  final String idGrup;
   const ModalListUserGrup({
     Key key,
-    // @required this.idsatuan,
+    @required this.idGrup,
   }) : super(key: key);
 
   @override
@@ -28,6 +28,27 @@ class ModalListUserGrup extends StatefulWidget {
 }
 
 class _ModalListUserGrupState extends State<ModalListUserGrup> {
+  List<Map<String, dynamic>> listUserGrup = [];
+
+  void getDetailUser() async {
+    var id = widget.idGrup;
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/grup-user/detail/user/$id"));
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listUserGrup = data;
+    });
+
+    print(listUserGrup);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDetailUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -86,13 +107,15 @@ class _ModalListUserGrupState extends State<ModalListUserGrup> {
                                 DataColumn(label: Text('Status')),
                                 DataColumn(label: Text('Terakhir Login')),
                               ],
-                              rows: dummyListUserGrup.map((e) {
+                              rows: listUserGrup.map((e) {
                                 return DataRow(cells: [
                                   DataCell(Text((x++).toString())),
-                                  DataCell(Text(e['id_user'])),
-                                  DataCell(Text(e['nama_user'])),
-                                  DataCell(Text(e['keterangan'])),
-                                  DataCell(Text(e['login'])),
+                                  DataCell(Text(e['USER_IDXX'])),
+                                  DataCell(Text(e['KETX_USER'])),
+                                  DataCell(Text(e['Active'] == '1'
+                                      ? 'Aktif'
+                                      : 'Tidak Aktif')),
+                                  DataCell(Text(e['LOGIN_TERAKHIR'])),
                                 ]);
                               }).toList())
                         ],

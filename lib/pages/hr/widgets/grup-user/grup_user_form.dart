@@ -43,9 +43,9 @@ class _GrupUserFormState extends State<GrupUserForm> {
 
     for (var i = 0; i < data.length; i++) {
       var access = {
-        "PROC_CODE": data[i]["PROC_CODE"],
+        "PROC_CODE": data[i]["LIST_CODE"],
         "MDUL_CODE": data[i]["MDUL_CODE"],
-        "MENU_NAME": data[i]["MENU_NAME"],
+        "MENU_NAME": data[i]["LIST_NAME"],
         "PATH": data[i]["PATH"],
         "TYPE_MDUL": data[i]["TYPE_MDUL"],
         "RIGHT_AUTH": data[i]["RIGHT_AUTH"],
@@ -78,6 +78,15 @@ class _GrupUserFormState extends State<GrupUserForm> {
     setState(() {
       listTypeModul = data;
     });
+
+    var semua = {
+      "MDUL_CODE": "",
+      "MENU_NAME": "Semua",
+    };
+
+    listTypeModul.add(semua);
+
+    setState(() {});
   }
 
   @override
@@ -275,11 +284,11 @@ class _GrupUserFormState extends State<GrupUserForm> {
         mode: Mode.MENU,
         items: listTypeModul,
         onChanged: (value) {
-          codeModul = value['CODD_VALU'];
-          namaModul = value['CODD_DESC'];
+          codeModul = value['MDUL_CODE'];
+          namaModul = value['MENU_NAME'];
         },
         popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['CODD_DESC']),
+          title: Text(item['MENU_NAME']),
         ),
         dropdownBuilder: (context, selectedItem) =>
             Text(namaModul ?? "Pilih Modul"),

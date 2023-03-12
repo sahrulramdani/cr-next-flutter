@@ -66,9 +66,9 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
 
     for (var i = 0; i < data.length; i++) {
       var access = {
-        "PROC_CODE": data[i]["PROG_KODE"],
-        "MDUL_CODE": data[i]["MDUL_CODE"],
-        "MENU_NAME": data[i]["MENU_NAME"],
+        "PROC_CODE": data[i]["PROG_CODE"],
+        "MDUL_CODE": data[i]["LIST_CODE"],
+        "MENU_NAME": data[i]["LIST_NAME"],
         "PATH": data[i]["PATH"],
         "TYPE_MDUL": data[i]["TYPE_MDUL"],
         "RIGHT_AUTH": data[i]["RIGHT_AUTH"],
@@ -101,6 +101,15 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
     setState(() {
       listTypeModul = data;
     });
+
+    var semua = {
+      "MDUL_CODE": "",
+      "MENU_NAME": "Semua",
+    };
+
+    listTypeModul.add(semua);
+
+    setState(() {});
   }
 
   @override
@@ -305,11 +314,11 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
         mode: Mode.MENU,
         items: listTypeModul,
         onChanged: (value) {
-          codeModul = value['CODD_VALU'];
-          namaModul = value['CODD_DESC'];
+          codeModul = value['MDUL_CODE'];
+          namaModul = value['MENU_NAME'];
         },
         popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['CODD_DESC']),
+          title: Text(item['MENU_NAME']),
         ),
         dropdownBuilder: (context, selectedItem) =>
             Text(namaModul ?? "Pilih Modul"),

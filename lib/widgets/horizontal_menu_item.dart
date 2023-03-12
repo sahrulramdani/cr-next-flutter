@@ -5,10 +5,11 @@ import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
 
 class HorizontalMenuItem extends StatelessWidget {
+  final String icon;
   final String itemName;
   final Function onTap;
 
-  const HorizontalMenuItem({Key key, this.itemName, this.onTap})
+  const HorizontalMenuItem({Key key, this.icon, this.itemName, this.onTap})
       : super(key: key);
 
   @override
@@ -44,7 +45,10 @@ class HorizontalMenuItem extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: menuController.returnIconFor(itemName),
+                  child: menuController.customIcon(
+                      IconData(int.parse(icon.toString()),
+                          fontFamily: "MaterialIcons"),
+                      itemName),
                 ),
                 if (!menuController.isActive(itemName))
                   Flexible(
