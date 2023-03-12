@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter_web_course/models/http_barang.dart';
+import 'package:flutter_web_course/models/http_biaya.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
@@ -13,47 +14,42 @@ import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:intl/intl.dart';
 
-class BarangForm extends StatefulWidget {
-  const BarangForm({Key key}) : super(key: key);
+class BiayaForm extends StatefulWidget {
+  const BiayaForm({Key key}) : super(key: key);
 
   @override
-  State<BarangForm> createState() => _BarangFormState();
+  State<BiayaForm> createState() => _BiayaFormState();
 }
 
-class _BarangFormState extends State<BarangForm> {
-  String namaBarang;
-  String idSatuan;
-  String namaSatuan;
-  String stokAwal;
-  String statusBrg;
-  String hargaBeli;
-  String hargaJual;
-  String keterangan;
+class _BiayaFormState extends State<BiayaForm> {
+  String namaBiaya;
+  String idJenisBiaya;
+  String jenisBiaya;
+  String nominal;
 
-  List<Map<String, dynamic>> listSatuan = [];
+  List<Map<String, dynamic>> listBiaya = [];
 
-  void getSatuan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+  void getJenisBiaya() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/jenis-biaya"));
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
-      listSatuan = data;
+      listBiaya = data;
     });
   }
 
   @override
   void initState() {
-    getSatuan();
+    getJenisBiaya();
     super.initState();
   }
 
-  Widget inputKodeBarang() {
+  Widget inputIdBiaya() {
     return TextFormField(
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        labelText: 'Kode Barang',
+        labelText: 'ID Biaya',
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
@@ -62,25 +58,28 @@ class _BarangFormState extends State<BarangForm> {
     );
   }
 
-  Widget inputNamaBarang() {
+  Widget inputNamaBiaya() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        labelText: 'Nama Barang',
+        label: Text('Nama Biaya', style: TextStyle(color: Colors.red)),
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
       ),
+      initialValue: namaBiaya ?? '',
       onChanged: ((value) {
-        namaBarang = value;
+        namaBiaya = value;
       }),
-      // onChanged: (value) {
-
-      // },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Nama Biaya masih kosong !";
+        }
+      },
     );
   }
 
-  Widget inputSatuan() {
+  Widget inputJenisBiaya() {
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -88,145 +87,78 @@ class _BarangFormState extends State<BarangForm> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-        label: "Satuan",
+        label: "Jenis Biaya",
         mode: Mode.MENU,
-        items: listSatuan,
+        items: listBiaya,
         onChanged: (value) {
-          idSatuan = value['IDXX_STAN'];
-          namaSatuan = value['NAMA_STAN'];
+          idJenisBiaya = value['CODD_VALU'];
+          jenisBiaya = value['CODD_DESC'];
         },
-        selectedItem: "Pilih Satuan",
+        selectedItem: "Pilih Jenis Biaya",
         popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['NAMA_STAN'].toString()),
+          title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaSatuan ?? "Pilih Paket"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            jenisBiaya ?? "Pilih Jenis Biaya",
+            style: TextStyle(
+                color: jenisBiaya == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
         validator: (value) {
-          if (value == "Pilih Jenis Kelamin") {
-            return "Jenis Kelamin masih kosong !";
+          if (value == "Pilih Jenis Biaya") {
+            return "Jenis Biaya masih kosong !";
           }
         },
       ),
     );
   }
 
-  Widget inputStokBarang() {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: [ThousandsFormatter()],
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-        labelText: 'Stok Awal Barang',
-        filled: true,
-        fillColor: Colors.white,
-        hoverColor: Colors.white,
-      ),
-      onChanged: (value) {
-        stokAwal = value;
-      },
-    );
-  }
-
-  Widget inputStatusBarang() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-        label: "Status Barang",
-        mode: Mode.MENU,
-        items: const ["Aktif", "Nonaktif"],
-        onChanged: (value) {
-          if (value == "Aktif") {
-            statusBrg = '1';
-          } else {
-            statusBrg = '0';
-          }
-        },
-        selectedItem: "Pilih Status Barang",
-        dropdownSearchDecoration: const InputDecoration(
-            border: InputBorder.none, filled: true, fillColor: Colors.white),
-        validator: (value) {
-          if (value == "Pilih Status Barang") {
-            return "Status Barang masih kosong !";
-          }
-        },
-      ),
-    );
-  }
-
-  Widget inputHargaBeli() {
+  Widget inputNominalBiaya() {
     return TextFormField(
       textAlign: TextAlign.right,
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-        labelText: 'Harga Beli',
+        label: Text('Nominal Biaya', style: TextStyle(color: Colors.red)),
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
       ),
       onChanged: (value) {
-        hargaBeli = value;
+        nominal = value;
       },
-    );
-  }
-
-  Widget inputHargaJual() {
-    return TextFormField(
-      textAlign: TextAlign.right,
-      keyboardType: TextInputType.number,
-      inputFormatters: [ThousandsFormatter()],
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-        labelText: 'Harga Jual',
-        filled: true,
-        fillColor: Colors.white,
-        hoverColor: Colors.white,
-      ),
-      onChanged: (value) {
-        hargaJual = value;
-      },
-    );
-  }
-
-  Widget inputKeterangan() {
-    return TextFormField(
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-        labelText: 'Keterangan',
-        filled: true,
-        fillColor: Colors.white,
-        hoverColor: Colors.white,
-      ),
-      onChanged: (value) {
-        keterangan = value;
+      initialValue: nominal ?? '0',
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Nominal Biaya masih kosong !";
+        }
       },
     );
   }
 
   fncSaveData() async {
     var response1 = await http
-        .get(Uri.parse("$urlAddress/inventory/barang/get-id"), headers: {
+        .get(Uri.parse("$urlAddress/finance/biaya/biaya/get-id"), headers: {
       'pte-token': kodeToken,
     });
     dynamic body1 = json.decode(response1.body);
-    String noBarang = body1['idBarang'];
+    String noBiaya = body1['idBiaya'];
 
-    HttpBarang.saveBarang(noBarang, namaBarang, idSatuan, stokAwal, hargaBeli,
-            hargaJual, keterangan)
-        .then((value) {
+    HttpBiaya.saveBiaya(
+      noBiaya,
+      namaBiaya,
+      idJenisBiaya,
+      nominal == null
+          ? (nominal == '0' ? nominal : '0')
+          : nominal.replaceAll(',', ''),
+    ).then((value) {
       if (value.status == true) {
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());
 
-        menuController.changeActiveitemTo('Barang');
-        navigationController.navigateTo('/inventory/barang');
+        menuController.changeActiveitemTo('Master Biaya');
+        navigationController.navigateTo('/setting/master-biaya');
       } else {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());
@@ -268,7 +200,11 @@ class _BarangFormState extends State<BarangForm> {
               const Expanded(child: SizedBox(width: 20)),
               ElevatedButton.icon(
                 onPressed: () {
-                  fncSaveData();
+                  if (formKey.currentState.validate()) {
+                    fncSaveData();
+                  } else {
+                    return null;
+                  }
                 },
                 icon: const Icon(Icons.save),
                 label: const Text(
@@ -285,8 +221,8 @@ class _BarangFormState extends State<BarangForm> {
               const SizedBox(width: 10),
               ElevatedButton.icon(
                 onPressed: () {
-                  menuController.changeActiveitemTo('Barang');
-                  navigationController.navigateTo('/inventory/barang');
+                  menuController.changeActiveitemTo('Master Biaya');
+                  navigationController.navigateTo('/setting/master-biaya');
                 },
                 icon: const Icon(Icons.cancel),
                 label: const Text(
@@ -312,17 +248,13 @@ class _BarangFormState extends State<BarangForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 525,
+                        width: 520,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            inputKodeBarang(),
+                            inputIdBiaya(),
                             const SizedBox(height: 8),
-                            inputNamaBarang(),
-                            const SizedBox(height: 8),
-                            inputSatuan(),
-                            const SizedBox(height: 8),
-                            inputStokBarang(),
+                            inputNamaBiaya(),
                             const SizedBox(height: 8),
                           ],
                         ),
@@ -331,16 +263,12 @@ class _BarangFormState extends State<BarangForm> {
                         width: 25,
                       ),
                       SizedBox(
-                        width: 525,
+                        width: 520,
                         child: Column(
                           children: [
-                            inputStatusBarang(),
+                            inputJenisBiaya(),
                             const SizedBox(height: 8),
-                            inputHargaBeli(),
-                            const SizedBox(height: 8),
-                            inputHargaJual(),
-                            const SizedBox(height: 8),
-                            inputKeterangan(),
+                            inputNominalBiaya(),
                             const SizedBox(height: 8),
                           ],
                         ),

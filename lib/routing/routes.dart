@@ -82,6 +82,9 @@ const settingPenggunaRoute = "/setting/daftar-pengguna";
 const settingMenuDisplayName = "Daftar Menu";
 const settingMenuRoute = "/setting/daftar-menu";
 
+const settingBiayaDisplayName = "Daftar Biaya";
+const settingBiayaRoute = "/setting/master-biaya";
+
 const financePageDisplayName = "Finance";
 const financePageRoute = "/finance";
 

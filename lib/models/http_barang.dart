@@ -12,6 +12,7 @@ class HttpBarang {
   HttpBarang({this.status});
 
   static Future<HttpBarang> saveBarang(
+    String KDXX_BRGX,
     String NAMA_BRGX,
     String JENS_STUA,
     String STOK_BRGX,
@@ -23,6 +24,7 @@ class HttpBarang {
     var hargaBeli = HRGX_BELI.replaceAll(",", "").toString();
     var hargaJual = HRGX_JUAL.replaceAll(",", "").toString();
     var hasilResponse = await http.post(urlApi, body: {
+      "KDXX_BRGX": KDXX_BRGX,
       "NAMA_BRGX": NAMA_BRGX,
       "JENS_STUA": JENS_STUA,
       "STOK_BRGX": STOK_BRGX,

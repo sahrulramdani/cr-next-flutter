@@ -34,6 +34,7 @@ import 'package:flutter_web_course/pages/marketing/marketing_maskapai.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_hotel.dart';
 // import 'package:flutter_web_course/pages/marketing/marketing_02dealtrack.dart';
 import 'package:flutter_web_course/pages/overview/overview.dart';
+import 'package:flutter_web_course/pages/pengaturan/setting_biaya.dart';
 // import 'package:flutter_web_course/pages/pm/pm.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 //import 'package:get/get.dart';
@@ -108,6 +109,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const SettingUser());
     case settingMenuRoute:
       return _getPageRoute(const SettingMenu());
+    case settingBiayaRoute:
+      return _getPageRoute(const SettingBiaya());
       // ------------------
       // case mrktDealTrackPageRoute:
       //   return _getPageRoute(DealTrackPage());

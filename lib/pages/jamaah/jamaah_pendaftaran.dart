@@ -58,7 +58,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   // String biaya;
   String biayaVaksin;
   String biayaPaspor;
-  String biayaAdmin = '100,000';
+  String biayaAdmin;
+  String biayaHandling;
   String estimasi;
   String mataUang;
 
@@ -80,6 +81,8 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   List<Map<String, dynamic>> listKantor = [];
   List<Map<String, dynamic>> listJamaah = [];
   List<Map<String, String>> listTagihan = [];
+  List<Map<String, dynamic>> listBiayaPaspor = [];
+  List<Map<String, dynamic>> listBiayaVaksin = [];
 
   void getAuth() async {
     var kode = 'JMH06';
@@ -140,13 +143,43 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     setState(() {});
   }
 
+  void getBiayaPaspor() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/biaya-paspor"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listBiayaPaspor = dataStatus;
+    setState(() {});
+  }
+
+  void getBiayaVaksin() async {
+    var response = await http.get(Uri.parse("$urlAddress/setup/biaya-vaksin"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listBiayaVaksin = dataStatus;
+    setState(() {});
+  }
+
+  void getBiayaAdmin() async {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
+    var response = await http.get(Uri.parse("$urlAddress/setup/biaya-admin"));
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      biayaAdmin = myformat.format(dataStatus[0]['JMLH_BYAX'] ?? 0);
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getList();
     getJadwal();
     getKantor();
+    getBiayaPaspor();
+    getBiayaVaksin();
+    getBiayaAdmin();
     getJamaah();
+    super.initState();
   }
 
   Widget inputKantor() {
@@ -411,6 +444,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   }
 
   Widget inputPaspor() {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -421,35 +455,15 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           label: "Paspor",
           mode: Mode.MENU,
           onChanged: (value) {
-            if (value != null) {
-              if (value == 'Proses Sendiri / Pending Paspor' ||
-                  value == 'Telah Diterima Dikantor') {
-                setState(() {
-                  pembuatan = value;
-                  biayaPaspor = '0';
-                });
-              } else {
-                setState(() {
-                  pembuatan = value;
-                  biayaPaspor = '1,000,000';
-                });
-              }
-              fncTotal();
-            } else {
-              setState(() {
-                pembuatan = '';
-              });
-              fncTotal();
-            }
+            setState(() {
+              pembuatan = value['NAMA_BYAX'];
+              biayaPaspor = myformat.format(value['JMLH_BYAX']);
+            });
           },
-          items: const [
-            "Pembuatan Baru / Kolektif Kantor",
-            "Berita Acara Pemeriksaan",
-            "Perpanjang",
-            "Tambah Kata Nama",
-            "Telah Diterima Dikantor",
-            "Proses Sendiri / Pending Paspor",
-          ],
+          items: listBiayaPaspor,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_BYAX'].toString()),
+              ),
           dropdownBuilder: (context, selectedItem) => Text(
               pembuatan ?? "Pilih Paspor",
               style: TextStyle(
@@ -460,6 +474,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   }
 
   Widget inputVaksin() {
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     return Container(
       height: 50,
       decoration: const BoxDecoration(
@@ -470,31 +485,15 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           label: "Vaksin",
           mode: Mode.MENU,
           onChanged: (value) {
-            if (value != null) {
-              if (value == 'Proses Sendiri') {
-                setState(() {
-                  vaksin = value;
-                  biayaVaksin = '0';
-                });
-              } else {
-                setState(() {
-                  vaksin = value;
-                  biayaVaksin = '305,000';
-                });
-              }
-              fncTotal();
-            } else {
-              setState(() {
-                vaksin = '';
-                biayaVaksin = '0';
-              });
-              fncTotal();
-            }
+            setState(() {
+              vaksin = value['NAMA_BYAX'];
+              biayaVaksin = myformat.format(value['JMLH_BYAX']);
+            });
           },
-          items: const [
-            "Kolektif Kantor",
-            "Proses Sendiri",
-          ],
+          items: listBiayaVaksin,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_BYAX'].toString()),
+              ),
           dropdownBuilder: (context, selectedItem) => Text(
               vaksin ?? "Pilih Vaksin",
               style:
@@ -704,6 +703,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                 : 0) +
             (biayaVaksin != null
                 ? int.parse(biayaVaksin.replaceAll(',', ''))
+                : 0) +
+            (biayaHandling != null
+                ? int.parse(biayaHandling.replaceAll(',', ''))
                 : 0));
 
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
@@ -995,7 +997,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () {
-                            authInqu == '1'
+                            authAddx == '1'
                                 ? fncSaveFoto()
                                 : showDialog(
                                     context: context,
@@ -1011,7 +1013,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                authInqu == '1' ? myBlue : Colors.blue[200],
+                                authAddx == '1' ? myBlue : Colors.blue[200],
                             minimumSize: const Size(100, 40),
                             shadowColor: Colors.grey,
                             elevation: 5,
@@ -1253,6 +1255,18 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
                                               alignment: Alignment.centerRight,
                                               child: Text(
                                                 biayaAdmin ?? '0',
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            )),
+                                          ]),
+                                          DataRow(cells: [
+                                            const DataCell(
+                                                Text('Biaya Handling')),
+                                            const DataCell(Text(':')),
+                                            DataCell(Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                biayaHandling ?? '0',
                                                 textAlign: TextAlign.right,
                                               ),
                                             )),

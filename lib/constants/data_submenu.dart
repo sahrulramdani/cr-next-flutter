@@ -225,6 +225,12 @@ List dataSubMenuFinance = [
     "title": "Penerbangan",
     "route": "/finance/profit-penerbangan"
   },
+  {
+    "level": 0,
+    "icon": Icons.price_change_outlined,
+    "title": "Master Biaya",
+    "route": "/setting/master-biaya"
+  },
 ];
 
 List DataSubMenu = [
