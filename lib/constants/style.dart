@@ -11,9 +11,9 @@ Color myGrey = Colors.grey[700];
 //Token
 
 String kodeToken = "";
-String namaUser = "Sahrul Ramdani";
-String username = "sahrulramdani20";
-String fotoUser = null;
+String namaUser = "";
+String username = "";
+String fotoUser;
 
 // AUTH PERMISSION
 dynamic authAddx = '0';

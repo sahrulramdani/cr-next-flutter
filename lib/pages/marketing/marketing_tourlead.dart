@@ -22,7 +22,7 @@ class MarketingTourleadPage extends StatefulWidget {
 
 class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
   void getAuth() async {
-    var kode = 'MKT08';
+    var kode = 'MKT04';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,

@@ -25,7 +25,7 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
   List<Map<String, dynamic>> listMaskapai = [];
 
   void getAuth() async {
-    var kode = 'MKT11';
+    var kode = 'STG05';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,

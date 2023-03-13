@@ -85,7 +85,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   List<Map<String, dynamic>> listBiayaVaksin = [];
 
   void getAuth() async {
-    var kode = 'JMH06';
+    var kode = 'JMH02';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,

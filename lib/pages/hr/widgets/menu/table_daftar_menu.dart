@@ -7,6 +7,7 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_edit_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_list_user_grup.dart';
+import 'package:flutter_web_course/pages/hr/widgets/menu/modul_detail_submenu.dart';
 import 'package:flutter_web_course/pages/hr/widgets/pengguna/modal_akses_pengguna.dart';
 import 'package:flutter_web_course/pages/hr/widgets/pengguna/modal_edit_pengguna.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_edit_satuan.dart';
@@ -22,9 +23,9 @@ import 'package:http/http.dart' as http;
 // import 'package:intl/intl.dart';
 
 class ButtonEdit extends StatelessWidget {
-  String idPengguna;
-  String namaPengguna;
-  ButtonEdit({Key key, @required this.idPengguna, @required this.namaPengguna})
+  String idMenu;
+  String namaMenu;
+  ButtonEdit({Key key, @required this.idMenu, @required this.namaMenu})
       : super(key: key);
 
   @override
@@ -35,12 +36,10 @@ class ButtonEdit extends StatelessWidget {
         color: myBlue,
       ),
       onPressed: () {
-        // showDialog(
-        //     context: context,
-        //     builder: (context) => ModalEditPengguna(
-        //           idPengguna: idPengguna,
-        //           namaPengguna: namaPengguna,
-        //         ));
+        showDialog(
+            context: context,
+            builder: (context) =>
+                ModalDetailSubmenu(idMenu: idMenu, namaMenu: namaMenu));
       },
     );
   }
@@ -81,22 +80,22 @@ class MyData extends DataTableSource {
       DataCell(Text((index + 1).toString(),
           style:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listMenu[index]['PROC_CODE'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Text(listMenu[index]['MDUL_CODE'],
           style:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Text(listMenu[index]['MENU_NAME'],
           style:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      // DataCell(Text(listMenu[index]['MENU_NAME'],
+      //     style:
+      //         TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ButtonEdit(
-              idPengguna: listMenu[index]['PROC_CODE'],
-              namaPengguna: listMenu[index]['PROC_CODE'],
+              idMenu: listMenu[index]['MDUL_CODE'],
+              namaMenu: listMenu[index]['MENU_NAME'],
             ),
             // const SizedBox(width: 10),
             // ButtonUser(
@@ -135,7 +134,7 @@ class _TableMenuState extends State<TableMenu> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.73,
+      height: screenHeight * 0.6,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
@@ -149,14 +148,7 @@ class _TableMenuState extends State<TableMenu> {
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
             DataColumn(
-                label: Text('Kode Program',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Kode Modul',
+                label: Text('Module',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -169,6 +161,13 @@ class _TableMenuState extends State<TableMenu> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Gilroy',
                         fontSize: 16))),
+            // DataColumn(
+            //     label: Text('Nama Modul',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold,
+            //             fontFamily: 'Gilroy',
+            //             fontSize: 16))),
             DataColumn(
                 label: Expanded(
               child: Center(

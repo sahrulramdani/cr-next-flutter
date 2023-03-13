@@ -28,7 +28,7 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   // ---------------------------- GET DATA -----------------------------
   // -------------------------------------------------------------------
   void getAuth() async {
-    var kode = 'JMH05';
+    var kode = 'JMH01';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,

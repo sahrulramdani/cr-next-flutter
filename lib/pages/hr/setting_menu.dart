@@ -4,15 +4,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy_user.dart';
-import 'package:flutter_web_course/pages/hr/widgets/grup-user/grup_user_form.dart';
-import 'package:flutter_web_course/pages/hr/widgets/grup-user/table_grup_user.dart';
-import 'package:flutter_web_course/pages/hr/widgets/menu/table_daftar_menu.dart';
-import 'package:flutter_web_course/pages/hr/widgets/pengguna/form_pengguna.dart';
-import 'package:flutter_web_course/pages/hr/widgets/pengguna/table_pengguna.dart';
-import 'package:flutter_web_course/pages/inventory/widgets/satuan/form_satuan.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
-import 'package:flutter_web_course/pages/inventory/widgets/satuan/table_satuan.dart';
+import 'package:flutter_web_course/pages/hr/widgets/menu/modal_tambah_menu.dart';
+import 'package:flutter_web_course/pages/hr/widgets/menu/table_daftar_menu.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_cd_hotel.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/hotel/table_hotel.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/maskapai/modal_cd_maskapai.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -46,12 +43,15 @@ class _SettingMenuState extends State<SettingMenu> {
     getModuleAll();
   }
 
-  Widget cmdTambah() {
+  Widget cmdTambah(context) {
+    // var idHotel = '';
+    // var tambah = true;
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
+        // setState(() {
+        //   enableFormL = !enableFormL;
+        // });
+        showDialog(context: context, builder: (context) => ModalTambahMenu());
         // getList();
       },
       icon: const Icon(Icons.add),
@@ -132,7 +132,7 @@ class _SettingMenuState extends State<SettingMenu> {
     );
   }
 
-  Widget menuButton() => Container(
+  Widget menuButton(context) => Container(
         height: !enableFormL ? 50 : 0,
         alignment: Alignment.centerRight,
         child: Row(
@@ -143,7 +143,7 @@ class _SettingMenuState extends State<SettingMenu> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    cmdTambah(),
+                    cmdTambah(context),
                     //---------------------------------
                     // spacePemisah(),
                     // //---------------------------------
@@ -198,27 +198,28 @@ class _SettingMenuState extends State<SettingMenu> {
           const SizedBox(
             height: 20,
           ),
-          menuButton(),
+          menuButton(context),
           const SizedBox(
             height: 10,
           ),
           Visibility(
               visible: enableFormL,
               child: Container(
-                  padding: const EdgeInsets.only(bottom: 20, right: 15),
-                  width: screenWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: const FormPengguna())),
+                padding: const EdgeInsets.only(bottom: 20, right: 15),
+                width: screenWidth,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 7,
+                    ),
+                  ],
+                ),
+                // child: const SatuanForm(),
+              )),
           Visibility(
               visible: !enableFormL,
               child: Container(
@@ -274,8 +275,21 @@ class _SettingMenuState extends State<SettingMenu> {
                                   style: const TextStyle(
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Menu'),
-                                  onChanged: (value) {},
+                                      hintText: 'Cari Nama Satuan'),
+                                  onChanged: (value) {
+                                    // if (value == '') {
+                                    //   listAgency = listAgency;
+                                    //   getList();
+                                    // } else {
+                                    //   setState(() {
+                                    //     listAgency = listAgency
+                                    //         .where((element) =>
+                                    //             element['NAMA_LGKP']
+                                    //                 .contains(value))
+                                    //         .toList();
+                                    //   });
+                                    // }
+                                  },
                                 ),
                               ),
                             ],
@@ -283,7 +297,7 @@ class _SettingMenuState extends State<SettingMenu> {
                         ),
                       ],
                     ),
-                    TableMenu(listMenu: listModule)
+                    TableMenu(listMenu: listModule),
                   ],
                 ),
               ))

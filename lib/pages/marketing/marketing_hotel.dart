@@ -27,7 +27,7 @@ class _MarketingHotelState extends State<MarketingHotel> {
   List<Map<String, dynamic>> listHotel = [];
 
   void getAuth() async {
-    var kode = 'MKT12';
+    var kode = 'STG06';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,

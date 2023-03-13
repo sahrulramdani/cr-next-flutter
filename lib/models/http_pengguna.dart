@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 import 'dart:convert';
 import "package:http/http.dart" as http;
@@ -123,15 +125,59 @@ class HttpPengguna {
     );
   }
 
-  // static Future<HttpPengguna> deleteHotel(String idHotel) async {
-  //   Uri urlApi = Uri.parse("$urlAddress/marketing/hotel/delete");
-  //   var hasilResponse = await http.post(urlApi, body: {
-  //     "IDXX_PSWT": idHotel,
-  //   });
+  static Future<HttpPengguna> saveMenu(
+    String modulecode,
+    String modulenama,
+    String path,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/menu/menus/save");
+    var hasilResponse = await http.post(urlApi, body: {
+      "MDUL_CODE": modulecode,
+      "MENU_NAME": modulenama,
+      "PATH": path,
+    });
 
-  //   var data = json.decode(hasilResponse.body);
-  //   return HttpPengguna(
-  //     status: data["status"],
-  //   );
-  // }
+    var data = json.decode(hasilResponse.body);
+    return HttpPengguna(
+      status: data["status"],
+    );
+  }
+
+  static Future<HttpPengguna> saveSubmenu(
+    String idMenu,
+    String subMenuName,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/menu/submenus/save");
+    var hasilResponse = await http.post(urlApi, body: {
+      "MDUL_CODE": idMenu,
+      "SUBMENU_NAME": subMenuName,
+    });
+
+    var data = json.decode(hasilResponse.body);
+    return HttpPengguna(
+      status: data["status"],
+    );
+  }
+
+  static Future<HttpPengguna> savelistmenu(
+    String idSubmenu,
+    String idmenu,
+    String listName,
+    String Path,
+    String typemdul,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/menu/listmenus/save");
+    var hasilResponse = await http.post(urlApi, body: {
+      "SUBMENU_CODE": idSubmenu,
+      "ID_MENU": idmenu,
+      "LIST_NAME": listName,
+      "PATH": Path,
+      "TYPE_MDUL": typemdul,
+    });
+
+    var data = json.decode(hasilResponse.body);
+    return HttpPengguna(
+      status: data["status"],
+    );
+  }
 }

@@ -21,7 +21,8 @@ class _SideMenuState extends State<SideMenu> {
   List dataMenu = [];
   String overview = " ";
   void getMenu() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/getmoduleall"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/get-module/user/$username"));
     List data = List.from(json.decode(response.body) as List);
 
     // var routes = new MenuItem(data)

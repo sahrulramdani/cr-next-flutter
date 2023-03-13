@@ -24,7 +24,7 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
   List<Map<String, dynamic>> listTransit = [];
 
   void getAuth() async {
-    var kode = 'MKT10';
+    var kode = 'STG04';
     var response = await http
         .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
       'pte-token': kodeToken,
