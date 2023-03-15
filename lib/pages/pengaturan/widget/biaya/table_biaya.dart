@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/pengaturan/widget/biaya/moda_hapus_biaya.dart';
 import 'package:flutter_web_course/pages/pengaturan/widget/biaya/modal_edit_biaya.dart';
 import 'package:intl/intl.dart';
@@ -29,12 +30,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditBiaya(idBiaya: idBiaya));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditBiaya(idBiaya: idBiaya))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -49,12 +56,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusBiaya(idBiaya: idBiaya));
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusBiaya(idBiaya: idBiaya))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

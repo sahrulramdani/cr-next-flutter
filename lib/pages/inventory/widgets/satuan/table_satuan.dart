@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_edit_satuan.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_hapus_satuan.dart';
 import 'package:flutter_web_course/pages/overview/widgets/datatable_proyek.dart';
@@ -26,12 +27,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditSatuan(idsatuan: satuan));
+        authExpt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditSatuan(idsatuan: satuan))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -46,12 +53,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusSatuan(idsatuan: idsatuan));
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusSatuan(idsatuan: idsatuan))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

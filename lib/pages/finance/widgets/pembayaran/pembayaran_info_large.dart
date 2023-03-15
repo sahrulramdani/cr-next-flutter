@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/chart_pembayaran.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:intl/intl.dart';
@@ -167,8 +168,17 @@ class _PembayaranInfoLargeState extends State<PembayaranInfoLarge> {
                     const SizedBox(height: 10),
                     ElevatedButton.icon(
                       onPressed: () {
-                        menuController.changeActiveitemTo('Form Bayar');
-                        navigationController.navigateTo('/finance/form-bayar');
+                        authAddx == '1'
+                            ? {
+                                menuController.changeActiveitemTo('Form Bayar'),
+                                navigationController
+                                    .navigateTo('/finance/form-bayar')
+                              }
+                            : showDialog(
+                                context: context,
+                                builder: (context) => const ModalInfo(
+                                      deskripsi: 'Anda Tidak Memiliki Akses',
+                                    ));
                       },
                       icon: const Icon(Icons.add_card_sharp),
                       label: const Text(
@@ -176,7 +186,8 @@ class _PembayaranInfoLargeState extends State<PembayaranInfoLarge> {
                         style: TextStyle(fontFamily: 'Gilroy'),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: myBlue,
+                        backgroundColor:
+                            authAddx == '1' ? myBlue : Colors.blue[200],
                         minimumSize: const Size(100, 40),
                         shadowColor: Colors.grey,
                         elevation: 5,

@@ -39,8 +39,6 @@ class _ModalListUserGrupState extends State<ModalListUserGrup> {
     setState(() {
       listUserGrup = data;
     });
-
-    print(listUserGrup);
   }
 
   @override

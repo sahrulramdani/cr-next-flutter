@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 
 // import 'package:flutter_web_course/pages/inventory/widgets/modal_hapus_barang.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jadwal.dart';
@@ -18,14 +19,19 @@ import 'package:intl/intl.dart';
 class MyData extends DataTableSource {
   final List<Map<String, dynamic>> dataPembayaran;
   MyData(this.dataPembayaran);
+
   @override
   DataRow getRow(int index) {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return DataRow(
         onLongPress: () {
-          menuController.changeActiveitemTo('Form Bayar');
-          navigationController.navigateTo('/finance/form-bayar');
+          authAddx == '1'
+              ? {
+                  menuController.changeActiveitemTo('Form Bayar'),
+                  navigationController.navigateTo('/finance/form-bayar')
+                }
+              : '';
         },
         cells: [
           DataCell(Text((index + 1).toString(),

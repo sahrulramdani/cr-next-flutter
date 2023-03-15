@@ -52,29 +52,32 @@ class _InfoEstimasiBayarState extends State<InfoEstimasiBayar> {
               const DataColumn(label: Text(':')),
               DataColumn(
                   label: Text(detailEst.isNotEmpty
-                      ? myFormat.format(detailEst[0]['BIAYA_PKET'])
+                      ? myFormat.format(detailEst[0]['BIAYA_PKET'] ?? 0)
                       : '-')),
             ], rows: [
               DataRow(cells: [
                 const DataCell(Text('Biaya Paspor')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? myFormat.format(detailEst[0]['PASPOR'])
+                    ? myFormat.format(detailEst[0]['PASPOR'] ?? 0)
                     : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Biaya Vaksin')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? myFormat.format(detailEst[0]['VAKSIN'])
+                    ? myFormat.format(detailEst[0]['VAKSIN'] ?? 0)
                     : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Jatuh Tempo')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? fncGetTanggal(detailEst[0]['JATUH_TEMP'])
+                    ? fncGetTanggal(detailEst[0]['JATUH_TEMP'] ??
+                        DateFormat("dd-MM-yyyy").format(DateTime.now()))
                     : '-')),
+                // DataCell(Text(
+                //     detailEst.isNotEmpty ? (detailEst[0]['JATUH_TEMP'] ?? '-') : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Status')),
@@ -100,21 +103,21 @@ class _InfoEstimasiBayarState extends State<InfoEstimasiBayar> {
                 const DataCell(Text('Estimasi Total')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? myFormat.format(detailEst[0]['ESTX_TOTL'])
+                    ? myFormat.format(detailEst[0]['ESTX_TOTL'] ?? 0)
                     : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Uang Masuk')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? myFormat.format(detailEst[0]['UANG_MASUK'])
+                    ? myFormat.format(detailEst[0]['UANG_MASUK'] ?? 0)
                     : '-')),
               ]),
               DataRow(cells: [
                 const DataCell(Text('Sisa Tagihan')),
                 const DataCell(Text(':')),
                 DataCell(Text(detailEst.isNotEmpty
-                    ? myFormat.format(detailEst[0]['SISA_TAGIHAN'])
+                    ? myFormat.format(detailEst[0]['SISA_TAGIHAN'] ?? 0)
                     : '-')),
               ]),
             ]),

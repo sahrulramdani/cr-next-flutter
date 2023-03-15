@@ -27,8 +27,6 @@ class _LainnyaKwitansiState extends State<LainnyaKwitansi> {
     setState(() {
       detailEst = dataStatus;
     });
-
-    print(detailEst);
   }
 
   void getKwitansi() async {
@@ -70,12 +68,12 @@ class _LainnyaKwitansiState extends State<LainnyaKwitansi> {
                     const DataColumn(label: Text('Uang Masuk : ')),
                     DataColumn(
                         label: Text(detailEst.isNotEmpty
-                            ? myFormat.format(detailEst[0]['UANG_MASUK'])
+                            ? myFormat.format(detailEst[0]['UANG_MASUK'] ?? 0)
                             : '0')),
                     const DataColumn(label: Text('Sisa Bayar : ')),
                     DataColumn(
                         label: Text(detailEst.isNotEmpty
-                            ? myFormat.format(detailEst[0]['SISA_TAGIHAN'])
+                            ? myFormat.format(detailEst[0]['SISA_TAGIHAN'] ?? 0)
                             : '0')),
                     DataColumn(
                         label: Text(detailEst.isNotEmpty
@@ -125,7 +123,7 @@ class _LainnyaKwitansiState extends State<LainnyaKwitansi> {
                   DataCell(Text((x++).toString())),
                   DataCell(Text(e['NOXX_FAKT'])),
                   DataCell(Text(e['CRTX_DATE'])),
-                  DataCell(Text(myFormat.format(e['JMLH_BYAR']))),
+                  DataCell(Text(myFormat.format(e['JMLH_BYAR'] ?? 0))),
                   DataCell(Text(e['CARA_BYAR'])),
                   DataCell(Text(e['NAME_BANK'])),
                   DataCell(Text(e['KETERANGAN'])),

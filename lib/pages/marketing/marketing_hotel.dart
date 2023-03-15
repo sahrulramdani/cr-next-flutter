@@ -27,11 +27,11 @@ class _MarketingHotelState extends State<MarketingHotel> {
   List<Map<String, dynamic>> listHotel = [];
 
   void getAuth() async {
-    var kode = 'STG06';
-    var response = await http
-        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
 
     var auth = json.decode(response.body);
     setState(() {

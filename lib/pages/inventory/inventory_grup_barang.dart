@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/form_barang.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/table_barang.dart';
@@ -30,6 +31,24 @@ class _InventoryGrupBarangPageState extends State<InventoryGrupBarangPage> {
   bool enableFormL = false;
   bool onStok = false;
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getDataGrupBarang() async {
     var response = await http
         .get(Uri.parse("$urlAddress/inventory/grupbrg/getGrupBrgHeaderAll"));
@@ -43,20 +62,27 @@ class _InventoryGrupBarangPageState extends State<InventoryGrupBarangPage> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getDataGrupBarang();
+    super.initState();
   }
 
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => const ModalTambahBarangGrupHeader());
+        authAddx == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => const ModalTambahBarangGrupHeader())
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -71,7 +97,15 @@ class _InventoryGrupBarangPageState extends State<InventoryGrupBarangPage> {
   Widget cmdPrint() {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
+        authPrnt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => const ModalTambahBarangGrupHeader())
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
@@ -79,65 +113,13 @@ class _InventoryGrupBarangPageState extends State<InventoryGrupBarangPage> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
       ),
     );
   }
-
-  // Widget cmdStok() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       if (onStok == false) {
-  //         setState(() {
-  //           dataBarang = dataBarang
-  //               .where((element) => int.parse(element['stok']) < 10)
-  //               .toList();
-  //           onStok = true;
-  //         });
-  //       } else {
-  //         setState(() {
-  //           dataBarang = listBarang;
-  //           onStok = false;
-  //         });
-  //       }
-  //     },
-  //     icon: const Icon(Icons.compress_rounded),
-  //     label: const Text(
-  //       'Stok < 10',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
 
   Widget spacePemisah() {
     return const SizedBox(

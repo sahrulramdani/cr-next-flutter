@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_edit_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_list_user_grup.dart';
 import 'package:flutter_web_course/pages/hr/widgets/menu/modul_detail_submenu.dart';
@@ -33,13 +34,19 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) =>
-                ModalDetailSubmenu(idMenu: idMenu, namaMenu: namaMenu));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) =>
+                    ModalDetailSubmenu(idMenu: idMenu, namaMenu: namaMenu))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

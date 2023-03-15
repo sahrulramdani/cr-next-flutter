@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 // import 'package:flutter_web_course/pages/inventory/widgets/modal_hapus_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_hapus_grup_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_list_grup.dart';
@@ -25,14 +26,20 @@ class ButtonKelola extends StatelessWidget {
     return IconButton(
         icon: Icon(
           Icons.format_list_bulleted_rounded,
-          color: myBlue,
+          color: authEdit == '1' ? myBlue : Colors.blue[200],
         ),
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) => ModalListGrup(
-                    idGrupbrg: idGrupBarang,
-                  ));
+          authEdit == '1'
+              ? showDialog(
+                  context: context,
+                  builder: (context) => ModalListGrup(
+                        idGrupbrg: idGrupBarang,
+                      ))
+              : showDialog(
+                  context: context,
+                  builder: (context) => const ModalInfo(
+                        deskripsi: 'Anda Tidak Memiliki Akses',
+                      ));
         });
   }
 }
@@ -46,12 +53,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusGrupBarang(idGrup: idGrup));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusGrupBarang(idGrup: idGrup))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

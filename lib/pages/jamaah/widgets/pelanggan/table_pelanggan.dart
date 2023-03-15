@@ -1,10 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
-import 'dart:convert';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jadwal.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/modal_menu_pelanggan.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
@@ -25,16 +24,22 @@ class ButtonEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
-        Icons.edit_outlined,
-        color: myBlue,
+        Icons.info_outline,
+        color: authAddx == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalMenuPelanggan(
-                  idPelanggan: idPelanggan,
-                  namaPelanggan: namaPelanggan,
-                ));
+        authAddx == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalMenuPelanggan(
+                      idPelanggan: idPelanggan,
+                      namaPelanggan: namaPelanggan,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -46,7 +51,7 @@ class MyData extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     return DataRow(cells: [
       DataCell(Text((index + 1).toString(),
           style:

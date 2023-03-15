@@ -24,6 +24,24 @@ class FinancePembayaranPage extends StatefulWidget {
 class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
   List<Map<String, dynamic>> listPembayaranCabang = [];
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   getPembayaranCabang() async {
     var response =
         await http.get(Uri.parse("$urlAddress/finance/info-data/list-cabang"));
@@ -36,8 +54,9 @@ class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getPembayaranCabang();
+    super.initState();
   }
 
   @override

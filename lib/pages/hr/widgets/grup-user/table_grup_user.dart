@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_edit_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_list_user_grup.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_edit_satuan.dart';
@@ -28,12 +29,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditGrupUser(idGrup: idGrup));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditGrupUser(idGrup: idGrup))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -48,12 +55,18 @@ class ButtonUser extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.supervised_user_circle_outlined,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalListUserGrup(idGrup: idGrup));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalListUserGrup(idGrup: idGrup))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

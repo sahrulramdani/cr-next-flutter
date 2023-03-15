@@ -3,10 +3,15 @@ import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/pages/finance/widgets/ujrah/table_transaksi.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:flutter_web_course/constants/style.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FinanceUjrahPage extends StatefulWidget {
   const FinanceUjrahPage({Key key}) : super(key: key);
@@ -16,16 +21,48 @@ class FinanceUjrahPage extends StatefulWidget {
 }
 
 class _FinanceUjrahPageState extends State<FinanceUjrahPage> {
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
+  @override
+  void initState() {
+    getAuth();
+    super.initState();
+  }
+
   Widget cmdPrint() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
         'Print Proses',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -35,14 +72,22 @@ class _FinanceUjrahPageState extends State<FinanceUjrahPage> {
 
   Widget cmdRekap() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
         'Print Transaksi',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

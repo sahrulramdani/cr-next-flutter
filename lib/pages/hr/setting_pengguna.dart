@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy_user.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/grup_user_form.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/table_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/widgets/pengguna/form_pengguna.dart';
@@ -28,6 +29,24 @@ class _SettingUserState extends State<SettingUser> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listPengguna = [];
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getPenggunaAll() async {
     var response =
         await http.get(Uri.parse("$urlAddress/menu/daftar-pengguna/all"));
@@ -41,21 +60,27 @@ class _SettingUserState extends State<SettingUser> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getPenggunaAll();
+    super.initState();
   }
 
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

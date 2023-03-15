@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/menu/modal_tambah_menu.dart';
 import 'package:flutter_web_course/pages/hr/widgets/menu/table_daftar_menu.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_cd_hotel.dart';
@@ -26,6 +27,24 @@ class _SettingMenuState extends State<SettingMenu> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listModule = [];
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getModuleAll() async {
     var response =
         await http.get(Uri.parse("$urlAddress/menu/daftar-menu/module-all"));
@@ -39,20 +58,22 @@ class _SettingMenuState extends State<SettingMenu> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getModuleAll();
+    super.initState();
   }
 
   Widget cmdTambah(context) {
-    // var idHotel = '';
-    // var tambah = true;
     return ElevatedButton.icon(
       onPressed: () async {
-        // setState(() {
-        //   enableFormL = !enableFormL;
-        // });
-        showDialog(context: context, builder: (context) => ModalTambahMenu());
-        // getList();
+        authAddx == '1'
+            ? showDialog(
+                context: context, builder: (context) => const ModalTambahMenu())
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(

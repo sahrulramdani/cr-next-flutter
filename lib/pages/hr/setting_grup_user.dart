@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/grup_user_form.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/table_grup_user.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/form_satuan.dart';
@@ -24,6 +25,24 @@ class SettingGrupUser extends StatefulWidget {
 class _SettingGrupUserState extends State<SettingGrupUser> {
   List<Map<String, dynamic>> listGrupUser = [];
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getData() async {
     var response = await http.get(Uri.parse("$urlAddress/menu/grup-user/all"));
     List<Map<String, dynamic>> data =
@@ -36,22 +55,28 @@ class _SettingGrupUserState extends State<SettingGrupUser> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getData();
+    super.initState();
   }
 
   bool enableFormL = false;
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

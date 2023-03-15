@@ -25,7 +25,7 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
 
   void getSubmenu() async {
     var response = await http.get(Uri.parse(
-        "$urlAddress/menu/getSubMenu/${menuController.activeItem.value}"));
+        "$urlAddress/menu/getSubMenu/${menuController.activeItem.value}/$username"));
     List data = List.from(json.decode(response.body) as List);
 
     setState(() {
@@ -34,7 +34,8 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
   }
 
   void getListMenu() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/getListMenu"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/getListMenu/$username"));
     List listmenu = List.from(json.decode(response.body) as List);
 
     setState(() {
@@ -51,6 +52,8 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
 
   @override
   Widget build(BuildContext context) {
+    drawermenu = [];
+
     for (var element in listSubmenu) {
       for (var element2 in listMenus) {
         if (element["CODE_SUBMENU"] == element2["SUBMENU_CODE"]) {
@@ -59,6 +62,7 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
       }
       drawermenu.add(Menu.fromJson(element));
     }
+
     return Drawer(child: _buildDrawer());
   }
 
@@ -160,6 +164,13 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
             ),
           ),
           onTap: () {
+            setState(() {
+              menuKode = menuItem.code;
+              drawermenu = [];
+              listSubmenu = [];
+              listMenus = [];
+            });
+
             if (menuItem.route == authenticationPageRoute) {
               menuController.changeActiveitemTo(overViewPageDisplayName);
               Get.offAllNamed(authenticationPageRoute);
@@ -202,9 +213,10 @@ class Menu {
   IconData icon;
   String title = "Sub Menu";
   String route = "tes";
+  String code = "AAA00";
   List<Menu> children = [];
   //default constructor
-  Menu(this.level, this.icon, this.title, this.route, this.children);
+  Menu(this.level, this.icon, this.title, this.route, this.children, this.code);
 
   //one method for  Json data
   Menu.fromJson(Map<String, dynamic> json) {
@@ -220,6 +232,7 @@ class Menu {
     //title
     title = json['NAME'];
 
+    code = json['LIST_CODE'];
     //route
     route = json['PATH'];
 

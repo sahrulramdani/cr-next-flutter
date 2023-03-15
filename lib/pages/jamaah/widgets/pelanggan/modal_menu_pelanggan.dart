@@ -42,7 +42,7 @@ class ButtonDetail extends StatelessWidget {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authInqu == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(280, 40),
         shadowColor: Colors.grey,
         elevation: 5,

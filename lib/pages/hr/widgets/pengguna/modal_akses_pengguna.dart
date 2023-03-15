@@ -400,9 +400,6 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
       }
     }
 
-    print(detailSaveMenu);
-    print(detailSaveMenu.length);
-
     HttpPengguna.updateAksesPengguna(
       widget.idPengguna,
       '$detailSaveMenu',

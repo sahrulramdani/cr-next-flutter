@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/form_barang.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/table_barang.dart';
@@ -24,6 +25,24 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
   bool enableFormL = false;
   bool onStok = false;
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getDataBarang() async {
     var response =
         await http.get(Uri.parse("$urlAddress/inventory/barang/getAllBarang"));
@@ -37,21 +56,27 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
 
   @override
   void initState() {
-    super.initState();
+    getAuth();
     getDataBarang();
+    super.initState();
   }
 
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -66,11 +91,48 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
   Widget cmdPrint() {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
+        authPrnt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
         'Print',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 5,
+      ),
+    );
+  }
+
+  Widget cmdStok() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        if (onStok == false) {
+          setState(() {
+            dataBarang = dataBarang
+                .where((element) => element['STOK_BRGX'] < 10)
+                .toList();
+            onStok = true;
+          });
+        } else {
+          getDataBarang();
+          setState(() {
+            onStok = false;
+          });
+        }
+      },
+      icon: const Icon(Icons.compress_rounded),
+      label: const Text(
+        'Stok < 10',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
@@ -81,37 +143,6 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
       ),
     );
   }
-
-  // Widget cmdStok() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       if (onStok == false) {
-  //         setState(() {
-  //           dataBarang = dataBarang
-  //               .where((element) => int.parse(element['stok']) < 10)
-  //               .toList();
-  //           onStok = true;
-  //         });
-  //       } else {
-  //         setState(() {
-  //           dataBarang = listBarang;
-  //           onStok = false;
-  //         });
-  //       }
-  //     },
-  //     icon: const Icon(Icons.compress_rounded),
-  //     label: const Text(
-  //       'Stok < 10',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
 
   // Widget cmdBatal() {
   //   return ElevatedButton.icon(
@@ -160,7 +191,7 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
                     //---------------------------------
                     spacePemisah(),
                     //---------------------------------
-                    // cmdStok(),
+                    cmdStok(),
                     //---------------------------------
                     spacePemisah(),
                   ],

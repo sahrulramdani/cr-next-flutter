@@ -21,6 +21,25 @@ class JamaahPelangganPage extends StatefulWidget {
 class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
   List<Map<String, dynamic>> listCardPelanggan = [];
   List<Map<String, dynamic>> listPelanggan = [];
+
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getPelanggan() async {
     var response =
         await http.get(Uri.parse("$urlAddress/jamaah/all-pelanggan"));
@@ -63,6 +82,7 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
 
   @override
   void initState() {
+    getAuth();
     getListCardDaftarJamaah();
     getPelanggan();
     super.initState();

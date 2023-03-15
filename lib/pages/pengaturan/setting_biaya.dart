@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/form_satuan.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/satuan/table_satuan.dart';
@@ -24,6 +25,24 @@ class SettingBiaya extends StatefulWidget {
 class _SettingBiayaState extends State<SettingBiaya> {
   List<Map<String, dynamic>> listBiaya = [];
 
+  void getAuth() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+
+    var auth = json.decode(response.body);
+    setState(() {
+      authAddx = auth['AUTH_ADDX'];
+      authEdit = auth['AUTH_EDIT'];
+      authDelt = auth['AUTH_DELT'];
+      authInqu = auth['AUTH_INQU'];
+      authPrnt = auth['AUTH_PRNT'];
+      authExpt = auth['AUTH_EXPT'];
+    });
+  }
+
   void getData() async {
     var response =
         await http.get(Uri.parse("$urlAddress/finance/biaya/biaya-all"));
@@ -37,6 +56,7 @@ class _SettingBiayaState extends State<SettingBiaya> {
 
   @override
   void initState() {
+    getAuth();
     getData();
     super.initState();
   }
@@ -45,14 +65,19 @@ class _SettingBiayaState extends State<SettingBiaya> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        setState(() {
-          enableFormL = !enableFormL;
-        });
-        // getList();
+        authAddx == '1'
+            ? setState(() {
+                enableFormL = !enableFormL;
+              })
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.add),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -67,7 +92,13 @@ class _SettingBiayaState extends State<SettingBiaya> {
   Widget cmdPrint() {
     return ElevatedButton.icon(
       onPressed: () {
-        // print(listAgency);
+        authEdit == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
       icon: const Icon(Icons.print_outlined),
       label: const Text(
@@ -75,7 +106,7 @@ class _SettingBiayaState extends State<SettingBiaya> {
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authEdit == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,
@@ -85,14 +116,22 @@ class _SettingBiayaState extends State<SettingBiaya> {
 
   Widget cmdExport() {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        authExpt == '1'
+            ? ''
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
       icon: const Icon(Icons.download_outlined),
       label: const Text(
         'Export',
         style: TextStyle(fontFamily: 'Gilroy'),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
+        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
         minimumSize: const Size(100, 40),
         shadowColor: Colors.grey,
         elevation: 5,

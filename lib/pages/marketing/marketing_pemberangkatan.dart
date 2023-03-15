@@ -24,11 +24,11 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
   List<Map<String, dynamic>> listCardPemberangkatan = [];
 
   void getAuth() async {
-    var kode = 'MKT03';
-    var response = await http
-        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
 
     var auth = json.decode(response.body);
     setState(() {

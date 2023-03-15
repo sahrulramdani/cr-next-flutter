@@ -33,11 +33,11 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   List<Map<String, dynamic>> listCardJadwal = [];
 
   void getAuth() async {
-    var kode = 'MKT02';
-    var response = await http
-        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
 
     var auth = json.decode(response.body);
     setState(() {

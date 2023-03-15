@@ -37,11 +37,11 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   // -------------------------------------------------------------------
 
   void getAuth() async {
-    var kode = 'MKT01';
-    var response = await http
-        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
 
     var auth = json.decode(response.body);
     setState(() {

@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_detail_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_edit_barang.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/barang/modal_hapus_barang.dart';
@@ -22,12 +23,18 @@ class ButtonEdit extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.edit_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalEditBarang(idBarang: idBarang));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalEditBarang(idBarang: idBarang))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -42,12 +49,18 @@ class ButtonHapus extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: myBlue,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalHapusBarang(idBarang: idBarang));
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusBarang(idBarang: idBarang))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -63,14 +76,20 @@ class ButtonStok extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.playlist_add_outlined,
-        color: myBlue,
+        color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalStokBarang(
-                  idBarang: idBarang,
-                ));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalStokBarang(
+                      idBarang: idBarang,
+                    ))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }
@@ -85,12 +104,18 @@ class ButtonDetail extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.info_outline,
-        color: myBlue,
+        color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) => ModalDetailBarang(idBarang: idBarang));
+        authEdit == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalDetailBarang(idBarang: idBarang))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
       },
     );
   }

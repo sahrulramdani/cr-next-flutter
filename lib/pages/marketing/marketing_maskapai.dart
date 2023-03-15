@@ -25,11 +25,11 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
   List<Map<String, dynamic>> listMaskapai = [];
 
   void getAuth() async {
-    var kode = 'STG05';
-    var response = await http
-        .get(Uri.parse("$urlAddress/get-permission/$kode/$username"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response = await http.get(
+        Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
 
     var auth = json.decode(response.body);
     setState(() {
