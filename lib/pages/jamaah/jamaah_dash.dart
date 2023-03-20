@@ -44,8 +44,10 @@ class _JamaahDashboardPageState extends State<JamaahDashboardPage> {
   }.toList();
 
   void getListCardDashboard() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 

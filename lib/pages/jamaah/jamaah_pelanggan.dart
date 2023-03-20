@@ -23,6 +23,8 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
   List<Map<String, dynamic>> listPelanggan = [];
 
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -40,19 +42,11 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
     });
   }
 
-  void getPelanggan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/jamaah/all-pelanggan"));
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listPelanggan = dataStatus;
-    });
-  }
-
   void getListCardDaftarJamaah() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/daftar-jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/daftar-jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -78,6 +72,20 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
     setState(() {
       listCardPelanggan = dataList.toList();
     });
+  }
+
+  void getPelanggan() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/jamaah/all-pelanggan"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listPelanggan = dataStatus;
+    });
+
+    loadEnd();
   }
 
   @override
@@ -163,47 +171,55 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(
-                            height: 40,
-                            width: 230,
-                            child: DropdownSearch(
-                              mode: Mode.MENU,
-                              items: const [
-                                "Filter",
-                                "Evaluasi Pembayaran",
-                                "Jadwal Pasporan",
-                                "Belum Handling",
-                                "Belum Persyaratan",
-                                "Belum Pasporan",
-                              ],
-                              onChanged: print,
-                              selectedItem: "Filter",
-                            ),
-                          ),
+                          ResponsiveWidget.isSmallScreen(context)
+                              ? const SizedBox(
+                                  width: 0,
+                                )
+                              : SizedBox(
+                                  height: 40,
+                                  width: 230,
+                                  child: DropdownSearch(
+                                    mode: Mode.MENU,
+                                    items: const [
+                                      "Filter",
+                                      "Evaluasi Pembayaran",
+                                      "Jadwal Pasporan",
+                                      "Belum Handling",
+                                      "Belum Persyaratan",
+                                      "Belum Pasporan",
+                                    ],
+                                    onChanged: print,
+                                    selectedItem: "Filter",
+                                  ),
+                                ),
                           const SizedBox(width: 10),
-                          SizedBox(
-                            height: 40,
-                            width: 200,
-                            child: DropdownSearch(
-                              mode: Mode.MENU,
-                              items: const [
-                                "Semua",
-                                "Pusat",
-                                "Turangga",
-                                "Tasikmalaya",
-                                "KPRK Garut",
-                                "KPRK Tasikmalaya",
-                                "KPRK Karawang",
-                                "KPRK Purwakarta",
-                                "KPRK Cirebon",
-                              ],
-                              onChanged: print,
-                              selectedItem: "Semua",
-                            ),
-                          ),
+                          ResponsiveWidget.isSmallScreen(context)
+                              ? const SizedBox(
+                                  width: 0,
+                                )
+                              : SizedBox(
+                                  height: 40,
+                                  width: 200,
+                                  child: DropdownSearch(
+                                    mode: Mode.MENU,
+                                    items: const [
+                                      "Semua",
+                                      "Pusat",
+                                      "Turangga",
+                                      "Tasikmalaya",
+                                      "KPRK Garut",
+                                      "KPRK Tasikmalaya",
+                                      "KPRK Karawang",
+                                      "KPRK Purwakarta",
+                                      "KPRK Cirebon",
+                                    ],
+                                    onChanged: print,
+                                    selectedItem: "Semua",
+                                  ),
+                                ),
                           Container(
                             height: 50,
-                            width: 250,
+                            width: fncWidthSearchBox(context),
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5)),

@@ -44,8 +44,10 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
   }
 
   void getDataBarang() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/barang/getAllBarang"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/barang/getAllBarang"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -330,14 +332,16 @@ class _InventoryBarangPageState extends State<InventoryBarangPage> {
                                       hintText: 'Cari Nama Barang'),
                                   onChanged: (value) {
                                     if (value == '') {
-                                      setState(() {
-                                        dataBarang = listBarang;
-                                      });
+                                      getDataBarang();
                                     } else {
                                       setState(() {
-                                        dataBarang = listBarang
-                                            .where((element) =>
-                                                element['nama'].contains(value))
+                                        dataBarang = dataBarang
+                                            .where(((element) =>
+                                                element['NAMA_BRGX']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
                                             .toList();
                                       });
                                     }

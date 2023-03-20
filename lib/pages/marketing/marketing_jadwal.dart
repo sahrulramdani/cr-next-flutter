@@ -33,6 +33,8 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   List<Map<String, dynamic>> listCardJadwal = [];
 
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -50,20 +52,11 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
     });
   }
 
-  void getAllJadwal() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getAllJadwal"));
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-
-    setState(() {
-      listJadwal = data;
-    });
-  }
-
   void getListCardJadwal() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/jadwal"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/jadwal"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -91,11 +84,26 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
     });
   }
 
+  void getAllJadwal() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getAllJadwal"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJadwal = data;
+    });
+
+    loadEnd();
+  }
+
   @override
   void initState() {
     getAuth();
-    getAllJadwal();
     getListCardJadwal();
+    getAllJadwal();
     super.initState();
   }
 
@@ -117,16 +125,8 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                     ));
       },
       icon: const Icon(Icons.add),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-      label: const Text(
-        'Tambah Data',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
+      style: fncButtonAuthStyle(authAddx, context),
+      label: fncLabelButtonStyle('Tambah Data', context),
     );
   }
 
@@ -142,16 +142,8 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                     ));
       },
       icon: const Icon(Icons.print_outlined),
-      label: const Text(
-        'Print Seat',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Print', context),
     );
   }
 
@@ -167,16 +159,8 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                     ));
       },
       icon: const Icon(Icons.download_outlined),
-      label: const Text(
-        'Export',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authExpt, context),
+      label: fncLabelButtonStyle('Export', context),
     );
   }
 
@@ -342,22 +326,24 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
                                       hintText: 'Cari Berdasarkan Paket'),
-                                  // onChanged: (value) {
-                                  //   if (value == '') {
-                                  //     setState(() {
-                                  //       listJadwal = dummyJadwalTable;
-                                  //     });
-                                  //   } else {
-                                  //     setState(() {
-                                  //       listJadwal = dummyJadwalTable
-                                  //           .where(((element) => element['tipe']
-                                  //               .toString()
-                                  //               .toUpperCase()
-                                  //               .contains(value.toUpperCase())))
-                                  //           .toList();
-                                  //     });
-                                  //   }
-                                  // },
+                                  onChanged: (value) {
+                                    if (value == '') {
+                                      setState(() {
+                                        getAllJadwal();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        listJadwal = listJadwal
+                                            .where(((element) =>
+                                                element['jenisPaket']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
+                                            .toList();
+                                      });
+                                    }
+                                  },
                                 ),
                               ),
                             ],

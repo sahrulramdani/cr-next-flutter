@@ -11,10 +11,16 @@ class HttpSatuan {
 
   static Future<HttpSatuan> saveSatuan(String satuan) async {
     Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "IDXX_STAN": fncRandomId(10),
-      "NAMA_STAN": satuan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "IDXX_STAN": fncRandomId(10),
+        "NAMA_STAN": satuan,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpSatuan(
@@ -25,10 +31,16 @@ class HttpSatuan {
   static Future<HttpSatuan> updateSatuan(
       String idSatuan, String namaSatuan) async {
     Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/update");
-    var hasilResponse = await http.post(urlApi, body: {
-      "IDXX_STAN": idSatuan,
-      "NAMA_STAN": namaSatuan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "IDXX_STAN": idSatuan,
+        "NAMA_STAN": namaSatuan,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpSatuan(
@@ -40,6 +52,9 @@ class HttpSatuan {
     Uri urlApi = Uri.parse("$urlAddress/inventory/satuan/delete");
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "IDXX_STAN": idSatuan,
       },

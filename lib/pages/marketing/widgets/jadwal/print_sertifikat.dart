@@ -158,16 +158,8 @@ class _PrintSertifikatState extends State<PrintSertifikat> {
         }
       },
       icon: const Icon(Icons.quick_contacts_mail),
-      label: const Text(
-        'Sertifikat',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Sertifikat', context),
     );
   }
 }

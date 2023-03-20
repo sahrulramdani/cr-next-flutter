@@ -173,16 +173,8 @@ class _PrintRiwayatBayarState extends State<PrintRiwayatBayar> {
         }
       },
       icon: const Icon(Icons.payments_outlined),
-      label: const Text(
-        'Riwayat Pembayaran',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Riwayat Bayar', context),
     );
   }
 }

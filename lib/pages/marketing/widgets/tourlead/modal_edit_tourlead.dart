@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/detail_jadwal_tourlead.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/detail_jadwal_pelanggan.dart';
@@ -98,59 +99,99 @@ class _ModalEditTourleadState extends State<ModalEditTourlead> {
                         color: Colors.amber[900],
                       ),
                       const SizedBox(width: 10),
-                      Text('TL. Billy Syahputra',
-                          style: TextStyle(
-                              color: myGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16)),
+                      Text('TL. Billy Syahputra', style: styleHeaderSmall),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10),
-                Expanded(
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: screenWidth * 0.44,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                ResponsiveWidget.isSmallScreen(context)
+                    ? Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: screenWidth * 0.8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Jadwal Keberangkatan',
+                                        style: TextStyle(
+                                            color: myGrey,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16)),
+                                    menuButton(),
+                                    const SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DetailJadwalTourlead()),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: screenWidth * 0.8,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Daftar Pelanggan',
+                                        style: TextStyle(
+                                            color: myGrey,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16)),
+                                    menuRefresh(),
+                                    const SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DetailJadwalPelanggan()),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: Row(
                           children: [
-                            Text('Jadwal Keberangkatan',
-                                style: TextStyle(
-                                    color: myGrey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
-                            menuButton(),
-                            const Expanded(
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DetailJadwalTourlead()),
+                            SizedBox(
+                              width: screenWidth * 0.44,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Jadwal Keberangkatan',
+                                      style: TextStyle(
+                                          color: myGrey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16)),
+                                  menuButton(),
+                                  const Expanded(
+                                    child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DetailJadwalTourlead()),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.44,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Daftar Pelanggan',
+                                      style: TextStyle(
+                                          color: myGrey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16)),
+                                  menuRefresh(),
+                                  const Expanded(
+                                    child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DetailJadwalPelanggan()),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: screenWidth * 0.44,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Daftar Pelanggan',
-                                style: TextStyle(
-                                    color: myGrey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
-                            menuRefresh(),
-                            const Expanded(
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DetailJadwalPelanggan()),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 SizedBox(
                   height: 30,
                   child: Row(

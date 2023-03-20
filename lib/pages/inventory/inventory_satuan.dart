@@ -42,8 +42,10 @@ class _InventorySatuanPageState extends State<InventorySatuanPage> {
   }
 
   void getData() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -309,18 +311,20 @@ class _InventorySatuanPageState extends State<InventorySatuanPage> {
                                   decoration: const InputDecoration(
                                       hintText: 'Cari Nama Satuan'),
                                   onChanged: (value) {
-                                    // if (value == '') {
-                                    //   listAgency = listAgency;
-                                    //   getList();
-                                    // } else {
-                                    //   setState(() {
-                                    //     listAgency = listAgency
-                                    //         .where((element) =>
-                                    //             element['NAMA_LGKP']
-                                    //                 .contains(value))
-                                    //         .toList();
-                                    //   });
-                                    // }
+                                    if (value == '') {
+                                      getData();
+                                    } else {
+                                      setState(() {
+                                        listSatuan = listSatuan
+                                            .where(((element) =>
+                                                element['NAMA_STAN']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
+                                            .toList();
+                                      });
+                                    }
                                   },
                                 ),
                               ),

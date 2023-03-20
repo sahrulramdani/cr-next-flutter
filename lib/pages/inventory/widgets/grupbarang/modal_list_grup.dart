@@ -31,8 +31,11 @@ class _ModalListGrupState extends State<ModalListGrup> {
 
   void getGrupBarangDetail() async {
     var id = widget.idGrupbrg;
-    var response = await http
-        .get(Uri.parse("$urlAddress/inventory/grupsbrg/getGrupDetail/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/inventory/grupsbrg/getGrupDetail/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 

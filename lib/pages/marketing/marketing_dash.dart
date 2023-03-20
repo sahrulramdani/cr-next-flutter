@@ -25,8 +25,10 @@ class _MarketingDashboardPageState extends State<MarketingDashboardPage> {
   List<Map<String, dynamic>> listCardDashboard = [];
 
   void getListCardDashboard() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/marketing"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/marketing"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 

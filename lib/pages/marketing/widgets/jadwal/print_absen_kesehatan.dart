@@ -165,16 +165,8 @@ class _PrintAbsenKesehatanState extends State<PrintAbsenKesehatan> {
         }
       },
       icon: const Icon(Icons.health_and_safety_outlined),
-      label: const Text(
-        'Absen Kesehatan',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Absen Kesehatan', context),
     );
   }
 }

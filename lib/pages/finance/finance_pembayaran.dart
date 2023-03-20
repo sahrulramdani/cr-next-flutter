@@ -43,8 +43,10 @@ class _FinancePembayaranPageState extends State<FinancePembayaranPage> {
   }
 
   getPembayaranCabang() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/finance/info-data/list-cabang"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/finance/info-data/list-cabang"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {

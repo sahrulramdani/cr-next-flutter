@@ -57,16 +57,8 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                     ));
       },
       icon: const Icon(Icons.print_outlined),
-      label: const Text(
-        'Akumulasi TL',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Akumulasi TL', context),
     );
   }
 
@@ -84,16 +76,8 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                     ));
       },
       icon: const Icon(Icons.list_alt_outlined),
-      label: const Text(
-        'Pemberangkatan TL',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authInqu == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authInqu, context),
+      label: fncLabelButtonStyle('Pemberangkatan TL', context),
     );
   }
 
@@ -187,11 +171,7 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                         children: [
                           Text(
                             'Pengelolaan Tour Leader',
-                            style: TextStyle(
-                                fontFamily: 'Gilroy',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: myBlue),
+                            style: fncTextHeaderFormStyle(context),
                           ),
                         ],
                       ),
@@ -203,7 +183,9 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                         children: [
                           SizedBox(
                             height: 40,
-                            width: 200,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                                ? 120
+                                : 200,
                             child: DropdownSearch(
                               mode: Mode.MENU,
                               items: const [
@@ -223,7 +205,9 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                           ),
                           Container(
                             height: 50,
-                            width: 250,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                                ? 100
+                                : 200,
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5)),

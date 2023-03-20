@@ -20,8 +20,12 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
 
   void getJamaahPemberangkatan() async {
     var id = widget.idDaftar;
-    var response = await http.get(Uri.parse(
-        "$urlAddress/marketing/pemberangkatan/detail-jamaah-berangkat/$id"));
+    var response = await http.get(
+        Uri.parse(
+            "$urlAddress/marketing/pemberangkatan/detail-jamaah-berangkat/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -51,19 +55,24 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
             child: Column(
               children: [
                 SizedBox(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.people_alt_outlined,
-                        color: Colors.amber[900],
-                      ),
-                      const SizedBox(width: 10),
-                      Text('Konfirmasi Pemberangkatan Pelanggan',
-                          style: TextStyle(
-                              color: myGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16)),
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.people_alt_outlined,
+                          color: Colors.amber[900],
+                        ),
+                        const SizedBox(width: 10),
+                        FittedBox(
+                          child: Text('Konfirmasi Pemberangkatan Pelanggan',
+                              style: TextStyle(
+                                  color: myGrey,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -78,35 +87,36 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
                             const DataColumn(label: Text(':')),
                             DataColumn(
                                 label: Text(detPel.isNotEmpty
-                                    ? detPel[0]['KDXX_DFTR']
+                                    ? detPel[0]['KDXX_DFTR'] ?? '-'
                                     : '')),
                           ], rows: [
                             DataRow(cells: [
                               const DataCell(Text('Nama Pelanggan')),
                               const DataCell(Text(':')),
                               DataCell(Text(detPel.isNotEmpty
-                                  ? detPel[0]['NAMA_JMAH']
+                                  ? detPel[0]['NAMA_JMAH'] ?? '-'
                                   : '')),
                             ]),
                             DataRow(cells: [
                               const DataCell(Text('Pendaftaran Via')),
                               const DataCell(Text(':')),
                               DataCell(Text(detPel.isNotEmpty
-                                  ? detPel[0]['DAFTAR_VIA']
+                                  ? detPel[0]['DAFTAR_VIA'] ?? '-'
                                   : '')),
                             ]),
                             DataRow(cells: [
                               const DataCell(Text('Berangkat')),
                               const DataCell(Text(':')),
                               DataCell(Text(detPel.isNotEmpty
-                                  ? fncGetTanggal(detPel[0]['TGLX_BGKT'])
+                                  ? fncGetTanggal(
+                                      detPel[0]['TGLX_BGKT'] ?? '01-01-1111')
                                   : '')),
                             ]),
                             DataRow(cells: [
                               const DataCell(Text('Telp Pelanggan')),
                               const DataCell(Text(':')),
                               DataCell(Text(detPel.isNotEmpty
-                                  ? detPel[0]['TELP_JMAH']
+                                  ? detPel[0]['TELP_JMAH'] ?? '-'
                                   : '')),
                             ]),
                           ])
@@ -170,7 +180,8 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
                                     detPel[0]['LEAD_FIRST'] != null)
                                   DataRow(cells: [
                                     const DataCell(Text('1')),
-                                    DataCell(Text(detPel[0]['LEAD_FIRST'])),
+                                    DataCell(
+                                        Text(detPel[0]['LEAD_FIRST'] ?? '-')),
                                     DataCell(Icon(
                                         detPel[0]['SVB_FIRST'] != null
                                             ? Icons.check
@@ -183,7 +194,8 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
                                     detPel[0]['LEAD_SECOND'] != null)
                                   DataRow(cells: [
                                     const DataCell(Text('2')),
-                                    DataCell(Text(detPel[0]['LEAD_SECOND'])),
+                                    DataCell(
+                                        Text(detPel[0]['LEAD_SECOND' ?? '-'])),
                                     DataCell(Icon(
                                         detPel[0]['SVB_SECOND'] != null
                                             ? Icons.check
@@ -202,40 +214,43 @@ class _ModalKonfirmasiBerangkatState extends State<ModalKonfirmasiBerangkat> {
                 )),
                 SizedBox(
                   height: 30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.check),
-                        label: const Text('Pendaftaran USmart'),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.check),
-                        label: const Text('Konfirmasi Pemberangkatan'),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.chat_outlined),
-                        label: const Text('WA'),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.star_border_outlined),
-                        label: const Text('VB'),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Kembali'))
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.check),
+                          label: const Text('Pendaftaran USmart'),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.check),
+                          label: const Text('Konfirmasi Pemberangkatan'),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.chat_outlined),
+                          label: const Text('WA'),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.star_border_outlined),
+                          label: const Text('VB'),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Kembali'))
+                      ],
+                    ),
                   ),
                 )
               ],

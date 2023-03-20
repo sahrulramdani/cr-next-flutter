@@ -28,8 +28,6 @@ class _DetailKTPAgencyState extends State<DetailKTPAgency> {
       fotoKtp =
           dataAgen[0]['FOTO_KTPX'] == '' ? null : dataAgen[0]['FOTO_KTPX'];
     });
-
-    print(fotoKtp);
   }
 
   @override

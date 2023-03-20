@@ -30,8 +30,10 @@ class _ModalStokBarangState extends State<ModalStokBarang> {
 
   void getDetailBarang() async {
     var id = widget.idBarang;
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/barang/getdetail/$id"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/barang/getdetail/$id"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

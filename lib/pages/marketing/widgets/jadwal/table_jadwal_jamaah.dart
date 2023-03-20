@@ -126,9 +126,7 @@ class MyData extends DataTableSource {
     NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     var Tanggal = (DateFormat("dd-MM-yyyy").format(DateTime.now())).toString();
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Icon(
         dataJadwal[index]['status'] == 1
             ? Icons.check
@@ -139,54 +137,43 @@ class MyData extends DataTableSource {
         size: 20,
       )),
       DataCell(Text(dataJadwal[index]['jenisPaket'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       // DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
       DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]['TGLX_BGKT'] == null
               ? "00-00-0000"
               : dataJadwal[index]['TGLX_BGKT'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]["TGLX_PLNG"] == null
               ? "00-00-0000"
               : dataJadwal[index]["TGLX_PLNG"].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]['PSWT_BGKT'] == null
               ? "-"
               : dataJadwal[index]['PSWT_BGKT'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]['PSWT_PLNG'] == null
               ? "-"
               : dataJadwal[index]['PSWT_PLNG'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           myformat
               .format(int.parse(dataJadwal[index]['TARIF_PKET'].toString())),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       // DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
       DataCell(Text(dataJadwal[index]['JMLX_SEAT'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]['SISA'] == 0
               ? 'Full'
               : dataJadwal[index]['SISA'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataJadwal[index]['KETERANGAN'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(Text(dataJadwal[index]['KETERANGAN'], style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -238,125 +225,33 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
   Widget build(BuildContext context) {
     final DataTableSource myTable = MyData(widget.dataJadwal);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: screenWidth,
-      height: 0.41 * screenHeight,
+      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           columnSpacing: 15,
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text(' ',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Paket',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Jenis',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            DataColumn(
-                label: Text('Hari',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Berangkat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pulang',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pesawat Berangkat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pesawat Pulang',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tarif',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Kurs',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            DataColumn(
-                label: Text('Seat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Sisa',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Keterangan',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text(' ', style: styleColumn)),
+            DataColumn(label: Text('Paket', style: styleColumn)),
+            DataColumn(label: Text('Hari', style: styleColumn)),
+            DataColumn(label: Text('Berangkat', style: styleColumn)),
+            DataColumn(label: Text('Pulang', style: styleColumn)),
+            DataColumn(label: Text('Pesawat Berangkat', style: styleColumn)),
+            DataColumn(label: Text('Pesawat Pulang', style: styleColumn)),
+            DataColumn(label: Text('Tarif', style: styleColumn)),
+            DataColumn(label: Text('Seat', style: styleColumn)),
+            DataColumn(label: Text('Sisa', style: styleColumn)),
+            DataColumn(label: Text('Keterangan', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     )))
           ],
         ),

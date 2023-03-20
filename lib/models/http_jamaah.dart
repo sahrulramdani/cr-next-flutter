@@ -21,6 +21,9 @@ class HttpJamaah {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "FOTO_JMAH": fotoJamaah,
@@ -64,6 +67,9 @@ class HttpJamaah {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "NAMA_LGKP": namaJamaah,
@@ -107,6 +113,9 @@ class HttpJamaah {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "FOTO_JMAH": fotoJamaah,
@@ -152,6 +161,9 @@ class HttpJamaah {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "NAMA_LGKP": namaJamaah,
@@ -189,6 +201,9 @@ class HttpJamaah {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": kodeJamaah,
       },

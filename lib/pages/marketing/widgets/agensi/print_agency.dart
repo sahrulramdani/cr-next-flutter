@@ -235,16 +235,8 @@ class PrintAgency extends StatelessWidget {
                     ));
       },
       icon: const Icon(Icons.print_outlined),
-      label: const Text(
-        'Print',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      label: fncLabelButtonStyle('Print', context),
+      style: fncButtonAuthStyle(authPrnt, context),
     );
   }
 }

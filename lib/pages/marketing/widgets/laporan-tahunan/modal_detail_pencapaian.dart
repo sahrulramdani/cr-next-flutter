@@ -28,8 +28,12 @@ class _ModalDetailPencapaianState extends State<ModalDetailPencapaian> {
   void getDetPencapaian() async {
     var tahun = widget.tahun;
     var kode = widget.kode;
-    var response = await http.get(Uri.parse(
-        "$urlAddress/data/dashboard/detail/laporan-pencapaian/$tahun/${kode}"));
+    var response = await http.get(
+        Uri.parse(
+            "$urlAddress/data/dashboard/detail/laporan-pencapaian/$tahun/${kode}"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -67,25 +71,19 @@ class _ModalDetailPencapaianState extends State<ModalDetailPencapaian> {
                       ),
                       const SizedBox(width: 10),
                       Text('Detail Pencapaian ${widget.kode}',
-                          style: TextStyle(
-                              color: myGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16)),
+                          style: fncTextHeaderModalStyle(context)),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
                 Expanded(
                     child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        TableDetailPencapaian(
-                            listDetailPencapaian: listDetPencapaian)
-                      ],
-                    ),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      TableDetailPencapaian(
+                          listDetailPencapaian: listDetPencapaian)
+                    ],
                   ),
                 )),
                 SizedBox(

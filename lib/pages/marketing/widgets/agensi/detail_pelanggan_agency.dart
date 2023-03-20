@@ -41,10 +41,6 @@ class _DetailPelangganAgencyState extends State<DetailPelangganAgency> {
 
   @override
   Widget build(BuildContext context) {
-    // dummyPelangganTable
-    //     .where(
-    //         (element) => element['id_marketing'].toString().contains(idAgency))
-    //     .toList();
     int x = 1;
     int jmah = listDataPelanggan.length;
 
@@ -147,13 +143,15 @@ class _DetailPelangganAgencyState extends State<DetailPelangganAgency> {
                             data['CEK'] == 1 ? Icons.check : Icons.clear,
                             color: data['CEK'] == 1 ? Colors.green : Colors.red,
                           )),
-                          DataCell(Text(data['KDXX_JMAH'])),
-                          DataCell(Text(data['NAMA_LGKP'])),
-                          DataCell(
-                              Text(data['JENISNA'] + ' - ' + data['PAKETNA'])),
+                          DataCell(Text(data['KDXX_JMAH'] ?? '-')),
+                          DataCell(Text(data['NAMA_LGKP'] ?? '-')),
+                          DataCell(Text(data['JENISNA'] ??
+                              '-' + ' - ' + data['PAKETNA'] ??
+                              '-')),
                           DataCell(Text(fncGetTanggal(DateFormat("dd-MM-yyyy")
-                              .format(DateTime.parse(data['TGLX_BGKT']))))),
-                          DataCell(Text(data['NAMA_KNTR'])),
+                              .format(DateTime.parse(
+                                  data['TGLX_BGKT'] ?? '01-01-1111'))))),
+                          DataCell(Text(data['NAMA_KNTR'] ?? '-')),
                           DataCell(Text((jmah--).toString())),
                           DataCell(Text(data['STAS_BYAR'].toString() == '1'
                               ? 'Lunas'

@@ -17,11 +17,17 @@ class HttpPendaftaran {
     String dokumenBase,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save-foto");
-    var hasilResponse = await http.post(urlApi, body: {
-      "NOXX_IDNT": nik,
-      "FOTO_KKXX": kkBase,
-      "FOTO_DOCX": dokumenBase,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "NOXX_IDNT": nik,
+        "FOTO_KKXX": kkBase,
+        "FOTO_DOCX": dokumenBase,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPendaftaran(
@@ -51,25 +57,31 @@ class HttpPendaftaran {
     String namaDok,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/jamaah/pendaftaran/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_DFTR": idPelanggan,
-      "KDXX_KNTR": idKantor,
-      "NOXX_IDNT": nik,
-      "KDXX_JDWL": idProduk,
-      "DOKX_KTPX": ktp,
-      "DOKX_KKXX": kk,
-      "DOKX_LAIN": lampiran,
-      "PEMB_PSPR": pembuatan,
-      "PRSS_VKSN": vaksin,
-      "HANDLING": handling,
-      "REFRENSI": refrensi,
-      "KDXX_MRKT": namaAgency,
-      "ESTX_TOTL": estimasi,
-      "JTUH_TEMP": jatuhTempo,
-      "NAMA_KKXX": namaKk,
-      "NAMA_DOCX": namaDok,
-      "TAGIHAN": listTagihan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_DFTR": idPelanggan,
+        "KDXX_KNTR": idKantor,
+        "NOXX_IDNT": nik,
+        "KDXX_JDWL": idProduk,
+        "DOKX_KTPX": ktp,
+        "DOKX_KKXX": kk,
+        "DOKX_LAIN": lampiran,
+        "PEMB_PSPR": pembuatan,
+        "PRSS_VKSN": vaksin,
+        "HANDLING": handling,
+        "REFRENSI": refrensi,
+        "KDXX_MRKT": namaAgency,
+        "ESTX_TOTL": estimasi,
+        "JTUH_TEMP": jatuhTempo,
+        "NAMA_KKXX": namaKk,
+        "NAMA_DOCX": namaDok,
+        "TAGIHAN": listTagihan,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPendaftaran(

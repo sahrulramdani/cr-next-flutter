@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/pemberangkatan/detail_pemberangkatan_jamaah.dart';
 
@@ -23,10 +24,10 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
     );
   }
 
-  Widget selectInput() {
+  Widget selectInput(context) {
     return SizedBox(
       height: 40,
-      width: 200,
+      width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
       child: DropdownSearch(
         mode: Mode.MENU,
         items: const ["Semua", "Hasan Basri", "Baihaqi", "Munawaroh"],
@@ -48,23 +49,18 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
                     ));
       },
       icon: const Icon(Icons.print),
-      label: const Text('Print'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Print', context),
     );
   }
 
-  Widget menuButton() => Container(
+  Widget menuButton(context) => Container(
         height: 50,
         alignment: Alignment.centerRight,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            selectInput(),
+            selectInput(context),
             spacePemisah(),
             cmdPrint(),
           ],
@@ -80,7 +76,7 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.7,
+            width: fncWidthModalForm(context),
             height: 700,
             child: Column(
               children: [
@@ -101,13 +97,13 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                menuButton(),
+                menuButton(context),
                 const SizedBox(height: 10),
                 Expanded(
                     child:
                         DetailPemberangkatanJamaah(idJadwal: widget.idJadwal)),
                 SizedBox(
-                  height: 30,
+                  height: 40,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,

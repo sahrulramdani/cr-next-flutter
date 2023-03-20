@@ -21,15 +21,23 @@ class _DetailPemberangkatanJamaahState
   List<Map<String, dynamic>> listPelangganPemberangkatan = [];
 
   void getJamaahPemberangkatan() async {
+    loadStart();
+
     var id = widget.idJadwal;
-    var response = await http.get(Uri.parse(
-        "$urlAddress/marketing/pemberangkatan/list-jamaah-berangkat/$id"));
+    var response = await http.get(
+        Uri.parse(
+            "$urlAddress/marketing/pemberangkatan/list-jamaah-berangkat/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
     setState(() {
       listPelangganPemberangkatan = data;
     });
+
+    loadEnd();
   }
 
   @override
@@ -53,92 +61,23 @@ class _DetailPemberangkatanJamaahState
           child: Column(
             children: [
               DataTable(
+                  dataRowHeight: 35,
+                  headingRowHeight: 40,
                   border: TableBorder.all(color: Colors.grey),
-                  columns: [
+                  columns: const [
+                    DataColumn(label: Text('No.', style: styleColumn)),
+                    DataColumn(label: Text('ID Pelanggan', style: styleColumn)),
+                    DataColumn(label: Text('Nama', style: styleColumn)),
+                    DataColumn(label: Text('ID Marketing', style: styleColumn)),
+                    DataColumn(label: Text('Marketing', style: styleColumn)),
+                    DataColumn(label: Text('Jenis', style: styleColumn)),
+                    DataColumn(label: Text('Level', style: styleColumn)),
                     DataColumn(
-                        label: Text('No.',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('ID Pelanggan',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Nama',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('ID Marketing',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Marketing',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Jenis',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Level',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Pendaftaran Via',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Jamaah Ke',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Biaya',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('VB',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16))),
-                    DataColumn(
-                        label: Text('Aksi',
-                            style: TextStyle(
-                                color: myGrey,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16)))
+                        label: Text('Pendaftaran Via', style: styleColumn)),
+                    DataColumn(label: Text('Jamaah Ke', style: styleColumn)),
+                    DataColumn(label: Text('Biaya', style: styleColumn)),
+                    DataColumn(label: Text('VB', style: styleColumn)),
+                    DataColumn(label: Text('Aksi', style: styleColumn))
                   ],
                   rows: listPelangganPemberangkatan.map((data) {
                     return DataRow(cells: [

@@ -41,8 +41,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
   List<Map<String, dynamic>> listSatuan = [];
 
   void getSatuan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -52,8 +54,10 @@ class _ModalEditBarangState extends State<ModalEditBarang> {
 
   void getDetailBarang() async {
     var id = widget.idBarang;
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/barang/getdetail/$id"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/barang/getdetail/$id"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

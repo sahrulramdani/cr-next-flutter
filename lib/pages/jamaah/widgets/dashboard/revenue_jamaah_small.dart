@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, unused_element
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -37,8 +38,10 @@ class _RevenueJamaahSmallState extends State<RevenueJamaahSmall> {
   String Tahun_ini = '0';
 
   void getChart() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/chart/dashboard/jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/chart/dashboard/jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -58,8 +61,10 @@ class _RevenueJamaahSmallState extends State<RevenueJamaahSmall> {
   }
 
   void dataJamaah() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/data/dashboard/jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/data/dashboard/jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -123,7 +128,7 @@ class _RevenueJamaahSmallState extends State<RevenueJamaahSmall> {
       child: Column(
         children: [
           SizedBox(
-            height: 260,
+            height: ResponsiveWidget.isSmallScreen(context) ? 280 : 260,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

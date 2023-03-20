@@ -55,15 +55,18 @@ class ModalDetailJadwal extends StatefulWidget {
 
 class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   bool cekAll = false;
-  Timer _timer;
 
   List<Map<String, dynamic>> listJadwalPelanggan = [];
 
   void getPelangganJadwal() async {
-    EasyLoading.show(status: 'loading...');
+    loadStart();
+
     var id = widget.idJadwal;
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getDetail-jamaah/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getDetail-jamaah/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     for (var i = 0; i < data.length; i++) {
@@ -73,42 +76,25 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
       data[i].addAll(tagihan);
     }
 
-    if (response.statusCode == 200) {
-      EasyLoading.showSuccess('Great Success!');
-      EasyLoading.dismiss();
-    }
-
     setState(() {
       listJadwalPelanggan = data;
     });
+
+    loadEnd();
   }
 
   @override
   void initState() {
-    // getProvinsi();
-    super.initState();
     getPelangganJadwal();
-    EasyLoading.addStatusCallback((status) {
-      if (status == EasyLoadingStatus.dismiss) {
-        _timer?.cancel();
-      }
-    });
+    super.initState();
   }
 
   Widget cmdBentukNama() {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.near_me_outlined),
-      label: const Text(
-        'Bentuk Nama',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authInqu, context),
+      label: fncLabelButtonStyle('Bentuk Nama', context),
     );
   }
 
@@ -121,16 +107,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.mark_as_unread_outlined),
-      label: const Text(
-        'Excel Asuransi',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authExpt, context),
+      label: fncLabelButtonStyle('Excel Asuransi', context),
     );
   }
 
@@ -164,16 +142,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                 ));
       },
       icon: const Icon(Icons.list),
-      label: const Text(
-        'Album Items',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Album Items', context),
     );
   }
 
@@ -194,16 +164,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.list),
-      label: const Text(
-        'ID Card',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('ID Card', context),
     );
   }
 
@@ -233,16 +195,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                 ));
       },
       icon: const Icon(Icons.assignment_sharp),
-      label: const Text(
-        'Surat Kuasa',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Surat Kuasa', context),
     );
   }
 
@@ -257,16 +211,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                 ));
       },
       icon: const Icon(Icons.recommend_outlined),
-      label: const Text(
-        'Rekomendasi Paspor',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Rekomendasi Paspor', context),
     );
   }
 
@@ -318,16 +264,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                 ));
       },
       icon: const Icon(Icons.assignment_late_outlined),
-      label: const Text(
-        'Surat Pernyataan',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Surat Pernyataan', context),
     );
   }
 
@@ -349,16 +287,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.download_for_offline_outlined),
-      label: const Text(
-        'Download Foto',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authInqu, context),
+      label: fncLabelButtonStyle('Download Foto', context),
     );
   }
 
@@ -366,16 +296,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     return ElevatedButton.icon(
       onPressed: () {},
       icon: const Icon(Icons.drive_folder_upload_outlined),
-      label: const Text(
-        'Upload Foto',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authEdit, context),
+      label: fncLabelButtonStyle('Upload Foto', context),
     );
   }
 
@@ -417,78 +339,81 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
 
   Widget menuButton() => SizedBox(
         height: 130,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // cmdBentukNama(),
-                // spacePemisah(),
-                cmdExcelManifest(),
-                spacePemisah(),
-                // cmdExcelAsuransi(),
-                // spacePemisah(),
-                cmdImportSipatuh(),
-                spacePemisah(),
-                cmdImportSiskopatuh(),
-                spacePemisah(),
-                cmdAlbum(),
-                spacePemisah(),
-                cmdAlbumItem(),
-                spacePemisah(),
-                cmdAlbumSampul(),
-                spacePemisah(),
-                cmdAbsenKesehatan(),
-              ],
-            ),
-            spacePemisah(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                cmdNameTagAll(),
-                spacePemisah(),
-                cmdNameTag1(),
-                // spacePemisah(),
-                // cmdNameTag2(),
-                spacePemisah(),
-                cmdNameTag3(),
-                spacePemisah(),
-                cmdSuku(),
-                spacePemisah(),
-                cmdRekompas(),
-                spacePemisah(),
-                cmdAbsenManasik(),
-                //  spacePemisah(),
-                //   cmdAbsenKesehatan(),
-                // spacePemisah(),
-                // cmdIDCard(),
-              ],
-            ),
-            spacePemisah(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                cmdNamaPelanggan(),
-                spacePemisah(),
-                cmdDaftarFoto(),
-                // spacePemisah(),
-                // cmdDownloadFoto(),
-                // spacePemisah(),
-                // cmdUploadFoto(),
-                spacePemisah(),
-                cmdRiwayatPembayaran(),
-                spacePemisah(),
-                cmdIdentitas(),
-                spacePemisah(),
-                cmdSP(),
-                spacePemisah(),
-                cmdSertifikat(),
-              ],
-            ),
-            spacePemisah(),
-          ],
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // cmdBentukNama(),
+                  // spacePemisah(),
+                  cmdExcelManifest(),
+                  spacePemisah(),
+                  // cmdExcelAsuransi(),
+                  // spacePemisah(),
+                  cmdImportSipatuh(),
+                  spacePemisah(),
+                  cmdImportSiskopatuh(),
+                  spacePemisah(),
+                  cmdAlbum(),
+                  spacePemisah(),
+                  cmdAlbumItem(),
+                  spacePemisah(),
+                  cmdAlbumSampul(),
+                  spacePemisah(),
+                  cmdAbsenKesehatan(),
+                ],
+              ),
+              spacePemisah(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  cmdNameTagAll(),
+                  spacePemisah(),
+                  cmdNameTag1(),
+                  // spacePemisah(),
+                  // cmdNameTag2(),
+                  spacePemisah(),
+                  cmdNameTag3(),
+                  spacePemisah(),
+                  cmdSuku(),
+                  spacePemisah(),
+                  cmdRekompas(),
+                  spacePemisah(),
+                  cmdAbsenManasik(),
+                  //  spacePemisah(),
+                  //   cmdAbsenKesehatan(),
+                  // spacePemisah(),
+                  // cmdIDCard(),
+                ],
+              ),
+              spacePemisah(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  cmdNamaPelanggan(),
+                  spacePemisah(),
+                  cmdDaftarFoto(),
+                  // spacePemisah(),
+                  // cmdDownloadFoto(),
+                  // spacePemisah(),
+                  // cmdUploadFoto(),
+                  spacePemisah(),
+                  cmdRiwayatPembayaran(),
+                  spacePemisah(),
+                  cmdIdentitas(),
+                  spacePemisah(),
+                  cmdSP(),
+                  spacePemisah(),
+                  cmdSertifikat(),
+                ],
+              ),
+              spacePemisah(),
+            ],
+          ),
         ),
       );
 
@@ -513,25 +438,28 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
         Form(
           child: Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.9,
+            width: fncWidthModalKeberangkatan(context),
             height: 700,
             child: Column(
               children: [
                 SizedBox(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.corporate_fare_rounded,
-                        color: Colors.amber[900],
-                      ),
-                      const SizedBox(width: 10),
-                      FittedBox(
-                        child: Text(
-                            'Jadwal Pelanggan Keberangkatan ${widget.keberangkatan}',
-                            style: TextStyle(
-                                color: myGrey, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.corporate_fare_rounded,
+                          color: Colors.amber[900],
+                        ),
+                        const SizedBox(width: 10),
+                        FittedBox(
+                          child: Text(
+                              'Jadwal Pelanggan Keberangkatan ${widget.keberangkatan}',
+                              style: TextStyle(
+                                  color: myGrey, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -677,30 +605,23 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                   ),
                 ),
                 SizedBox(
-                  height: 25,
+                  height: 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          showDialog(
-                              context: context,
-                              builder: (context) => const ModalSaveSuccess());
-                        },
-                        icon: const Icon(Icons.save),
-                        label: const Text(
-                          'Simpan Data',
-                          style: TextStyle(fontFamily: 'Gilroy'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: myBlue,
-                          shadowColor: Colors.grey,
-                          elevation: 5,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
+                      // ElevatedButton.icon(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //     showDialog(
+                      //         context: context,
+                      //         builder: (context) => const ModalSaveSuccess());
+                      //   },
+                      //   icon: const Icon(Icons.save),
+                      //   label: fncLabelButtonStyle('Simpan Data', context),
+                      //   style: fncButtonRegulerStyle(context),
+                      // ),
+                      // const SizedBox(width: 10),
                       ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);

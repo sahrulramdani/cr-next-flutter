@@ -115,35 +115,26 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Text(dataJamaah[index]['NOXX_IDNT'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataJamaah[index]['NAMA_LGKP'] ?? '-',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataJamaah[index]['NAMA_AYAH'] ?? '-',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(
+          Text(dataJamaah[index]['NAMA_LGKP'] ?? '-', style: styleRowReguler)),
+      DataCell(
+          Text(dataJamaah[index]['NAMA_AYAH'] ?? '-', style: styleRowReguler)),
       DataCell(Text(dataJamaah[index]['JENS_KLMN'] == 'P' ? 'Pria' : 'Wanita',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataJamaah[index]['TMPT_LHIR'] ??
               '-' +
                   ', ' +
                   DateFormat("dd-MM-yyyy")
                       .format(DateTime.parse(dataJamaah[index]['TGLX_LHIR'])),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataJamaah[index]['ALAMAT'] ?? '-',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(
+          Text(dataJamaah[index]['ALAMAT'] ?? '-', style: styleRowReguler)),
       DataCell(Text(dataJamaah[index]['NOXX_TELP'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,84 +183,30 @@ class _TableMasterJamaahState extends State<TableMasterJamaah> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final DataTableSource myTable = MyData(widget.dataJamaah);
 
     return SizedBox(
       width: screenWidth,
-      height: 0.41 * screenHeight,
+      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           columnSpacing: 15.0,
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('NIK',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama Lengkap',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama Ayah',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Jenis Kelamin',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('TTL',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Alamat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Telepon',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('NIK', style: styleColumn)),
+            DataColumn(label: Text('Nama Lengkap', style: styleColumn)),
+            DataColumn(label: Text('Nama Ayah', style: styleColumn)),
+            DataColumn(label: Text('Jenis Kelamin', style: styleColumn)),
+            DataColumn(label: Text('TTL', style: styleColumn)),
+            DataColumn(label: Text('Alamat', style: styleColumn)),
+            DataColumn(label: Text('Telepon', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     )))
           ],
         ),

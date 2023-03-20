@@ -19,8 +19,11 @@ class _InfoRiwayatBayarState extends State<InfoRiwayatBayar> {
 
   void riwayatDet() async {
     var id = widget.idPelanggan;
-    var response = await http
-        .get(Uri.parse("$urlAddress/jamaah/jamaah/detail/info-bayar/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/jamaah/jamaah/detail/info-bayar/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 

@@ -38,6 +38,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
   String namaBank;
   String metodePembayaran;
   String keterangan;
+  String mutasi;
 
   String stringTotal;
   String stringTagihan;
@@ -50,9 +51,12 @@ class _PembayaranFormState extends State<PembayaranForm> {
   List<Map<String, dynamic>> listJadwal = [];
   List<Map<String, dynamic>> listTagihan = [];
   List<Map<String, dynamic>> listBank = [];
+  List<Map<String, dynamic>> listMutasiRek = [];
   List<Map<String, dynamic>> detailTagihan = [];
 
   void getList() async {
+    loadStart();
+
     var response = await http
         .get(Uri.parse("$urlAddress/finance/pembayaran/get-jamaah"), headers: {
       'pte-token': kodeToken,
@@ -65,13 +69,32 @@ class _PembayaranFormState extends State<PembayaranForm> {
   }
 
   getBank() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/banks"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/banks"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
     setState(() {
       listBank = dataStatus;
     });
+  }
+
+  getMutasi() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/finance/pembayaran/mutasi-rekening"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listMutasiRek = dataStatus;
+    });
+
+    loadEnd();
   }
 
   // getJadwal(id) async {
@@ -130,9 +153,10 @@ class _PembayaranFormState extends State<PembayaranForm> {
 
   @override
   void initState() {
-    super.initState();
     getList();
     getBank();
+    getMutasi();
+    super.initState();
   }
 
   Widget inputPilihJamaah() {
@@ -334,7 +358,6 @@ class _PembayaranFormState extends State<PembayaranForm> {
 
   Widget inputUangDiterima() {
     return TextFormField(
-      key: _formKey,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       textAlign: TextAlign.right,
       decoration: InputDecoration(
@@ -345,12 +368,18 @@ class _PembayaranFormState extends State<PembayaranForm> {
       initialValue: uangDiterima ?? '0',
       keyboardType: TextInputType.number,
       inputFormatters: [ThousandsFormatter()],
-      onChanged: (value) {
+      onFieldSubmitted: (value) {
         setState(() {
           uangDiterima = value;
         });
         fncKembali();
       },
+      // onChanged: (value) {
+      //   setState(() {
+      //     uangDiterima = value;
+      //   });
+      //   fncKembali();
+      // },
     );
   }
 
@@ -382,8 +411,9 @@ class _PembayaranFormState extends State<PembayaranForm> {
         mode: Mode.MENU,
         items: const [
           "Tunai",
-          "Transfer",
-          "Virtual Account",
+          "Transfer BSI 0098829912821",
+          "Tranfer BCA 0099839919281",
+          "Tranfer Mandiri Syariah 00298139919281",
         ],
         onChanged: (value) {
           metodePembayaran = value;
@@ -403,42 +433,51 @@ class _PembayaranFormState extends State<PembayaranForm> {
     );
   }
 
-  Widget inputRekTabungan() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-        label: "Rekening Tabungan",
-        mode: Mode.BOTTOM_SHEET,
-        items: listBank,
-        onChanged: (value) {
-          idBank = value['CODD_VALU'];
-          namaBank = value['CODD_DESC'];
-        },
-        showSearchBox: true,
-        popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['CODD_DESC'].toString()),
-        ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaBank ?? "Bank Belum dipilih"),
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
-        validator: (value) {
-          if (value == "Pilih Rekening Tabungan") {
-            return "Rekening Tabungan masih kosong !";
-          }
-        },
-      ),
+  // Widget inputRekTabungan() {
+  //   return Container(
+  //     height: 50,
+  //     decoration: const BoxDecoration(
+  //         border: Border(
+  //             bottom: BorderSide(
+  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+  //     child: DropdownSearch(
+  //       label: "Rekening Tabungan",
+  //       mode: Mode.BOTTOM_SHEET,
+  //       items: listBank,
+  //       onChanged: (value) {
+  //         idBank = value['CODD_VALU'];
+  //         namaBank = value['CODD_DESC'];
+  //       },
+  //       showSearchBox: true,
+  //       popupItemBuilder: (context, item, isSelected) => ListTile(
+  //         title: Text(item['CODD_DESC'].toString()),
+  //       ),
+  //       dropdownBuilder: (context, selectedItem) =>
+  //           Text(namaBank ?? "Bank Belum dipilih"),
+  //       dropdownSearchDecoration:
+  //           const InputDecoration(border: InputBorder.none),
+  //       validator: (value) {
+  //         if (value == "Pilih Rekening Tabungan") {
+  //           return "Rekening Tabungan masih kosong !";
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget inputMutasiRekening() {
+    return TextFormField(
+      initialValue: mutasi ?? "Mutasi Rekening",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(labelText: 'Mutasi', hintText: ''),
     );
   }
 
   Widget inputKeterangan() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Keterangan Referal'),
+      decoration: const InputDecoration(labelText: 'Keterangan Pembayaran'),
       onChanged: (value) {
         keterangan = value;
       },
@@ -482,6 +521,116 @@ class _PembayaranFormState extends State<PembayaranForm> {
       ),
     );
   }
+
+  // WIDGET MODAL HANDLING
+  Widget mutasiRekeningModal(context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    int x = 1;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            width: screenWidth * 0.8,
+            height: 700,
+            child: Column(
+              children: [
+                SizedBox(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.people_alt_outlined,
+                        color: Colors.amber[900],
+                      ),
+                      const SizedBox(width: 10),
+                      Text('Daftar Mutasi Rekening',
+                          style: TextStyle(
+                              color: myGrey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                    child: SizedBox(
+                  width: screenWidth,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          DataTable(
+                              dataRowHeight: 35,
+                              headingRowHeight: 40,
+                              border: TableBorder.all(color: Colors.grey),
+                              columns: const [
+                                DataColumn(
+                                    label: Text('No.', style: styleColumn)),
+                                DataColumn(
+                                    label: Text('Kode Transaksi',
+                                        style: styleColumn)),
+                                DataColumn(
+                                    label:
+                                        Text('Keterangan', style: styleColumn)),
+                                DataColumn(
+                                    label: Text('Nominal', style: styleColumn)),
+                                DataColumn(
+                                    label: Text('Tanggal Transaksi',
+                                        style: styleColumn)),
+                              ],
+                              rows: listMutasiRek.map((data) {
+                                return DataRow(
+                                    onLongPress: () {
+                                      setState(() {
+                                        mutasi = data['KODE_TRNX'];
+                                        uangDiterima =
+                                            myFormat.format(data['Amount']);
+                                        fncKembali();
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    cells: [
+                                      DataCell(Text((x++).toString())),
+                                      DataCell(Text(data['KODE_TRNX'] ?? '-')),
+                                      DataCell(Text(data['Keterangan'] ?? '-')),
+                                      DataCell(Text(
+                                          myFormat.format(data['Amount']) ??
+                                              '-')),
+                                      DataCell(Text(data['TransDate'] ?? '-')),
+                                    ]);
+                              }).toList()),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Kembali'))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  // WIDGET MODAL HANDLING
 
   fncCekAll() {
     for (var i = 0; i < listTagihan.length; i++) {
@@ -567,12 +716,13 @@ class _PembayaranFormState extends State<PembayaranForm> {
     // print(uangDiterima.replaceAll(',', ''));
     // print(detailTagihan);
 
-    HttpPembayaran.savePendaftaran(
+    HttpPembayaran.savePembayaran(
       noFaktur,
       idPendaftaran,
       stringTotal.replaceAll(',', ''),
       metodePembayaran,
       idBank ?? '',
+      mutasi ?? '',
       keterangan ?? '',
       uangDiterima.replaceAll(',', ''),
       '$detailTagihan',
@@ -635,16 +785,8 @@ class _PembayaranFormState extends State<PembayaranForm> {
                   fncSaveData();
                 },
                 icon: const Icon(Icons.save),
-                label: const Text(
-                  'Simpan Data',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                style: fncButtonAuthStyle(authAddx, context),
+                label: fncLabelButtonStyle('Simpan', context),
               )
             ],
           ),
@@ -817,6 +959,45 @@ class _PembayaranFormState extends State<PembayaranForm> {
                             Row(
                               children: [
                                 SizedBox(
+                                  width: 230,
+                                  child: inputCaraBayar(),
+                                ),
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: 280,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 130,
+                                        child: inputMutasiRekening(),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      SizedBox(
+                                          width: 140,
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      mutasiRekeningModal(
+                                                          context));
+                                            },
+                                            icon: const Icon(
+                                                Icons.shopping_basket_outlined),
+                                            label: fncLabelButtonStyle(
+                                                'Cek Mutasi', context),
+                                            style:
+                                                fncButtonRegulerStyle(context),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                SizedBox(
                                   width: 255,
                                   child: inputJumlahTagihan(),
                                 ),
@@ -849,20 +1030,6 @@ class _PembayaranFormState extends State<PembayaranForm> {
                               color: myBlue,
                             ),
                             const SizedBox(height: 35),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 255,
-                                  child: inputCaraBayar(),
-                                ),
-                                const SizedBox(width: 10),
-                                SizedBox(
-                                  width: 255,
-                                  child: inputRekTabungan(),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
                             inputKeterangan(),
                           ],
                         ),

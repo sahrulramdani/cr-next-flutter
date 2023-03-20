@@ -98,7 +98,9 @@ class _JamaahAlumniPageState extends State<JamaahAlumniPage> {
                         children: [
                           Container(
                             height: 50,
-                            width: 250,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                                ? 120
+                                : 250,
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5)),

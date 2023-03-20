@@ -171,7 +171,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
 
   getMenikah() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -181,7 +183,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
   }
 
   getPendidikan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pendidikans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -191,7 +196,10 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
   }
 
   getPekerjaan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pekerjaans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -763,18 +771,18 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     if (fotoJamaahByte != null) {
       return Image.memory(
         fotoJamaahByte,
-        width: 150,
+        height: 150,
       );
     } else {
       if (fotoJamaah != '') {
         return Image(
           image: NetworkImage('$urlAddress/uploads/foto/$fotoJamaah'),
-          width: 150,
+          height: 150,
         );
       } else {
         return const Image(
           image: AssetImage('assets/images/NO_IMAGE.jpg'),
-          width: 150,
+          height: 150,
         );
       }
     }
@@ -784,18 +792,18 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
     if (fotoKtpJamaahByte != null) {
       return Image.memory(
         fotoKtpJamaahByte,
-        width: 150,
+        height: 150,
       );
     } else {
       if (fotoKtpJamaah != "") {
         return Image(
           image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtpJamaah'),
-          width: 150,
+          height: 150,
         );
       } else {
         return const Image(
           image: AssetImage('assets/images/NO_IMAGE.jpg'),
-          width: 150,
+          height: 150,
         );
       }
     }
@@ -893,7 +901,6 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final formKey = GlobalKey<FormState>();
 
     return Dialog(
@@ -903,7 +910,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
           key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.81,
+            width: fncWidthModalForm(context),
             height: 700,
             child: Column(
               children: [
@@ -933,7 +940,7 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
                                 inputNIK(),
@@ -956,6 +963,8 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                 const SizedBox(height: 8),
                                 inputKel(),
                                 const SizedBox(height: 8),
+                                inputKodePos(),
+                                const SizedBox(height: 8),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -967,7 +976,8 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: 370, child: inputUploadFoto()),
+                                        width: fncWidthInputModal(context),
+                                        child: inputUploadFoto()),
                                     const SizedBox(width: 10),
                                     Container(
                                       padding: const EdgeInsets.only(top: 10),
@@ -976,17 +986,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                           getImageJamaah();
                                         },
                                         icon: const Icon(Icons.save),
-                                        label: const Text(
-                                          'Upload Foto',
-                                          style:
-                                              TextStyle(fontFamily: 'Gilroy'),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: myBlue,
-                                          minimumSize: const Size(100, 40),
-                                          shadowColor: Colors.grey,
-                                          elevation: 10,
-                                        ),
+                                        label: fncLabelButtonStyle(
+                                            'Upload Foto', context),
+                                        style: fncButtonRegulerStyle(context),
                                       ),
                                     ),
                                   ],
@@ -998,11 +1000,9 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                             width: 25,
                           ),
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
-                                inputKodePos(),
-                                const SizedBox(height: 8),
                                 inputNamaAyah(),
                                 const SizedBox(height: 8),
                                 inputTelp(),
@@ -1034,7 +1034,8 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: 370, child: inputUploadKTP()),
+                                        width: fncWidthInputModal(context),
+                                        child: inputUploadKTP()),
                                     const SizedBox(width: 10),
                                     Container(
                                       padding: const EdgeInsets.only(top: 10),
@@ -1043,21 +1044,14 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                                           getImageKtp();
                                         },
                                         icon: const Icon(Icons.save),
-                                        label: const Text(
-                                          'Upload KTP',
-                                          style:
-                                              TextStyle(fontFamily: 'Gilroy'),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: myBlue,
-                                          minimumSize: const Size(100, 40),
-                                          shadowColor: Colors.grey,
-                                          elevation: 10,
-                                        ),
+                                        label: fncLabelButtonStyle(
+                                            'Upload KTP', context),
+                                        style: fncButtonRegulerStyle(context),
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
+                                const SizedBox(height: 60),
                               ],
                             ),
                           ),
@@ -1077,22 +1071,17 @@ class _ModalEditJamaahState extends State<ModalEditJamaah> {
                           fncSaveFoto();
                         },
                         icon: const Icon(Icons.save),
-                        label: const Text(
-                          'Simpan Data',
-                          style: TextStyle(fontFamily: 'Gilroy'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: myBlue,
-                          shadowColor: Colors.grey,
-                          elevation: 5,
-                        ),
+                        label: fncLabelButtonStyle('Simpan', context),
+                        style: fncButtonRegulerStyle(context),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Kembali'))
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: fncLabelButtonStyle('Batal', context),
+                        style: fncButtonRegulerStyle(context),
+                      )
                     ],
                   ),
                 )

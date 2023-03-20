@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter_web_course/models/http_grup_barang.dart';
+import 'package:flutter_web_course/models/http_grup_handling.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/grupbarang/modal_list_grup.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
@@ -20,15 +21,16 @@ import '../../../../constants/controllers.dart';
 // import 'package:intl/intl.dart';
 // import 'dart:convert';
 
-class ModalTambahBarangGrup extends StatefulWidget {
+class ModalTambahBarangHandling extends StatefulWidget {
   String idGrup;
-  ModalTambahBarangGrup({Key key, @required this.idGrup}) : super(key: key);
+  ModalTambahBarangHandling({Key key, @required this.idGrup}) : super(key: key);
 
   @override
-  State<ModalTambahBarangGrup> createState() => _ModalTambahBarangGrupState();
+  State<ModalTambahBarangHandling> createState() =>
+      _ModalTambahBarangHandlingState();
 }
 
-class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
+class _ModalTambahBarangHandlingState extends State<ModalTambahBarangHandling> {
   NumberFormat myformat = NumberFormat.decimalPattern('en_us');
   String kodeBarang;
   String namaBarang;
@@ -65,43 +67,43 @@ class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       height: 50,
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Pilih Barang",
-          items: listBarang,
-          onChanged: (value) {
-            setState(() {
-              kodeBarang = value['KDXX_BRGX'];
-              namaBarang = value['NAMA_BRGX'];
-              satuan = value['NAMA_STAN'];
-              keterangan = value['KETERANGAN'];
-            });
-          },
-          // showClearButton: true,
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(
-                  item['NAMA_BRGX'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                    '${'Harga Beli : ' + myformat.format(item['HRGX_BELI'])} - Harga Jual : ' +
-                        myformat.format(item['HRGX_JUAL']),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                trailing: Text(
-                    '${'Stok : ' + item['STOK_BRGX'].toString()} - ' +
-                        item['NAMA_STAN'],
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['NAMA_BRGX']
-              : "Produk belum Dipilih"),
-          dropdownSearchDecoration: const InputDecoration(
-              border: InputBorder.none, filled: true, fillColor: Colors.white),
-          validator: (value) {
-            if (value == null) {
-              return "Produk masih kosong !";
-            }
-          }),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Pilih Barang",
+        items: listBarang,
+        onChanged: (value) {
+          setState(() {
+            kodeBarang = value['KDXX_BRGX'];
+            namaBarang = value['NAMA_BRGX'];
+            satuan = value['NAMA_STAN'];
+            keterangan = value['KETERANGAN'];
+          });
+        },
+        // showClearButton: true,
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(
+            item['NAMA_BRGX'],
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+              '${'Harga Beli : ' + myformat.format(item['HRGX_BELI'])} - Harga Jual : ' +
+                  myformat.format(item['HRGX_JUAL']),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          trailing: Text(
+              '${'Stok : ' + item['STOK_BRGX'].toString()} - ' +
+                  item['NAMA_STAN'],
+              textAlign: TextAlign.center),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaBarang ?? "Produk belum Dipilih"),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+        validator: (value) {
+          if (kodeBarang == null) {
+            return "Produk masih kosong !";
+          }
+        },
+      ),
     );
   }
 
@@ -111,25 +113,36 @@ class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Banyak Barang Dalam Grup',
+          labelText: 'Banyak Barang Dalam Handling',
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
       onChanged: (value) {
         quantity = value;
       },
+      initialValue: quantity,
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Jumlah Barang masih kosong !";
+        }
+      },
     );
   }
 
-  fncSaveData() {
-    HttpGrupBarang.saveGrupBarangDetail(widget.idGrup, kodeBarang, quantity)
-        .then((value) {
+  fncSaveData(context) {
+    HttpGrupHandling.saveGrupHandlingDetail(
+      widget.idGrup,
+      kodeBarang,
+      quantity,
+    ).then((value) {
       if (value.status == true) {
+        Navigator.pop(context);
+
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());
 
-        menuController.changeActiveitemTo('Grup Barang');
-        navigationController.navigateTo('/inventory/grup-barang');
+        menuController.changeActiveitemTo('Master Handling');
+        navigationController.navigateTo('/inventory/master-handling');
       } else {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());
@@ -139,12 +152,14 @@ class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Stack(children: [
         Form(
+          key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.5,
@@ -188,7 +203,11 @@ class _ModalTambahBarangGrupState extends State<ModalTambahBarangGrup> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          if (formKey.currentState.validate()) {
+                            fncSaveData(context);
+                          } else {
+                            return null;
+                          }
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

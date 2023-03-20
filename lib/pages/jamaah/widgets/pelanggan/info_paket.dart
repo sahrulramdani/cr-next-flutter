@@ -20,8 +20,11 @@ class _InfoPaketState extends State<InfoPaket> {
 
   void paketPelanggan() async {
     var id = widget.idPelanggan;
-    var response = await http
-        .get(Uri.parse("$urlAddress/jamaah/jamaah/detail/info-paket/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/jamaah/jamaah/detail/info-paket/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {

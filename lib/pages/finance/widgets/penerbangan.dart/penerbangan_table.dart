@@ -30,34 +30,26 @@ class MyData extends DataTableSource {
               dataProfit[index]['KETERANGAN'] +
               ' ' +
               fncGetTanggal(dataProfit[index]['TGLX_BGKT']),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataProfit[index]['TERISI'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(
+          Text(dataProfit[index]['TERISI'].toString(), style: styleRowReguler)),
       DataCell(Text(
           ((dataProfit[index]['JMLX_SEAT']) - (dataProfit[index]['TERISI']))
               .toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(myFormat.format(dataProfit[index]['EST_PROFIT']),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(myFormat.format(dataProfit[index]['TLH_MASUK']),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           myFormat.format(((dataProfit[index]['EST_PROFIT']) -
                   (dataProfit[index]['TLH_MASUK'])) *
               1),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
 
       // DataCell(Text(myFormat.format(dataProfit[index]['TARIF_PKET']))),
       // DataCell(Text(dataProfit[index]['JMLX_SEAT'].toString())),
@@ -103,69 +95,15 @@ class _TablePenerbanganState extends State<TablePenerbangan> {
           columnSpacing: 10,
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Penerbangan',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tarif',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Seat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Terisi',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Sisa',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Estimasi',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Telah Masuk',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Selisih',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('Penerbangan', style: styleColumn)),
+            DataColumn(label: Text('Tarif', style: styleColumn)),
+            DataColumn(label: Text('Seat', style: styleColumn)),
+            DataColumn(label: Text('Terisi', style: styleColumn)),
+            DataColumn(label: Text('Sisa', style: styleColumn)),
+            DataColumn(label: Text('Estimasi', style: styleColumn)),
+            DataColumn(label: Text('Telah Masuk', style: styleColumn)),
+            DataColumn(label: Text('Selisih', style: styleColumn)),
           ],
         ),
       ),

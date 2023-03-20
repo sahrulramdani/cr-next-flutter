@@ -1,4 +1,7 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy.dart';
 // import 'package:flutter_web_course/constants/dummy_marketing.dart';
@@ -37,6 +40,8 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   // -------------------------------------------------------------------
 
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -54,21 +59,11 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
     });
   }
 
-  void getAgency() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
+  void getListCardAgency() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/agency"), headers: {
       'pte-token': kodeToken,
     });
-    List<Map<String, dynamic>> dataAgency =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listAgency = dataAgency;
-    });
-  }
-
-  void getListCardAgency() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/agency"));
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -96,12 +91,25 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
     });
   }
 
+  void getAgency() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataAgency =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listAgency = dataAgency;
+    });
+
+    loadEnd();
+  }
+
   @override
   void initState() {
     getAuth();
-    getAgency();
     getListCardAgency();
-
+    getAgency();
     super.initState();
   }
 
@@ -123,16 +131,8 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                     ));
       },
       icon: const Icon(Icons.add),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-      label: const Text(
-        'Tambah Data',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
+      style: fncButtonAuthStyle(authAddx, context),
+      label: fncLabelButtonStyle('Tambah Data', context),
     );
   }
 
@@ -318,7 +318,7 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                             children: [
                               Container(
                                 height: 50,
-                                width: 250,
+                                width: fncWidthSearchBox(context),
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
                                 decoration: BoxDecoration(
@@ -337,7 +337,7 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                                       setState(() {
                                         listAgency = listAgency
                                             .where(((element) =>
-                                                element['nama_lengkap']
+                                                element['NAMA_LGKP']
                                                     .toString()
                                                     .toUpperCase()
                                                     .contains(
@@ -355,7 +355,7 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                     ),
                     TableAgency(
                       dataAgency: listAgency,
-                    )
+                    ),
                   ],
                 ),
               ))

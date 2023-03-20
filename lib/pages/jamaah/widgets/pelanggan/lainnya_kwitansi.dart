@@ -20,8 +20,11 @@ class _LainnyaKwitansiState extends State<LainnyaKwitansi> {
 
   void getEstimasi() async {
     var id = widget.idPelanggan;
-    var response = await http
-        .get(Uri.parse("$urlAddress/jamaah/jamaah/detail/info-estimasi/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/jamaah/jamaah/detail/info-estimasi/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -31,8 +34,11 @@ class _LainnyaKwitansiState extends State<LainnyaKwitansi> {
 
   void getKwitansi() async {
     var id = widget.idPelanggan;
-    var response = await http
-        .get(Uri.parse("$urlAddress/jamaah/jamaah/lainnya/kwitansi/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/jamaah/jamaah/lainnya/kwitansi/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 

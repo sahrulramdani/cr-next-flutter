@@ -33,8 +33,10 @@ class _BarangFormState extends State<BarangForm> {
   List<Map<String, dynamic>> listSatuan = [];
 
   void getSatuan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/inventory/satuan/getAllSatuan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

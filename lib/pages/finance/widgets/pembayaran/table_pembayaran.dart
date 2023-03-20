@@ -34,29 +34,21 @@ class MyData extends DataTableSource {
               : '';
         },
         cells: [
-          DataCell(Text((index + 1).toString(),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-          DataCell(Text(dataPembayaran[index]['NAMA_KNTR'],
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-          DataCell(Text(dataPembayaran[index]['ALMT_KNTR'],
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          DataCell(Text((index + 1).toString(), style: styleRowReguler)),
+          DataCell(
+              Text(dataPembayaran[index]['NAMA_KNTR'], style: styleRowReguler)),
+          DataCell(
+              Text(dataPembayaran[index]['ALMT_KNTR'], style: styleRowReguler)),
           DataCell(Text(dataPembayaran[index]['JML_DFTAR'].toString(),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+              style: styleRowReguler)),
           DataCell(Text(myFormat.format(dataPembayaran[index]['TOTL_TGIH']),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+              style: styleRowReguler)),
           DataCell(Text(myFormat.format(dataPembayaran[index]['JML_BYAR']),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+              style: styleRowReguler)),
           DataCell(Text(
               myFormat.format((dataPembayaran[index]['TOTL_TGIH']) -
                   (dataPembayaran[index]['JML_BYAR'])),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+              style: styleRowReguler)),
         ]);
   }
 
@@ -94,55 +86,13 @@ class _TablePembayaranState extends State<TablePembayaran> {
           columnSpacing: 8,
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Cabang',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Lokasi',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Daftar',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tagihan',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pembayaran',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Selisih',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('Cabang', style: styleColumn)),
+            DataColumn(label: Text('Lokasi', style: styleColumn)),
+            DataColumn(label: Text('Daftar', style: styleColumn)),
+            DataColumn(label: Text('Tagihan', style: styleColumn)),
+            DataColumn(label: Text('Pembayaran', style: styleColumn)),
+            DataColumn(label: Text('Selisih', style: styleColumn)),
           ],
         ),
       ),

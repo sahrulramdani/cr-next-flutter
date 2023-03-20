@@ -75,16 +75,8 @@ class ExportAgency extends StatelessWidget {
                     ));
       },
       icon: const Icon(Icons.download_outlined),
-      label: const Text(
-        'Export',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      label: fncLabelButtonStyle('Export', context),
+      style: fncButtonAuthStyle(authExpt, context),
     );
   }
 }

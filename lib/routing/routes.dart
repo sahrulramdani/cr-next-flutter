@@ -67,6 +67,9 @@ const invGrupBarangPageRoute = "/inventory/grup-barang";
 const invKirimBarangPageDisplayName = "Kirim Barang";
 const invKirimBarangPageRoute = "/inventory/kirim-barang";
 
+const invHandlingPageDisplayName = "Master Handling";
+const invHandlingPageRoute = "/inventory/master-handling";
+
 const hrPageDisplayName = "HR";
 const hrPageRoute = "/hr";
 

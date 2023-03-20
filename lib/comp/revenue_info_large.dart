@@ -38,8 +38,10 @@ class _RevenueInfoLargeState extends State<RevenueInfoLarge> {
   String TahunLalu = '0';
 
   void getChart() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/chart/dashboard/marketing"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/chart/dashboard/marketing"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -59,8 +61,10 @@ class _RevenueInfoLargeState extends State<RevenueInfoLarge> {
   }
 
   void getOverview() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/data/dashboard/overview"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/data/dashboard/overview"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

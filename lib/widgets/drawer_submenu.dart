@@ -24,8 +24,12 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
   List<Menu> drawermenu = [];
 
   void getSubmenu() async {
-    var response = await http.get(Uri.parse(
-        "$urlAddress/menu/getSubMenu/${menuController.activeItem.value}/$username"));
+    var response = await http.get(
+        Uri.parse(
+            "$urlAddress/menu/getSubMenu/${menuController.activeItem.value}/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List data = List.from(json.decode(response.body) as List);
 
     setState(() {
@@ -34,8 +38,10 @@ class _DrawerSubMenuState extends State<DrawerSubMenu> {
   }
 
   void getListMenu() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/menu/getListMenu/$username"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/menu/getListMenu/$username"), headers: {
+      'pte-token': kodeToken,
+    });
     List listmenu = List.from(json.decode(response.body) as List);
 
     setState(() {

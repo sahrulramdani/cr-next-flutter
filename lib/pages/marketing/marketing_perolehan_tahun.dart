@@ -29,8 +29,10 @@ class _MarketingPerolehanTahunanState extends State<MarketingPerolehanTahunan> {
   List<Map<String, dynamic>> listPerolehanTahun = [];
 
   void getPerolehan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/data/dashboard/laporan-tahunan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/data/dashboard/laporan-tahunan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -123,8 +125,7 @@ class _MarketingPerolehanTahunanState extends State<MarketingPerolehanTahunan> {
                     margin: EdgeInsets.only(
                         top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
                     child: CustomText(
-                      text:
-                          'Marketing - Laporan - ${menuController.activeItem.value}',
+                      text: 'Marketing - ${menuController.activeItem.value}',
                       size: 24,
                       weight: FontWeight.bold,
                     ),
@@ -132,40 +133,72 @@ class _MarketingPerolehanTahunanState extends State<MarketingPerolehanTahunan> {
                 ],
               )),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 533,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                    child: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: const ChartLaporanTahunan(),
-                )),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                            offset: const Offset(0, 6),
-                            color: lightGrey.withOpacity(0.2),
-                            blurRadius: 12)
-                      ],
-                    ),
-                    child:
-                        TableLaporanTahunan(listPerolehan: listPerolehanTahun),
+          ResponsiveWidget.isSmallScreen(context)
+              ? SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 390,
+                        padding: const EdgeInsets.all(5),
+                        child: const ChartLaporanTahunan(),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 390,
+                        padding: const EdgeInsets.all(5),
+                        child: Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: const Offset(0, 6),
+                                  color: lightGrey.withOpacity(0.2),
+                                  blurRadius: 12)
+                            ],
+                          ),
+                          child: TableLaporanTahunan(
+                              listPerolehan: listPerolehanTahun),
+                        ),
+                      )
+                    ],
                   ),
-                ))
-              ],
-            ),
-          )
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: const ChartLaporanTahunan(),
+                    )),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: const Offset(0, 6),
+                                color: lightGrey.withOpacity(0.2),
+                                blurRadius: 12)
+                          ],
+                        ),
+                        child: TableLaporanTahunan(
+                            listPerolehan: listPerolehanTahun),
+                      ),
+                    ))
+                  ],
+                ),
         ],
       ),
     );

@@ -34,33 +34,20 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['id_lead'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['nama'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['level'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['sukses'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['pending'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['2022'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['naik'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listKelolaTourLead[index]['total'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
+      DataCell(
+          Text(listKelolaTourLead[index]['id_lead'], style: styleRowReguler)),
+      DataCell(Text(listKelolaTourLead[index]['nama'], style: styleRowReguler)),
+      DataCell(
+          Text(listKelolaTourLead[index]['level'], style: styleRowReguler)),
+      DataCell(
+          Text(listKelolaTourLead[index]['sukses'], style: styleRowReguler)),
+      DataCell(
+          Text(listKelolaTourLead[index]['pending'], style: styleRowReguler)),
+      DataCell(Text(listKelolaTourLead[index]['2022'], style: styleRowReguler)),
+      DataCell(Text(listKelolaTourLead[index]['naik'], style: styleRowReguler)),
+      DataCell(
+          Text(listKelolaTourLead[index]['total'], style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -102,86 +89,27 @@ class _TableTourleaderState extends State<TableTourleader> {
 
     return SizedBox(
       width: screenWidth,
-      height: 0.41 * screenHeight,
+      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           source: myTable,
           columnSpacing: 15,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('ID',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Level',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Sukses',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pending',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('2022',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Naik Level',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Total',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('ID', style: styleColumn)),
+            DataColumn(label: Text('Nama', style: styleColumn)),
+            DataColumn(label: Text('Level', style: styleColumn)),
+            DataColumn(label: Text('Sukses', style: styleColumn)),
+            DataColumn(label: Text('Pending', style: styleColumn)),
+            DataColumn(label: Text('2022', style: styleColumn)),
+            DataColumn(label: Text('Naik Level', style: styleColumn)),
+            DataColumn(label: Text('Total', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     )))
           ],
         ),

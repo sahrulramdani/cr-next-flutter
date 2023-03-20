@@ -24,6 +24,8 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
   List<Map<String, dynamic>> listCardPemberangkatan = [];
 
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -41,20 +43,11 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
     });
   }
 
-  void getAllPemberangkatan() async {
-    var response = await http.get(
-        Uri.parse("$urlAddress/marketing/pemberangkatan/all-pemberangkatan"));
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-
-    setState(() {
-      listPemberangkatan = data;
-    });
-  }
-
   void getListCardPemberangkatan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/pemberangkatan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/pemberangkatan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -82,11 +75,27 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
     });
   }
 
+  void getAllPemberangkatan() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/pemberangkatan/all-pemberangkatan"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listPemberangkatan = data;
+    });
+
+    loadEnd();
+  }
+
   @override
   void initState() {
     getAuth();
-    getAllPemberangkatan();
     getListCardPemberangkatan();
+    getAllPemberangkatan();
     super.initState();
   }
 

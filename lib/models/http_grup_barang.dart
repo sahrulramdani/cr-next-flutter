@@ -14,10 +14,16 @@ class HttpGrupBarang {
   static Future<HttpGrupBarang> saveGrupBarangHeader(
       String namaGrupBarang, String Keterangan) async {
     Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "NAMA_GRUP": namaGrupBarang,
-      "KETERANGAN": Keterangan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "NAMA_GRUP": namaGrupBarang,
+        "KETERANGAN": Keterangan,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupBarang(
@@ -28,11 +34,17 @@ class HttpGrupBarang {
   static Future<HttpGrupBarang> saveGrupBarangDetail(
       String idGrupHeader, String idBarang, String quantity) async {
     Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/saveDetail");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_GRUP": idGrupHeader,
-      "KDXX_BRGX": idBarang,
-      "QTYX_BRGX": quantity,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_GRUP": idGrupHeader,
+        "KDXX_BRGX": idBarang,
+        "QTYX_BRGX": quantity,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupBarang(
@@ -42,9 +54,15 @@ class HttpGrupBarang {
 
   static Future<HttpGrupBarang> deleteGrupBarang(String idGrup) async {
     Uri urlApi = Uri.parse("$urlAddress/inventory/grupbrg/deleteGrupBarang");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_GRUP": idGrup,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_GRUP": idGrup,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupBarang(
@@ -56,10 +74,16 @@ class HttpGrupBarang {
       String idGrup, String idBarang) async {
     Uri urlApi =
         Uri.parse("$urlAddress/inventory/grupbrg/deleteGrupBarangDetail");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_GRUP": idGrup,
-      "KDXX_BRGX": idBarang,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_GRUP": idGrup,
+        "KDXX_BRGX": idBarang,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupBarang(

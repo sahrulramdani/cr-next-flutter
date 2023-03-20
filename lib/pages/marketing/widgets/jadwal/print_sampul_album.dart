@@ -162,16 +162,8 @@ class _PrintSampulAlbumState extends State<PrintSampulAlbum> {
         // }
       },
       icon: const Icon(Icons.photo_camera_front_outlined),
-      label: const Text(
-        'Sampul Album',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Sampul Album', context),
     );
   }
 }

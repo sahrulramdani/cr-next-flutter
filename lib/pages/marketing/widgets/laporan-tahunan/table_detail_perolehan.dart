@@ -75,128 +75,71 @@ class _TableDetailPerolehanState extends State<TableDetailPerolehan> {
 
     return SizedBox(
         width: screenWidth * 0.75,
-        child: DataTable(
-          headingRowColor: MaterialStateColor.resolveWith((states) => myBlue),
-          columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tahun',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pusat',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Agen',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Cabang',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tourleader',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Total',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-          ],
-          rows: widget.listDetPerolehan.map((e) {
-            return DataRow(cells: [
-              DataCell(Text((x++).toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-              DataCell(Text(e['TAHUN'].toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-              DataCell(Text(e['PUSAT'].toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-              DataCell(
-                Text(e['AGEN'].toString(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        fontSize: 16)),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => ModalDetailPencapaian(
-                            tahun: e['TAHUN'].toString(),
-                            kode: 'Agen',
-                          ));
-                },
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SizedBox(
+              width: screenWidth < 450 ? 600 : 1020,
+              child: DataTable(
+                headingRowColor:
+                    MaterialStateColor.resolveWith((states) => myBlue),
+                columns: const [
+                  DataColumn(label: Text('No.', style: styleColumn)),
+                  DataColumn(label: Text('Tahun', style: styleColumn)),
+                  DataColumn(label: Text('Pusat', style: styleColumn)),
+                  DataColumn(label: Text('Agen', style: styleColumn)),
+                  DataColumn(label: Text('Cabang', style: styleColumn)),
+                  DataColumn(label: Text('Tourleader', style: styleColumn)),
+                  DataColumn(label: Text('Total', style: styleColumn)),
+                ],
+                rows: widget.listDetPerolehan.map((e) {
+                  return DataRow(cells: [
+                    DataCell(Text((x++).toString(), style: styleRowPencapaian)),
+                    DataCell(
+                        Text(e['TAHUN'].toString(), style: styleRowPencapaian)),
+                    DataCell(
+                        Text(e['PUSAT'].toString(), style: styleRowPencapaian)),
+                    DataCell(
+                      Text(e['AGEN'].toString(), style: styleRowPencapaian),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => ModalDetailPencapaian(
+                                  tahun: e['TAHUN'].toString(),
+                                  kode: 'Agen',
+                                ));
+                      },
+                    ),
+                    DataCell(
+                      Text(e['CABANG'].toString(), style: styleRowPencapaian),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => ModalDetailPencapaian(
+                                  tahun: e['TAHUN'].toString(),
+                                  kode: 'Cabang',
+                                ));
+                      },
+                    ),
+                    DataCell(
+                      Text(e['TOURLEAD'].toString(), style: styleRowPencapaian),
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => ModalDetailPencapaian(
+                                  tahun: e['TAHUN'].toString(),
+                                  kode: 'Tourleader',
+                                ));
+                      },
+                    ),
+                    DataCell(
+                        Text(e['TOTAL'].toString(), style: styleRowPencapaian)),
+                  ]);
+                }).toList(),
               ),
-              DataCell(
-                Text(e['CABANG'].toString(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        fontSize: 16)),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => ModalDetailPencapaian(
-                            tahun: e['TAHUN'].toString(),
-                            kode: 'Cabang',
-                          ));
-                },
-              ),
-              DataCell(
-                Text(e['TOURLEAD'].toString(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                        fontSize: 16)),
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => ModalDetailPencapaian(
-                            tahun: e['TAHUN'].toString(),
-                            kode: 'Tourleader',
-                          ));
-                },
-              ),
-              DataCell(Text(e['TOTAL'].toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-            ]);
-          }).toList(),
+            ),
+          ),
         ));
   }
 }

@@ -21,8 +21,10 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
   List<Map<String, dynamic>> listProfitJadwal = [];
 
   void getProfitPenerbangan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/finance/penerbangan/get-profit"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/finance/penerbangan/get-profit"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -102,7 +104,9 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
                         children: [
                           Container(
                             height: 50,
-                            width: 250,
+                            width: ResponsiveWidget.isSmallScreen(context)
+                                ? 100
+                                : 250,
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5)),
@@ -111,7 +115,23 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
                                   fontFamily: 'Gilroy', fontSize: 14),
                               decoration: const InputDecoration(
                                   hintText: 'Cari Berdasarkan Nama'),
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                if (value == '') {
+                                  setState(() {
+                                    getProfitPenerbangan();
+                                  });
+                                } else {
+                                  setState(() {
+                                    listProfitJadwal = listProfitJadwal
+                                        .where(((element) =>
+                                            element['namaPaket']
+                                                .toString()
+                                                .toUpperCase()
+                                                .contains(value.toUpperCase())))
+                                        .toList();
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],

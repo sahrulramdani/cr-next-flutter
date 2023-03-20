@@ -9,12 +9,13 @@ class HttpPembayaran {
 
   HttpPembayaran({this.status});
 
-  static Future<HttpPembayaran> savePendaftaran(
+  static Future<HttpPembayaran> savePembayaran(
     String nomorFaktur,
     String idPendaftaran,
     String totalBayar,
     String metode,
     String bank,
+    String mutasi,
     String keterangan,
     String uangDiterima,
     String detailTagihan,
@@ -26,6 +27,7 @@ class HttpPembayaran {
       "TOTL_BYAR": totalBayar,
       "METODE": metode,
       "KDXX_BANK": bank,
+      "TRNS_NUMBER": mutasi,
       "KETERANGAN": keterangan,
       "UANG_DITE": uangDiterima,
       "DETX_TGIH": detailTagihan,

@@ -90,8 +90,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
 
   void getDetail() async {
     var id = widget.idJadwal;
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getDetail/$id"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getDetail/$id"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -139,8 +141,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getJenisPaket() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getjenispaket"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getjenispaket"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -155,8 +159,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getPaket() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getpaket"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getpaket"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -165,8 +171,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getMataUang() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getmatauang"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getmatauang"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -175,8 +183,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getTransit() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -185,8 +195,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getMaskapai() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -195,8 +207,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getHotelMekkah() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -205,8 +220,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getHotelMadinah() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -215,8 +233,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getHotelPlus() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -225,8 +245,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getHotelTransit() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -235,7 +258,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   }
 
   void getTujuan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -993,7 +1019,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.81,
+            width: fncWidthModalForm(context),
             height: 700,
             child: Column(
               children: [
@@ -1023,7 +1049,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
                                 inputIDPaket(),
@@ -1114,7 +1140,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                             width: 25,
                           ),
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
                                 inputTujuan(),

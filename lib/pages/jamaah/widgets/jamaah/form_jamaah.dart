@@ -116,7 +116,9 @@ class _JamaahFormState extends State<JamaahForm> {
 
   getMenikah() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -126,7 +128,10 @@ class _JamaahFormState extends State<JamaahForm> {
   }
 
   getPendidikan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pendidikans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -136,7 +141,10 @@ class _JamaahFormState extends State<JamaahForm> {
   }
 
   getPekerjaan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pekerjaans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -779,7 +787,6 @@ class _JamaahFormState extends State<JamaahForm> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Form(
       key: formKey,
@@ -797,14 +804,8 @@ class _JamaahFormState extends State<JamaahForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Tambah Data Baru',
-                      style: TextStyle(
-                          fontFamily: 'Gilroy',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: myBlue),
-                    ),
+                    Text('Tambah Data Baru',
+                        style: fncTextHeaderFormStyle(context)),
                   ],
                 ),
               ),
@@ -818,16 +819,8 @@ class _JamaahFormState extends State<JamaahForm> {
                   }
                 },
                 icon: const Icon(Icons.save),
-                label: const Text(
-                  'Simpan Data',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Simpan', context),
+                style: fncButtonRegulerStyle(context),
               ),
               const SizedBox(width: 10),
               ElevatedButton.icon(
@@ -846,23 +839,15 @@ class _JamaahFormState extends State<JamaahForm> {
                   navigationController.navigateTo('/jamaah/master');
                 },
                 icon: const Icon(Icons.cancel),
-                label: const Text(
-                  'Batal',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Batal', context),
+                style: fncButtonRegulerStyle(context),
               )
             ],
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(
-              height: 0.47 * screenHeight,
+              height: fncHeightFormWithCard(context),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -872,7 +857,7 @@ class _JamaahFormState extends State<JamaahForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -901,7 +886,8 @@ class _JamaahFormState extends State<JamaahForm> {
                               Row(
                                 children: [
                                   SizedBox(
-                                      width: 370, child: inputUploadFoto()),
+                                      width: fncWidthInputForm(context),
+                                      child: inputUploadFoto()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -913,16 +899,9 @@ class _JamaahFormState extends State<JamaahForm> {
                                                 const ModalUploadFotoJamaah());
                                       },
                                       icon: const Icon(Icons.save),
-                                      label: const Text(
-                                        'Upload Foto',
-                                        style: TextStyle(fontFamily: 'Gilroy'),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: myBlue,
-                                        minimumSize: const Size(100, 40),
-                                        shadowColor: Colors.grey,
-                                        elevation: 10,
-                                      ),
+                                      label: fncLabelButtonStyle(
+                                          'Upload Foto', context),
+                                      style: fncButtonRegulerStyle(context),
                                     ),
                                   ),
                                 ],
@@ -934,7 +913,7 @@ class _JamaahFormState extends State<JamaahForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               inputNamaAyah(),
@@ -959,7 +938,9 @@ class _JamaahFormState extends State<JamaahForm> {
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  SizedBox(width: 370, child: inputUploadKTP()),
+                                  SizedBox(
+                                      width: fncWidthInputForm(context),
+                                      child: inputUploadKTP()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -971,16 +952,9 @@ class _JamaahFormState extends State<JamaahForm> {
                                                 const ModalUploadKtpJamaah());
                                       },
                                       icon: const Icon(Icons.save),
-                                      label: const Text(
-                                        'Upload Ktp',
-                                        style: TextStyle(fontFamily: 'Gilroy'),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: myBlue,
-                                        minimumSize: const Size(100, 40),
-                                        shadowColor: Colors.grey,
-                                        elevation: 10,
-                                      ),
+                                      label: fncLabelButtonStyle(
+                                          'Upload KTP', context),
+                                      style: fncButtonRegulerStyle(context),
                                     ),
                                   ),
                                 ],

@@ -38,8 +38,10 @@ class _RevenueJamaahLargeState extends State<RevenueJamaahLarge> {
   String Tahun_ini = '0';
 
   void getChart() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/chart/dashboard/jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/chart/dashboard/jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -59,8 +61,10 @@ class _RevenueJamaahLargeState extends State<RevenueJamaahLarge> {
   }
 
   void dataJamaah() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/data/dashboard/jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/data/dashboard/jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

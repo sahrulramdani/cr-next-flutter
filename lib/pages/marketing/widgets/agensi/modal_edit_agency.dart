@@ -2,8 +2,10 @@
 
 // import 'package:flutter_web_course/constants/public_variable.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +91,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   TextEditingController dateExp = TextEditingController();
 
   void getDetail() async {
+    // EasyLoading.show(status: 'Loading...');
+
     String id = widget.idAgency;
     var response = await http
         .get(Uri.parse("$urlAddress/marketing/agency/detail/$id"), headers: {
@@ -197,7 +201,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   }
 
   getKantor() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/kantor"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/kantor"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -208,7 +215,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
 
   getLeader() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/marketing/all-agency"));
+        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -218,7 +227,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   }
 
   getFeeLevel() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/fee-level"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/fee-level"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -229,7 +241,9 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
 
   getMenikah() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -239,7 +253,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   }
 
   getPendidikan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pendidikans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -249,13 +266,19 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   }
 
   getPekerjaan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pekerjaans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
     setState(() {
       listPekerjaan = dataStatus;
     });
+
+    EasyLoading.showSuccess('Done!');
+    EasyLoading.dismiss();
   }
 
   getJenisMarketing() {
@@ -272,7 +295,6 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
 
   @override
   void initState() {
-    super.initState();
     getDetail();
     getProvinsi();
     getKantor();
@@ -281,6 +303,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     getMenikah();
     getPendidikan();
     getPekerjaan();
+    super.initState();
   }
 
   Widget inputKodeMarket() {
@@ -766,8 +789,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
             katMarket ?? "Pilih Kategori Marketing",
             style: TextStyle(
                 color: katMarket == null ? Colors.red : Colors.black)),
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
         validator: (value) {
           if (value == "Pilih Kategori Marketing") {
             return "Kategori Marketing masih kosong !";
@@ -1064,18 +1087,25 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     if (fotoAgencyByte != null) {
       return Image.memory(
         fotoAgencyByte,
-        width: 150,
+        height: 150,
       );
     } else {
       if (fotoAgency != "") {
-        return Image(
-          image: NetworkImage('$urlAddress/uploads/foto/$fotoAgency'),
-          width: 150,
-        );
+        if (fotoAgency != null) {
+          return Image(
+            image: NetworkImage('$urlAddress/uploads/foto/$fotoAgency'),
+            height: 150,
+          );
+        } else {
+          return const Image(
+            image: AssetImage('assets/images/NO_IMAGE.jpg'),
+            height: 150,
+          );
+        }
       } else {
         return const Image(
           image: AssetImage('assets/images/NO_IMAGE.jpg'),
-          width: 150,
+          height: 150,
         );
       }
     }
@@ -1085,18 +1115,25 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     if (fotoKtpAgencyByte != null) {
       return Image.memory(
         fotoKtpAgencyByte,
-        width: 150,
+        height: 150,
       );
     } else {
       if (fotoKtpAgency != "") {
-        return Image(
-          image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtpAgency'),
-          width: 150,
-        );
+        if (fotoKtpAgency != null) {
+          return Image(
+            image: NetworkImage('$urlAddress/uploads/ktp/$fotoKtpAgency'),
+            height: 150,
+          );
+        } else {
+          return const Image(
+            image: AssetImage('assets/images/NO_IMAGE.jpg'),
+            height: 150,
+          );
+        }
       } else {
         return const Image(
           image: AssetImage('assets/images/NO_IMAGE.jpg'),
-          width: 150,
+          height: 150,
         );
       }
     }
@@ -1203,7 +1240,6 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final formKey = GlobalKey<FormState>();
 
     return Dialog(
@@ -1213,7 +1249,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
           key: formKey,
           child: Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.81,
+            width: fncWidthModalForm(context),
             height: 700,
             child: Column(
               children: [
@@ -1243,7 +1279,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
                                 inputKodeMarket(),
@@ -1287,7 +1323,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: 370, child: inputUploadFoto()),
+                                        width: fncWidthInputModal(context),
+                                        child: inputUploadFoto()),
                                     const SizedBox(width: 10),
                                     Container(
                                       padding: const EdgeInsets.only(top: 10),
@@ -1295,18 +1332,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                         onPressed: () {
                                           getImageAgency();
                                         },
-                                        icon: const Icon(Icons.save),
-                                        label: const Text(
-                                          'Upload Foto',
-                                          style:
-                                              TextStyle(fontFamily: 'Gilroy'),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: myBlue,
-                                          minimumSize: const Size(100, 40),
-                                          shadowColor: Colors.grey,
-                                          elevation: 10,
-                                        ),
+                                        icon: const Icon(Icons.image_outlined),
+                                        label: fncLabelButtonStyle(
+                                            'Upload Foto', context),
+                                        style: fncButtonRegulerStyle(context),
                                       ),
                                     ),
                                   ],
@@ -1318,7 +1347,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                             width: 25,
                           ),
                           SizedBox(
-                            width: 530,
+                            width: fncWidthColumnModal(context),
                             child: Column(
                               children: [
                                 inputFeeLevel(),
@@ -1360,7 +1389,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: 370, child: inputUploadKTP()),
+                                        width: fncWidthInputModal(context),
+                                        child: inputUploadKTP()),
                                     const SizedBox(width: 10),
                                     Container(
                                       padding: const EdgeInsets.only(top: 10),
@@ -1368,22 +1398,15 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                         onPressed: () {
                                           getImageKtp();
                                         },
-                                        icon: const Icon(Icons.save),
-                                        label: const Text(
-                                          'Upload KTP',
-                                          style:
-                                              TextStyle(fontFamily: 'Gilroy'),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: myBlue,
-                                          minimumSize: const Size(100, 40),
-                                          shadowColor: Colors.grey,
-                                          elevation: 10,
-                                        ),
+                                        icon: const Icon(Icons.image_outlined),
+                                        label: fncLabelButtonStyle(
+                                            'Upload KTP', context),
+                                        style: fncButtonRegulerStyle(context),
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
+                                const SizedBox(height: 60),
                               ],
                             ),
                           ),
@@ -1403,22 +1426,17 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                           fncSaveFoto();
                         },
                         icon: const Icon(Icons.save),
-                        label: const Text(
-                          'Simpan Data',
-                          style: TextStyle(fontFamily: 'Gilroy'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: myBlue,
-                          shadowColor: Colors.grey,
-                          elevation: 5,
-                        ),
+                        label: fncLabelButtonStyle('Simpan', context),
+                        style: fncButtonRegulerStyle(context),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Kembali'))
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: fncLabelButtonStyle('Batal', context),
+                        style: fncButtonRegulerStyle(context),
+                      )
                     ],
                   ),
                 )

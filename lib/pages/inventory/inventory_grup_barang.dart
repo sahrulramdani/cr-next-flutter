@@ -50,8 +50,11 @@ class _InventoryGrupBarangPageState extends State<InventoryGrupBarangPage> {
   }
 
   void getDataGrupBarang() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/inventory/grupbrg/getGrupBrgHeaderAll"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/inventory/grupbrg/getGrupBrgHeaderAll"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 

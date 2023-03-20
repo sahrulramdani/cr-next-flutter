@@ -153,16 +153,8 @@ class _PrintDaftarFotoState extends State<PrintDaftarFoto> {
         }
       },
       icon: const Icon(Icons.image_aspect_ratio_outlined),
-      label: const Text(
-        'Daftar Foto',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Daftar Foto', context),
     );
   }
 }

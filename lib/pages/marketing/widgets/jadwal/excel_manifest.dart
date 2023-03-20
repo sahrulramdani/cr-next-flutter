@@ -105,16 +105,8 @@ class _ExcelManifestState extends State<ExcelManifest> {
         }
       },
       icon: const Icon(Icons.system_update_tv),
-      label: const Text(
-        'Excel Manifest',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authExpt, context),
+      label: fncLabelButtonStyle('Excel Manifest', context),
     );
   }
 }

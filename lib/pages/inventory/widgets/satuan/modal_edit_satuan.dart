@@ -29,8 +29,11 @@ class _ModalEditSatuanState extends State<ModalEditSatuan> {
 
   void getDetailSatuan() async {
     var id = widget.idsatuan;
-    var response = await http
-        .get(Uri.parse("$urlAddress/inventory/satuan/getDetailSatuan/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/inventory/satuan/getDetailSatuan/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 

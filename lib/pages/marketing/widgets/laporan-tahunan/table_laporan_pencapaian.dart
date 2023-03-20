@@ -73,58 +73,33 @@ class _TableDetailPencapaianState extends State<TableDetailPencapaian> {
 
     return SizedBox(
         width: screenWidth * 0.75,
-        child: DataTable(
-          headingRowColor: MaterialStateColor.resolveWith((states) => myBlue),
-          columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text(' ',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama Lengkap',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Pencapaian Jamaah',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-          ],
-          rows: widget.listDetailPencapaian.map((e) {
-            return DataRow(color: fncGetColor(x), cells: [
-              DataCell(Text((x++).toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-              DataCell(fncGetIcon(x - 1)),
-              DataCell(Text(e['NAMA_LGKP'].toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-              DataCell(Text(e['PEROLEHAN'].toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                      fontSize: 16))),
-            ]);
-          }).toList(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: screenWidth < 450 ? 600 : 1020,
+            child: DataTable(
+              columnSpacing: screenWidth < 450 ? 30 : 80,
+              headingRowColor:
+                  MaterialStateColor.resolveWith((states) => myBlue),
+              columns: const [
+                DataColumn(label: Text('No.', style: styleColumn)),
+                DataColumn(label: Text(' ', style: styleColumn)),
+                DataColumn(label: Text('Nama Lengkap', style: styleColumn)),
+                DataColumn(
+                    label: Text('Pencapaian Jamaah', style: styleColumn)),
+              ],
+              rows: widget.listDetailPencapaian.map((e) {
+                return DataRow(color: fncGetColor(x), cells: [
+                  DataCell(Text((x++).toString(), style: styleRowPencapaian)),
+                  DataCell(fncGetIcon(x - 1)),
+                  DataCell(Text(e['NAMA_LGKP'].toString(),
+                      style: styleRowPencapaian)),
+                  DataCell(Text(e['PEROLEHAN'].toString(),
+                      style: styleRowPencapaian)),
+                ]);
+              }).toList(),
+            ),
+          ),
         ));
   }
 }

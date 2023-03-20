@@ -130,16 +130,8 @@ class _PrintNamaPelangganState extends State<PrintNamaPelanggan> {
         }
       },
       icon: const Icon(Icons.list_alt),
-      label: const Text(
-        'Nama Pelanggan',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Nama Pelanggan', context),
     );
   }
 }

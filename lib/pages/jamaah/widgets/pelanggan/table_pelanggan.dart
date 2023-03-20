@@ -53,9 +53,7 @@ class MyData extends DataTableSource {
   DataRow getRow(int index) {
     // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Icon(
           dataPelanggan[index]['STS_BRGKT'] == 0
               ? Icons.access_alarm_outlined
@@ -64,24 +62,16 @@ class MyData extends DataTableSource {
               ? Colors.orange[800]
               : Colors.green)),
       DataCell(Text(dataPelanggan[index]['KDXX_DFTR'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataPelanggan[index]['NAMA_LGKP'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(dataPelanggan[index]['JENS_KLMN'],
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(Text(dataPelanggan[index]['NAMA_LGKP'], style: styleRowReguler)),
+      DataCell(Text(dataPelanggan[index]['JENS_KLMN'], style: styleRowReguler)),
       DataCell(Text(dataPelanggan[index]['UMUR'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(dataPelanggan[index]['BERANGKAT'] ?? '-',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(
           dataPelanggan[index]['PASPORAN'] == 'BELUM' ? 'BELUM' : 'PASPORAN',
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       // DataCell(Text(dataPelanggan[index]['HANDLING'])),
       // DataCell(Text(dataPelanggan[index]['NOXX_TELP'].toString())),
       // DataCell(Text(myFormat.format(dataPelanggan[index]['UANG_MASUK']))),
@@ -124,74 +114,25 @@ class _TablePelangganState extends State<TablePelanggan> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final DataTableSource myTable = MyData(widget.dataPelanggan);
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.5,
+      height: fncHeightTableWithCardWithoutTambah(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           columnSpacing: 17,
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text(' ',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('ID',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Jenis Kelamin',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Umur',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Berangkat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Persyaratan',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text(' ', style: styleColumn)),
+            DataColumn(label: Text('ID', style: styleColumn)),
+            DataColumn(label: Text('Nama', style: styleColumn)),
+            DataColumn(label: Text('Jenis Kelamin', style: styleColumn)),
+            DataColumn(label: Text('Umur', style: styleColumn)),
+            DataColumn(label: Text('Berangkat', style: styleColumn)),
+            DataColumn(label: Text('Persyaratan', style: styleColumn)),
             // DataColumn(
             //     label: Text('Handling',
             //         style: TextStyle(
@@ -231,12 +172,7 @@ class _TablePelangganState extends State<TablePelanggan> {
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     )))
           ],
         ),

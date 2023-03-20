@@ -35,31 +35,37 @@ class HttpJadwal {
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/save");
     var Tarif = tarif.replaceAll(",", "").toString();
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_JDWL": fncRandomId(15),
-      "NAMA_PKET": idpaket,
-      "JENS_PKET": idjenis,
-      "TJAN_PKET": tujuan,
-      "HOTL_MEKX": idhotelMek,
-      "HOTL_MADX": idhotelMad,
-      "HOTL_JEDX": idhotelJed,
-      "HOTL_TRAX": idhotelTra,
-      "TGLX_BGKT": fncTanggal(tglBerangkat),
-      "TGLX_PLNG": fncTanggal(tglPulang),
-      "JMLX_HARI": jumlahHari,
-      "PSWT_BGKT": pesawatBrgkt,
-      "PSWT_PLNG": pesawatPulang,
-      "RUTE_AWAL_BRKT": rute,
-      "RUTE_TRNS_BRKT": rute2,
-      "RUTE_AKHR_BRKT": rute3,
-      "RUTE_AWAL_PLNG": ruteAwalPulg,
-      "RUTE_TRNS_PLNG": ruteTransitPlng,
-      "RUTE_AKHR_PLNG": ruteAkhirPlng,
-      "TARIF_PKET": Tarif,
-      "JMLX_SEAT": jumlahSeat,
-      "MATA_UANG": idMataUang,
-      "KETERANGAN": keterangan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_JDWL": fncRandomId(15),
+        "NAMA_PKET": idpaket,
+        "JENS_PKET": idjenis,
+        "TJAN_PKET": tujuan,
+        "HOTL_MEKX": idhotelMek,
+        "HOTL_MADX": idhotelMad,
+        "HOTL_JEDX": idhotelJed,
+        "HOTL_TRAX": idhotelTra,
+        "TGLX_BGKT": fncTanggal(tglBerangkat),
+        "TGLX_PLNG": fncTanggal(tglPulang),
+        "JMLX_HARI": jumlahHari,
+        "PSWT_BGKT": pesawatBrgkt,
+        "PSWT_PLNG": pesawatPulang,
+        "RUTE_AWAL_BRKT": rute,
+        "RUTE_TRNS_BRKT": rute2,
+        "RUTE_AKHR_BRKT": rute3,
+        "RUTE_AWAL_PLNG": ruteAwalPulg,
+        "RUTE_TRNS_PLNG": ruteTransitPlng,
+        "RUTE_AKHR_PLNG": ruteAkhirPlng,
+        "TARIF_PKET": Tarif,
+        "JMLX_SEAT": jumlahSeat,
+        "MATA_UANG": idMataUang,
+        "KETERANGAN": keterangan,
+      },
+    );
     var data = json.decode(hasilResponse.body);
     return HttpJadwal(
       status: data["status"],
@@ -93,31 +99,37 @@ class HttpJadwal {
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/update");
     var Tarif = tarif.replaceAll(",", "").toString();
-    var hasilResponse = await http.post(urlApi, body: {
-      "IDXX_JDWL": idJadwal,
-      "NAMA_PKET": idpaket,
-      "JENS_PKET": idjenis,
-      "TJAN_PKET": tujuan,
-      "HOTL_MEKX": idhotelMek,
-      "HOTL_MADX": idhotelMad,
-      "HOTL_JEDX": idhotelJed,
-      "HOTL_TRAX": idhotelTra,
-      "TGLX_BGKT": fncTanggal(tglBerangkat),
-      "TGLX_PLNG": fncTanggal(tglPulang),
-      "JMLX_HARI": jumlahHari,
-      "PSWT_BGKT": pesawatBrgkt,
-      "PSWT_PLNG": pesawatPulang,
-      "RUTE_AWAL_BRKT": rute,
-      "RUTE_TRNS_BRKT": rute2,
-      "RUTE_AKHR_BRKT": rute3,
-      "RUTE_AWAL_PLNG": ruteAwalPlng,
-      "RUTE_TRNS_PLNG": ruteTransitPlng,
-      "RUTE_AKHR_PLNG": ruteAkhirPlng,
-      "TARIF_PKET": Tarif,
-      "JMLX_SEAT": jumlahSeat,
-      "MATA_UANG": idMataUang,
-      "KETERANGAN": keterangan,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "IDXX_JDWL": idJadwal,
+        "NAMA_PKET": idpaket,
+        "JENS_PKET": idjenis,
+        "TJAN_PKET": tujuan,
+        "HOTL_MEKX": idhotelMek,
+        "HOTL_MADX": idhotelMad,
+        "HOTL_JEDX": idhotelJed,
+        "HOTL_TRAX": idhotelTra,
+        "TGLX_BGKT": fncTanggal(tglBerangkat),
+        "TGLX_PLNG": fncTanggal(tglPulang),
+        "JMLX_HARI": jumlahHari,
+        "PSWT_BGKT": pesawatBrgkt,
+        "PSWT_PLNG": pesawatPulang,
+        "RUTE_AWAL_BRKT": rute,
+        "RUTE_TRNS_BRKT": rute2,
+        "RUTE_AKHR_BRKT": rute3,
+        "RUTE_AWAL_PLNG": ruteAwalPlng,
+        "RUTE_TRNS_PLNG": ruteTransitPlng,
+        "RUTE_AKHR_PLNG": ruteAkhirPlng,
+        "TARIF_PKET": Tarif,
+        "JMLX_SEAT": jumlahSeat,
+        "MATA_UANG": idMataUang,
+        "KETERANGAN": keterangan,
+      },
+    );
     var data = json.decode(hasilResponse.body);
     return HttpJadwal(
       status: data["status"],
@@ -129,6 +141,9 @@ class HttpJadwal {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "IDXX_JDWL": idJadwal,
       },

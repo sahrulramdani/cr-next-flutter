@@ -170,16 +170,8 @@ class _PrintIdentitasState extends State<PrintIdentitas> {
         }
       },
       icon: const Icon(Icons.assignment_ind_outlined),
-      label: const Text(
-        'Identitas',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Identitas', context),
     );
   }
 }

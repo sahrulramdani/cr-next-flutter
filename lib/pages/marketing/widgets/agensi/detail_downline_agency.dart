@@ -30,8 +30,6 @@ class _DetailDownlineAgencyState extends State<DetailDownlineAgency> {
     setState(() {
       listDownline = dataStatus;
     });
-
-    print(listDownline);
   }
 
   @override

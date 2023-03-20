@@ -13,6 +13,7 @@ import 'package:flutter_web_course/pages/hr/setting_pengguna.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_barang.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_dash.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_grup_barang.dart';
+import 'package:flutter_web_course/pages/inventory/inventory_handling.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_kirim_barang.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_pengeluaran.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_satuan.dart';
@@ -89,6 +90,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const InventoryGrupBarangPage());
     case invKirimBarangPageRoute:
       return _getPageRoute(const InventoryKirimBarang());
+    case invHandlingPageRoute:
+      return _getPageRoute(const InventoryHandlingPage());
     case financePageRoute:
       return _getPageRoute(const FinanceDashboardPage());
     case fincPembayaranPageRoute:

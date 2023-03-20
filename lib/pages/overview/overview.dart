@@ -21,8 +21,11 @@ class _OverViewPageState extends State<OverViewPage> {
   List<Map<String, dynamic>> listCardDashboard = [];
 
   void getListCardDashboard() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/main-dashboard"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/main-dashboard"), headers: {
+      'pte-token': kodeToken,
+    });
+
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -95,7 +98,9 @@ class _OverViewPageState extends State<OverViewPage> {
             height: 20,
           ),
           SizedBox(
-            height: screenHeight * 0.48,
+            height: ResponsiveWidget.isSmallScreen(context)
+                ? screenHeight * 0.6
+                : screenHeight * 0.48,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(children: [

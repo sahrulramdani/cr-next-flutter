@@ -54,7 +54,10 @@ class _DetailBankAgencyState extends State<DetailBankAgency> {
   }
 
   getBank() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/banks"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/banks"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 

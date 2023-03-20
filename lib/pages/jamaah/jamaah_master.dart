@@ -28,6 +28,8 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   // ---------------------------- GET DATA -----------------------------
   // -------------------------------------------------------------------
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -45,18 +47,11 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
     });
   }
 
-  void getJamaah() async {
-    var response = await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"));
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listJamaah = dataStatus;
-    });
-  }
-
   void getListCardCalonJamaah() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/info/dashboard/calon-jamaah"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/info/dashboard/calon-jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -82,6 +77,20 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
     setState(() {
       listCardCalonJamaah = dataList.toList();
     });
+  }
+
+  void getJamaah() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listJamaah = dataStatus;
+    });
+
+    loadEnd();
   }
 
   @override
@@ -110,16 +119,8 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                     ));
       },
       icon: const Icon(Icons.add),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authAddx == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
-      label: const Text(
-        'Tambah Data',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
+      style: fncButtonAuthStyle(authAddx, context),
+      label: fncLabelButtonStyle('Tambah Data', context),
     );
   }
 
@@ -135,16 +136,8 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                     ));
       },
       icon: const Icon(Icons.print_outlined),
-      label: const Text(
-        'Print',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authPrnt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Print', context),
     );
   }
 
@@ -160,16 +153,8 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                     ));
       },
       icon: const Icon(Icons.download_outlined),
-      label: const Text(
-        'Export',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authExpt == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authExpt, context),
+      label: fncLabelButtonStyle('Export', context),
     );
   }
 
@@ -359,18 +344,20 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                                   decoration: const InputDecoration(
                                       hintText: 'Cari Berdasarkan Nama'),
                                   onChanged: (value) {
-                                    // if (value == '') {
-                                    //   listAgency = listAgency;
-                                    //   getList();
-                                    // } else {
-                                    //   setState(() {
-                                    //     listAgency = listAgency
-                                    //         .where((element) =>
-                                    //             element['NAMA_LGKP']
-                                    //                 .contains(value))
-                                    //         .toList();
-                                    //   });
-                                    // }
+                                    if (value == '') {
+                                      getJamaah();
+                                    } else {
+                                      setState(() {
+                                        listJamaah = listJamaah
+                                            .where(((element) =>
+                                                element['NAMA_LGKP']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
+                                            .toList();
+                                      });
+                                    }
                                   },
                                 ),
                               ),

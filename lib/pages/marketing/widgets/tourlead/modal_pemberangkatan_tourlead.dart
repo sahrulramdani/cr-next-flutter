@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/detail_berangkat_tourlead.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/detail_jadwal_tourlead.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/detail_jadwal_pelanggan.dart';
@@ -24,7 +25,9 @@ class _ModalPemberangkatanTourleadState
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            width: screenWidth * 0.6,
+            width: ResponsiveWidget.isSmallScreen(context)
+                ? screenWidth * 0.9
+                : screenWidth * 0.6,
             height: 700,
             child: Column(
               children: [

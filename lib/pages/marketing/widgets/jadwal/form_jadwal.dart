@@ -81,8 +81,10 @@ class _JadwalFormState extends State<JadwalForm> {
   List<Map<String, dynamic>> listKota = [];
 
   void getJenisPaket() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getjenispaket"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getjenispaket"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -97,8 +99,12 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getPaket() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getpaket"));
+    loadStart();
+
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getpaket"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -107,8 +113,10 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getMataUang() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getmatauang"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getmatauang"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -117,8 +125,10 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getTransit() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -127,8 +137,10 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getMaskapai() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -137,8 +149,11 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getHotelMekkah() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -147,8 +162,11 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getHotelMadinah() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -157,8 +175,10 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getHotelPlus() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -167,8 +187,11 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getHotelTransit() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -177,12 +200,17 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   void getTujuan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
       listTujuan = data;
     });
+
+    loadEnd();
   }
 
   @override
@@ -949,11 +977,7 @@ class _JadwalFormState extends State<JadwalForm> {
                   children: [
                     Text(
                       'Tambah Data Baru',
-                      style: TextStyle(
-                          fontFamily: 'Gilroy',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: myBlue),
+                      style: fncTextHeaderFormStyle(context),
                     ),
                   ],
                 ),
@@ -968,16 +992,8 @@ class _JadwalFormState extends State<JadwalForm> {
                   }
                 },
                 icon: const Icon(Icons.save),
-                label: const Text(
-                  'Simpan Data',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Simpan', context),
+                style: fncButtonRegulerStyle(context),
               ),
               const SizedBox(width: 10),
               ElevatedButton.icon(
@@ -986,23 +1002,15 @@ class _JadwalFormState extends State<JadwalForm> {
                   navigationController.navigateTo('/mrkt/jadwal');
                 },
                 icon: const Icon(Icons.cancel),
-                label: const Text(
-                  'Batal',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Batal', context),
+                style: fncButtonRegulerStyle(context),
               )
             ],
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(
-              height: 0.47 * screenHeight,
+              height: fncHeightFormWithCard(context),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -1016,7 +1024,7 @@ class _JadwalFormState extends State<JadwalForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1036,7 +1044,7 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               inputTujuan(),
@@ -1061,7 +1069,7 @@ class _JadwalFormState extends State<JadwalForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(
@@ -1091,7 +1099,7 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(
@@ -1126,7 +1134,7 @@ class _JadwalFormState extends State<JadwalForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(
@@ -1161,7 +1169,7 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(
@@ -1201,7 +1209,7 @@ class _JadwalFormState extends State<JadwalForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(
@@ -1234,7 +1242,7 @@ class _JadwalFormState extends State<JadwalForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               Divider(

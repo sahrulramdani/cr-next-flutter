@@ -1,7 +1,9 @@
 // ignore_for_file: missing_return, deprecated_member_use, avoid_print
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/constants/public_variable.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_upload_foto_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/modal_upload_ktp_agency.dart';
 import 'package:http/http.dart' as http;
@@ -84,16 +86,9 @@ class _AgencyFormState extends State<AgencyForm> {
   TextEditingController dateKeluar = TextEditingController();
   TextEditingController dateExp = TextEditingController();
 
-  void getJamaah() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/calon-agency"));
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    listJamaah = dataStatus;
-    setState(() {});
-  }
-
   void getProvinsi() async {
+    loadStart();
+
     var response = await http.get(Uri.parse(
         "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"));
     List<Map<String, dynamic>> dataStatus =
@@ -134,7 +129,10 @@ class _AgencyFormState extends State<AgencyForm> {
   }
 
   getKantor() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/kantor"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/kantor"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -145,7 +143,9 @@ class _AgencyFormState extends State<AgencyForm> {
 
   getLeader() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/marketing/all-agency"));
+        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -155,7 +155,10 @@ class _AgencyFormState extends State<AgencyForm> {
   }
 
   getFeeLevel() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/fee-level"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/fee-level"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -166,7 +169,9 @@ class _AgencyFormState extends State<AgencyForm> {
 
   getMenikah() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/setup/status-menikah"));
+        await http.get(Uri.parse("$urlAddress/setup/status-menikah"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -176,7 +181,10 @@ class _AgencyFormState extends State<AgencyForm> {
   }
 
   getPendidikan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pendidikans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pendidikans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
@@ -186,13 +194,29 @@ class _AgencyFormState extends State<AgencyForm> {
   }
 
   getPekerjaan() async {
-    var response = await http.get(Uri.parse("$urlAddress/setup/pekerjaans"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/pekerjaans"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
     setState(() {
       listPekerjaan = dataStatus;
     });
+  }
+
+  void getJamaah() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/calon-agency"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+    listJamaah = dataStatus;
+    setState(() {});
+
+    loadEnd();
   }
 
   getJenisMarketing() {
@@ -209,8 +233,6 @@ class _AgencyFormState extends State<AgencyForm> {
 
   @override
   void initState() {
-    super.initState();
-    getJamaah();
     getProvinsi();
     getKantor();
     getLeader();
@@ -218,6 +240,8 @@ class _AgencyFormState extends State<AgencyForm> {
     getMenikah();
     getPendidikan();
     getPekerjaan();
+    getJamaah();
+    super.initState();
   }
 
   // -----------------------------------------------------------------------------------------------
@@ -1148,7 +1172,6 @@ class _AgencyFormState extends State<AgencyForm> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Form(
       key: formKey,
@@ -1166,14 +1189,8 @@ class _AgencyFormState extends State<AgencyForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Tambah Data Baru',
-                      style: TextStyle(
-                          fontFamily: 'Gilroy',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: myBlue),
-                    ),
+                    Text('Tambah Data Baru',
+                        style: fncTextHeaderFormStyle(context)),
                   ],
                 ),
               ),
@@ -1187,16 +1204,8 @@ class _AgencyFormState extends State<AgencyForm> {
                   }
                 },
                 icon: const Icon(Icons.save),
-                label: const Text(
-                  'Simpan Data',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Simpan', context),
+                style: fncButtonRegulerStyle(context),
               ),
               const SizedBox(width: 10),
               ElevatedButton.icon(
@@ -1218,23 +1227,15 @@ class _AgencyFormState extends State<AgencyForm> {
                   navigationController.navigateTo('/mrkt/agency');
                 },
                 icon: const Icon(Icons.cancel),
-                label: const Text(
-                  'Batal',
-                  style: TextStyle(fontFamily: 'Gilroy'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: myBlue,
-                  minimumSize: const Size(100, 40),
-                  shadowColor: Colors.grey,
-                  elevation: 5,
-                ),
+                label: fncLabelButtonStyle('Batal', context),
+                style: fncButtonRegulerStyle(context),
               )
             ],
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(
-              height: 0.47 * screenHeight,
+              height: fncHeightFormWithCard(context),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -1244,13 +1245,15 @@ class _AgencyFormState extends State<AgencyForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  SizedBox(width: 410, child: inputJamaah()),
+                                  SizedBox(
+                                      width: fncWidthInputForm(context),
+                                      child: inputJamaah()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -1259,16 +1262,9 @@ class _AgencyFormState extends State<AgencyForm> {
                                         fncBersih();
                                       },
                                       icon: const Icon(Icons.clear),
-                                      label: const Text(
-                                        'Clear',
-                                        style: TextStyle(fontFamily: 'Gilroy'),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: myBlue,
-                                        minimumSize: const Size(100, 40),
-                                        shadowColor: Colors.grey,
-                                        elevation: 10,
-                                      ),
+                                      label:
+                                          fncLabelButtonStyle('Clear', context),
+                                      style: fncButtonRegulerStyle(context),
                                     ),
                                   ),
                                 ],
@@ -1302,7 +1298,8 @@ class _AgencyFormState extends State<AgencyForm> {
                               Row(
                                 children: [
                                   SizedBox(
-                                      width: 370, child: inputUploadFoto()),
+                                      width: fncWidthInputForm(context),
+                                      child: inputUploadFoto()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -1313,17 +1310,10 @@ class _AgencyFormState extends State<AgencyForm> {
                                             builder: (context) =>
                                                 const ModalUploadFotoAgency());
                                       },
-                                      icon: const Icon(Icons.save),
-                                      label: const Text(
-                                        'Upload Foto',
-                                        style: TextStyle(fontFamily: 'Gilroy'),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: myBlue,
-                                        minimumSize: const Size(100, 40),
-                                        shadowColor: Colors.grey,
-                                        elevation: 10,
-                                      ),
+                                      icon: const Icon(Icons.image_outlined),
+                                      label: fncLabelButtonStyle(
+                                          'Upload Foto', context),
+                                      style: fncButtonRegulerStyle(context),
                                     ),
                                   ),
                                 ],
@@ -1335,7 +1325,7 @@ class _AgencyFormState extends State<AgencyForm> {
                           width: 25,
                         ),
                         SizedBox(
-                          width: 525,
+                          width: fncWidthColumnForm(context),
                           child: Column(
                             children: [
                               inputFeeLevel(),
@@ -1368,7 +1358,9 @@ class _AgencyFormState extends State<AgencyForm> {
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  SizedBox(width: 370, child: inputUploadKTP()),
+                                  SizedBox(
+                                      width: fncWidthInputForm(context),
+                                      child: inputUploadKTP()),
                                   const SizedBox(width: 10),
                                   Container(
                                     padding: const EdgeInsets.only(top: 10),
@@ -1379,17 +1371,10 @@ class _AgencyFormState extends State<AgencyForm> {
                                             builder: (context) =>
                                                 const ModalUploadKtpAgency());
                                       },
-                                      icon: const Icon(Icons.save),
-                                      label: const Text(
-                                        'Upload KTP',
-                                        style: TextStyle(fontFamily: 'Gilroy'),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: myBlue,
-                                        minimumSize: const Size(100, 40),
-                                        shadowColor: Colors.grey,
-                                        elevation: 10,
-                                      ),
+                                      icon: const Icon(Icons.image_outlined),
+                                      label: fncLabelButtonStyle(
+                                          'Upload KTP', context),
+                                      style: fncButtonRegulerStyle(context),
                                     ),
                                   ),
                                 ],

@@ -21,8 +21,11 @@ class _ModalDetailPerolehanState extends State<ModalDetailPerolehan> {
   List<Map<String, dynamic>> listDetPerolehan = [];
 
   void getDetPerolehan() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/data/dashboard/detail/laporan-tahunan"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/data/dashboard/detail/laporan-tahunan"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -60,25 +63,16 @@ class _ModalDetailPerolehanState extends State<ModalDetailPerolehan> {
                       ),
                       const SizedBox(width: 10),
                       Text('Detail Perolehan',
-                          style: TextStyle(
-                              color: myGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16)),
+                          style: fncTextHeaderModalStyle(context)),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                    child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
                     child: Column(
-                      children: [
-                        TableDetailPerolehan(listDetPerolehan: listDetPerolehan)
-                      ],
-                    ),
-                  ),
+                  children: [
+                    TableDetailPerolehan(listDetPerolehan: listDetPerolehan)
+                  ],
                 )),
                 SizedBox(
                   height: 30,

@@ -28,7 +28,7 @@ void configLoading() {
     ..indicatorSize = 45.0
     ..radius = 10.0
     ..progressColor = Colors.white
-    ..backgroundColor = Color.fromARGB(170, 50, 137, 207)
+    ..backgroundColor = Color.fromARGB(255, 50, 136, 207)
     ..indicatorColor = Colors.white
     ..textColor = Colors.white
     ..maskColor = Colors.blue.withOpacity(0.5)

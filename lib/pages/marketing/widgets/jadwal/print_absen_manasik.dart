@@ -172,16 +172,8 @@ class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
         }
       },
       icon: const Icon(Icons.library_add_check_outlined),
-      label: const Text(
-        'Absen Manasik',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authPrnt, context),
+      label: fncLabelButtonStyle('Absen Manasik', context),
     );
   }
 }

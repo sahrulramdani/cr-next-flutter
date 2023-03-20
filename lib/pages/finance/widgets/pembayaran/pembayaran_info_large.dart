@@ -22,8 +22,10 @@ class _PembayaranInfoLargeState extends State<PembayaranInfoLarge> {
   List<Map<String, dynamic>> totalTagihan = [];
 
   getListChart() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/finance/chart/total-bulanan"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/finance/chart/total-bulanan"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -32,8 +34,11 @@ class _PembayaranInfoLargeState extends State<PembayaranInfoLarge> {
   }
 
   getTotalTagihan() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/finance/info-data/total-tagihan"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/finance/info-data/total-tagihan"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {

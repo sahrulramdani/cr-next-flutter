@@ -2,6 +2,7 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_string_interpolations, prefer_const_constructors
 
 import 'dart:convert';
+import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
@@ -19,8 +20,11 @@ class ChartLaporanTahunan extends StatefulWidget {
 class _ChartLaporanTahunanState extends State<ChartLaporanTahunan> {
   List<Map<String, dynamic>> listChartLaporanTahunan = [];
   void getChart() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/chart/dashboard/laporan-tahunan"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/chart/dashboard/laporan-tahunan"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -79,7 +83,7 @@ class _ChartLaporanTahunanState extends State<ChartLaporanTahunan> {
               ),
               SizedBox(
                 width: 600,
-                height: 450,
+                height: ResponsiveWidget.isSmallScreen(context) ? 300 : 450,
                 child: charts.BarChart(
                   _createSampleData(),
                   barRendererDecorator: charts.BarLabelDecorator<String>(),

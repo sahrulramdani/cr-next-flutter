@@ -37,8 +37,10 @@ class _RevenueMarketingSmallState extends State<RevenueMarketingSmall> {
   String TourLeader = '0';
 
   void getChart() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/chart/dashboard/marketing"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/chart/dashboard/marketing"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -58,8 +60,10 @@ class _RevenueMarketingSmallState extends State<RevenueMarketingSmall> {
   }
 
   void getAgensi() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/data/dashboard/marketing"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/data/dashboard/marketing"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {

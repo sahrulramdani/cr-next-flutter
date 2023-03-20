@@ -17,15 +17,19 @@ class RevenueInfo extends StatelessWidget {
         text: TextSpan(children: [
           TextSpan(
               text: "$title \n\n",
-              style:
-                  TextStyle(color: myGrey, fontSize: 18, fontFamily: 'Gilroy')),
+              style: TextStyle(
+                  color: myGrey,
+                  fontSize: 18,
+                  fontFamily: 'Gilroy',
+                  fontWeight: FontWeight.normal)),
           TextSpan(
               text: " $amount ",
               style: TextStyle(
-                  color: dark,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Gilroy')),
+                color: dark,
+                fontSize: 30,
+                fontWeight: FontWeight.w300,
+                fontFamily: 'Gilroy',
+              )),
         ]),
       ),
     ));

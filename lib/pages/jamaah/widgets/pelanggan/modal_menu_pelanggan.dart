@@ -37,16 +37,8 @@ class ButtonDetail extends StatelessWidget {
                 idPelanggan: idPelanggan, namaPelanggan: namaPelanggan));
       },
       icon: const Icon(Icons.info_outline_rounded),
-      label: const Text(
-        'Detail',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: authInqu == '1' ? myBlue : Colors.blue[200],
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Detail', context),
     );
   }
 }
@@ -63,16 +55,8 @@ class ButtonPembayaran extends StatelessWidget {
             builder: (context) => const DetailModalPembayaran());
       },
       icon: const Icon(Icons.payments_outlined),
-      label: const Text(
-        'Pembayaran',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Pembayaran', context),
     );
   }
 }
@@ -89,16 +73,8 @@ class ButtonPaspor extends StatelessWidget {
             builder: (context) => const DetailModalKonfirmPaspor());
       },
       icon: const Icon(Icons.corporate_fare_rounded),
-      label: const Text(
-        'Konfirmasi Paspor',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Konfirmasi Paspor', context),
     );
   }
 }
@@ -115,16 +91,8 @@ class ButtonHandling extends StatelessWidget {
             builder: (context) => const DetailModalUbahHandling());
       },
       icon: const Icon(Icons.cases_outlined),
-      label: const Text(
-        'Kelola Handling',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Kelola Handling', context),
     );
   }
 }
@@ -143,16 +111,8 @@ class ButtonLunas extends StatelessWidget {
                 ));
       },
       icon: const Icon(Icons.done_all_outlined),
-      label: const Text(
-        'Konfirmasi Lunas',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Konfirmasi Lunas', context),
     );
   }
 }
@@ -169,16 +129,8 @@ class ButtonJadwal extends StatelessWidget {
             builder: (context) => const DetailModalUbahJadwal());
       },
       icon: const Icon(Icons.calendar_month_outlined),
-      label: const Text(
-        'Perubahan Jadwal',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Perubahan Jadwal', context),
     );
   }
 }
@@ -197,16 +149,8 @@ class ButtonFasilitas extends StatelessWidget {
                 ));
       },
       icon: const Icon(Icons.fact_check_outlined),
-      label: const Text(
-        'Perubahan Fasilitas',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Perubahan Fasilitas', context),
     );
   }
 }
@@ -223,16 +167,8 @@ class ButtonBatal extends StatelessWidget {
             builder: (context) => const DetailModalBatalKembali());
       },
       icon: const Icon(Icons.free_cancellation_outlined),
-      label: const Text(
-        'Pembatalan dan Pengembalian',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Pembatalan dan Pengembalian', context),
     );
   }
 }
@@ -254,16 +190,8 @@ class ButtonLainnya extends StatelessWidget {
                 idPelanggan: idPelanggan, namaPelanggan: namaPelanggan));
       },
       icon: const Icon(Icons.manage_accounts_outlined),
-      label: const Text(
-        'Lainnya',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(280, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthPelangganStyle(authInqu, context),
+      label: fncLabelButtonStyle('Lainnya', context),
     );
   }
 }

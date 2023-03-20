@@ -22,6 +22,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "FOTO_AGEN": fotoAgen,
@@ -73,6 +76,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "KDXX_AGEN": fncGetIDAgensi(namaAgen, tanggalLahir),
         "NOXX_IDNT": nik,
@@ -123,6 +129,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "KDXX_MRKT": kodeMarketing,
         "NOXX_REKX": nomorRekening,
@@ -149,6 +158,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "NOXX_IDNT": nik,
         "FOTO_AGEN": fotoAgen,
@@ -202,6 +214,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "KDXX_AGEN": id,
         "NOXX_IDNT": nik,
@@ -247,6 +262,9 @@ class HttpAgency {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "KDXX_AGEN": kodeAgen,
       },

@@ -153,16 +153,8 @@ class _ImportSiskopatuhState extends State<ImportSiskopatuh> {
         }
       },
       icon: const Icon(Icons.keyboard_double_arrow_down),
-      label: const Text(
-        'Export Siskopatuh',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 5,
-      ),
+      style: fncButtonAuthStyle(authExpt, context),
+      label: fncLabelButtonStyle('Export Siskopatuh', context),
     );
   }
 }
