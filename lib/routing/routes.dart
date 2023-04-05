@@ -97,11 +97,32 @@ const fincPembayaranPageRoute = "/finance/pembayaran-jamaah";
 const fincBayarFormPageDisplayName = "Form Bayar";
 const fincBayarFormPageRoute = "/finance/form-bayar";
 
+const fincMasterAccount = "Master Account";
+const fincMasterAccountPageRoute = "/finance/master-account";
+
+const fincKasDanBank = "Pembuatan Kas dan Bank";
+const fincKasDanBankPageRoute = "/finance/pembuatan-kasbank";
+
+const fincCaraBayar = "Pembuatan Cara Bayar";
+const fincCaraBayarPageRoute = "/finance/pembuatan-carabayar";
+
 const fincUjrahPageDisplayName = "Ujrah";
 const fincUjrahPageRoute = "/finance/pembayaran-ujrah";
 
 const fincPenerbanganPageDisplayName = "Penerbangan";
 const fincPenerbanganPageRoute = "/finance/profit-penerbangan";
+
+const fincPembayaranHariPageDisplayName = "Laporan Pembayaran";
+const fincPembayaranHariPageRoute = "/finance/laporan-pembayaran";
+
+const fincKasBankHariPageDisplayName = "Laporan Kas dan Bank";
+const fincKasBankHariPageRoute = "/finance/laporan-kasbank";
+
+const fincKasPendapatan = "Kas Pendapatan";
+const fincKasPendapatanPageRoute = "/finance/kas-pendapatan";
+
+const fincKasPengeluaran = "Kas Pendapatan";
+const fincKasPengeluaranPageRoute = "/finance/kas-pengeluaran";
 // ----------------
 
 // const mrktDealTrackPageDisplayName = "DealTrack";

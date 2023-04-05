@@ -53,6 +53,7 @@ class HttpPendaftaran {
     String estimasi,
     String jatuhTempo,
     String listTagihan,
+    String listBarang,
     String namaKk,
     String namaDok,
   ) async {
@@ -80,6 +81,7 @@ class HttpPendaftaran {
         "NAMA_KKXX": namaKk,
         "NAMA_DOCX": namaDok,
         "TAGIHAN": listTagihan,
+        "BARANG": listBarang,
       },
     );
 

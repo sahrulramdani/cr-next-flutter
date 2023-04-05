@@ -10,6 +10,8 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/models/http_pembayaran.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/modal_bayar_kurang.dart';
+import 'package:flutter_web_course/pages/finance/widgets/pembayaran/save_pembayaran_success.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
@@ -34,9 +36,10 @@ class _PembayaranFormState extends State<PembayaranForm> {
   String nik;
   String namaJadwal;
   String idPendaftaran;
-  String idBank;
-  String namaBank;
-  String metodePembayaran;
+  // String idBank;
+  // String namaBank;
+  String idCaraBayar;
+  String descCaraBayar;
   String keterangan;
   String mutasi;
 
@@ -44,13 +47,15 @@ class _PembayaranFormState extends State<PembayaranForm> {
   String stringTagihan;
   bool cekAll = false;
   bool disabledCekAll = true;
+  bool disabledMutasi = true;
   String uangDiterima;
   String uangKembali;
+  String mataUang;
 
   List<Map<String, dynamic>> listJamaah = [];
   List<Map<String, dynamic>> listJadwal = [];
   List<Map<String, dynamic>> listTagihan = [];
-  List<Map<String, dynamic>> listBank = [];
+  List<Map<String, dynamic>> listCaraBayar = [];
   List<Map<String, dynamic>> listMutasiRek = [];
   List<Map<String, dynamic>> detailTagihan = [];
 
@@ -69,15 +74,15 @@ class _PembayaranFormState extends State<PembayaranForm> {
   }
 
   getBank() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/setup/banks"), headers: {
+    var response = await http
+        .get(Uri.parse("$urlAddress/finance/all-carabayar"), headers: {
       'pte-token': kodeToken,
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
 
     setState(() {
-      listBank = dataStatus;
+      listCaraBayar = dataStatus;
     });
   }
 
@@ -96,19 +101,6 @@ class _PembayaranFormState extends State<PembayaranForm> {
 
     loadEnd();
   }
-
-  // getJadwal(id) async {
-  //   var response = await http.get(
-  //       Uri.parse("$urlAddress/finance/pembayaran/get-jadwal/$id"),
-  //       headers: {
-  //         'pte-token': kodeToken,
-  //       });
-  //   List<Map<String, dynamic>> dataStatus =
-  //       List.from(json.decode(response.body) as List);
-  //   setState(() {
-  //     listJadwal = dataStatus;
-  //   });
-  // }
 
   getTagihan(id) async {
     var response = await http.get(
@@ -182,6 +174,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
                     value['KETERANGAN'];
                 disabledCekAll = false;
                 idPendaftaran = value['KDXX_DFTR'];
+                mataUang = value['MATA_UANG'];
               });
               // getJadwal(value["KDXX_DFTR"]);
               getTagihan(value['KDXX_DFTR']);
@@ -192,6 +185,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
                 namaJadwal = null;
                 disabledCekAll = true;
                 idPendaftaran = null;
+                mataUang = null;
               });
               // getJadwal('cek');
               getTagihan('cek');
@@ -247,77 +241,6 @@ class _PembayaranFormState extends State<PembayaranForm> {
       initialValue: namaJadwal ?? 'Jadwal Jamaah',
     );
   }
-
-  // Widget inputNamaJadwal() {
-  //   NumberFormat myformat = NumberFormat.decimalPattern('en_us');
-
-  //   return Container(
-  //     height: 50,
-  //     decoration: const BoxDecoration(
-  //         border: Border(
-  //             bottom: BorderSide(
-  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-  //     child: DropdownSearch(
-  //         enabled: true,
-  //         mode: Mode.BOTTOM_SHEET,
-  //         label: "Jadwal",
-  //         items: listJadwal,
-  //         onChanged: (value) {
-  //           // if (value != null) {
-  //           //   setState(() {
-  //           //     namaJadwal = value['namaPaket'] +
-  //           //         ' - ' +
-  //           //         value['jenisPaket'] +
-  //           //         ' - ' +
-  //           //         value['KETERANGAN'];
-  //           //     disabledCekAll = false;
-  //           //     idPendaftaran = value['KDXX_DFTR'];
-  //           //   });
-  //           //   getTagihan(value['KDXX_DFTR']);
-  //           // } else {
-  //           //   setState(() {
-  //           //     namaJadwal = null;
-  //           //     disabledCekAll = true;
-  //           //   });
-  //           //   getTagihan('cek');
-  //           //   idPendaftaran = null;
-  //           // }
-  //         },
-  //         showSearchBox: true,
-  //         popupItemBuilder: (context, item, isSelected) => ListTile(
-  //               title: Text(
-  //                 item['namaPaket'] +
-  //                     ' - ' +
-  //                     item['jenisPaket'] +
-  //                     ' - ' +
-  //                     item['KETERANGAN'],
-  //                 style: const TextStyle(fontWeight: FontWeight.bold),
-  //               ),
-  //               subtitle: Text(
-  //                   item['MATA_UANG'] +
-  //                       ' ' +
-  //                       myformat.format(item['TARIF_PKET']) +
-  //                       ' - ' +
-  //                       'Sisa Seat : ' +
-  //                       item['SISA'].toString(),
-  //                   style: const TextStyle(fontWeight: FontWeight.bold)),
-  //               trailing: Text(
-  //                   fncGetTanggal(item['BERANGKAT']) +
-  //                       ' - ' +
-  //                       fncGetTanggal(item['PULANG']),
-  //                   textAlign: TextAlign.center),
-  //             ),
-  //         dropdownBuilder: (context, selectedItem) =>
-  //             Text(namaJadwal ?? "Pilih Jadwal"),
-  //         validator: (value) {
-  //           if (value == null) {
-  //             return "Jadwal Produk masih kosong !";
-  //           }
-  //         },
-  //         dropdownSearchDecoration:
-  //             const InputDecoration(border: InputBorder.none)),
-  //   );
-  // }
 
   Widget inputJumlahTagihan() {
     return TextFormField(
@@ -407,21 +330,24 @@ class _PembayaranFormState extends State<PembayaranForm> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-        label: "Metode Pembayaran",
         mode: Mode.MENU,
-        items: const [
-          "Tunai",
-          "Transfer BSI 0098829912821",
-          "Tranfer BCA 0099839919281",
-          "Tranfer Mandiri Syariah 00298139919281",
-        ],
+        label: "Metode Pembayaran",
+        items: listCaraBayar,
         onChanged: (value) {
-          metodePembayaran = value;
+          setState(() {
+            idCaraBayar = value['KODE_BANK'];
+            descCaraBayar = value['NAMA_BANK'] + " - " + value['ACCT_CODE'];
+            disabledMutasi = value['CHKX_BANK'] == '0' ? true : false;
+          });
         },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_BANK'] ?? '-'),
+        ),
         dropdownBuilder: (context, selectedItem) => Text(
-            metodePembayaran ?? "Pilih Metode Pembayaran",
+            descCaraBayar ?? "Pilih Metode Pembayaran",
             style: TextStyle(
-                color: metodePembayaran == null ? Colors.red : Colors.black)),
+                color: descCaraBayar == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
@@ -432,38 +358,6 @@ class _PembayaranFormState extends State<PembayaranForm> {
       ),
     );
   }
-
-  // Widget inputRekTabungan() {
-  //   return Container(
-  //     height: 50,
-  //     decoration: const BoxDecoration(
-  //         border: Border(
-  //             bottom: BorderSide(
-  //                 style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-  //     child: DropdownSearch(
-  //       label: "Rekening Tabungan",
-  //       mode: Mode.BOTTOM_SHEET,
-  //       items: listBank,
-  //       onChanged: (value) {
-  //         idBank = value['CODD_VALU'];
-  //         namaBank = value['CODD_DESC'];
-  //       },
-  //       showSearchBox: true,
-  //       popupItemBuilder: (context, item, isSelected) => ListTile(
-  //         title: Text(item['CODD_DESC'].toString()),
-  //       ),
-  //       dropdownBuilder: (context, selectedItem) =>
-  //           Text(namaBank ?? "Bank Belum dipilih"),
-  //       dropdownSearchDecoration:
-  //           const InputDecoration(border: InputBorder.none),
-  //       validator: (value) {
-  //         if (value == "Pilih Rekening Tabungan") {
-  //           return "Rekening Tabungan masih kosong !";
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget inputMutasiRekening() {
     return TextFormField(
@@ -674,6 +568,16 @@ class _PembayaranFormState extends State<PembayaranForm> {
   }
 
   fncSaveData() async {
+    detailTagihan = [];
+
+    if (uangDiterima == null) {
+      return showDialog(
+          context: context,
+          builder: (context) => const ModalInfo(
+                deskripsi: "Kamu Lupa Menekan Enter Pada Uang Diterima!",
+              ));
+    }
+
     if (int.parse(uangDiterima.replaceAll(',', '')) <
         int.parse(stringTotal.replaceAll(',', ''))) {
       return showDialog(
@@ -720,8 +624,7 @@ class _PembayaranFormState extends State<PembayaranForm> {
       noFaktur,
       idPendaftaran,
       stringTotal.replaceAll(',', ''),
-      metodePembayaran,
-      idBank ?? '',
+      idCaraBayar,
       mutasi ?? '',
       keterangan ?? '',
       uangDiterima.replaceAll(',', ''),
@@ -732,7 +635,15 @@ class _PembayaranFormState extends State<PembayaranForm> {
         navigationController.navigateTo('/finance/form-bayar');
 
         showDialog(
-            context: context, builder: (context) => const ModalSaveSuccess());
+            context: context,
+            builder: (context) => ModalSavePembayaranSuccess(
+                  noKwitansi: noFaktur,
+                  noPelanggan: idPendaftaran,
+                  namaPelanggan: namaPelanggan,
+                  jumlahBayar: stringTotal.replaceAll(",", ""),
+                  mataUang: mataUang,
+                  detailPembayaran: detailTagihan,
+                ));
       } else {
         showDialog(
             context: context, builder: (context) => const ModalSaveFail());
@@ -976,18 +887,23 @@ class _PembayaranFormState extends State<PembayaranForm> {
                                           width: 140,
                                           child: ElevatedButton.icon(
                                             onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      mutasiRekeningModal(
-                                                          context));
+                                              disabledMutasi == true
+                                                  ? ''
+                                                  : showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          mutasiRekeningModal(
+                                                              context));
                                             },
                                             icon: const Icon(
                                                 Icons.shopping_basket_outlined),
                                             label: fncLabelButtonStyle(
                                                 'Cek Mutasi', context),
-                                            style:
-                                                fncButtonRegulerStyle(context),
+                                            style: fncButtonAuthStyle(
+                                                disabledMutasi == true
+                                                    ? '0'
+                                                    : '1',
+                                                context),
                                           )),
                                     ],
                                   ),

@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/pages/authentication/authentication.dart';
 import 'package:flutter_web_course/pages/clients/clients.dart';
 import 'package:flutter_web_course/pages/finance/finance_dash.dart';
+import 'package:flutter_web_course/pages/finance/finance_kas_pendapatan.dart';
+import 'package:flutter_web_course/pages/finance/finance_kas_pengeluaran.dart';
+import 'package:flutter_web_course/pages/finance/finance_kasbank_harian.dart';
+import 'package:flutter_web_course/pages/finance/finance_master_account.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembayaran.dart';
+import 'package:flutter_web_course/pages/finance/finance_pembayaran_harian.dart';
+import 'package:flutter_web_course/pages/finance/finance_pembuatan_bayar.dart';
+import 'package:flutter_web_course/pages/finance/finance_pembuatan_kas.dart';
 import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
 import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_page.dart';
@@ -102,6 +109,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const FinanceUjrahPage());
     case fincPenerbanganPageRoute:
       return _getPageRoute(const FinancePenerbanganPage());
+    case fincPembayaranHariPageRoute:
+      return _getPageRoute(const FinancePembayaranHarian());
+    case fincKasPendapatanPageRoute:
+      return _getPageRoute(const KasPendapatan());
+    case fincKasPengeluaranPageRoute:
+      return _getPageRoute(const KasPengeluaran());
+    case fincMasterAccountPageRoute:
+      return _getPageRoute(const FinanceMasterAccount());
+    case fincKasDanBankPageRoute:
+      return _getPageRoute(const FinanceKasDanBankPage());
+    case fincCaraBayarPageRoute:
+      return _getPageRoute(const FinanceCaraBayar());
+    case fincKasBankHariPageRoute:
+      return _getPageRoute(const FinanceKasBankHarian());
     case hrPageRoute:
       return _getPageRoute(const HumanResourceDashPage());
     case hrKaryawanPageRoute:

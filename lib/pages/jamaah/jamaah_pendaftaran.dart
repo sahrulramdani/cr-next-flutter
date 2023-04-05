@@ -91,6 +91,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   List<Map<String, dynamic>> listBiayaVaksin = [];
   List<Map<String, dynamic>> listBiayaKamar = [];
   List<Map<String, dynamic>> listBarangHandling = [];
+  List<Map<String, dynamic>> listBarangPelanggan = [];
 
   void getAuth() async {
     loadStart();
@@ -1067,9 +1068,12 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     dynamic body1 = json.decode(response1.body);
     String idPelanggan = body1['idPelanggan'];
 
+    listTagihan = [];
+    listBarangPelanggan = [];
+
     var tagihan = {
       {
-        '"nama_tagihan"': '"Paket Umroh"',
+        '"nama_tagihan"': '"Biaya Paket"',
         '"total_tagihan"': '"${tarif.replaceAll(',', '')}"',
       },
       if (biayaVaksin != '0')
@@ -1100,6 +1104,26 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     };
     listTagihan.addAll(tagihan);
 
+    for (var i = 0; i < listBarangHandling.length; i++) {
+      if (listBarangHandling[i]['JMLH'] != '0') {
+        var barang = {
+          '"KDXX_BRGX"': '"${listBarangHandling[i]['KDXX_BRGX'].toString()}"',
+          '"NAMA_BRGX"': '"${listBarangHandling[i]['NAMA_BRGX'].toString()}"',
+          '"JENS_BRGX"': '"${listBarangHandling[i]['JENS_BRGX'].toString()}"',
+          '"STOK_BRGX"': '"${listBarangHandling[i]['STOK_BRGX'].toString()}"',
+          '"HRGX_BELI"': '"${listBarangHandling[i]['HRGX_BELI'].toString()}"',
+          '"HRGX_JUAL"': '"${listBarangHandling[i]['HRGX_JUAL'].toString()}"',
+          '"KETERANGAN"': '"${listBarangHandling[i]['KETERANGAN'].toString()}"',
+          '"JMLH"': '"${listBarangHandling[i]['JMLH'].toString()}"',
+          '"SUBTOTAL"': '"${listBarangHandling[i]['SUBTOTAL'].toString()}"',
+        };
+        listBarangPelanggan.add(barang);
+      }
+    }
+
+    print(listBarangPelanggan.length);
+    print(listBarangPelanggan);
+
     HttpPendaftaran.savePendaftaran(
       idPelanggan,
       idKantor,
@@ -1116,6 +1140,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       totalEst,
       fncJatuhTempo(tglBerangkat).toString(),
       '$listTagihan',
+      '$listBarangPelanggan',
       namaKk,
       namaDok,
     ).then((value) {

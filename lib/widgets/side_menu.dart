@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/log_out_modal.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/routing/routes.dart';
@@ -79,8 +80,11 @@ class _SideMenuState extends State<SideMenu> {
                       itemName: item["MENU_NAME"],
                       onTap: () {
                         if (item['PATH'].toString() == "/auth") {
-                          menuController.changeActiveitemTo(overview);
-                          Get.offAllNamed(item['PATH'].toString());
+                          // menuController.changeActiveitemTo(overview);
+                          // Get.offAllNamed(item['PATH'].toString());
+                          showDialog(
+                              context: context,
+                              builder: (context) => const LogoutModal());
                         }
                         if (item['MENU_NAME'].toString() == "Log Out") {
                           menuController.changeActiveitemTo(overview);

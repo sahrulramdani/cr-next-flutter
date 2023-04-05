@@ -54,6 +54,7 @@ dependencies:
   url_strategy: ^0.2.0
   flutter_image: ^4.1.5
   flutter_easyloading: ^3.0.5
+  animated_tree_view: ^1.0.0
   # image_picker_web: ^1.0.9
 
 dev_dependencies:
@@ -104,6 +105,7 @@ flutter:
     - assets/images/nametag_koper_background.png
     - assets/images/ktp_pict.jpg
     - assets/images/kartu_keluarga.png
+    - assets/images/head-kwitansi.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
@@ -123,6 +125,8 @@ flutter:
       fonts:
         - asset: assets/fonts/Gilroy-Light.otf
         - asset: assets/fonts/Gilroy-ExtraBold.otf
+        - asset: assets/fonts/Gilroy-Medium.otf
+        - asset: assets/fonts/Gilroy-Reguler.otf
     - family: Montserrat
       fonts:
         - asset: assets/fonts/open-sans.ttf

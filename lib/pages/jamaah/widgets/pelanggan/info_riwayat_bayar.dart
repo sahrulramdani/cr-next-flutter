@@ -51,21 +51,21 @@ class _InfoRiwayatBayarState extends State<InfoRiwayatBayar> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.print_outlined),
-              label: const Text(
-                'Print Nota',
-                style: TextStyle(fontFamily: 'Gilroy'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: myBlue,
-                minimumSize: const Size(280, 40),
-                shadowColor: Colors.grey,
-                elevation: 5,
-              ),
-            ),
-            const SizedBox(height: 20),
+            // ElevatedButton.icon(
+            //   onPressed: () {},
+            //   icon: const Icon(Icons.print_outlined),
+            //   label: const Text(
+            //     'Print Nota',
+            //     style: TextStyle(fontFamily: 'Gilroy'),
+            //   ),
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: myBlue,
+            //     minimumSize: const Size(280, 40),
+            //     shadowColor: Colors.grey,
+            //     elevation: 5,
+            //   ),
+            // ),
+            // const SizedBox(height: 20),
             DataTable(
               border: TableBorder.all(color: Colors.grey),
               columns: [
@@ -113,7 +113,7 @@ class _InfoRiwayatBayarState extends State<InfoRiwayatBayar> {
               rows: detailPembayaran.map((e) {
                 return DataRow(
                     onLongPress: () {
-                      print(e['NOXX_BYAR']);
+                      // print(e['NOXX_BYAR']);
                     },
                     cells: [
                       DataCell(Text((x++).toString())),
@@ -123,7 +123,7 @@ class _InfoRiwayatBayarState extends State<InfoRiwayatBayar> {
                       DataCell(Text(myFormat.format(e['DIBAYARKAN']))),
                       DataCell(Text(e['JENIS'])),
                       DataCell(Text(e['STS_PEMBAYARAN'])),
-                      DataCell(Text(e['CARA_BYAR'])),
+                      DataCell(Text(e['NAMA_BANK'])),
                       const DataCell(Text('PUSAT')),
                       DataCell(Text(e['KETERANGAN'])),
                     ]);
