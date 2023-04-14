@@ -80,12 +80,12 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   List<Map<String, dynamic>> listPaket = [];
   List<Map<String, dynamic>> listMataUang = [];
   List<Map<String, dynamic>> listTransit = [];
-  List<Map<String, dynamic>> listBandara = dummyDataBandara;
+  List<Map<String, dynamic>> listBandara = [];
   List<Map<String, dynamic>> listMaskapai = [];
   List<Map<String, dynamic>> listHotelMekkah = [];
   List<Map<String, dynamic>> listHotelMadinah = [];
   List<Map<String, dynamic>> listHotelPlus = [];
-  List<Map<String, dynamic>> listHotelTransit = [];
+  List<Map<String, dynamic>> listHotelTambahan = [];
   List<Map<String, dynamic>> listTujuan = [];
 
   void getDetail() async {
@@ -129,9 +129,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       idHotelMad = data[0]['HOTL_MADX'];
       namaHotelMad = data[0]['HOTEL_MADINAH'];
       idHotelJed = data[0]['HOTL_JEDX'];
-      namaHotelJed = data[0]['HOTEL_JEDDAH'];
+      namaHotelJed = data[0]['HOTEL_PLUS'];
       idHotelTra = data[0]['HOTL_TRAX'];
-      namaHotelTra = data[0]['HOTEL_TRANSIT'];
+      namaHotelTra = data[0]['HOTEL_TAMBAH'];
       tujuan = data[0]['TJAN_PKET'];
       namaTujuan = data[0]['NAMA_TUJUAN'];
       if (data[0]['JENS_PKET'] == '02' || data[0]['JENS_PKET'] == '04') {
@@ -191,81 +191,34 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         List.from(json.decode(response.body) as List);
     setState(() {
       listTransit = data;
-    });
-  }
-
-  void getMaskapai() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"), headers: {
-      'pte-token': kodeToken,
-    });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listMaskapai = data;
-    });
-  }
-
-  void getHotelMekkah() async {
-    var response = await http.get(
-        Uri.parse("$urlAddress/marketing/jadwal/getHotelMekkah"),
-        headers: {
-          'pte-token': kodeToken,
-        });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listHotelMekkah = data;
-    });
-  }
-
-  void getHotelMadinah() async {
-    var response = await http.get(
-        Uri.parse("$urlAddress/marketing/jadwal/getHotelMadinah"),
-        headers: {
-          'pte-token': kodeToken,
-        });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listHotelMadinah = data;
-    });
-  }
-
-  void getHotelPlus() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotelPlus"), headers: {
-      'pte-token': kodeToken,
-    });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listHotelPlus = data;
-    });
-  }
-
-  void getHotelTransit() async {
-    var response = await http.get(
-        Uri.parse("$urlAddress/marketing/jadwal/getHotelTransit"),
-        headers: {
-          'pte-token': kodeToken,
-        });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listHotelTransit = data;
-    });
-  }
-
-  void getTujuan() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/setup/plus-tujuan"), headers: {
-      'pte-token': kodeToken,
-    });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-    setState(() {
       listTujuan = data;
+    });
+  }
+
+  void getHotel() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listHotelMekkah = data
+          .where(((element) =>
+              element['LOKX_HTLX'].toString().toUpperCase().contains('MEKKAH')))
+          .toList();
+      listHotelMadinah = data
+          .where(((element) => element['LOKX_HTLX']
+              .toString()
+              .toUpperCase()
+              .contains('MADINAH')))
+          .toList();
+      listHotelPlus = data
+          .where(((element) =>
+              element['KTGR_HTLX'].toString() == '02' ||
+              element['KTGR_HTLX'].toString() == '03'))
+          .toList();
+      listHotelTambahan = data;
     });
   }
 
@@ -277,12 +230,6 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     getPaket();
     getMataUang();
     getTransit();
-    getMaskapai();
-    getHotelMekkah();
-    getHotelMadinah();
-    getHotelPlus();
-    getHotelTransit();
-    getTujuan();
   }
 
   Widget inputIDPaket() {
@@ -318,8 +265,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaPaket ?? "Pilih Paket"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaPaket ?? "Pilih Paket",
+            style: TextStyle(
+                color: namaPaket == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, fillColor: Colors.white, filled: true),
         validator: (value) {
@@ -360,8 +309,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaJenis ?? "Pilih Jenis Paket"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaJenis ?? "Pilih Jenis Paket",
+            style: TextStyle(
+                color: namaJenis == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, fillColor: Colors.white, filled: true),
         validator: (value) {
@@ -456,11 +407,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                 title:
                     Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
               ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaHotelJed ?? "Hotel belum Dipilih",
-                style: TextStyle(
-                    color: namaHotelJed == null ? Colors.red : Colors.black),
-              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(namaHotelJed ?? "Hotel belum Dipilih"),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
     );
@@ -476,7 +424,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       child: DropdownSearch(
           mode: Mode.BOTTOM_SHEET,
           label: "Hotel Tambahan",
-          items: listHotelTransit,
+          items: listHotelTambahan,
           onChanged: (value) {
             // print(value['iata_code']);
             idHotelTra = value['IDXX_HTLX'];
@@ -508,15 +456,17 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Tujuan",
           items: listTujuan,
           onChanged: (value) {
-            tujuan = value['KDXX_VALU'];
-            namaTujuan = value['KDXX_DESC'];
+            tujuan = value['IDXX_RTRS'];
+            namaTujuan = value['NAMA_NEGR'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(item['KDXX_DESC']),
+                title: Text(item['NAMA_NEGR']),
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaTujuan ?? 'Tujuan Hanya Untuk Jenis Plus',
+                style: TextStyle(
+                    color: tujuan == null ? Colors.red : Colors.black),
               ),
           dropdownSearchDecoration:
               const InputDecoration(border: InputBorder.none)),
@@ -527,7 +477,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     return TextField(
       controller: dateBerangkat,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Berangkat',
+          label: Text("Tanggal Berangkat", style: TextStyle(color: Colors.red)),
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white,
@@ -551,7 +501,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     return TextField(
       controller: datePulang,
       decoration: const InputDecoration(
-          labelText: 'Tanggal Pulang',
+          label: Text("Tanggal Pulang", style: TextStyle(color: Colors.red)),
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white,
@@ -588,7 +538,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Jumlah Hari',
+          label: Text("Jumlah Hari", style: TextStyle(color: Colors.red)),
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
@@ -625,6 +575,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaPesawatBerangkat ?? "Maskapai belum Dipilih",
+                style: TextStyle(
+                    color: namaPesawatBerangkat == null
+                        ? Colors.red
+                        : Colors.black),
               ),
           validator: (value) {
             if (value == null) {
@@ -658,6 +612,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               ),
           dropdownBuilder: (context, selectedItem) => Text(
                 namaPesawatPulang ?? "Maskapai belum Dipilih",
+                style: TextStyle(
+                    color:
+                        namaPesawatPulang == null ? Colors.red : Colors.black),
               ),
           validator: (value) {
             if (value == null) {
@@ -681,16 +638,19 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Awal Berangkat",
           items: listBandara,
           onChanged: (value) {
-            // print(value['iata_code']);
-            rute = value['iata_code'];
+            rute = value['KDXX_BAND'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['iata_code']} - ${item['municipality']}"),
-                trailing: Text(item['name']),
+                title:
+                    Text("${item['KDXX_BAND']} - ${item['PROVINSI'] ?? '|'}"),
+                trailing: Text(item['NAMA_BAND']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(rute ?? "Rute Awal Berangkat belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+                rute ?? "Rute Awal Berangkat belum Dipilih",
+                style:
+                    TextStyle(color: rute == null ? Colors.red : Colors.black),
+              ),
           validator: (value) {
             if (value == null) {
               return "Rute Awal Berangkat masih kosong !";
@@ -713,7 +673,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Transit Berangkat",
           items: listTransit,
           onChanged: (value) {
-            rute2 = value['IDXX_RTS'];
+            rute2 = value['IDXX_RTRS'];
             namaTransit = value['NAMA_NEGR'];
           },
           showSearchBox: true,
@@ -744,16 +704,18 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Akhir Berangkat",
           items: listBandara,
           onChanged: (value) {
-            // print(value['iata_code']);
-            rute3 = value['iata_code'];
+            rute3 = value['KDXX_BAND'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['iata_code']} - ${item['municipality']}"),
-                trailing: Text(item['name']),
+                title:
+                    Text("${item['KDXX_BAND']} - ${item['PROVINSI'] ?? '|'}"),
+                trailing: Text(item['NAMA_BAND']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(rute3 ?? "Rute Akhir Berangkat belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              rute3 ?? "Rute Akhir Berangkat belum Dipilih",
+              style:
+                  TextStyle(color: rute3 == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == null) {
               return "Rute Akhir Berangkat masih kosong !";
@@ -776,16 +738,18 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Awal Pulang",
           items: listBandara,
           onChanged: (value) {
-            // print(value['iata_code']);
-            ruteAwalPlng = value['iata_code'];
+            ruteAwalPlng = value['KDXX_BAND'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['iata_code']} - ${item['municipality']}"),
-                trailing: Text(item['name']),
+                title:
+                    Text("${item['KDXX_BAND']} - ${item['PROVINSI'] ?? '|'}"),
+                trailing: Text(item['NAMA_BAND']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(ruteAwalPlng ?? "Rute Awal Pulang belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              ruteAwalPlng ?? "Rute Awal Pulang belum Dipilih",
+              style: TextStyle(
+                  color: ruteAwalPlng == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == null) {
               return "Rute Awal Pulang masih kosong !";
@@ -808,7 +772,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Transit Pulang",
           items: listTransit,
           onChanged: (value) {
-            ruteTransitPlng = value['IDXX_RTS'];
+            ruteTransitPlng = value['IDXX_RTRS'];
             namaRuteTransitPlng = value['NAMA_NEGR'];
           },
           showSearchBox: true,
@@ -835,16 +799,18 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
           label: "Rute Akhir Pulang",
           items: listBandara,
           onChanged: (value) {
-            // print(value['iata_code']);
-            ruteAkhirPlng = value['iata_code'];
+            ruteAkhirPlng = value['KDXX_BAND'];
           },
           showSearchBox: true,
           popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['iata_code']} - ${item['municipality']}"),
-                trailing: Text(item['name']),
+                title:
+                    Text("${item['KDXX_BAND']} - ${item['PROVINSI'] ?? '|'}"),
+                trailing: Text(item['NAMA_BAND']),
               ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(ruteAkhirPlng ?? "Rute Akhir Pulang belum Dipilih"),
+          dropdownBuilder: (context, selectedItem) => Text(
+              ruteAkhirPlng ?? "Rute Akhir Pulang belum Dipilih",
+              style: TextStyle(
+                  color: ruteAkhirPlng == null ? Colors.red : Colors.black)),
           validator: (value) {
             if (value == null) {
               return "Rute Akhir Pulang masih kosong !";
@@ -863,7 +829,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       inputFormatters: [ThousandsFormatter()],
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Tarif',
+          label: Text("Tarif", style: TextStyle(color: Colors.red)),
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
@@ -884,7 +850,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       keyboardType: TextInputType.number,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Jumlah Seat',
+          label: Text("Jumlah Seat", style: TextStyle(color: Colors.red)),
           filled: true,
           fillColor: Colors.white,
           hoverColor: Colors.white),
@@ -917,8 +883,10 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(mataUang ?? "Pilih Mata Uang"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            mataUang ?? "Pilih Mata Uang",
+            style:
+                TextStyle(color: mataUang == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
         validator: (value) {
@@ -954,7 +922,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     // print("HOTEL MAD : $idHotelMad");
     // print("HOTEL JED : $idHotelJed");
     // print("HOTEL TRA : $idHotelTra");
-    // print("KOTA TRANSIT : $idTransit");
+    // // print("KOTA TRANSIT : $idTransit");
     // print("JUMLAH HARI : $jumlahHari");
     // print("PESAWAT BRGKT : $pesawatBerangkat");
     // print("PESAWAT PLANG : $pesawatPulang");

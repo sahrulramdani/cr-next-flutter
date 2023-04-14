@@ -34,6 +34,8 @@ class ModalCdHotel extends StatefulWidget {
 class _ModalCdHotelState extends State<ModalCdHotel> {
   String idHotel;
   String namaHotel;
+  String lokasi;
+  String alamat;
   String bintang;
   String idBintang;
   String idKategori;
@@ -42,26 +44,34 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
   List<Map<String, dynamic>> listBintgHtl = [];
   List<Map<String, dynamic>> listKategori = [];
 
-  void getDetailSatuan() async {
+  void getDetailHotel() async {
     var id = widget.idHotel;
-    var response = await http
-        .get(Uri.parse("$urlAddress/marketing/hotel/getDetailHotel/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/hotel/getDetailHotel/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
     setState(() {
       idHotel = data[0]['IDXX_HTLX'];
       namaHotel = data[0]['NAMA_HTLX'];
+      lokasi = data[0]['LOKX_HTLX'];
+      alamat = data[0]['ALMT_HTLX'];
+      namaHotel = data[0]['NAMA_HTLX'];
       bintang = data[0]['CODD_DESC'].toString();
       idBintang = data[0]['BINTG_HTLX'].toString();
       idKategori = data[0]['KTGR_HTLX'].toString();
-      namaKategori = data[0]['namaKota'].toString();
+      namaKategori = data[0]['NAMA_KTGR'].toString();
     });
   }
 
   void getBintangHtl() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/hotel/getBintangHtl"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/hotel/getBintangHtl"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -71,8 +81,10 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
   }
 
   void getKategori() async {
-    var response =
-        await http.get(Uri.parse('$urlAddress/marketing/hotel/getKategori'));
+    var response = await http
+        .get(Uri.parse('$urlAddress/marketing/hotel/getKategori'), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -85,14 +97,14 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
   void initState() {
     super.initState();
     if (widget.tambah != true) {
-      getDetailSatuan();
+      getDetailHotel();
     }
 
     getBintangHtl();
     getKategori();
   }
 
-  Widget inputSatuan() {
+  Widget inputNamaHotel() {
     return TextFormField(
       initialValue: namaHotel ?? "",
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
@@ -100,7 +112,50 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
         namaHotel = value;
       }),
       decoration: const InputDecoration(
-        labelText: 'Hotel',
+        label: Text('Nama Hotel', style: TextStyle(color: Colors.red)),
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Hotel masih kosong !";
+        }
+      },
+    );
+  }
+
+  Widget inputLokasi() {
+    return TextFormField(
+      initialValue: lokasi ?? "",
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      onChanged: ((value) {
+        lokasi = value;
+      }),
+      decoration: const InputDecoration(
+        hintText: 'Mekkah / Madinah / Jeddah',
+        label: Text('Lokasi Hotel', style: TextStyle(color: Colors.red)),
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Lokasi masih kosong !";
+        }
+      },
+    );
+  }
+
+  Widget inputAlamat() {
+    return TextFormField(
+      initialValue: alamat ?? "",
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      onChanged: ((value) {
+        alamat = value;
+      }),
+      decoration: const InputDecoration(
+        labelText: 'Alamat Hotel',
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
@@ -126,8 +181,10 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(bintang ?? "Pilih Bintang"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            bintang ?? "Pilih Bintang",
+            style:
+                TextStyle(color: bintang == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, fillColor: Colors.white, filled: true),
         validator: (value) {
@@ -157,8 +214,10 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['CODD_DESC'].toString()),
         ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(namaKategori ?? "Pilih Kategori"),
+        dropdownBuilder: (context, selectedItem) => Text(
+            namaKategori ?? "Pilih Kategori",
+            style: TextStyle(
+                color: namaKategori == null ? Colors.red : Colors.black)),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, fillColor: Colors.white, filled: true),
         validator: (value) {
@@ -170,14 +229,18 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
     );
   }
 
-  fncSaveData() {
-    // print("NAMA HOTEL : $namaHotel");
-    // print("BINTANG : $idBintang");
-    // print("KATEGORI : ${idKategori}");
-
+  fncSaveData(context) {
     if (widget.tambah == true) {
-      HttpHotel.saveHotel(namaHotel, idBintang, idKategori).then((value) {
+      HttpHotel.saveHotel(
+        namaHotel,
+        idBintang,
+        lokasi,
+        alamat ?? '',
+        idKategori,
+      ).then((value) {
         if (value.status == true) {
+          Navigator.pop(context);
+
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
 
@@ -189,8 +252,14 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
         }
       });
     } else {
-      HttpHotel.updateHotel(idHotel, namaHotel, idBintang, idKategori)
-          .then((value) {
+      HttpHotel.updateHotel(
+        idHotel,
+        namaHotel,
+        idBintang,
+        lokasi,
+        alamat ?? '',
+        idKategori,
+      ).then((value) {
         if (value.status == true) {
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
@@ -218,7 +287,7 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.5,
-            height: 300,
+            height: 460,
             child: Column(
               children: [
                 SizedBox(
@@ -247,14 +316,14 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Column(
                     children: [
-                      inputSatuan(),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      inputNamaHotel(),
+                      const SizedBox(height: 8),
                       inputBintangHotel(),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
+                      inputLokasi(),
+                      const SizedBox(height: 8),
+                      inputAlamat(),
+                      const SizedBox(height: 8),
                       inputKategori(),
                     ],
                   ),
@@ -267,7 +336,11 @@ class _ModalCdHotelState extends State<ModalCdHotel> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          if (formKey.currentState.validate()) {
+                            fncSaveData(context);
+                          } else {
+                            return null;
+                          }
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

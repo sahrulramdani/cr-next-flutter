@@ -76,21 +76,16 @@ class MyData extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listHotel[index]['IDXX_HTLX'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Text(listHotel[index]['NAMA_HTLX'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Text(listHotel[index]['CODD_DESC'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
+      DataCell(Text(listHotel[index]['LOKX_HTLX'].toString(),
+          style: styleRowReguler)),
+      DataCell(Text(listHotel[index]['ALMT_HTLX'].toString(),
+          style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -142,44 +137,16 @@ class _TableHotelState extends State<TableHotel> {
         child: PaginatedDataTable(
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('ID',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Bintang',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('Nama', style: styleColumn)),
+            DataColumn(label: Text('Bintang', style: styleColumn)),
+            DataColumn(label: Text('Lokasi', style: styleColumn)),
+            DataColumn(label: Text('Alamat', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     ))),
           ],
         ),

@@ -74,29 +74,21 @@ class MyData extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-
     return DataRow(cells: [
-      DataCell(Text((index + 1).toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
-      DataCell(Text(listTransit[index]['IDXX_RTS'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+      DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Text(listTransit[index]['NAMA_NEGR'].toString(),
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[800]))),
+          style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 5),
             ButtonEdit(
-              idTransit: listTransit[index]['IDXX_RTS'].toString(),
+              idTransit: listTransit[index]['IDXX_RTRS'].toString(),
             ),
             const SizedBox(width: 5),
             ButtonHapus(
-              idTransit: listTransit[index]['IDXX_RTS'].toString(),
+              idTransit: listTransit[index]['IDXX_RTRS'].toString(),
             ),
           ],
         ),
@@ -138,37 +130,13 @@ class _TableMasterTransitState extends State<TableMasterTransit> {
         child: PaginatedDataTable(
           source: myTable,
           columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('ID',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Nama',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
+            DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('Nama', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gilroy',
-                              fontSize: 16)),
+                      child: Text('Aksi', style: styleColumn),
                     ))),
           ],
         ),

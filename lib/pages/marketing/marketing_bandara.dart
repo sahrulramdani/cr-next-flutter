@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/bandara/modal_cd_bandara.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/bandara/table_bandara.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_cd_hotel.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/hotel/table_hotel.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/maskapai/modal_cd_maskapai.dart';
 import 'widgets/maskapai/table_maskapai.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -14,17 +18,19 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'widgets/transit/modal_cd_transit.dart';
 import 'package:http/http.dart' as http;
 
-class MarketingMaskapai extends StatefulWidget {
-  const MarketingMaskapai({Key key}) : super(key: key);
+class MarketingBandaraPage extends StatefulWidget {
+  const MarketingBandaraPage({Key key}) : super(key: key);
 
   @override
-  State<MarketingMaskapai> createState() => _MarketingMaskapaiState();
+  State<MarketingBandaraPage> createState() => _MarketingBandaraPageState();
 }
 
-class _MarketingMaskapaiState extends State<MarketingMaskapai> {
-  List<Map<String, dynamic>> listMaskapai = [];
+class _MarketingBandaraPageState extends State<MarketingBandaraPage> {
+  List<Map<String, dynamic>> listBandara = [];
 
   void getAuth() async {
+    loadStart();
+
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -44,15 +50,17 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
 
   void getData() async {
     var response = await http
-        .get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"), headers: {
+        .get(Uri.parse("$urlAddress/marketing/bandara/get-all"), headers: {
       'pte-token': kodeToken,
     });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
     setState(() {
-      listMaskapai = data;
+      listBandara = data;
     });
+
+    loadEnd();
   }
 
   @override
@@ -64,7 +72,7 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
 
   bool enableFormL = false;
   Widget cmdTambah(context) {
-    var idMaskapai = '';
+    var idBandara = '';
     var tambah = true;
     return ElevatedButton.icon(
       onPressed: () async {
@@ -72,7 +80,7 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
             ? showDialog(
                 context: context,
                 builder: (context) =>
-                    ModalCdMaskapai(idMaskapai: idMaskapai, tambah: tambah))
+                    ModalCdBandara(idBandara: idBandara, tambah: tambah))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -93,6 +101,63 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
     );
   }
 
+  // Widget cmdPrint() {
+  //   return ElevatedButton.icon(
+  //     onPressed: () {
+  //       // print(listAgency);
+  //     },
+  //     icon: const Icon(Icons.print_outlined),
+  //     label: const Text(
+  //       'Print',
+  //       style: TextStyle(fontFamily: 'Gilroy'),
+  //     ),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: myBlue,
+  //       minimumSize: const Size(100, 40),
+  //       shadowColor: Colors.grey,
+  //       elevation: 5,
+  //     ),
+  //   );
+  // }
+
+  // Widget cmdExport() {
+  //   return ElevatedButton.icon(
+  //     onPressed: () {},
+  //     icon: const Icon(Icons.download_outlined),
+  //     label: const Text(
+  //       'Export',
+  //       style: TextStyle(fontFamily: 'Gilroy'),
+  //     ),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: myBlue,
+  //       minimumSize: const Size(100, 40),
+  //       shadowColor: Colors.grey,
+  //       elevation: 5,
+  //     ),
+  //   );
+  // }
+
+  // Widget cmdBatal() {
+  //   return ElevatedButton.icon(
+  //     onPressed: () {
+  //       setState(() {
+  //         enableFormL = !enableFormL;
+  //       });
+  //     },
+  //     icon: const Icon(Icons.cancel),
+  //     label: const Text(
+  //       'Batal',
+  //       style: TextStyle(fontFamily: 'Gilroy'),
+  //     ),
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: myBlue,
+  //       minimumSize: const Size(100, 40),
+  //       shadowColor: Colors.grey,
+  //       elevation: 5,
+  //     ),
+  //   );
+  // }
+
   Widget spacePemisah() {
     return const SizedBox(
       height: 10,
@@ -112,8 +177,33 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     cmdTambah(context),
+                    //---------------------------------
+                    // spacePemisah(),
+                    // //---------------------------------
+                    // cmdPrint(),
+                    // //---------------------------------
+                    // spacePemisah(),
+                    // //---------------------------------
+                    // cmdExport(),
+                    // //---------------------------------
+                    // spacePemisah(),
                   ],
                 )),
+
+            //---------------------------------
+            // Visibility(
+            //   visible: enableFormL,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       // cmdSimpan(),
+            //       //---------------------------------
+            //       // spacePemisah(),
+            //       //---------------------------------
+            //       cmdBatal()
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       );
@@ -193,7 +283,7 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Seluruh Maskapai',
+                                'Seluruh Bandara',
                                 style: TextStyle(
                                     fontFamily: 'Gilroy',
                                     fontWeight: FontWeight.bold,
@@ -218,15 +308,15 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
                                   style: const TextStyle(
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Maskapai'),
+                                      hintText: 'Cari Nama Bandara'),
                                   onChanged: (value) {
                                     if (value == '') {
                                       getData();
                                     } else {
                                       setState(() {
-                                        listMaskapai = listMaskapai
+                                        listBandara = listBandara
                                             .where(((element) =>
-                                                element['NAMA_PSWT']
+                                                element['NAMA_BAND']
                                                     .toString()
                                                     .toUpperCase()
                                                     .contains(
@@ -242,7 +332,7 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
                         ),
                       ],
                     ),
-                    TableMasterMaskapai(listMaskapai: listMaskapai)
+                    TableBandara(listBandara: listBandara),
                   ],
                 ),
               ))

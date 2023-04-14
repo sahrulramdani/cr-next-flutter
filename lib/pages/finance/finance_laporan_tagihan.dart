@@ -1,9 +1,9 @@
 // ignore_for_file: missing_return, deprecated_member_use
 
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/finance/widgets/lapor-bayar/table_laporan_pembayaran.dart';
+import 'package:flutter_web_course/pages/finance/widgets/lapor-tagihan/table_laporan_tagihan.dart';
 import 'package:flutter_web_course/pages/finance/widgets/penerbangan.dart/penerbangan_table.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/kirim/table_kirim_barang.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -16,118 +16,36 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-class FinancePembayaranHarian extends StatefulWidget {
-  const FinancePembayaranHarian({Key key}) : super(key: key);
+class FinanceLaporanTagihan extends StatefulWidget {
+  const FinanceLaporanTagihan({Key key}) : super(key: key);
 
   @override
-  State<FinancePembayaranHarian> createState() =>
-      _FinancePembayaranHarianState();
+  State<FinanceLaporanTagihan> createState() => _FinanceLaporanTagihanState();
 }
 
-class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
-  String kodeBayar = 'XX';
-  String caraBayar = 'Semua';
+class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
   String jenisTagihan = 'Semua';
-  String totalPembayaran = '0';
+  String totalTagihan = '0';
+  String sisaTagihan = '0';
   String pelanggan = 'ALL';
   String noPelanggan;
   String namaPelanggan;
-
+  String kodeBerangkat = 'ALL';
+  String statusBerangkat = 'Semua';
   TextEditingController dateAwal = TextEditingController();
   TextEditingController dateAkhir = TextEditingController();
 
-  List<Map<String, dynamic>> listDataPembayaran = [];
+  List<Map<String, dynamic>> listDataTagihan = [];
   List<Map<String, dynamic>> listPelanggan = [];
-  List<Map<String, dynamic>> listJenis = [];
-  List<Map<String, dynamic>> listCaraBayar = [];
 
   void getHariIni() async {
+    loadStart();
+
     setState(() {
       dateAwal.text =
           DateFormat('dd-MM-yyyy').format(DateTime.now()).toString();
       dateAkhir.text =
           DateFormat('dd-MM-yyyy').format(DateTime.now()).toString();
-    });
-  }
-
-  void getDataPembayaran() async {
-    var tglAwal = fncTanggal(dateAwal.text);
-    var tglAkhir = fncTanggal(dateAkhir.text);
-
-    var response = await http.get(
-        Uri.parse(
-            "$urlAddress/finance/pembayaran/get-laporan/$tglAwal/$tglAkhir/$jenisTagihan/$pelanggan/$kodeBayar"),
-        headers: {
-          'pte-token': kodeToken,
-        });
-    List<Map<String, dynamic>> data =
-        List.from(json.decode(response.body) as List);
-
-    int ttl = 0;
-    for (var i = 0; i < data.length; i++) {
-      ttl += data[i]['DIBAYARKAN'];
-    }
-
-    if (data.isNotEmpty) {
-      for (var j = 0; j < data.length; j++) {
-        var pushData = {
-          "NOXX_FAKT":
-              "${data[j]['NOXX_FAKT'] != data[j == 0 ? 0 : j - 1]['NOXX_FAKT'] ? data[j]['NOXX_FAKT'] : (j == 0 ? data[j]['NOXX_FAKT'] : '')}",
-          "TGLX_BYAR":
-              "${data[j]['TGLX_BYAR'] != data[j == 0 ? 0 : j - 1]['TGLX_BYAR'] ? data[j]['TGLX_BYAR'] : (j == 0 ? data[j]['TGLX_BYAR'] : '')}",
-          "KDXX_DFTR":
-              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['KDXX_DFTR'] : (j == 0 ? data[j]['KDXX_DFTR'] : '')}",
-          "NOXX_IDNT":
-              "${data[j]['NOXX_IDNT'] != data[j == 0 ? 0 : j - 1]['NOXX_IDNT'] ? data[j]['NOXX_IDNT'] : (j == 0 ? data[j]['NOXX_IDNT'] : '')}",
-          "NAMA_LGKP":
-              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['NAMA_LGKP'] : (j == 0 ? data[j]['NAMA_LGKP'] : '')}",
-          "NOXX_TGIH": "${data[j]['NOXX_TGIH']}",
-          "TGLX_TGIH":
-              "${data[j]['NOXX_FAKT'] != data[j == 0 ? 0 : j - 1]['NOXX_FAKT'] ? data[j]['TGLX_TGIH'] : (j == 0 ? data[j]['TGLX_TGIH'] : '')}",
-          "JENS_TGIH": "${data[j]['JENS_TGIH']}",
-          "TARIF_TGIH": "${data[j]['TARIF_TGIH']}",
-          "DIBAYARKAN": "${data[j]['DIBAYARKAN']}",
-          "NAMA_BANK":
-              "${data[j]['NOXX_FAKT'] != data[j == 0 ? 0 : j - 1]['NOXX_FAKT'] ? data[j]['NAMA_BANK'] : (j == 0 ? data[j]['NAMA_BANK'] : '')}",
-          "KETERANGAN": "${data[j]['KETERANGAN']}",
-          "KETX_USER": "${data[j]['KETX_USER']}",
-          // "JENS_TGIH":
-          //     "${data[j]['JENS_TGIH'] != data[j == 0 ? 0 : j - 1]['JENS_TGIH'] ? data[j]['JENS_TGIH'] : (j == 0 ? data[j]['JENS_TGIH'] : '')}",
-        };
-
-        listDataPembayaran.add(pushData);
-      }
-    }
-
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-    setState(() {
-      totalPembayaran = myFormat.format(ttl);
-    });
-
-    loadEnd();
-  }
-
-  void getJenisTagihan() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/finance/pendapatan-biaya/8901"), headers: {
-      'pte-token': kodeToken,
-    });
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listJenis = dataStatus;
-    });
-  }
-
-  void getCaraBayar() async {
-    var response = await http
-        .get(Uri.parse("$urlAddress/finance/all-carabayar"), headers: {
-      'pte-token': kodeToken,
-    });
-    List<Map<String, dynamic>> dataStatus =
-        List.from(json.decode(response.body) as List);
-    setState(() {
-      listCaraBayar = dataStatus;
     });
   }
 
@@ -145,12 +63,38 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
     loadEnd();
   }
 
+  void getDataTagihan() async {
+    var tglAwal = fncTanggal(dateAwal.text);
+    var tglAkhir = fncTanggal(dateAkhir.text);
+
+    var response = await http.get(
+        Uri.parse(
+            "$urlAddress/finance/tagihan/get-laporan/$tglAwal/$tglAkhir/$jenisTagihan/$pelanggan/$kodeBerangkat"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    int ttl1 = 0;
+    int ttl2 = 0;
+    for (var i = 0; i < dataStatus.length; i++) {
+      ttl1 += dataStatus[i]['TOTL_TGIH'];
+      ttl2 += dataStatus[i]['SISA_TGIH'];
+    }
+
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    setState(() {
+      totalTagihan = myFormat.format(ttl1);
+      sisaTagihan = myFormat.format(ttl2);
+      listDataTagihan = dataStatus;
+    });
+  }
+
   @override
   void initState() {
     getHariIni();
     getPelanggan();
-    getJenisTagihan();
-    getCaraBayar();
     super.initState();
   }
 
@@ -262,67 +206,81 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
     );
   }
 
-  Widget selectJenis() {
-    return Container(
+  Widget selectBerangkat(context) {
+    return SizedBox(
       height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
       child: DropdownSearch(
         mode: Mode.MENU,
-        label: "Jenis Tagihan",
-        items: listJenis,
-        showClearButton: true,
+        label: 'Status Berangkat',
+        items: const [
+          "Semua",
+          "Sudah Berangkat",
+          "Belum Berangkat",
+        ],
         onChanged: (value) {
-          if (value != null) {
-            jenisTagihan = value['DESKRIPSI'];
-          } else {
-            jenisTagihan = 'Semua';
-          }
+          setState(() {
+            if (value == 'Sudah Berangkat') {
+              kodeBerangkat = '1';
+            } else if (value == 'Belum Berangkat') {
+              kodeBerangkat = '0';
+            } else {
+              kodeBerangkat = 'ALL';
+            }
+
+            statusBerangkat = value;
+          });
         },
-        showSearchBox: true,
-        popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['DESKRIPSI'] ?? '-'),
-        ),
-        dropdownBuilder: (context, selectedItem) =>
-            Text(jenisTagihan ?? "Pilih Kas/Bank"),
-        dropdownSearchDecoration: const InputDecoration(
-          border: InputBorder.none,
-        ),
+        selectedItem: "Semua",
       ),
     );
   }
 
-  Widget inputCaraBayar() {
-    return Container(
+  // Widget selectJenis(context) {
+  //   return SizedBox(
+  //     height: 50,
+  //     width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
+  //     child: DropdownSearch(
+  //       mode: Mode.MENU,
+  //       label: 'Jenis Tagihan',
+  //       items: const [
+  //         "Semua",
+  //         "Biaya Paket",
+  //         "Vaksin",
+  //         "Paspor",
+  //         "Biaya Admin",
+  //         "Biaya Handling",
+  //         "Biaya Kamar",
+  //         "Tagihan Sistem Lama",
+  //       ],
+  //       onChanged: (value) {
+  //         setState(() {
+  //           jenisTagihan = value;
+  //         });
+  //       },
+  //       selectedItem: "Semua",
+  //     ),
+  //   );
+  // }
+
+  Widget selectJenis(context) {
+    return SizedBox(
       height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
       child: DropdownSearch(
         mode: Mode.MENU,
-        label: "Sumber Kas/Bank",
-        items: listCaraBayar,
+        label: 'Status Lunas',
+        items: const [
+          "Semua",
+          "Lunas",
+          "Belum",
+        ],
         onChanged: (value) {
-          if (value != null) {
-            kodeBayar = value['KODE_BANK'];
-            caraBayar = value['NAMA_BANK'];
-          } else {
-            kodeBayar = 'XX';
-            caraBayar = 'Semua';
-          }
+          setState(() {
+            jenisTagihan = value;
+          });
         },
-        showSearchBox: true,
-        showClearButton: true,
-        popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['NAMA_BANK'] ?? '-'),
-        ),
-        dropdownBuilder: (context, selectedItem) => Text(caraBayar ?? "Semua"),
-        dropdownSearchDecoration: const InputDecoration(
-          border: InputBorder.none,
-        ),
+        selectedItem: "Semua",
       ),
     );
   }
@@ -330,8 +288,7 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
   Widget cmdCari() {
     return ElevatedButton.icon(
       onPressed: () async {
-        loadStart();
-        getDataPembayaran();
+        getDataTagihan();
       },
       icon: const Icon(Icons.search_outlined),
       style: fncButtonAuthStyle('1', context),
@@ -342,11 +299,6 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-    final styleRowKhusus = TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
-    int x = 1;
 
     return SingleChildScrollView(
       child: Column(
@@ -386,15 +338,15 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(width: 150, child: inputTglAwal()),
+                    SizedBox(width: 120, child: inputTglAwal()),
                     const SizedBox(width: 10),
-                    SizedBox(width: 150, child: inputTglAkhir()),
+                    SizedBox(width: 120, child: inputTglAkhir()),
                     Expanded(child: Container()),
                     SizedBox(width: 260, child: inputPilihJamaah()),
                     const SizedBox(width: 10),
-                    SizedBox(width: 160, child: selectJenis()),
+                    SizedBox(width: 180, child: selectBerangkat(context)),
                     const SizedBox(width: 10),
-                    SizedBox(width: 200, child: inputCaraBayar()),
+                    SizedBox(width: 180, child: selectJenis(context)),
                     const SizedBox(width: 5),
                     cmdCari(),
                   ],
@@ -430,13 +382,25 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Total Pembayaran : $totalPembayaran',
-                            style: TextStyle(
-                                fontFamily: 'Gilroy',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: myBlue),
+                          Row(
+                            children: [
+                              Text(
+                                'Total Tagihan : $totalTagihan       -       ',
+                                style: TextStyle(
+                                    fontFamily: 'Gilroy',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: myBlue),
+                              ),
+                              Text(
+                                'Sisa Tagihan : $sisaTagihan',
+                                style: TextStyle(
+                                    fontFamily: 'Gilroy',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: myBlue),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -458,10 +422,10 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                                   hintText: 'Cari Berdasarkan Nama'),
                               onChanged: (value) {
                                 if (value == '') {
-                                  getDataPembayaran();
+                                  getDataTagihan();
                                 } else {
                                   setState(() {
-                                    listDataPembayaran = listDataPembayaran
+                                    listDataTagihan = listDataTagihan
                                         .where(((element) =>
                                             element['NAMA_LGKP']
                                                 .toString()
@@ -478,73 +442,7 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: screenHeight * 0.62,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          DataTable(
-                              columnSpacing: 30,
-                              dataRowHeight: 25,
-                              columns: const [
-                                DataColumn(
-                                    label: Text('No.', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Tanggal', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nomor Transaksi',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Kode Daftar',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nama Jamaah',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Tgl Tagihan',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nama Tagihan',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label:
-                                        Text('Cara Bayar', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Jumlah', style: styleColumn)),
-                              ],
-                              rows: listDataPembayaran.map((e) {
-                                return DataRow(cells: [
-                                  DataCell(Text((x++).toString(),
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['TGLX_BYAR'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NOXX_FAKT'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['KDXX_DFTR'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NAMA_LGKP'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['TGLX_TGIH'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['JENS_TGIH'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NAMA_BANK'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(
-                                      myFormat
-                                          .format(int.parse(e['DIBAYARKAN'])),
-                                      style: styleRowKhusus)),
-                                ]);
-                              }).toList())
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-                // TableLaporanPembayaran(dataLaporan: listDataPembayaran)
+                TableLaporanTagihan(dataLaporan: listDataTagihan)
               ],
             ),
           )

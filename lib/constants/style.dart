@@ -18,7 +18,7 @@ Color myGrey = Colors.grey[700];
 // String fotoUser;
 
 String kodeToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODA2NzcxOTYsImV4cCI6MTY4MDc2MzU5Nn0.5QoG6TqH5Y6unbLybPykb8Fje5UhkurnPNtB1AmsoD0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODE0NDA1MTIsImV4cCI6MTY4MTUyNjkxMn0.MBn2Xe18avzRN12OHJBtmz8tI1zzi4XibNcPtcdMXkk";
 String namaUser = "Superadmin";
 String username = "superadmin";
 String fotoUser;

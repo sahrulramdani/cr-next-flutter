@@ -34,6 +34,9 @@ const mrktPesawatPageRoute = "/mrkt/maskapai";
 const mrktHotelPageDisplayName = "Master Hotel";
 const mrktHotelPageRoute = "/mrkt/hotel";
 
+const mrktBandaraPageDisplayName = "Master Bandara";
+const mrktBandaraPageRoute = "/mrkt/bandara";
+
 const jamaahPageDisplayName = "Jamaah";
 const jamaahPageRoute = "/jamaah";
 
@@ -118,11 +121,23 @@ const fincPembayaranHariPageRoute = "/finance/laporan-pembayaran";
 const fincKasBankHariPageDisplayName = "Laporan Kas dan Bank";
 const fincKasBankHariPageRoute = "/finance/laporan-kasbank";
 
+const fincLaporanTagihanDisplayName = "Laporan Tagihan";
+const fincLaporanTagihanRoute = "/finance/laporan-tagihan";
+
 const fincKasPendapatan = "Kas Pendapatan";
 const fincKasPendapatanPageRoute = "/finance/kas-pendapatan";
 
 const fincKasPengeluaran = "Kas Pendapatan";
 const fincKasPengeluaranPageRoute = "/finance/kas-pengeluaran";
+
+const fincEstimasiPaket = "Estimasi Biaya Paket";
+const fincEstimasiPaketPageRoute = "/finance/estimasi-paket";
+
+const fincPendapatanBiaya = "Komponen Pendapatan dan Biaya";
+const fincPendapatanBiayaPageRoute = "/finance/master-pendapatan-biaya";
+
+const fincCostStructure = "Cost Structure";
+const fincCostStructurePageRoute = "/finance/cost-structure";
 // ----------------
 
 // const mrktDealTrackPageDisplayName = "DealTrack";

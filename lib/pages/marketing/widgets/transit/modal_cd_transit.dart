@@ -33,13 +33,17 @@ class _ModalCdTransitState extends State<ModalCdTransit> {
 
   void getDetailSatuan() async {
     var id = widget.idTransit;
+
     var response = await http.get(
-        Uri.parse("$urlAddress/marketing/rutetransit/getDetailTransit/$id"));
+        Uri.parse("$urlAddress/marketing/rutetransit/getDetailTransit/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
     setState(() {
-      idTransit = data[0]['IDXX_RTS'];
+      idTransit = data[0]['IDXX_RTRS'];
       namaTransit = data[0]['NAMA_NEGR'];
     });
   }
@@ -60,21 +64,25 @@ class _ModalCdTransitState extends State<ModalCdTransit> {
         namaTransit = value;
       }),
       decoration: const InputDecoration(
-        labelText: 'Rute Transit',
+        label: Text('Rute Transit', style: TextStyle(color: Colors.red)),
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
       ),
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Rute masih kosong !";
+        }
+      },
     );
   }
 
-  fncSaveData() {
-    // print("ID SATUAN : $idSatuan");
-    // print("NAMA SATUAN : $namaSatuan");
-
+  fncSaveData(context) {
     if (widget.tambah == true) {
       HttpTransit.saveRuteTransit(namaTransit).then((value) {
         if (value.status == true) {
+          Navigator.pop(context);
+
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
 
@@ -114,7 +122,7 @@ class _ModalCdTransitState extends State<ModalCdTransit> {
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.5,
-            height: 200,
+            height: 220,
             child: Column(
               children: [
                 SizedBox(
@@ -158,7 +166,11 @@ class _ModalCdTransitState extends State<ModalCdTransit> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          if (formKey.currentState.validate()) {
+                            fncSaveData(context);
+                          } else {
+                            return null;
+                          }
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

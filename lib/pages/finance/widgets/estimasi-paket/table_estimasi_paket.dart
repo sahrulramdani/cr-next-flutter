@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
+import 'package:flutter_web_course/pages/finance/widgets/estimasi-paket/modal_detail_estimasi.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_edit_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
@@ -17,18 +18,14 @@ import 'package:intl/intl.dart';
 class ButtonDetail extends StatelessWidget {
   String idJadwal;
   String keberangkatan;
-  String jenisPaket;
+  String seat;
   String harga;
-  String tglBgkt;
-  String tglPlng;
   ButtonDetail({
     Key key,
     this.idJadwal,
     this.keberangkatan,
-    this.jenisPaket,
+    this.seat,
     this.harga,
-    this.tglBgkt,
-    this.tglPlng,
   }) : super(key: key);
 
   @override
@@ -42,71 +39,11 @@ class ButtonDetail extends StatelessWidget {
         authInqu == '1'
             ? showDialog(
                 context: context,
-                builder: (context) => ModalDetailJadwal(
-                      idJadwal: idJadwal,
-                      keberangkatan: keberangkatan,
-                      jenisPaket: jenisPaket,
-                      harga: harga,
-                      tglBgkt: tglBgkt,
-                      tglPlng: tglPlng,
-                    ))
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
-      },
-    );
-  }
-}
-
-class ButtonEdit extends StatelessWidget {
-  String idJadwal;
-  ButtonEdit({
-    Key key,
-    @required this.idJadwal,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.edit_outlined,
-        color: authEdit == '1' ? myBlue : Colors.blue[200],
-      ),
-      onPressed: () {
-        authEdit == '1'
-            ? showDialog(
-                context: context,
-                builder: (context) => ModalEditJadwal(
-                      idJadwal: idJadwal,
-                    ))
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
-      },
-    );
-  }
-}
-
-class ButtonHapus extends StatelessWidget {
-  String idJadwal;
-  ButtonHapus({Key key, @required this.idJadwal}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.delete_outline,
-        color: authDelt == '1' ? myBlue : Colors.blue[200],
-      ),
-      onPressed: () {
-        authDelt == '1'
-            ? showDialog(
-                context: context,
-                builder: (context) => ModalHapusJadwal(idJadwal: idJadwal))
+                builder: (context) => ModalDetailEstimasi(
+                    idJadwal: idJadwal,
+                    keberangkatan: keberangkatan,
+                    seat: seat,
+                    harga: harga))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -128,12 +65,8 @@ class MyData extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(Icon(
-        dataJadwal[index]['STATUS'] == 1
-            ? Icons.check
-            : Icons.access_alarm_outlined,
-        color: dataJadwal[index]['STATUS'] == 1
-            ? Colors.green
-            : Colors.orange[800],
+        dataJadwal[index]['CEK'] != null ? Icons.check : Icons.clear,
+        color: dataJadwal[index]['CEK'] != null ? Colors.green : Colors.red,
         size: 20,
       )),
       DataCell(Text(dataJadwal[index]['jenisPaket'].toString(),
@@ -142,14 +75,14 @@ class MyData extends DataTableSource {
       DataCell(Text(dataJadwal[index]['JMLX_HARI'].toString(),
           style: styleRowReguler)),
       DataCell(Text(
-          dataJadwal[index]['TGLX_BGKT'] == null
+          dataJadwal[index]['TGL_BGKT'] == null
               ? "00-00-0000"
-              : dataJadwal[index]['TGLX_BGKT'].toString(),
+              : dataJadwal[index]['TGL_BGKT'].toString(),
           style: styleRowReguler)),
       DataCell(Text(
-          dataJadwal[index]["TGLX_PLNG"] == null
+          dataJadwal[index]["TGL_PLNG"] == null
               ? "00-00-0000"
-              : dataJadwal[index]["TGLX_PLNG"].toString(),
+              : dataJadwal[index]["TGL_PLNG"].toString(),
           style: styleRowReguler)),
       DataCell(Text(
           dataJadwal[index]['NAME_PESWT_BGKT'] == null
@@ -173,7 +106,7 @@ class MyData extends DataTableSource {
               ? 'Full'
               : dataJadwal[index]['SISA'].toString(),
           style: styleRowReguler)),
-      DataCell(Text(dataJadwal[index]['KETERANGAN'], style: styleRowReguler)),
+      // DataCell(Text(dataJadwal[index]['KETERANGAN'], style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -181,19 +114,10 @@ class MyData extends DataTableSource {
             ButtonDetail(
               idJadwal: dataJadwal[index]['IDXX_JDWL'],
               keberangkatan:
-                  fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()),
-              jenisPaket: dataJadwal[index]['jenisPaket'].toString(),
-              harga: dataJadwal[index]['TARIF_PKET'].toString(),
-              tglBgkt: dataJadwal[index]['TGLX_BGKT'].toString(),
-              tglPlng: dataJadwal[index]['TGLX_PLNG'].toString(),
-            ),
-            const SizedBox(width: 5),
-            ButtonEdit(
-              idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
-            ),
-            const SizedBox(width: 5),
-            ButtonHapus(
-              idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
+                  fncGetTanggal(dataJadwal[index]['TGL_BGKT'].toString()),
+              seat: dataJadwal[index]['JMLX_SEAT'].toString(),
+              harga: myformat.format(
+                  int.parse(dataJadwal[index]['TARIF_PKET'].toString())),
             ),
           ],
         ),
@@ -211,24 +135,25 @@ class MyData extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-class TableJadwalJamaah extends StatefulWidget {
+class TableEstimasiPaket extends StatefulWidget {
   final List<Map<String, dynamic>> dataJadwal;
-  const TableJadwalJamaah({Key key, @required this.dataJadwal})
+  const TableEstimasiPaket({Key key, @required this.dataJadwal})
       : super(key: key);
 
   @override
-  State<TableJadwalJamaah> createState() => _TableJadwalJamaahState();
+  State<TableEstimasiPaket> createState() => _TableEstimasiPaketState();
 }
 
-class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
+class _TableEstimasiPaketState extends State<TableEstimasiPaket> {
   @override
   Widget build(BuildContext context) {
     final DataTableSource myTable = MyData(widget.dataJadwal);
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCard(context),
+      height: screenHeight * 0.72,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
@@ -246,7 +171,7 @@ class _TableJadwalJamaahState extends State<TableJadwalJamaah> {
             DataColumn(label: Text('Tarif', style: styleColumn)),
             DataColumn(label: Text('Seat', style: styleColumn)),
             DataColumn(label: Text('Sisa', style: styleColumn)),
-            DataColumn(label: Text('Keterangan', style: styleColumn)),
+            // DataColumn(label: Text('Keterangan', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,

@@ -42,8 +42,10 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
   }
 
   void getData() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getTransit"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -215,20 +217,22 @@ class _MarketingTransitPageState extends State<MarketingTransitPage> {
                                   style: const TextStyle(
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Satuan'),
+                                      hintText: 'Cari Nama Negara'),
                                   onChanged: (value) {
-                                    // if (value == '') {
-                                    //   listAgency = listAgency;
-                                    //   getList();
-                                    // } else {
-                                    //   setState(() {
-                                    //     listAgency = listAgency
-                                    //         .where((element) =>
-                                    //             element['NAMA_LGKP']
-                                    //                 .contains(value))
-                                    //         .toList();
-                                    //   });
-                                    // }
+                                    if (value == '') {
+                                      getData();
+                                    } else {
+                                      setState(() {
+                                        listTransit = listTransit
+                                            .where(((element) =>
+                                                element['NAMA_NEGR']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
+                                            .toList();
+                                      });
+                                    }
                                   },
                                 ),
                               ),

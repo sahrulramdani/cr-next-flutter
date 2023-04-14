@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/pages/authentication/authentication.dart';
 import 'package:flutter_web_course/pages/clients/clients.dart';
+import 'package:flutter_web_course/pages/finance/finance_cost_stucture.dart';
 import 'package:flutter_web_course/pages/finance/finance_dash.dart';
+import 'package:flutter_web_course/pages/finance/finance_estimasi_paket.dart';
 import 'package:flutter_web_course/pages/finance/finance_kas_pendapatan.dart';
 import 'package:flutter_web_course/pages/finance/finance_kas_pengeluaran.dart';
 import 'package:flutter_web_course/pages/finance/finance_kasbank_harian.dart';
+import 'package:flutter_web_course/pages/finance/finance_laporan_tagihan.dart';
 import 'package:flutter_web_course/pages/finance/finance_master_account.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembayaran.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembayaran_harian.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembuatan_bayar.dart';
 import 'package:flutter_web_course/pages/finance/finance_pembuatan_kas.dart';
+import 'package:flutter_web_course/pages/finance/finance_pendapatan_biaya.dart';
 import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
 import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_page.dart';
@@ -26,6 +30,7 @@ import 'package:flutter_web_course/pages/inventory/inventory_pengeluaran.dart';
 import 'package:flutter_web_course/pages/inventory/inventory_satuan.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_alumni.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_dash.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_bandara.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_jadwal.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_master.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_pelanggan.dart';
@@ -75,6 +80,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const MarketingMaskapai());
     case mrktHotelPageRoute:
       return _getPageRoute(const MarketingHotel());
+    case mrktBandaraPageRoute:
+      return _getPageRoute(const MarketingBandaraPage());
     case jamaahPageRoute:
       return _getPageRoute(const JamaahDashboardPage());
     case jmahDataPageRoute:
@@ -123,6 +130,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const FinanceCaraBayar());
     case fincKasBankHariPageRoute:
       return _getPageRoute(const FinanceKasBankHarian());
+    case fincEstimasiPaketPageRoute:
+      return _getPageRoute(const FinanceEstimasiPaket());
+    case fincLaporanTagihanRoute:
+      return _getPageRoute(const FinanceLaporanTagihan());
+    case fincPendapatanBiayaPageRoute:
+      return _getPageRoute(const FinancePendapatanBiaya());
+    case fincCostStructurePageRoute:
+      return _getPageRoute(const FinanceCostStructure());
     case hrPageRoute:
       return _getPageRoute(const HumanResourceDashPage());
     case hrKaryawanPageRoute:

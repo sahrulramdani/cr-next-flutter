@@ -9,11 +9,19 @@ class HttpMaskapai {
 
   HttpMaskapai({this.status});
 
-  static Future<HttpMaskapai> saveMaskapai(String namaMaskapai) async {
+  static Future<HttpMaskapai> saveMaskapai(
+      String kodeMaskapai, String namaMaskapai) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/maskapai/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "NAMA_PSWT": namaMaskapai,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KODE_PSWT": kodeMaskapai,
+        "NAMA_PSWT": namaMaskapai,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpMaskapai(
@@ -22,12 +30,19 @@ class HttpMaskapai {
   }
 
   static Future<HttpMaskapai> updateMaskapai(
-      String idMaskapai, String namaMaskapai) async {
+      String idMaskapai, String kodeMaskapai, String namaMaskapai) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/maskapai/update");
-    var hasilResponse = await http.post(urlApi, body: {
-      "IDXX_PSWT": idMaskapai,
-      "NAMA_PSWT": namaMaskapai,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "IDXX_PSWT": idMaskapai,
+        "KODE_PSWT": kodeMaskapai,
+        "NAMA_PSWT": namaMaskapai,
+      },
+    );
     var data = json.decode(hasilResponse.body);
     return HttpMaskapai(
       status: data["status"],
@@ -36,9 +51,15 @@ class HttpMaskapai {
 
   static Future<HttpMaskapai> deleteMaskapai(String idMaskapai) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/maskapai/delete");
-    var hasilResponse = await http.post(urlApi, body: {
-      "IDXX_PSWT": idMaskapai,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "IDXX_PSWT": idMaskapai,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpMaskapai(

@@ -41,7 +41,6 @@ class HttpJadwal {
         'pte-token': kodeToken,
       },
       body: {
-        "KDXX_JDWL": fncRandomId(15),
         "NAMA_PKET": idpaket,
         "JENS_PKET": idjenis,
         "TJAN_PKET": tujuan,

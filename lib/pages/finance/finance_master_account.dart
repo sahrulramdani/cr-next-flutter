@@ -501,10 +501,21 @@ class _FinanceMasterAccountState extends State<FinanceMasterAccount> {
           kodeAkun = body1['KDXX_COAX'];
           levelAkun = body1['LVEL_COAX'];
 
+          // print(kodeAkun);
+          // print(namaAkun);
+          // print(indukAkun);
+          // print(kategoriAkun);
+          // print(idMataUang);
+          // print(statusBudget == true ? '1' : '0');
+          // print(statusDebetKredit == true ? '1' : '0');
+          // print(idTipe);
+          // print(dk);
+          // print(levelAkun);
+
           HttpAccount.saveAccount(
             kodeAkun,
             namaAkun,
-            indukAkun,
+            indukAkun ?? '',
             kategoriAkun,
             idMataUang,
             statusBudget == true ? '1' : '0',

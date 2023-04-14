@@ -2,65 +2,66 @@ import 'dart:async';
 import 'dart:convert';
 import "package:http/http.dart" as http;
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/controllers/func_all.dart';
 
-class HttpTransit {
+class HttpKompPendapatan {
   bool status;
 
-  HttpTransit({this.status});
+  HttpKompPendapatan({this.status});
 
-  static Future<HttpTransit> saveRuteTransit(String namaTransit) async {
-    Uri urlApi = Uri.parse("$urlAddress/marketing/rutetransit/save");
+  static Future<HttpKompPendapatan> saveKompPendapatan(
+      String deskripsi, String tipe) async {
+    Uri urlApi = Uri.parse("$urlAddress/finance/pendapatan-biaya/save");
     var hasilResponse = await http.post(
       urlApi,
       headers: {
         'pte-token': kodeToken,
       },
       body: {
-        "NAMA_NEGR": namaTransit,
+        "DESKRIPSI": deskripsi,
+        "TIPE_PBYA": tipe,
       },
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpTransit(
+    return HttpKompPendapatan(
       status: data["status"],
     );
   }
 
-  static Future<HttpTransit> updateRuteTransit(
-      String idTransit, String namaTransit) async {
-    Uri urlApi = Uri.parse("$urlAddress/marketing/rutetransit/update");
+  static Future<HttpKompPendapatan> updateKompPendapatan(
+      String idBiaya, String deskripsi, String tipe) async {
+    Uri urlApi = Uri.parse("$urlAddress/finance/pendapatan-biaya/update");
     var hasilResponse = await http.post(
       urlApi,
       headers: {
         'pte-token': kodeToken,
       },
       body: {
-        "IDXX_RTRS": idTransit,
-        "NAMA_NEGR": namaTransit,
+        "KDXX_PBYA": idBiaya,
+        "DESKRIPSI": deskripsi,
+        "TIPE_PBYA": tipe,
       },
     );
     var data = json.decode(hasilResponse.body);
-    return HttpTransit(
+    return HttpKompPendapatan(
       status: data["status"],
     );
   }
 
-  static Future<HttpTransit> deleteRuteTransit(String idTransit) async {
-    Uri urlApi = Uri.parse("$urlAddress/marketing/rutetransit/delete");
-
+  static Future<HttpKompPendapatan> deleteKompPendapatan(String idBiaya) async {
+    Uri urlApi = Uri.parse("$urlAddress/finance/pendapatan-biaya/delete");
     var hasilResponse = await http.post(
       urlApi,
       headers: {
         'pte-token': kodeToken,
       },
       body: {
-        "IDXX_RTRS": idTransit,
+        "KDXX_PBYA": idBiaya,
       },
     );
 
     var data = json.decode(hasilResponse.body);
-    return HttpTransit(
+    return HttpKompPendapatan(
       status: data["status"],
     );
   }

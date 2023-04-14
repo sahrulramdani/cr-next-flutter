@@ -14,7 +14,6 @@ import 'package:flutter_web_course/pages/finance/widgets/pembayaran/save_pembaya
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
-import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +28,6 @@ class PembayaranForm extends StatefulWidget {
 }
 
 class _PembayaranFormState extends State<PembayaranForm> {
-  final _formKey = GlobalKey<FormState>();
   List<Map> objBarang = [];
 
   String namaPelanggan;

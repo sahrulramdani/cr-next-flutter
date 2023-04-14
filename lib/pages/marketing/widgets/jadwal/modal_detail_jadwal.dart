@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
-import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/excel_manifest.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_sipatuh.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/import_siskopatuh.dart';
@@ -26,8 +25,6 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_identita
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_rekompas.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_riwayat_bayar.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_suku.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-// import 'package:flutter_web_course/models/http_controller.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -429,6 +426,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    const styleHead =
+        TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
     int x = 1;
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
@@ -484,14 +483,17 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: DataTable(
+                                    columnSpacing: 20,
                                     dataRowHeight: 30,
-                                    headingRowHeight: 30,
+                                    headingRowHeight: 45,
+                                    headingRowColor:
+                                        MaterialStateProperty.resolveWith<
+                                            Color>((Set<MaterialState> states) {
+                                      return Colors.blue;
+                                    }),
                                     columns: [
                                       const DataColumn(
-                                          label: Text('No.',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label: Text('No.', style: styleHead)),
                                       DataColumn(
                                           label: Checkbox(
                                         value: cekAll,
@@ -503,65 +505,41 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                         },
                                       )),
                                       const DataColumn(
-                                          label: Text('Nama',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Nama', style: styleHead)),
                                       const DataColumn(
                                           label: Text('Jenis Kelamin',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                              style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Umur',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Umur', style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Paspor',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Paspor', style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Vaksin',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Vaksin', style: styleHead)),
                                       const DataColumn(
                                           label: Text('Handling',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                              style: styleHead)),
                                       const DataColumn(
                                           label: Text('Telepon',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                              style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Total',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Total', style: styleHead)),
                                       const DataColumn(
                                           label: Text('Uang Masuk',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                              style: styleHead)),
                                       const DataColumn(
                                           label: Text('Sisa Bayar',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                              style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Lunas',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Lunas', style: styleHead)),
                                       const DataColumn(
-                                          label: Text('Cetak',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12))),
+                                          label:
+                                              Text('Cetak', style: styleHead)),
                                     ],
                                     rows: listJadwalPelanggan.map((e) {
                                       return DataRow(cells: [

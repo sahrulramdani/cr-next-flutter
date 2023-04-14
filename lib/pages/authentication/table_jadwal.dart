@@ -67,7 +67,7 @@ class MyData extends DataTableSource {
       DataCell(Text((index + 1).toString())),
       DataCell(Text(fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()))),
       // DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
-      DataCell(Text(dataJadwal[index]['PSWT_BGKT'])),
+      DataCell(Text(dataJadwal[index]['NAME_PESWT_BGKT'])),
       DataCell(Text(dataJadwal[index]['RUTE_AKHR_BRKT'] == null
           ? ""
           : "${dataJadwal[index]['RUTE_AKHR_BRKT'].toString()} - ${dataJadwal[index]['RUTE_AWAL_PLNG'].toString()}")),
@@ -350,7 +350,9 @@ class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
                 // DataCell(Text(e['jenisPaket'].toString())),
                 DataCell(Center(
                   child: Text(
-                    e['PSWT_BGKT'] == null ? "-" : e['PSWT_BGKT'].toString(),
+                    e['NAME_PESWT_BGKT'] == null
+                        ? "-"
+                        : e['NAME_PESWT_BGKT'].toString(),
                     style: TextStyle(
                         color: Color.fromARGB(249, 48, 50, 51),
                         fontWeight: FontWeight.bold,
@@ -638,9 +640,9 @@ class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
                                   // DataCell(Text(e['jenisPaket'].toString())),
                                   DataCell(Center(
                                     child: Text(
-                                      e['PSWT_BGKT'] == null
+                                      e['NAME_PESWT_BGKT'] == null
                                           ? "-"
-                                          : e['PSWT_BGKT'].toString(),
+                                          : e['NAME_PESWT_BGKT'].toString(),
                                       style: TextStyle(
                                           color:
                                               Color.fromARGB(249, 48, 50, 51),

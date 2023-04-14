@@ -3,16 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
-import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_hapus_jadwal.dart';
-import 'modal_cd_maskapai.dart';
-import 'modal_hapus_maskapai.dart';
-// import 'package:intl/intl.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/bandara/modal_cd_bandara.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/bandara/modal_hapus_bandara.dart';
+
+/// Example without a datasource
+// MYDATA
 
 class ButtonEdit extends StatelessWidget {
-  String idMaskapai;
+  String idBandara;
   ButtonEdit({
     Key key,
-    @required this.idMaskapai,
+    @required this.idBandara,
   }) : super(key: key);
 
   @override
@@ -23,11 +24,11 @@ class ButtonEdit extends StatelessWidget {
         color: authEdit == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        authInqu == '1'
+        authEdit == '1'
             ? showDialog(
                 context: context,
-                builder: (context) => ModalCdMaskapai(
-                      idMaskapai: idMaskapai,
+                builder: (context) => ModalCdBandara(
+                      idBandara: idBandara,
                     ))
             : showDialog(
                 context: context,
@@ -40,8 +41,8 @@ class ButtonEdit extends StatelessWidget {
 }
 
 class ButtonHapus extends StatelessWidget {
-  String idMaskapai;
-  ButtonHapus({Key key, @required this.idMaskapai}) : super(key: key);
+  String idBandara;
+  ButtonHapus({Key key, @required this.idBandara}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +52,10 @@ class ButtonHapus extends StatelessWidget {
         color: authDelt == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        authDelt == '1'
+        authEdit == '1'
             ? showDialog(
                 context: context,
-                builder: (context) =>
-                    ModalHapusMaskapai(idMaskapai: idMaskapai))
+                builder: (context) => ModalHapusBandara(idBandara: idBandara))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -67,18 +67,21 @@ class ButtonHapus extends StatelessWidget {
 }
 
 class MyData extends DataTableSource {
-  final List<Map<String, dynamic>> listMaskapai;
-  MyData(this.listMaskapai);
+  final List<Map<String, dynamic>> listBandara;
+  MyData(this.listBandara);
 
   @override
   DataRow getRow(int index) {
-    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-
     return DataRow(cells: [
       DataCell(Text((index + 1).toString(), style: styleRowReguler)),
-      DataCell(Text(listMaskapai[index]['KODE_PSWT'].toString(),
-          style: styleRowReguler)),
-      DataCell(Text(listMaskapai[index]['NAMA_PSWT'].toString(),
+      DataCell(
+          Text(listBandara[index]['NAMA_BAND'] ?? '-', style: styleRowReguler)),
+      DataCell(
+          Text(listBandara[index]['KDXX_BAND'] ?? '-', style: styleRowReguler)),
+      DataCell(
+          Text(listBandara[index]['JENIS'] ?? '-', style: styleRowReguler)),
+      DataCell(Text(
+          "${listBandara[index]['KOTA'] ?? '|'} - ${listBandara[index]['PROVINSI'] ?? '|'} - ${listBandara[index]['NEGARA'] ?? '|'}",
           style: styleRowReguler)),
       DataCell(Center(
         child: Row(
@@ -86,11 +89,11 @@ class MyData extends DataTableSource {
           children: [
             const SizedBox(width: 5),
             ButtonEdit(
-              idMaskapai: listMaskapai[index]['IDXX_PSWT'].toString(),
+              idBandara: listBandara[index]['IDXX_BAND'].toString(),
             ),
             const SizedBox(width: 5),
             ButtonHapus(
-              idMaskapai: listMaskapai[index]['IDXX_PSWT'].toString(),
+              idBandara: listBandara[index]['IDXX_BAND'].toString(),
             ),
           ],
         ),
@@ -102,25 +105,24 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listMaskapai.length;
+  int get rowCount => listBandara.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
-class TableMasterMaskapai extends StatefulWidget {
-  final List<Map<String, dynamic>> listMaskapai;
-  const TableMasterMaskapai({Key key, @required this.listMaskapai})
-      : super(key: key);
+class TableBandara extends StatefulWidget {
+  final List<Map<String, dynamic>> listBandara;
+  const TableBandara({Key key, @required this.listBandara}) : super(key: key);
 
   @override
-  State<TableMasterMaskapai> createState() => _TableMasterMaskapaiState();
+  State<TableBandara> createState() => _TableBandaraState();
 }
 
-class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
+class _TableBandaraState extends State<TableBandara> {
   @override
   Widget build(BuildContext context) {
-    final DataTableSource myTable = MyData(widget.listMaskapai);
+    final DataTableSource myTable = MyData(widget.listBandara);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -133,8 +135,10 @@ class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
           source: myTable,
           columns: const [
             DataColumn(label: Text('No.', style: styleColumn)),
+            DataColumn(label: Text('Nama Bandara', style: styleColumn)),
             DataColumn(label: Text('Kode', style: styleColumn)),
-            DataColumn(label: Text('Nama', style: styleColumn)),
+            DataColumn(label: Text('Jenis', style: styleColumn)),
+            DataColumn(label: Text('Lokasi', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,

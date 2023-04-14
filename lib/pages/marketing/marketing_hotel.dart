@@ -45,8 +45,10 @@ class _MarketingHotelState extends State<MarketingHotel> {
   }
 
   void getData() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -275,7 +277,7 @@ class _MarketingHotelState extends State<MarketingHotel> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Seluruh Maskapai',
+                                'Seluruh Hotel',
                                 style: TextStyle(
                                     fontFamily: 'Gilroy',
                                     fontWeight: FontWeight.bold,
@@ -300,20 +302,22 @@ class _MarketingHotelState extends State<MarketingHotel> {
                                   style: const TextStyle(
                                       fontFamily: 'Gilroy', fontSize: 14),
                                   decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Satuan'),
+                                      hintText: 'Cari Nama Hotel'),
                                   onChanged: (value) {
-                                    // if (value == '') {
-                                    //   listAgency = listAgency;
-                                    //   getList();
-                                    // } else {
-                                    //   setState(() {
-                                    //     listAgency = listAgency
-                                    //         .where((element) =>
-                                    //             element['NAMA_LGKP']
-                                    //                 .contains(value))
-                                    //         .toList();
-                                    //   });
-                                    // }
+                                    if (value == '') {
+                                      getData();
+                                    } else {
+                                      setState(() {
+                                        listHotel = listHotel
+                                            .where(((element) =>
+                                                element['NAMA_HTLX']
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        value.toUpperCase())))
+                                            .toList();
+                                      });
+                                    }
                                   },
                                 ),
                               ),

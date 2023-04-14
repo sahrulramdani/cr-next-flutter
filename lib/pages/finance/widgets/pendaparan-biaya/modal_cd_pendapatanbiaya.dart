@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter_web_course/models/http_komp_pendapatan.dart';
 import 'package:flutter_web_course/models/http_maskapai.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
@@ -15,27 +16,30 @@ import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:intl/intl.dart';
 // import 'dart:convert';
 
-class ModalCdMaskapai extends StatefulWidget {
-  final String idMaskapai;
+class ModalCdPendapatanBiaya extends StatefulWidget {
+  final String idBiaya;
   final bool tambah;
 
-  const ModalCdMaskapai(
-      {Key key, @required this.idMaskapai, @required this.tambah})
+  const ModalCdPendapatanBiaya(
+      {Key key, @required this.idBiaya, @required this.tambah})
       : super(key: key);
 
   @override
-  State<ModalCdMaskapai> createState() => _ModalCdMaskapaiState();
+  State<ModalCdPendapatanBiaya> createState() => _ModalCdPendapatanBiayaState();
 }
 
-class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
-  String idMaskapai;
-  String kodeMaskapai;
-  String namaMaskapai;
+class _ModalCdPendapatanBiayaState extends State<ModalCdPendapatanBiaya> {
+  List<Map<String, dynamic>> listJenisBiaya = [];
+
+  String idBiaya;
+  String deskripsi;
+  String kodeJenis;
+  String namaJenis;
 
   void getDetailSatuan() async {
-    var id = widget.idMaskapai;
+    var id = widget.idBiaya;
     var response = await http.get(
-        Uri.parse("$urlAddress/marketing/maskapai/getDetailMaskapai/$id"),
+        Uri.parse("$urlAddress/finance/pendapatan-biaya/detail/$id"),
         headers: {
           'pte-token': kodeToken,
         });
@@ -43,29 +47,45 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
         List.from(json.decode(response.body) as List);
 
     setState(() {
-      idMaskapai = data[0]['IDXX_PSWT'];
-      kodeMaskapai = data[0]['KODE_PSWT'];
-      namaMaskapai = data[0]['NAMA_PSWT'];
+      idBiaya = data[0]['KDXX_PBYA'];
+      deskripsi = data[0]['DESKRIPSI'];
+      kodeJenis = data[0]['TIPE_PBYA'];
+      namaJenis = data[0]['CODD_DESC'];
+    });
+  }
+
+  void getJenisBiaya() async {
+    var id = widget.idBiaya;
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/get-komp-biaya"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listJenisBiaya = data;
     });
   }
 
   @override
   void initState() {
     super.initState();
+    getJenisBiaya();
     if (widget.tambah != true) {
       getDetailSatuan();
     }
   }
 
-  Widget inputKodeMaskapai() {
+  Widget inputDeskripsi() {
     return TextFormField(
-      initialValue: kodeMaskapai ?? "",
+      initialValue: deskripsi ?? "",
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       onChanged: ((value) {
-        kodeMaskapai = value;
+        deskripsi = value;
       }),
       decoration: const InputDecoration(
-        label: Text('Kode Maskapai', style: TextStyle(color: Colors.red)),
+        label: Text('Deskripsi', style: TextStyle(color: Colors.red)),
         filled: true,
         fillColor: Colors.white,
         hoverColor: Colors.white,
@@ -78,52 +98,70 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
     );
   }
 
-  Widget inputNamaMaskapai() {
-    return TextFormField(
-      initialValue: namaMaskapai ?? "",
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      onChanged: ((value) {
-        namaMaskapai = value;
-      }),
-      decoration: const InputDecoration(
-        label: Text('Nama Maskapai', style: TextStyle(color: Colors.red)),
-        filled: true,
-        fillColor: Colors.white,
-        hoverColor: Colors.white,
-      ),
-      validator: (value) {
-        if (value.isEmpty) {
-          return "Nama masih kosong !";
-        }
-      },
+  Widget inputTipeBiaya() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          label: "Tipe Biaya",
+          mode: Mode.MENU,
+          onChanged: (value) {
+            setState(() {
+              kodeJenis = value['CODD_VALU'];
+              namaJenis = value['CODD_DESC'];
+            });
+          },
+          items: listJenisBiaya,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['CODD_DESC'].toString()),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaJenis ?? "Pilih Tipe",
+              style: TextStyle(
+                  color: namaJenis == null ? Colors.red : Colors.black)),
+          dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none,
+            filled: true,
+            fillColor: Colors.white,
+            hoverColor: Colors.white,
+          )),
     );
   }
 
   fncSaveData(context) {
     if (widget.tambah == true) {
-      HttpMaskapai.saveMaskapai(kodeMaskapai, namaMaskapai).then((value) {
+      HttpKompPendapatan.saveKompPendapatan(
+        deskripsi,
+        kodeJenis,
+      ).then((value) {
         if (value.status == true) {
           Navigator.pop(context);
 
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
 
-          menuController.changeActiveitemTo('Master Maskapai');
-          navigationController.navigateTo('/mrkt/maskapai');
+          menuController.changeActiveitemTo('Komponen Pendapatan dan Biaya');
+          navigationController.navigateTo('/finance/master-pendapatan-biaya');
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());
         }
       });
     } else {
-      HttpMaskapai.updateMaskapai(idMaskapai, kodeMaskapai, namaMaskapai)
-          .then((value) {
+      HttpKompPendapatan.updateKompPendapatan(
+        idBiaya,
+        deskripsi,
+        kodeJenis,
+      ).then((value) {
         if (value.status == true) {
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
 
-          menuController.changeActiveitemTo('Master Maskapai');
-          navigationController.navigateTo('/mrkt/maskapai');
+          menuController.changeActiveitemTo('Komponen Pendapatan dan Biaya');
+          navigationController.navigateTo('/finance/master-pendapatan-biaya');
         } else {
           showDialog(
               context: context, builder: (context) => const ModalSaveFail());
@@ -158,8 +196,8 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
                       const SizedBox(width: 10),
                       Text(
                           widget.tambah == true
-                              ? "Tambah Data Maskapai"
-                              : "Ubah Data Maskapai",
+                              ? "Tambah Data Biaya"
+                              : "Ubah Data Biaya",
                           style: TextStyle(
                               color: myGrey,
                               fontWeight: FontWeight.bold,
@@ -174,9 +212,9 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Column(
                     children: [
-                      inputKodeMaskapai(),
+                      inputDeskripsi(),
                       const SizedBox(height: 8),
-                      inputNamaMaskapai(),
+                      inputTipeBiaya(),
                     ],
                   ),
                 )),
