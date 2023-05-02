@@ -27,6 +27,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  youtube_player_flutter: ^8.1.0
+  hooks_riverpod: ^2.1.3
   charts_flutter: ^0.12.0
   cupertino_icons: ^1.0.5
   data_table_2: ^2.3.7
@@ -55,6 +57,7 @@ dependencies:
   flutter_image: ^4.1.5
   flutter_easyloading: ^3.0.5
   animated_tree_view: ^1.0.0
+
   # image_picker_web: ^1.0.9
 
 dev_dependencies:
@@ -78,6 +81,12 @@ flutter:
   assets:
     - assets/icons/logo.png
     - assets/icons/top-icon.png
+    - assets/icons/facebook-icon.png
+    - assets/icons/instagram-icon.png
+    - assets/icons/youtube-icon.png
+    - assets/icons/top-icon.png
+    - assets/icons/maps-icon.png
+    - assets/icons/whatsapp-icon.png
     - assets/images/box-background.png
     - assets/images/gold-medal.png
     - assets/images/silver-medal.png
@@ -106,6 +115,15 @@ flutter:
     - assets/images/ktp_pict.jpg
     - assets/images/kartu_keluarga.png
     - assets/images/head-kwitansi.png
+    - assets/images/not-found.png
+    - assets/images/header-content.png
+    - assets/images/body-content-1.png
+    - assets/images/background-landing-page.png
+    - assets/images/tentang-kami-foto.png
+    - assets/images/default-poster.png
+    - assets/images/legalitas.png
+    - assets/images/maps-location.png
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

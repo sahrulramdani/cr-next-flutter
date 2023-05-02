@@ -89,6 +89,7 @@ class _PrintAbsenManasikState extends State<PrintAbsenManasik> {
                           pw.Text('Jl. SUTAATMAJA RT069/009 CIGADUNG SUBANG'),
                           pw.SizedBox(height: 20),
                           pw.Table.fromTextArray(
+                              cellStyle: const pw.TextStyle(fontSize: 10),
                               cellPadding: const pw.EdgeInsets.symmetric(
                                   horizontal: 2, vertical: 1),
                               headers: [

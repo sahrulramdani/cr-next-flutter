@@ -415,11 +415,13 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
       );
 
   fncCekAll() {
+    loadStart();
     for (var i = 0; i < listJadwalPelanggan.length; i++) {
       setState(() {
         listJadwalPelanggan[i]['CEK'] = cekAll;
       });
     }
+    loadEnd();
   }
 
   @override
@@ -428,6 +430,8 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
     final screenHeight = MediaQuery.of(context).size.height;
     const styleHead =
         TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+    final styleRowKhusus = TextStyle(
+        fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 10);
     int x = 1;
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
@@ -483,7 +487,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: DataTable(
-                                    columnSpacing: 20,
+                                    columnSpacing: 17,
                                     dataRowHeight: 30,
                                     headingRowHeight: 45,
                                     headingRowColor:
@@ -496,6 +500,7 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                           label: Text('No.', style: styleHead)),
                                       DataColumn(
                                           label: Checkbox(
+                                        activeColor: Colors.green,
                                         value: cekAll,
                                         onChanged: (bool value) {
                                           setState(() {
@@ -537,14 +542,15 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                       const DataColumn(
                                           label:
                                               Text('Lunas', style: styleHead)),
-                                      const DataColumn(
-                                          label:
-                                              Text('Cetak', style: styleHead)),
+                                      // const DataColumn(
+                                      //     label:
+                                      //         Text('Cetak', style: styleHead)),
                                     ],
                                     rows: listJadwalPelanggan.map((e) {
                                       return DataRow(cells: [
                                         DataCell(Text((x++).toString())),
                                         DataCell(Checkbox(
+                                          activeColor: Colors.green,
                                           value: e['CEK'],
                                           onChanged: (bool value) {
                                             setState(() {
@@ -552,26 +558,37 @@ class _ModalDetailJadwalState extends State<ModalDetailJadwal> {
                                             });
                                           },
                                         )),
-                                        DataCell(
-                                            Text(e['NAMA_LGKP'].toString())),
-                                        DataCell(Text(e['JENS_KLMN'] == 'P'
-                                            ? "Pria"
-                                            : "Wanita")),
-                                        DataCell(Text(e['UMUR'].toString())),
-                                        DataCell(Text(e['PEMB_PSPR'])),
-                                        DataCell(Text(e['PRSS_VKSN'])),
-                                        DataCell(Text(e['HANDLING'])),
-                                        DataCell(
-                                            Text(e['NOXX_TELP'].toString())),
+                                        DataCell(Text(e['NAMA_LGKP'].toString(),
+                                            style: styleRowKhusus)),
                                         DataCell(Text(
-                                            myFormat.format(e['EST_TOTAL']))),
-                                        DataCell(
-                                            Text(myFormat.format(e['MASUK']))),
-                                        DataCell(
-                                            Text(myFormat.format(e['SISA']))),
-                                        DataCell(
-                                            Text(e['STATUS_BAYAR'].toString())),
-                                        const DataCell(Text('Pending')),
+                                            e['JENS_KLMN'] == 'P'
+                                                ? "Pria"
+                                                : "Wanita",
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(e['UMUR'].toString(),
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(e['PEMB_PSPR'],
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(e['PRSS_VKSN'],
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(e['HANDLING'],
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(e['NOXX_TELP'].toString(),
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(
+                                            myFormat.format(e['EST_TOTAL']),
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(
+                                            myFormat.format(e['MASUK']),
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(
+                                            myFormat.format(e['SISA']),
+                                            style: styleRowKhusus)),
+                                        DataCell(Text(
+                                            e['STATUS_BAYAR'].toString(),
+                                            style: styleRowKhusus)),
+                                        // DataCell(Text('Pending',
+                                        //     style: styleRowKhusus)),
                                       ]);
                                     }).toList()),
                               ),

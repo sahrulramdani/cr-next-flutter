@@ -67,7 +67,7 @@ class _TableLaporanTahunanState extends State<TableLaporanTahunan> {
 
     return SizedBox(
       width: screenWidth * 0.9,
-      height: 0.9 * screenHeight,
+      height: 0.73 * screenHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

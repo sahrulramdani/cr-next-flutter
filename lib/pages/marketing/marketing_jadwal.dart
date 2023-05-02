@@ -8,7 +8,9 @@ import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/export_jadwal.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/form_jadwal.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/jadwal/print_jadwal.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/table_jadwal_jamaah.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,7 @@ class MarketingJadwalPage extends StatefulWidget {
 class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   bool enableFormL = false;
   List<Map<String, dynamic>> listJadwal = [];
+  List<Map<String, dynamic>> listJadwalAktif = [];
   List<Map<String, dynamic>> listCardJadwal = [];
 
   void getAuth() async {
@@ -93,6 +96,8 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
 
     setState(() {
       listJadwal = data;
+      listJadwalAktif =
+          data.where(((element) => element['STATUS'] == 0)).toList();
     });
 
     loadEnd();
@@ -130,37 +135,11 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
   }
 
   Widget cmdPrint() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        authPrnt == '1'
-            ? ''
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
-      },
-      icon: const Icon(Icons.print_outlined),
-      style: fncButtonAuthStyle(authPrnt, context),
-      label: fncLabelButtonStyle('Print', context),
-    );
+    return PrintJadwal(listJadwal: listJadwalAktif);
   }
 
   Widget cmdExport() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        authExpt == '1'
-            ? ''
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
-      },
-      icon: const Icon(Icons.download_outlined),
-      style: fncButtonAuthStyle(authExpt, context),
-      label: fncLabelButtonStyle('Export', context),
-    );
+    return ExportJadwal(listJadwal: listJadwal);
   }
 
   Widget spacePemisah() {
@@ -194,21 +173,6 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                     spacePemisah(),
                   ],
                 )),
-
-            //---------------------------------
-            // Visibility(
-            //   visible: enableFormL,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       // cmdSimpan(),
-            //       //---------------------------------
-            //       // spacePemisah(),
-            //       //---------------------------------
-            //       cmdBatal()
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       );
@@ -350,9 +314,7 @@ class _MarketingJadwalPageState extends State<MarketingJadwalPage> {
                         ),
                       ],
                     ),
-                    TableJadwalJamaah(
-                      dataJadwal: listJadwal,
-                    ),
+                    TableJadwalJamaah(dataJadwal: listJadwal),
                   ],
                 ),
               ))

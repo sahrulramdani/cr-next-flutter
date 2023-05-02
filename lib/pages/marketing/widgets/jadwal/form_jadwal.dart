@@ -934,6 +934,8 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   fncSaveData() {
+    // print(fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
+    //     namaRuteTransitPlng, ruteAkhirPlng));
     // print("ID PAKET : $idpaket");
     // print("ID JENIS : $idjenis");
     // print("TUJUAN : $tujuan");
@@ -957,29 +959,31 @@ class _JadwalFormState extends State<JadwalForm> {
     // print("TANGGAL BERANGKT : ${dateBerangkat.text}");
     // print("TANGGAL PULNG : ${datePulang.text}");
     HttpJadwal.saveJadwal(
-            idpaket,
-            idjenis,
-            tujuan ?? '',
-            idHotelMek ?? '',
-            idHotelMad ?? '',
-            idHotelJed ?? '',
-            idHotelTra ?? '',
-            jumlahHari,
-            pesawatBerangkat ?? '',
-            pesawatPulang ?? '',
-            rute,
-            rute2 ?? '',
-            rute3,
-            ruteAwalPlng,
-            ruteTransitPlng ?? '',
-            ruteAkhirPlng,
-            tarif,
-            jumlahSeat,
-            idMataUang,
-            keterangan ?? '',
-            dateBerangkat.text,
-            datePulang.text)
-        .then((value) {
+      idpaket,
+      idjenis,
+      tujuan ?? '',
+      idHotelMek ?? '',
+      idHotelMad ?? '',
+      idHotelJed ?? '',
+      idHotelTra ?? '',
+      jumlahHari,
+      pesawatBerangkat ?? '',
+      pesawatPulang ?? '',
+      rute,
+      rute2 ?? '',
+      rute3,
+      ruteAwalPlng,
+      ruteTransitPlng ?? '',
+      ruteAkhirPlng,
+      tarif,
+      jumlahSeat,
+      idMataUang,
+      keterangan ?? '',
+      dateBerangkat.text,
+      datePulang.text,
+      fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
+          namaRuteTransitPlng, ruteAkhirPlng),
+    ).then((value) {
       if (value.status == true) {
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());

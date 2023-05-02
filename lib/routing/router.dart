@@ -82,6 +82,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const MarketingHotel());
     case mrktBandaraPageRoute:
       return _getPageRoute(const MarketingBandaraPage());
+    // MARKETING
     case jamaahPageRoute:
       return _getPageRoute(const JamaahDashboardPage());
     case jmahDataPageRoute:
@@ -92,6 +93,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const JamaahPelangganPage());
     case jmahAlumniPageRoute:
       return _getPageRoute(const JamaahAlumniPage());
+    // INVERTORY
     case inventoryPageRoute:
       return _getPageRoute(const InventoryDashboardPage());
     case invSatuanPageRoute:
@@ -106,6 +108,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const InventoryKirimBarang());
     case invHandlingPageRoute:
       return _getPageRoute(const InventoryHandlingPage());
+    // FINANCE
     case financePageRoute:
       return _getPageRoute(const FinanceDashboardPage());
     case fincPembayaranPageRoute:
@@ -138,10 +141,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const FinancePendapatanBiaya());
     case fincCostStructurePageRoute:
       return _getPageRoute(const FinanceCostStructure());
+    // HUMAN RESOURCE
     case hrPageRoute:
       return _getPageRoute(const HumanResourceDashPage());
     case hrKaryawanPageRoute:
       return _getPageRoute(const HrKaryawanPage());
+    // SETTING
     case settingGrupUserRoute:
       return _getPageRoute(const SettingGrupUser());
     case settingPenggunaRoute:
@@ -150,17 +155,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const SettingMenu());
     case settingBiayaRoute:
       return _getPageRoute(const SettingBiaya());
+      return _getPageRoute(ClientsPage());
+    // AUTHENTICATION
+    case authenticationPageRoute:
+      return _getPageRoute(const AuthenticationPage());
+    default:
+      return _getPageRoute(const OverViewPage());
+  }
+}
+
       // ------------------
       // case mrktDealTrackPageRoute:
       //   return _getPageRoute(DealTrackPage());
       // case projectPageRoute:
       //   return _getPageRoute(PmPage());
       // case clientPageRoute:
-      return _getPageRoute(ClientsPage());
-    case authenticationPageRoute:
-      return _getPageRoute(const AuthenticationPage());
-
-    default:
-      return _getPageRoute(const OverViewPage());
-  }
-}

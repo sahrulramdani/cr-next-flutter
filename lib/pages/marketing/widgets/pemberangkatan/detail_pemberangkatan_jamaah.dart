@@ -62,22 +62,32 @@ class _DetailPemberangkatanJamaahState
             children: [
               DataTable(
                   dataRowHeight: 35,
-                  headingRowHeight: 40,
-                  border: TableBorder.all(color: Colors.grey),
+                  headingRowHeight: 30,
+                  columnSpacing: 25,
+                  headingRowColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    return Colors.blue;
+                  }),
+                  headingTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy'),
+                  dataTextStyle: const TextStyle(
+                      color: Colors.black, fontSize: 12, fontFamily: 'Gilroy'),
+                  // border: TableBorder.all(color: Colors.grey),
                   columns: const [
-                    DataColumn(label: Text('No.', style: styleColumn)),
-                    DataColumn(label: Text('ID Pelanggan', style: styleColumn)),
-                    DataColumn(label: Text('Nama', style: styleColumn)),
-                    DataColumn(label: Text('ID Marketing', style: styleColumn)),
-                    DataColumn(label: Text('Marketing', style: styleColumn)),
-                    DataColumn(label: Text('Jenis', style: styleColumn)),
-                    DataColumn(label: Text('Level', style: styleColumn)),
-                    DataColumn(
-                        label: Text('Pendaftaran Via', style: styleColumn)),
-                    DataColumn(label: Text('Jamaah Ke', style: styleColumn)),
-                    DataColumn(label: Text('Biaya', style: styleColumn)),
-                    DataColumn(label: Text('VB', style: styleColumn)),
-                    DataColumn(label: Text('Aksi', style: styleColumn))
+                    DataColumn(label: Text('No.')),
+                    DataColumn(label: Text('ID Pelanggan')),
+                    DataColumn(label: Text('Nama')),
+                    DataColumn(label: Text('ID Marketing')),
+                    DataColumn(label: Text('Marketing')),
+                    DataColumn(label: Text('Jenis')),
+                    DataColumn(label: Text('Level')),
+                    DataColumn(label: Text('Pendaftaran Via')),
+                    DataColumn(label: Text('Jamaah Ke')),
+                    DataColumn(label: Text('Biaya')),
+                    DataColumn(label: Text('VB')),
+                    DataColumn(label: Text('Aksi'))
                   ],
                   rows: listPelangganPemberangkatan.map((data) {
                     return DataRow(cells: [

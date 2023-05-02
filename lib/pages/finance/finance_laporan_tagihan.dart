@@ -8,6 +8,7 @@ import 'package:flutter_web_course/pages/finance/widgets/penerbangan.dart/penerb
 import 'package:flutter_web_course/pages/inventory/widgets/kirim/table_kirim_barang.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -64,6 +65,9 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
   }
 
   void getDataTagihan() async {
+    loadStart();
+
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     var tglAwal = fncTanggal(dateAwal.text);
     var tglAkhir = fncTanggal(dateAkhir.text);
 
@@ -73,22 +77,58 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
         headers: {
           'pte-token': kodeToken,
         });
-    List<Map<String, dynamic>> dataStatus =
+    List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
+
+    // print(data);
+
+    if (data.isNotEmpty) {
+      for (var j = 0; j < data.length; j++) {
+        var pushData = {
+          "NOXX_IDNT": "${data[j]['NOXX_IDNT']}",
+          "NAMA_LGKP":
+              "${data[j]['NAMA_LGKP'] != data[j == 0 ? 0 : j - 1]['NAMA_LGKP'] ? data[j]['NAMA_LGKP'] : (j == 0 ? data[j]['NAMA_LGKP'] : '')}",
+          "KDXX_DFTR":
+              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['KDXX_DFTR'] : (j == 0 ? data[j]['KDXX_DFTR'] : '')}",
+          "STAS_BGKT":
+              "${data[j]['STAS_BGKT'] != data[j == 0 ? 0 : j - 1]['STAS_BGKT'] ? data[j]['STAS_BGKT'] : (j == 0 ? data[j]['STAS_BGKT'] : '')}",
+          "STATUS_BGKT":
+              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['STATUS_BGKT'] : (j == 0 ? data[j]['STATUS_BGKT'] : '')}",
+          "IDXX_JDWL":
+              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['IDXX_JDWL'] : (j == 0 ? data[j]['IDXX_JDWL'] : '')}",
+          "TGLX_BGKT":
+              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? data[j]['TGLX_BGKT'] : (j == 0 ? data[j]['TGLX_BGKT'] : '')}",
+          "BERANGKAT":
+              "${data[j]['KDXX_DFTR'] != data[j == 0 ? 0 : j - 1]['KDXX_DFTR'] ? fncGetTanggal(data[j]['BERANGKAT']) : (j == 0 ? fncGetTanggal(data[j]['BERANGKAT']) : '')}",
+          "JENS_TGIH": data[j]['JENS_TGIH'],
+          "TOTL_TGIH": myFormat.format(data[j]['TOTL_TGIH']),
+          "JMLX_BYAR": myFormat.format(data[j]['JMLX_BYAR']),
+          "SISA_TGIH": myFormat.format(data[j]['SISA_TGIH']),
+          "TGLX_TDIB": data[j]['TGLX_TDIB'],
+          "TGLX_TAGIHAN": fncGetTanggal(data[j]['TGLX_TAGIHAN']),
+          "STS_LUNAS": data[j]['STS_LUNAS'],
+        };
+
+        listDataTagihan.add(pushData);
+      }
+    }
+
+    // print(listDataTagihan);
 
     int ttl1 = 0;
     int ttl2 = 0;
-    for (var i = 0; i < dataStatus.length; i++) {
-      ttl1 += dataStatus[i]['TOTL_TGIH'];
-      ttl2 += dataStatus[i]['SISA_TGIH'];
+    for (var i = 0; i < data.length; i++) {
+      ttl1 += data[i]['TOTL_TGIH'];
+      ttl2 += data[i]['SISA_TGIH'];
     }
 
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
     setState(() {
       totalTagihan = myFormat.format(ttl1);
       sisaTagihan = myFormat.format(ttl2);
-      listDataTagihan = dataStatus;
+      // listDataTagihan = dataStatus;
     });
+
+    loadEnd();
   }
 
   @override
@@ -207,8 +247,12 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
   }
 
   Widget selectBerangkat(context) {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
       child: DropdownSearch(
         mode: Mode.MENU,
@@ -232,6 +276,8 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
           });
         },
         selectedItem: "Semua",
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }
@@ -264,8 +310,12 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
   // }
 
   Widget selectJenis(context) {
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       width: ResponsiveWidget.isSmallScreen(context) ? 150 : 200,
       child: DropdownSearch(
         mode: Mode.MENU,
@@ -281,6 +331,8 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
           });
         },
         selectedItem: "Semua",
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
       ),
     );
   }

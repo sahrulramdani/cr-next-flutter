@@ -86,6 +86,7 @@ class _PrintIdentitasState extends State<PrintIdentitas> {
                           pw.Text('Jl. SUTAATMAJA RT069/009 CIGADUNG SUBANG'),
                           pw.SizedBox(height: 20),
                           pw.Table.fromTextArray(
+                              cellStyle: const pw.TextStyle(fontSize: 10),
                               cellPadding: const pw.EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 10),
                               columnWidths: {
@@ -114,7 +115,7 @@ class _PrintIdentitasState extends State<PrintIdentitas> {
                                     i++)
                                   [
                                     (urut++).toString(),
-                                    listPelanggan[i]['NOXX_IDNT'].toString(),
+                                    "${listPelanggan[i]['NOXX_IDNT'] ?? '-'}",
                                     listPelanggan[i]['NAMA_LGKP'].toString(),
                                     listPelanggan[i]['NAMA_AYAH'].toString(),
                                     "${listPelanggan[i]['TMPT_LHIR']}, ${fncGetTanggal(DateFormat("dd-MM-yyyy").format(DateTime.parse(listPelanggan[(a - 1)]['TGLX_LHIR'])))}",

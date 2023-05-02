@@ -144,27 +144,6 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
     return ExportAgency(listAgency: listAgency);
   }
 
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
   Widget spacePemisah() {
     return const SizedBox(
       height: 10,
@@ -196,21 +175,6 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                     spacePemisah(),
                   ],
                 )),
-
-            //---------------------------------
-            // Visibility(
-            //   visible: enableFormL,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       // cmdSimpan(),
-            //       //---------------------------------
-            //       // spacePemisah(),
-            //       //---------------------------------
-            //       cmdBatal()
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       );

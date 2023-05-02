@@ -46,8 +46,9 @@ class MyData extends DataTableSource {
           DataCell(Text(myFormat.format(dataPembayaran[index]['JML_BYAR']),
               style: styleRowReguler)),
           DataCell(Text(
-              myFormat.format((dataPembayaran[index]['TOTL_TGIH']) -
-                  (dataPembayaran[index]['JML_BYAR'])),
+              myFormat.format(((dataPembayaran[index]['TOTL_TGIH']) -
+                      (dataPembayaran[index]['JML_BYAR']))
+                  .abs()),
               style: styleRowReguler)),
         ]);
   }

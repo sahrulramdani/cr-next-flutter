@@ -962,6 +962,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       keterangan,
       dateBerangkat.text,
       datePulang.text,
+      fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
+          namaRuteTransitPlng, ruteAkhirPlng),
     ).then((value) {
       if (value.status == true) {
         showDialog(

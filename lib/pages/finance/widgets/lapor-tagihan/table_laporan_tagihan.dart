@@ -20,37 +20,29 @@ class MyData extends DataTableSource {
   MyData(this.dataLaporan);
   @override
   DataRow getRow(int index) {
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    final styleRowKhusus = TextStyle(
+        fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
+    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
-      DataCell(Text(fncGetTanggal(dataLaporan[index]['TGLX_TAGIHAN']),
-          style: styleRowReguler)),
-      DataCell(Text(fncGetTanggal(dataLaporan[index]['BERANGKAT']),
-          style: styleRowReguler)),
-      DataCell(Text(dataLaporan[index]['KDXX_DFTR'].toString(),
-          style: styleRowReguler)),
-      DataCell(Text(dataLaporan[index]['NAMA_LGKP'].toString(),
-          style: styleRowReguler)),
-      DataCell(Text(dataLaporan[index]['JENS_TGIH'].toString(),
-          style: styleRowReguler)),
-      DataCell(Text(myFormat.format(dataLaporan[index]['TOTL_TGIH']),
-          style: styleRowReguler)),
-      DataCell(Text(myFormat.format(dataLaporan[index]['SISA_TGIH']),
-          style: styleRowReguler)),
-      DataCell(Text(dataLaporan[index]['STS_LUNAS'].toString(),
+      DataCell(Text(dataLaporan[index]['NAMA_LGKP'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['KDXX_DFTR'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['BERANGKAT'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['STATUS_BGKT'],
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: dataLaporan[index]['STAS_BGKT'] == '0'
+                  ? Colors.red[800]
+                  : Colors.green[800]))),
+      DataCell(Text(dataLaporan[index]['TGLX_TAGIHAN'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['JENS_TGIH'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['TOTL_TGIH'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['SISA_TGIH'], style: styleRowKhusus)),
+      DataCell(Text(dataLaporan[index]['STS_LUNAS'],
           style: TextStyle(
               fontWeight: FontWeight.bold,
               color: dataLaporan[index]['STS_LUNAS'] == 'Belum'
-                  ? Colors.red[800]
-                  : Colors.green[800]))),
-      DataCell(Text(
-          dataLaporan[index]['STAS_BGKT'] == 0
-              ? 'Belum Berangkat'
-              : 'Sudah Berangkat',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: dataLaporan[index]['STAS_BGKT'] == 0
                   ? Colors.red[800]
                   : Colors.green[800]))),
     ]);
@@ -88,18 +80,20 @@ class _TableLaporanTagihanState extends State<TableLaporanTagihan> {
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
           columnSpacing: 5,
+          rowsPerPage: 200,
+          dataRowHeight: 25,
           source: myTable,
           columns: const [
             DataColumn(label: Text('No.', style: styleColumn)),
-            DataColumn(label: Text('Tanggal Tagihan', style: styleColumn)),
-            DataColumn(label: Text('Tanggal Berangkat', style: styleColumn)),
-            DataColumn(label: Text('No Pelanggan', style: styleColumn)),
             DataColumn(label: Text('Nama Pelanggan', style: styleColumn)),
+            DataColumn(label: Text('No Pelanggan', style: styleColumn)),
+            DataColumn(label: Text('Tanggal Berangkat', style: styleColumn)),
+            DataColumn(label: Text('Status Berangkat', style: styleColumn)),
+            DataColumn(label: Text('Tanggal Tagihan', style: styleColumn)),
             DataColumn(label: Text('Jenis Tagihan', style: styleColumn)),
             DataColumn(label: Text('Jumlah', style: styleColumn)),
             DataColumn(label: Text('Sisa', style: styleColumn)),
             DataColumn(label: Text('Status Lunas', style: styleColumn)),
-            DataColumn(label: Text('Status Berangkat', style: styleColumn)),
           ],
         ),
       ),

@@ -1,15 +1,11 @@
-import 'dart:io';
+// ignore_for_file: unnecessary_import, avoid_web_libraries_in_flutter
+
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 class ExportAgency extends StatelessWidget {
@@ -24,12 +20,12 @@ class ExportAgency extends StatelessWidget {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
 
-    sheet.getRangeByName('A1').setText('ID Marketing');
-    sheet.getRangeByName('B1').setText('Nama');
-    sheet.getRangeByName('C1').setText('Fee Level');
-    sheet.getRangeByName('D1').setText('Periode');
-    sheet.getRangeByName('E1').setText('Total');
-    sheet.getRangeByName('F1').setText('Poin');
+    sheet.getRangeByName('A1').setText('ID MARKETING');
+    sheet.getRangeByName('B1').setText('NAMA');
+    sheet.getRangeByName('C1').setText('FEE LEVEL');
+    sheet.getRangeByName('D1').setText('PERIODE');
+    sheet.getRangeByName('E1').setText('TOTAL');
+    sheet.getRangeByName('F1').setText('POIN');
 
     int x = 2;
     for (var i = 0; i < listAgency.length; i++) {
@@ -66,13 +62,21 @@ class ExportAgency extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        authExpt == '1'
-            ? _createExport()
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
+        if (listAgency.isEmpty) {
+          showDialog(
+              context: context,
+              builder: (context) => const ModalInfo(
+                    deskripsi: 'Data Tidak Ada',
+                  ));
+        } else {
+          authExpt == '1'
+              ? _createExport()
+              : showDialog(
+                  context: context,
+                  builder: (context) => const ModalInfo(
+                        deskripsi: 'Anda Tidak Memiliki Akses',
+                      ));
+        }
       },
       icon: const Icon(Icons.download_outlined),
       label: fncLabelButtonStyle('Export', context),

@@ -97,8 +97,8 @@ class _ModalEditPemberangkatanState extends State<ModalEditPemberangkatan> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                menuButton(context),
-                const SizedBox(height: 10),
+                // menuButton(context),
+                // const SizedBox(height: 10),
                 Expanded(
                     child:
                         DetailPemberangkatanJamaah(idJadwal: widget.idJadwal)),

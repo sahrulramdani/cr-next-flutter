@@ -16,6 +16,48 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
+class MyData extends DataTableSource {
+  final styleRowKhusus = TextStyle(
+      fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
+
+  final List<Map<String, dynamic>> listDataPembayaran;
+  MyData(this.listDataPembayaran);
+  @override
+  DataRow getRow(int index) {
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+
+    return DataRow(cells: [
+      DataCell(Text((index + 1).toString())),
+      DataCell(
+          Text(listDataPembayaran[index]['TGLX_BYAR'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['NOXX_FAKT'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['KDXX_DFTR'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['NAMA_LGKP'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['TGLX_TGIH'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['JENS_TGIH'], style: styleRowKhusus)),
+      DataCell(
+          Text(listDataPembayaran[index]['NAMA_BANK'], style: styleRowKhusus)),
+      DataCell(Text(
+          myFormat.format(int.parse(listDataPembayaran[index]['DIBAYARKAN'])),
+          style: styleRowKhusus)),
+    ]);
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => listDataPembayaran.length;
+
+  @override
+  int get selectedRowCount => 0;
+}
+
 class FinancePembayaranHarian extends StatefulWidget {
   const FinancePembayaranHarian({Key key}) : super(key: key);
 
@@ -343,10 +385,11 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-    final styleRowKhusus = TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
-    int x = 1;
+    final DataTableSource myTable = MyData(listDataPembayaran);
+    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    // final styleRowKhusus = TextStyle(
+    //     fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
+    // int x = 1;
 
     return SingleChildScrollView(
       child: Column(
@@ -479,72 +522,34 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                   ],
                 ),
                 SizedBox(
-                  height: screenHeight * 0.62,
+                  height: screenHeight * 0.58,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          DataTable(
-                              columnSpacing: 30,
-                              dataRowHeight: 25,
-                              columns: const [
-                                DataColumn(
-                                    label: Text('No.', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Tanggal', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nomor Transaksi',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Kode Daftar',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nama Jamaah',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Tgl Tagihan',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Nama Tagihan',
-                                        style: styleColumn)),
-                                DataColumn(
-                                    label:
-                                        Text('Cara Bayar', style: styleColumn)),
-                                DataColumn(
-                                    label: Text('Jumlah', style: styleColumn)),
-                              ],
-                              rows: listDataPembayaran.map((e) {
-                                return DataRow(cells: [
-                                  DataCell(Text((x++).toString(),
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['TGLX_BYAR'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NOXX_FAKT'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['KDXX_DFTR'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NAMA_LGKP'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['TGLX_TGIH'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['JENS_TGIH'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(e['NAMA_BANK'],
-                                      style: styleRowKhusus)),
-                                  DataCell(Text(
-                                      myFormat
-                                          .format(int.parse(e['DIBAYARKAN'])),
-                                      style: styleRowKhusus)),
-                                ]);
-                              }).toList())
-                        ],
-                      ),
+                    scrollDirection: Axis.vertical,
+                    child: PaginatedDataTable(
+                      columnSpacing: 30,
+                      dataRowHeight: 25,
+                      rowsPerPage: 150,
+                      source: myTable,
+                      columns: const [
+                        DataColumn(label: Text('No.', style: styleColumn)),
+                        DataColumn(label: Text('Tanggal', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Nomor Transaksi', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Kode Daftar', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Nama Jamaah', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Tgl Tagihan', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Nama Tagihan', style: styleColumn)),
+                        DataColumn(
+                            label: Text('Cara Bayar', style: styleColumn)),
+                        DataColumn(label: Text('Jumlah', style: styleColumn)),
+                      ],
                     ),
                   ),
                 )
-                // TableLaporanPembayaran(dataLaporan: listDataPembayaran)
               ],
             ),
           )

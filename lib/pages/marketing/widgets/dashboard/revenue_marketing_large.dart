@@ -100,12 +100,13 @@ class _RevenueMarketingLargeState extends State<RevenueMarketingLarge> {
 
     return [
       charts.Series<OrdinalSales, String>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
+          id: 'Sales',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (OrdinalSales sales, _) => (sales.year).toString(),
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          data: data,
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              '${sales.sales.toString()}')
     ];
   }
 
@@ -141,6 +142,8 @@ class _RevenueMarketingLargeState extends State<RevenueMarketingLarge> {
                 height: 200,
                 child: charts.BarChart(
                   _createSampleData(),
+                  barRendererDecorator: charts.BarLabelDecorator<String>(),
+                  domainAxis: const charts.OrdinalAxisSpec(),
                   animate: true,
                 ),
               )

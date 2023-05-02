@@ -102,12 +102,12 @@ class _RevenueJamaahSmallState extends State<RevenueJamaahSmall> {
 
     return [
       charts.Series<OrdinalSales, String>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
+          id: 'Sales',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (OrdinalSales sales, _) => (sales.year).toString(),
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          data: data,
+          labelAccessorFn: (OrdinalSales sales, _) => sales.sales.toString())
     ];
   }
 
@@ -144,6 +144,8 @@ class _RevenueJamaahSmallState extends State<RevenueJamaahSmall> {
                   height: 200,
                   child: charts.BarChart(
                     _createSampleData(),
+                    barRendererDecorator: charts.BarLabelDecorator<String>(),
+                    domainAxis: const charts.OrdinalAxisSpec(),
                     animate: true,
                   ),
                 ),

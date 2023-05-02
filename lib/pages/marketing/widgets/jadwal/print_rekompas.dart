@@ -316,7 +316,7 @@ class _ModalRekompasState extends State<ModalRekompas> {
                       ),
                       const SizedBox(width: 10),
                       FittedBox(
-                        child: Text('Print Surat Pernyataan',
+                        child: Text('Print Rekomendasi Paspor',
                             style: TextStyle(
                                 color: myGrey, fontWeight: FontWeight.bold)),
                       ),

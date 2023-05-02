@@ -170,6 +170,9 @@ const mrktLeadsPageRoute = "/mrkt/leads";
 const authenticationPageDisplayName = "Log Out";
 const authenticationPageRoute = "/auth";
 
+const landingPageDisplayName = "Landing";
+const landingPageRoute = "/landing";
+
 // MENU ASLI
 
 const purchasingPageDisplayName = "Purchasing";

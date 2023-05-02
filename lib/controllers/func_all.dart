@@ -169,6 +169,19 @@ fncInfoPeriode(tglAwal, tglAkhir) {
   }
 
   var hasil =
-      '${tanggalAwal} ${namaBulanAwal} ${tahunAwal == tahunAkhir ? '' : tahunAwal} s/d ${tanggalAkhir} ${namaBulanAkhir} ${tahunAkhir}';
+      '$tanggalAwal $namaBulanAwal ${tahunAwal == tahunAkhir ? '' : tahunAwal} s/d $tanggalAkhir $namaBulanAkhir $tahunAkhir';
   return hasil;
+}
+
+fncKeteranganRute(rute1, rute2, rute3, rute4, rute5, rute6) {
+  var ketr1 = rute1 != null ? "$rute1 - " : "";
+  var ketr2 = rute2 != null ? "$rute2 - " : "";
+  var ketr3 = rute3 != null ? "$rute3" : "";
+  var ketr4 = rute4 != null ? "$rute4 - " : "";
+  var ketr5 = rute5 != null ? "$rute5 - " : "";
+  var ketr6 = rute6 != null ? "$rute6" : "";
+
+  var keterangan = "$ketr1$ketr2$ketr3 # $ketr4$ketr5$ketr6";
+
+  return keterangan;
 }

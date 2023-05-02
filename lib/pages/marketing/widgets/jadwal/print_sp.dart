@@ -102,8 +102,7 @@ class _ModalSuratPernyataanState extends State<ModalSuratPernyataan> {
                                           [
                                             "Nomor Paspor",
                                             ":",
-                                            listPelanggan[(a - 1)]['NOXX_PSPR']
-                                                .toString(),
+                                            "${listPelanggan[(a - 1)]['NOXX_PSPR'] ?? '-'}",
                                           ],
                                         ]),
                                     pw.SizedBox(height: 5),

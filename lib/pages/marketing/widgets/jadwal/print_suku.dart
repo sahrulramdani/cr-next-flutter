@@ -304,7 +304,7 @@ class _ModalSuratKuasaState extends State<ModalSuratKuasa> {
                       ),
                       const SizedBox(width: 10),
                       FittedBox(
-                        child: Text('Print Surat Pernyataan',
+                        child: Text('Print Surat Kuasa',
                             style: TextStyle(
                                 color: myGrey, fontWeight: FontWeight.bold)),
                       ),

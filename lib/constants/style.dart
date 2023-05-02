@@ -18,7 +18,7 @@ Color myGrey = Colors.grey[700];
 // String fotoUser;
 
 String kodeToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODE0NDA1MTIsImV4cCI6MTY4MTUyNjkxMn0.MBn2Xe18avzRN12OHJBtmz8tI1zzi4XibNcPtcdMXkk";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNhaHJ1bHJhbWRhbmkyMCIsImlhdCI6MTY4Mjk5NDU1NSwiZXhwIjoxNjgzMDgwOTU1fQ.ysYf1OoQK48nv4fRk1WHtMNDUID3mQAZnECk0FZz9Ws";
 String namaUser = "Superadmin";
 String username = "superadmin";
 String fotoUser;
@@ -37,8 +37,8 @@ dynamic authExpt = '0';
 bool enableForm = false;
 
 //Url Aplikasi
-String urlAddress = "http://localhost:3000";
-// String urlAddress = "http://202.78.195.175:4000";
+// String urlAddress = "http://localhost:3000";
+String urlAddress = "http://202.78.195.175:4000";
 
 // STYLE WIDGET
 const styleColumn = TextStyle(
@@ -159,7 +159,7 @@ fncLabelButtonStyle(text, context) {
 }
 
 fncWidthColumnForm(context) {
-  return ResponsiveWidget.isSmallScreen(context) ? 355 : 525;
+  return ResponsiveWidget.isSmallScreen(context) ? 355 : 520;
 }
 
 fncWidthInputForm(context) {
