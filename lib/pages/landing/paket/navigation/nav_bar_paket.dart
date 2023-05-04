@@ -9,8 +9,8 @@ import 'package:flutter_web_course/pages/landing/src/widgets/responsive_widget.d
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NavBar extends ResponsiveWidget {
-  const NavBar({Key key}) : super(key: key);
+class NavbarPaket extends ResponsiveWidget {
+  const NavbarPaket({Key key}) : super(key: key);
 
   @override
   Widget buildDesktop(BuildContext context) {
@@ -28,7 +28,6 @@ class DesktopNavBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final isScrolled = ref.watch(scrolledProvider);
     const navBarColor = Colors.white;
 
     return Container(
@@ -46,52 +45,31 @@ class DesktopNavBar extends HookConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
         child: Row(
           children: <Widget>[
-            Image.asset(
-              "assets/images/logo_craudhah_lands.png",
-              height: 60.0,
+            GestureDetector(
+              onTap: () {
+                menuController.changeActiveitemTo("");
+                Get.offAllNamed('/paket');
+              },
+              child: Image.asset(
+                "assets/images/logo_craudhah_lands.png",
+                height: 60.0,
+              ),
             ),
             const SizedBox(width: 10.0),
-            // const Text(
-            //   "Cahaya Raudhah",
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.w700,
-            //     color: Colors.black87,
-            //     fontSize: 32,
-            //   ),
-            // ),
             Expanded(child: Container()),
-            NavBarButton(
-              onTap: () => ref.read(currentPageProvider.state).state = homeKey,
-              text: "Beranda",
-            ),
-            NavBarButton(
-              onTap: () =>
-                  ref.read(currentPageProvider.state).state = featureKey,
-              text: "Tentang",
-            ),
-            NavBarButton(
-              onTap: () =>
-                  ref.read(currentPageProvider.state).state = screenshotKey,
-              text: "Produk",
-            ),
-            NavBarButton(
-              onTap: () =>
-                  ref.read(currentPageProvider.state).state = contactKey,
-              text: "Kontak",
-            ),
             ElevatedButton(
               onPressed: () {
                 menuController.changeActiveitemTo("");
-                Get.offAllNamed('/auth');
+                Get.offAllNamed('/homepage');
               },
               child: Container(
                 alignment: Alignment.center,
                 height: 40,
-                width: 100,
+                width: 120,
                 child: const Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    'Log In',
+                    'Homepage',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -119,58 +97,35 @@ class MobileNavBar extends HookConsumerWidget {
     return Stack(
       children: [
         AnimatedContainer(
-          margin: const EdgeInsets.only(top: 70.0),
+          margin: const EdgeInsets.only(top: 100.0),
           duration: const Duration(milliseconds: 350),
           curve: Curves.ease,
           height: containerHeight.value,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                NavBarButton(
-                  text: "Beranda",
-                  onTap: () {
-                    ref.read(currentPageProvider.state).state = homeKey;
-                    containerHeight.value = 0;
-                  },
-                ),
-                NavBarButton(
-                  text: "Tentang",
-                  onTap: () {
-                    ref.read(currentPageProvider.state).state = featureKey;
-                    containerHeight.value = 0;
-                  },
-                ),
-                NavBarButton(
-                  text: "Produk",
-                  onTap: () {
-                    ref.read(currentPageProvider.state).state = screenshotKey;
-                    containerHeight.value = 0;
-                  },
-                ),
-                NavBarButton(
-                  text: "Kontak",
-                  onTap: () {
-                    ref.read(currentPageProvider.state).state = contactKey;
-                    containerHeight.value = 0;
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    menuController.changeActiveitemTo(" ");
-                    Get.offAllNamed('/auth');
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 40,
-                    width: 100,
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Text(
-                        'Log In',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
+                Container(
+                  height: 50,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      menuController.changeActiveitemTo("");
+                      Get.offAllNamed('/landing');
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 40,
+                      width: 100,
+                      child: const Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          'Kembali',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -198,14 +153,6 @@ class MobileNavBar extends HookConsumerWidget {
                   "assets/images/logo_craudhah_lands.png",
                   height: 60.0,
                 ),
-                // const SizedBox(width: 10.0),
-                // const Text(
-                //   "Company Name",
-                //   style: TextStyle(
-                //       fontWeight: FontWeight.w700,
-                //       color: Colors.black87,
-                //       fontSize: 32),
-                // ),
                 Expanded(
                   child: Container(),
                 ),

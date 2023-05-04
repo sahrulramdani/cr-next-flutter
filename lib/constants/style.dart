@@ -18,7 +18,7 @@ Color myGrey = Colors.grey[700];
 // String fotoUser;
 
 String kodeToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNhaHJ1bHJhbWRhbmkyMCIsImlhdCI6MTY4Mjk5NDU1NSwiZXhwIjoxNjgzMDgwOTU1fQ.ysYf1OoQK48nv4fRk1WHtMNDUID3mQAZnECk0FZz9Ws";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODMxNzIxNjksImV4cCI6MTY4MzI1ODU2OX0.g_lCeqHh1-hWZkbt_YPTtLY7TjmcGl8K5AMLkNIOkJU";
 String namaUser = "Superadmin";
 String username = "superadmin";
 String fotoUser;
@@ -37,8 +37,8 @@ dynamic authExpt = '0';
 bool enableForm = false;
 
 //Url Aplikasi
-// String urlAddress = "http://localhost:3000";
-String urlAddress = "http://202.78.195.175:4000";
+String urlAddress = "http://localhost:3000";
+// String urlAddress = "http://202.78.195.175:4000";
 
 // STYLE WIDGET
 const styleColumn = TextStyle(

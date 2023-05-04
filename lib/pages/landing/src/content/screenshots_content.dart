@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/landing/src/widgets/card_icon_widget.dart';
 import 'package:flutter_web_course/pages/landing/src/widgets/card_paket.dart';
@@ -182,17 +183,34 @@ class _ScreenshotsContentResponsiveState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: listJadwal.map((e) {
                       return CardPaketLanding(
-                        id: e['IDXX_PKET'].toString(),
+                        jenis: "XX",
+                        idPaket: e['IDXX_JDWL'].toString(),
                         judul: e['jenisPaket'],
                         keterangan: e['KETERANGAN'],
                         harga: e['TARIF_PKET'],
                         mu: e['MATA_UANG'],
                         sisa: e['SISA'],
+                        foto: e['FOTO_PKET'],
+                        keberangkatan: e['TGLX_BGKT'],
                       );
                     }).toList()),
               ),
             ),
             const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () async {
+                menuController.changeActiveitemTo("Semua Paket");
+                Get.offAllNamed('/paket');
+              },
+              icon: const Icon(Icons.all_inbox_outlined),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green[600],
+                minimumSize: const Size(100, 50),
+                shadowColor: Colors.grey,
+                elevation: 5,
+              ),
+              label: fncLabelButtonStyle('Lihat Semua Paket', context),
+            ),
           ],
         ),
       ),

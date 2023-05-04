@@ -6,7 +6,10 @@ import 'package:flutter_web_course/controllers/navigation_controller.dart';
 import 'package:flutter_web_course/layout.dart';
 import 'package:flutter_web_course/pages/404/error_page.dart';
 import 'package:flutter_web_course/pages/authentication/authentication.dart';
+import 'package:flutter_web_course/pages/landing/all-paket.dart';
+import 'package:flutter_web_course/pages/landing/detail-paket.dart';
 import 'package:flutter_web_course/pages/landing/landing.dart';
+import 'package:flutter_web_course/pages/landing/paket/content/detail-product.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -47,7 +50,7 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: GetMaterialApp(
         scrollBehavior: MyCustomScrollBehavior(),
-        initialRoute: landingPageRoute,
+        initialRoute: homePageRoute,
         unknownRoute: GetPage(
             name: "/not-found",
             page: () => const PageNotFound(),
@@ -66,7 +69,10 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: authenticationPageRoute,
               page: () => const AuthenticationPage()),
-          GetPage(name: landingPageRoute, page: () => const LandingPage()),
+          GetPage(name: homePageRoute, page: () => const LandingPage()),
+          GetPage(name: allPaketPageRoute, page: () => const AllPaketPage()),
+          GetPage(
+              name: detailPaketPageRoute, page: () => const DetailPaketPage()),
           GetPage(name: "/not-found", page: () => const PageNotFound()),
         ],
         debugShowCheckedModeBanner: false,

@@ -12,6 +12,8 @@ import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 
 class JadwalForm extends StatefulWidget {
   const JadwalForm({Key key}) : super(key: key);
@@ -56,6 +58,10 @@ class _JadwalFormState extends State<JadwalForm> {
   String namaHotelJed;
   String idHotelTra;
   String namaHotelTra;
+
+  String fotoJadwal = "";
+  String fotoJadwalBase = "";
+  Uint8List fotoJadwalByte;
 
   bool enableTujuan = false;
 
@@ -506,7 +512,9 @@ class _JadwalFormState extends State<JadwalForm> {
           label: Text("Tanggal Berangkat", style: TextStyle(color: Colors.red)),
           hintText: "DD-MM-YYYY"),
       onChanged: (String value) {
-        tglBerangkat = value;
+        setState(() {
+          tglBerangkat = value;
+        });
       },
       onTap: () async {
         DateTime pickedDate = await showDatePicker(
@@ -864,6 +872,7 @@ class _JadwalFormState extends State<JadwalForm> {
       onChanged: (value) {
         tarif = value;
       },
+      initialValue: tarif ?? '0',
       validator: (value) {
         if (tarif.isEmpty) {
           return "Tarif masih kosong !";
@@ -881,6 +890,7 @@ class _JadwalFormState extends State<JadwalForm> {
       onChanged: (value) {
         jumlahSeat = value;
       },
+      initialValue: tarif ?? '0',
       validator: (value) {
         if (jumlahSeat.isEmpty) {
           return "Jumlah Seat masih kosong !";
@@ -915,7 +925,7 @@ class _JadwalFormState extends State<JadwalForm> {
         dropdownSearchDecoration:
             const InputDecoration(border: InputBorder.none),
         validator: (value) {
-          if (value == "Pilih Mata Uang") {
+          if (mataUang == null) {
             return "Mata Uang masih kosong !";
           }
         },
@@ -927,13 +937,98 @@ class _JadwalFormState extends State<JadwalForm> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(labelText: 'Keterangan'),
+      initialValue: keterangan,
       onChanged: (value) {
         keterangan = value;
       },
     );
   }
 
-  fncSaveData() {
+  Widget resultFotoJadwal() {
+    if (fotoJadwalByte != null) {
+      return Image.memory(
+        fotoJadwalByte,
+        height: 150,
+      );
+    } else {
+      if (fotoJadwal != "") {
+        if (fotoJadwal != null) {
+          return Image(
+            image: NetworkImage('$urlAddress/uploads/jadwal/$fotoJadwal'),
+            height: 150,
+          );
+        } else {
+          return const Image(
+            image: AssetImage('assets/images/NO_IMAGE.jpg'),
+            height: 150,
+          );
+        }
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          height: 150,
+        );
+      }
+    }
+  }
+
+  Widget inputUploadJadwal() {
+    return TextFormField(
+      initialValue: fotoJadwal != "" ? fotoJadwal : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload Foto',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
+
+  getImageJadwal() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoJadwal = fileResult.files.first.name;
+        fotoJadwalByte = fileResult.files.first.bytes;
+        fotoJadwalBase = encodeFoto;
+      });
+    }
+  }
+
+  fncSaveFoto() {
+    HttpJadwal.saveFotoJadwal(
+      dateBerangkat.text,
+      fotoJadwalBase != '' ? fotoJadwalBase : 'TIDAK',
+    ).then(
+      (value) {
+        if (value.status == true) {
+          setState(() {
+            fotoJadwal = '';
+            fotoJadwalBase = '';
+            fotoJadwalByte = null;
+          });
+
+          fncSaveData(value.foto);
+        } else {
+          setState(() {
+            fotoJadwal = '';
+            fotoJadwalBase = '';
+            fotoJadwalByte = null;
+          });
+
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
+
+  fncSaveData(namaFoto) {
+    // print(namaFoto);
     // print(fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
     //     namaRuteTransitPlng, ruteAkhirPlng));
     // print("ID PAKET : $idpaket");
@@ -983,6 +1078,7 @@ class _JadwalFormState extends State<JadwalForm> {
       datePulang.text,
       fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
           namaRuteTransitPlng, ruteAkhirPlng),
+      namaFoto != 'KOSONG' ? namaFoto : "",
     ).then((value) {
       if (value.status == true) {
         showDialog(
@@ -1028,7 +1124,7 @@ class _JadwalFormState extends State<JadwalForm> {
               ElevatedButton.icon(
                 onPressed: () {
                   if (formKey.currentState.validate()) {
-                    fncSaveData();
+                    fncSaveFoto();
                   } else {
                     return null;
                   }
@@ -1314,7 +1410,60 @@ class _JadwalFormState extends State<JadwalForm> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: fncWidthColumnForm(context),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  resultFotoJadwal(),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                      width: fncWidthInputModal(context),
+                                      child: inputUploadJadwal()),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        getImageJadwal();
+                                      },
+                                      icon: const Icon(Icons.image_outlined),
+                                      label: fncLabelButtonStyle(
+                                          'Upload Foto', context),
+                                      style: fncButtonRegulerStyle(context),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        SizedBox(
+                          width: fncWidthColumnForm(context),
+                          child: Column(
+                            children: const [],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

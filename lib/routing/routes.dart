@@ -170,8 +170,14 @@ const mrktLeadsPageRoute = "/mrkt/leads";
 const authenticationPageDisplayName = "Log Out";
 const authenticationPageRoute = "/auth";
 
-const landingPageDisplayName = "Landing";
-const landingPageRoute = "/landing";
+const homePageDisplayName = "Homepage";
+const homePageRoute = "/homepage";
+
+const allPaketPageDisplayName = "Semua Paket";
+const allPaketPageRoute = "/paket";
+
+const detailPaketPageDisplayName = "Semua Paket";
+const detailPaketPageRoute = "/paket/:id";
 
 // MENU ASLI
 

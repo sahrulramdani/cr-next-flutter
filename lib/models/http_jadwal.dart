@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 import 'dart:convert';
 import "package:http/http.dart" as http;
@@ -6,8 +8,33 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 
 class HttpJadwal {
   bool status;
+  String foto;
 
-  HttpJadwal({this.status});
+  HttpJadwal({this.status, this.foto});
+
+  static Future<HttpJadwal> saveFotoJadwal(
+    String tglBerangkat,
+    String fotoJadwal,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/save-foto");
+
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "TGLX_BGKT": tglBerangkat,
+        "FOTO_PKET": fotoJadwal,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpJadwal(
+      status: data["status"],
+      foto: data["foto"],
+    );
+  }
 
   static Future<HttpJadwal> saveJadwal(
     String idpaket,
@@ -33,6 +60,7 @@ class HttpJadwal {
     String tglBerangkat,
     String tglPulang,
     String ketRute,
+    String foto,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/save");
     var Tarif = tarif.replaceAll(",", "").toString();
@@ -65,6 +93,7 @@ class HttpJadwal {
         "MATA_UANG": idMataUang,
         "KETERANGAN": keterangan,
         "KETX_RUTE": ketRute,
+        "FOTO_PKET": foto,
       },
     );
     var data = json.decode(hasilResponse.body);
@@ -73,31 +102,59 @@ class HttpJadwal {
     );
   }
 
+  static Future<HttpJadwal> updateFotoJadwal(
+    String tglBerangkat,
+    String fotoJadwal,
+    String fotoLamaAgen,
+  ) async {
+    Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/update-foto");
+
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "TGLX_BGKT": tglBerangkat,
+        "FOTO_PKET": fotoJadwal,
+        "FOTO_LAMA": fotoLamaAgen,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpJadwal(
+      status: data["status"],
+      foto: data["foto"],
+    );
+  }
+
   static Future<HttpJadwal> updateJadwal(
-      String idJadwal,
-      String idpaket,
-      String idjenis,
-      String tujuan,
-      String idhotelMek,
-      String idhotelMad,
-      String idhotelJed,
-      String idhotelTra,
-      String jumlahHari,
-      String pesawatBrgkt,
-      String pesawatPulang,
-      String rute,
-      String rute2,
-      String rute3,
-      String ruteAwalPlng,
-      String ruteTransitPlng,
-      String ruteAkhirPlng,
-      String tarif,
-      String jumlahSeat,
-      String idMataUang,
-      String keterangan,
-      String tglBerangkat,
-      String tglPulang,
-      String ketRute) async {
+    String idJadwal,
+    String idpaket,
+    String idjenis,
+    String tujuan,
+    String idhotelMek,
+    String idhotelMad,
+    String idhotelJed,
+    String idhotelTra,
+    String jumlahHari,
+    String pesawatBrgkt,
+    String pesawatPulang,
+    String rute,
+    String rute2,
+    String rute3,
+    String ruteAwalPlng,
+    String ruteTransitPlng,
+    String ruteAkhirPlng,
+    String tarif,
+    String jumlahSeat,
+    String idMataUang,
+    String keterangan,
+    String tglBerangkat,
+    String tglPulang,
+    String ketRute,
+    String foto,
+  ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/jadwal/update");
     var Tarif = tarif.replaceAll(",", "").toString();
     var hasilResponse = await http.post(
@@ -130,6 +187,7 @@ class HttpJadwal {
         "MATA_UANG": idMataUang,
         "KETERANGAN": keterangan,
         "KETX_RUTE": ketRute,
+        "FOTO_PKET": foto,
       },
     );
     var data = json.decode(hasilResponse.body);

@@ -18,6 +18,8 @@ import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:flutter_web_course/constants/dummy_data_bandara.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 
 class ModalEditJadwal extends StatefulWidget {
   String idJadwal;
@@ -69,6 +71,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
   String namaHotelJed;
   String idHotelTra;
   String namaHotelTra;
+
+  String fotoJadwal = "";
+  String fotoJadwalBase = "";
+  Uint8List fotoJadwalByte;
+  String fotoLamaJadwal = "";
 
   bool enableTujuan = false;
 
@@ -137,6 +144,8 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       if (data[0]['JENS_PKET'] == '02' || data[0]['JENS_PKET'] == '04') {
         enableTujuan = true;
       }
+      fotoJadwal = data[0]['FOTO_PKET'];
+      fotoLamaJadwal = data[0]['FOTO_PKET'];
     });
   }
 
@@ -195,6 +204,30 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     });
   }
 
+  void getMaskapai() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/jadwal/getMaskapai"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listMaskapai = data;
+    });
+  }
+
+  void getBandara() async {
+    var response = await http
+        .get(Uri.parse("$urlAddress/marketing/bandara/get-all"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listBandara = data;
+    });
+  }
+
   void getHotel() async {
     var response = await http
         .get(Uri.parse("$urlAddress/marketing/jadwal/getHotel"), headers: {
@@ -230,6 +263,9 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     getPaket();
     getMataUang();
     getTransit();
+    getMaskapai();
+    getBandara();
+    getHotel();
   }
 
   Widget inputIDPaket() {
@@ -332,26 +368,26 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Mekkah",
-          items: listHotelMekkah,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            idHotelMek = value['IDXX_HTLX'];
-            namaHotelMek = value['NAMA_HTLX'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title:
-                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaHotelMek ?? "Hotel belum Dipilih",
-                style: TextStyle(
-                    color: namaHotelMek == null ? Colors.red : Colors.black),
-              ),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Hotel Mekkah",
+        items: listHotelMekkah,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          idHotelMek = value['IDXX_HTLX'];
+          namaHotelMek = value['NAMA_HTLX'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaHotelMek ?? "Hotel belum Dipilih",
+          style: TextStyle(
+              color: namaHotelMek == null ? Colors.red : Colors.black),
+        ),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -363,26 +399,26 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Madinah",
-          items: listHotelMadinah,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            idHotelMad = value['IDXX_HTLX'];
-            namaHotelMad = value['NAMA_HTLX'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title:
-                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaHotelMad ?? "Hotel belum Dipilih",
-                style: TextStyle(
-                    color: namaHotelMad == null ? Colors.red : Colors.black),
-              ),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Hotel Madinah",
+        items: listHotelMadinah,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          idHotelMad = value['IDXX_HTLX'];
+          namaHotelMad = value['NAMA_HTLX'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaHotelMad ?? "Hotel belum Dipilih",
+          style: TextStyle(
+              color: namaHotelMad == null ? Colors.red : Colors.black),
+        ),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -394,23 +430,23 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Plus",
-          items: listHotelPlus,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            idHotelJed = value['IDXX_HTLX'];
-            namaHotelJed = value['NAMA_HTLX'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title:
-                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) =>
-              Text(namaHotelJed ?? "Hotel belum Dipilih"),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Hotel Plus",
+        items: listHotelPlus,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          idHotelJed = value['IDXX_HTLX'];
+          namaHotelJed = value['NAMA_HTLX'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaHotelJed ?? "Hotel belum Dipilih"),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -422,24 +458,24 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Hotel Tambahan",
-          items: listHotelTambahan,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            idHotelTra = value['IDXX_HTLX'];
-            namaHotelTra = value['NAMA_HTLX'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title:
-                    Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaHotelTra ?? "Hotel belum Dipilih",
-              ),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Hotel Tambahan",
+        items: listHotelTambahan,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          idHotelTra = value['IDXX_HTLX'];
+          namaHotelTra = value['NAMA_HTLX'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_HTLX']} - Bintang ${item['CODD_DESC']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaHotelTra ?? "Hotel belum Dipilih",
+        ),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -451,25 +487,25 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          enabled: enableTujuan,
-          mode: Mode.BOTTOM_SHEET,
-          label: "Tujuan",
-          items: listTujuan,
-          onChanged: (value) {
-            tujuan = value['IDXX_RTRS'];
-            namaTujuan = value['NAMA_NEGR'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(item['NAMA_NEGR']),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaTujuan ?? 'Tujuan Hanya Untuk Jenis Plus',
-                style: TextStyle(
-                    color: tujuan == null ? Colors.red : Colors.black),
-              ),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        enabled: enableTujuan,
+        mode: Mode.BOTTOM_SHEET,
+        label: "Tujuan",
+        items: listTujuan,
+        onChanged: (value) {
+          tujuan = value['IDXX_RTRS'];
+          namaTujuan = value['NAMA_NEGR'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_NEGR']),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaTujuan ?? 'Tujuan Hanya Untuk Jenis Plus',
+          style: TextStyle(color: tujuan == null ? Colors.red : Colors.black),
+        ),
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -561,32 +597,31 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Maskapai Berangkat",
-          items: listMaskapai,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            pesawatBerangkat = value['IDXX_PSWT'];
-            namaPesawatBerangkat = value['NAMA_PSWT'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['NAMA_PSWT']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaPesawatBerangkat ?? "Maskapai belum Dipilih",
-                style: TextStyle(
-                    color: namaPesawatBerangkat == null
-                        ? Colors.red
-                        : Colors.black),
-              ),
-          validator: (value) {
-            if (value == null) {
-              return "Maskapai masih kosong !";
-            }
-          },
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Maskapai Berangkat",
+        items: listMaskapai,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          pesawatBerangkat = value['IDXX_PSWT'];
+          namaPesawatBerangkat = value['NAMA_PSWT'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_PSWT']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaPesawatBerangkat ?? "Maskapai belum Dipilih",
+          style: TextStyle(
+              color: namaPesawatBerangkat == null ? Colors.red : Colors.black),
+        ),
+        validator: (value) {
+          if (value == null) {
+            return "Maskapai masih kosong !";
+          }
+        },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -598,31 +633,31 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
       child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Maskapai Pulang",
-          items: listMaskapai,
-          onChanged: (value) {
-            // print(value['iata_code']);
-            pesawatPulang = value['IDXX_PSWT'];
-            namaPesawatPulang = value['NAMA_PSWT'];
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text("${item['NAMA_PSWT']}"),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-                namaPesawatPulang ?? "Maskapai belum Dipilih",
-                style: TextStyle(
-                    color:
-                        namaPesawatPulang == null ? Colors.red : Colors.black),
-              ),
-          validator: (value) {
-            if (value == null) {
-              return "Maskapai masih kosong !";
-            }
-          },
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
+        mode: Mode.BOTTOM_SHEET,
+        label: "Maskapai Pulang",
+        items: listMaskapai,
+        onChanged: (value) {
+          // print(value['iata_code']);
+          pesawatPulang = value['IDXX_PSWT'];
+          namaPesawatPulang = value['NAMA_PSWT'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text("${item['NAMA_PSWT']}"),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaPesawatPulang ?? "Maskapai belum Dipilih",
+          style: TextStyle(
+              color: namaPesawatPulang == null ? Colors.red : Colors.black),
+        ),
+        validator: (value) {
+          if (value == null) {
+            return "Maskapai masih kosong !";
+          }
+        },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, fillColor: Colors.white, filled: true),
+      ),
     );
   }
 
@@ -913,7 +948,79 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
     );
   }
 
-  fncSaveData() {
+  Widget resultFotoJadwal() {
+    if (fotoJadwalByte != null) {
+      return Image.memory(
+        fotoJadwalByte,
+        height: 150,
+      );
+    } else {
+      if (fotoJadwal != "") {
+        if (fotoJadwal != null) {
+          return Image(
+            image: NetworkImage('$urlAddress/uploads/paket/$fotoJadwal'),
+            height: 150,
+          );
+        } else {
+          return const Image(
+            image: AssetImage('assets/images/NO_IMAGE.jpg'),
+            height: 150,
+          );
+        }
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/NO_IMAGE.jpg'),
+          height: 150,
+        );
+      }
+    }
+  }
+
+  Widget inputUploadFoto() {
+    return TextFormField(
+      initialValue: fotoJadwal != "" ? fotoJadwal : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload Foto',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
+
+  getImageJadwal() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoJadwal = fileResult.files.first.name;
+        fotoJadwalByte = fileResult.files.first.bytes;
+        fotoJadwalBase = encodeFoto;
+      });
+    }
+  }
+
+  fncSaveFoto() {
+    HttpJadwal.updateFotoJadwal(
+      dateBerangkat.text,
+      fotoJadwalBase != '' ? fotoJadwalBase : 'TIDAK',
+      fotoLamaJadwal,
+    ).then(
+      (value) {
+        if (value.status == true) {
+          fncSaveData(value.foto);
+        } else {
+          print('GAGAL UPLOAD FOTO');
+        }
+      },
+    );
+  }
+
+  fncSaveData(namaFoto) {
     // print("ID JADWAL : ${widget.idJadwal}");
     // print("ID PAKET : $idpaket");
     // print("ID JENIS : $idjenis");
@@ -964,8 +1071,11 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
       datePulang.text,
       fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
           namaRuteTransitPlng, ruteAkhirPlng),
+      namaFoto,
     ).then((value) {
       if (value.status == true) {
+        imageCache.clear();
+
         showDialog(
             context: context, builder: (context) => const ModalSaveSuccess());
         menuController.changeActiveitemTo('Jadwal');
@@ -1103,6 +1213,34 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                                 const SizedBox(height: 8),
                                 inputHotelMad(),
                                 const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    resultFotoJadwal(),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        width: fncWidthInputModal(context),
+                                        child: inputUploadFoto()),
+                                    const SizedBox(width: 10),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          getImageJadwal();
+                                        },
+                                        icon: const Icon(Icons.image_outlined),
+                                        label: fncLabelButtonStyle(
+                                            'Upload Foto', context),
+                                        style: fncButtonRegulerStyle(context),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -1191,7 +1329,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                                 inputHotelJed(),
                                 const SizedBox(height: 8),
                                 inputHotelTra(),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 212),
                               ],
                             ),
                           ),
@@ -1208,7 +1346,7 @@ class _ModalEditJadwalState extends State<ModalEditJadwal> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          fncSaveData();
+                          fncSaveFoto();
                         },
                         icon: const Icon(Icons.save),
                         label: const Text(

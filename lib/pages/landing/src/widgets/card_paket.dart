@@ -1,34 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class CardPaketLanding extends StatelessWidget {
-  final String id;
+class CardPaketLanding extends StatefulWidget {
+  final String jenis;
+  final String idPaket;
   final String judul;
   final String keterangan;
+  final String keberangkatan;
   final int harga;
   final String mu;
   final int sisa;
+  final String foto;
 
   const CardPaketLanding(
-      {this.id,
+      {this.jenis,
+      this.idPaket,
       this.judul,
       this.keterangan,
+      this.keberangkatan,
       this.harga,
       this.mu,
       this.sisa,
+      this.foto,
       key})
       : super(key: key);
+
+  @override
+  State<CardPaketLanding> createState() => _CardPaketLandingState();
+}
+
+class _CardPaketLandingState extends State<CardPaketLanding> {
+  double widthCard = 270;
+  double heightCard = 470;
+  double heightPict = 270;
+  double sizeJudul = 30;
+  double sizeDescription = 11;
+  double sizeHarga = 25;
+  double sizeSeat = 12;
+  double horizontalMargin = 20;
+  double verticalMargin = 15;
+
+  // void getSize() async {
+  //   if (widget.jenis == 'XX') {
+  //     widthCard = 270;
+  //     heightCard = 470;
+  //     heightPict = 270;
+  //     sizeJudul = 30;
+  //     sizeDescription = 11;
+  //     sizeHarga = 25;
+  //     sizeSeat = 12;
+  //     horizontalMargin = 20;
+  //     verticalMargin = 15;
+  //   } else {
+  //     widthCard = 180;
+  //     heightCard = 350;
+  //     heightPict = 180;
+  //     sizeJudul = 20;
+  //     sizeDescription = 9;
+  //     sizeHarga = 14;
+  //     sizeSeat = 10;
+  //     horizontalMargin = 8;
+  //     verticalMargin = 8;
+  //   }
+  // }
+
+  // @override
+  // void initState() {
+  //   getSize();
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
     NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
 
     return Container(
-      margin: const EdgeInsets.only(right: 40),
-      width: 270,
-      height: 470,
+      margin: EdgeInsets.symmetric(
+          horizontal: horizontalMargin, vertical: verticalMargin),
+      width: widthCard,
+      height: heightCard,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -43,14 +97,16 @@ class CardPaketLanding extends StatelessWidget {
       ),
       child: Column(children: [
         Container(
-          width: 270,
-          height: 270,
+          width: widthCard,
+          height: heightPict,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
-            image: const DecorationImage(
+            image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/default-poster.png')),
+                image: widget.foto != ""
+                    ? NetworkImage('$urlAddress/uploads/paket/${widget.foto}')
+                    : const AssetImage('assets/images/NO_IMAGE.jpg')),
           ),
           child: const SizedBox(),
         ),
@@ -60,31 +116,34 @@ class CardPaketLanding extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                judul,
-                style: const TextStyle(
-                    color: Color.fromARGB(255, 232, 174, 0),
-                    fontSize: 30,
+                widget.judul,
+                style: TextStyle(
+                    color: const Color.fromARGB(255, 232, 174, 0),
+                    fontSize: sizeJudul,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
-              Text(keterangan,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 5),
-              Text("$mu.${myFormat.format(harga)}",
+              Text(widget.keterangan,
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: sizeDescription, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              Text("Keberangkatan Tanggal ${widget.keberangkatan}",
+                  style: TextStyle(
+                      fontSize: sizeDescription, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              Text("${widget.mu}.${myFormat.format(widget.harga)}",
+                  style: TextStyle(
+                      fontSize: sizeHarga,
                       fontWeight: FontWeight.bold,
                       color: Colors.red[800])),
               const SizedBox(height: 5),
-              Text("Sisa seat tersedia : $sisa",
-                  style: const TextStyle(fontSize: 12)),
+              Text("Sisa seat tersedia : ${widget.sisa}",
+                  style: TextStyle(fontSize: sizeSeat)),
               const SizedBox(height: 15),
               ElevatedButton.icon(
                 onPressed: () async {
-                  Get.snackbar("Information", "Menu Masih Dalam Proses",
-                      snackPosition: SnackPosition.TOP,
-                      animationDuration: const Duration(milliseconds: 200));
+                  menuController.changeActiveitemTo("");
+                  Get.offAllNamed('/paket/${widget.idPaket}');
                 },
                 icon: const Icon(Icons.info),
                 style: ElevatedButton.styleFrom(
@@ -101,47 +160,6 @@ class CardPaketLanding extends StatelessWidget {
           ),
         ))
       ]),
-      //  Row(
-      //   children: [
-      //     Expanded(
-      //       child: Container(
-      //         padding: const EdgeInsets.all(10),
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: [
-      //             Text(
-      //               judul,
-      //               maxLines: 2,
-      //               style: const TextStyle(
-      //                   fontWeight: FontWeight.bold,
-      //                   fontFamily: 'Gilroy',
-      //                   fontSize: 15,
-      //                   color: Colors.white),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //     Container(
-      //       width: 100,
-      //       padding: const EdgeInsets.all(10),
-      //       child: Column(
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         crossAxisAlignment: CrossAxisAlignment.center,
-      //         children: [
-      //           FittedBox(
-      //             child: Text(
-      //               keterangan,
-      //               maxLines: 2,
-      //               style: const TextStyle(fontSize: 30, color: Colors.white),
-      //             ),
-      //           )
-      //         ],
-      //       ),
-      //     )
-      //   ],
-      // ),
     );
   }
 }
