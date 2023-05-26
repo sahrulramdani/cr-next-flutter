@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
-import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +61,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   String dikeluarkanDi;
   String statusAgen;
   String idStatus;
+  String idFirst;
+  String gradeTL;
+  String gradeTLNama;
+  bool enableGrade = false;
 
   String fotoAgency = "";
   String fotoAgencyBase = "";
@@ -84,6 +87,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
   List<Map<String, dynamic>> listMenikah = [];
   List<Map<String, dynamic>> listPendidikan = [];
   List<Map<String, dynamic>> listPekerjaan = [];
+  List<Map<String, dynamic>> listGradeTL = [];
   var listJenisMarketing = ["Perorangan", "Perusahaan"];
 
   TextEditingController dateLhir = TextEditingController();
@@ -154,6 +158,16 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       fotoLamaAgen = dataAgen[0]['FOTO_AGEN'];
       fotoKtpAgency = dataAgen[0]['FOTO_KTPX'];
       fotoLamaKtpAgen = dataAgen[0]['FOTO_KTPX'];
+      if (dataAgen[0]['FEEX_LVEL'] != '4954') {
+        gradeTL = null;
+        gradeTLNama = null;
+        enableGrade = false;
+      } else {
+        gradeTL = dataAgen[0]['FIRST_LVEL'];
+        gradeTLNama = dataAgen[0]['FIRST_LVL'];
+        enableGrade = true;
+      }
+      idFirst = dataAgen[0]['FIRST_LVEL'];
     });
   }
 
@@ -239,6 +253,19 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     });
   }
 
+  getGradeTL() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/grade-tl"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> dataStatus =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listGradeTL = dataStatus;
+    });
+  }
+
   getMenikah() async {
     var response =
         await http.get(Uri.parse("$urlAddress/setup/status-menikah"), headers: {
@@ -300,6 +327,7 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     getKantor();
     getLeader();
     getFeeLevel();
+    getGradeTL();
     getMenikah();
     getPendidikan();
     getPekerjaan();
@@ -745,6 +773,13 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
           if (value['CODD_DESC'] == 'Tourleader') {
             setState(() {
               katMarket = 'Perorangan';
+              enableGrade = true;
+            });
+          } else {
+            setState(() {
+              gradeTL = null;
+              gradeTLNama = null;
+              enableGrade = false;
             });
           }
           getJenisMarketing();
@@ -760,6 +795,35 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
             return "Fee Level masih kosong !";
           }
         },
+        dropdownSearchDecoration: const InputDecoration(
+            border: InputBorder.none, filled: true, fillColor: Colors.white),
+      ),
+    );
+  }
+
+  Widget inputGrade() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
+        label: "Grade Tourleader",
+        items: listGradeTL,
+        onChanged: (value) {
+          setState(() {
+            gradeTL = value['CODD_VALU'];
+            gradeTLNama = value['CODD_DESC'];
+          });
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(gradeTLNama ?? "Grade TL belum Dipilih"),
         dropdownSearchDecoration: const InputDecoration(
             border: InputBorder.none, filled: true, fillColor: Colors.white),
       ),
@@ -805,7 +869,10 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
           label: Text('Nama Penanggung Jawab',
-              style: TextStyle(color: Colors.red))),
+              style: TextStyle(color: Colors.red)),
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         namaPenanggungJawab = value;
       },
@@ -822,7 +889,11 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
       decoration: const InputDecoration(
-          labelText: 'Telepon Penanggung Jawab', hintText: "08xxxxxxxxxxx"),
+          labelText: 'Telepon Penanggung Jawab',
+          hintText: "08xxxxxxxxxxx",
+          filled: true,
+          fillColor: Colors.white,
+          hoverColor: Colors.white),
       onChanged: (value) {
         telpPenanggungJawab = value;
       },
@@ -1219,6 +1290,8 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
       idStatus,
       namaFoto,
       namaKtp,
+      gradeTL ?? 'NOTL',
+      idFirst,
     ).then(
       (value) {
         if (value.status == true) {
@@ -1339,7 +1412,11 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
+                                Visibility(
+                                  visible: enableGrade,
+                                  child: const SizedBox(height: 50),
+                                ),
                               ],
                             ),
                           ),
@@ -1352,6 +1429,15 @@ class _ModalEditAgencyState extends State<ModalEditAgency> {
                               children: [
                                 inputFeeLevel(),
                                 const SizedBox(height: 8),
+                                Visibility(
+                                  visible: enableGrade,
+                                  child: Column(
+                                    children: [
+                                      inputGrade(),
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
                                 inputJenisMarketing(),
                                 const SizedBox(height: 8),
                                 inputPenanggungJawab(),

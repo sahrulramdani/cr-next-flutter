@@ -16,12 +16,18 @@ class HttpGrupMenu {
     String detailGrup,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/grup-user/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_GRUP": kodeGrup,
-      "NAMA_GRUP": namaGrup,
-      "KETERANGAN": keterangan,
-      "DETX_GRUP": detailGrup
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_GRUP": kodeGrup,
+        "NAMA_GRUP": namaGrup,
+        "KETERANGAN": keterangan,
+        "DETX_GRUP": detailGrup
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupMenu(
@@ -37,13 +43,19 @@ class HttpGrupMenu {
     String detailGrup,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/grup-user/update");
-    var hasilResponse = await http.post(urlApi, body: {
-      "KDXX_GRUP": kodeGrup,
-      "NAMA_GRUP": namaGrup,
-      "KETERANGAN": keterangan,
-      "STAS_GRUP": statusGrup,
-      "DETX_GRUP": detailGrup
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "KDXX_GRUP": kodeGrup,
+        "NAMA_GRUP": namaGrup,
+        "KETERANGAN": keterangan,
+        "STAS_GRUP": statusGrup,
+        "DETX_GRUP": detailGrup
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpGrupMenu(
@@ -51,15 +63,15 @@ class HttpGrupMenu {
     );
   }
 
-  // static Future<HttpGrupMenu> deleteHotel(String idHotel) async {
-  //   Uri urlApi = Uri.parse("$urlAddress/marketing/hotel/delete");
-  //   var hasilResponse = await http.post(urlApi, body: {
-  //     "IDXX_PSWT": idHotel,
-  //   });
+  static Future<HttpGrupMenu> deleteGrupMenu(String idGrup) async {
+    Uri urlApi = Uri.parse("$urlAddress/menu/grup-user/delete");
+    var hasilResponse = await http.post(urlApi, body: {
+      "KDXX_GRUP": idGrup,
+    });
 
-  //   var data = json.decode(hasilResponse.body);
-  //   return HttpGrupMenu(
-  //     status: data["status"],
-  //   );
-  // }
+    var data = json.decode(hasilResponse.body);
+    return HttpGrupMenu(
+      status: data["status"],
+    );
+  }
 }

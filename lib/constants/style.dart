@@ -16,15 +16,18 @@ Color myGrey = Colors.grey[700];
 // String namaUser = "";
 // String username = "";
 // String fotoUser;
+// String kodeAgen;
 
 String kodeToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODMxNzIxNjksImV4cCI6MTY4MzI1ODU2OX0.g_lCeqHh1-hWZkbt_YPTtLY7TjmcGl8K5AMLkNIOkJU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODUwNjk5NzUsImV4cCI6MTY4NTE1NjM3NX0.g4aMTYVA9IAAIg1SkYcnh6COsTtnGaCNVIGr2O2BrR8";
 String namaUser = "Superadmin";
 String username = "superadmin";
-String fotoUser;
+String fotoUser = 'superadmin20230513.png';
+String kodeAgen = '23SAH0311200001';
 
 // MENU CODE
 String menuKode = "";
+String produkKode = "";
 
 // AUTH PERMISSION
 dynamic authAddx = '0';
@@ -36,9 +39,10 @@ dynamic authExpt = '0';
 
 bool enableForm = false;
 
-//Url Aplikasi
+// Url Aplikasi
 String urlAddress = "http://localhost:3000";
 // String urlAddress = "http://202.78.195.175:4000";
+// String urlAddress = "http://api.craudhah.spsolution.co.id:4000";
 
 // STYLE WIDGET
 const styleColumn = TextStyle(
@@ -145,6 +149,28 @@ fncButtonRegulerStyle(context) {
         : const Size(100, 40),
     shadowColor: Colors.grey,
     elevation: 5,
+  );
+}
+
+fncButtonMarketStyle(context) {
+  return ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    minimumSize: ResponsiveWidget.isSmallScreen(context)
+        ? const Size(60, 40)
+        : const Size(100, 40),
+    shadowColor: Colors.grey,
+    elevation: 5,
+  );
+}
+
+fncLabelButtonMarketStyle(text, context) {
+  return Text(
+    text,
+    style: TextStyle(
+      color: myBlue,
+      fontFamily: 'Gilroy',
+      fontSize: ResponsiveWidget.isSmallScreen(context) ? 11 : 14,
+    ),
   );
 }
 

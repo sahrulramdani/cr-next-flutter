@@ -27,37 +27,43 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter:
+    sdk: flutter
+  js: ^0.6.2
   youtube_player_flutter: ^8.1.0
   hooks_riverpod: ^2.1.3
   charts_flutter: ^0.12.0
   cupertino_icons: ^1.0.5
   data_table_2: ^2.3.7
   dropdown_search: ^2.0.1
-  flutter:
-    sdk: flutter
   get: ^4.6.5
   google_fonts: ^3.0.1
   google_nav_bar: ^5.0.6
-  http: ^0.13.5
+  http: any
   intl: ^0.17.0
   open_file: ^3.0.3
-  path_provider: ^2.0.11
+  path_provider: ^2.0.15
   pattern_formatter: ^2.0.0
   pdf: ^3.8.4
   provider: ^6.0.3
-  url_launcher: ^5.7.5
-  image_picker: ^0.6.6
-  file_picker: ^2.1.7
+  url_launcher: ^6.0.4
+  image_picker: ^0.7.5
+  file_picker: ^4.0.0
   cross_file: ^0.3.3+2
   syncfusion_flutter_pdf : ^ 20.3.49 
   syncfusion_flutter_xlsio: ^20.4.44-beta
-  firebase_storage: ^3.1.5
+  firebase_storage: ^3.1.5  
   consolelog: ^0.0.2
   url_strategy: ^0.2.0
   flutter_image: ^4.1.5
   flutter_easyloading: ^3.0.5
   animated_tree_view: ^1.0.0
-
+  clipboard: ^0.1.3
+  shared_preferences: ^2.0.5
+  share_plus: ^4.0.10
+  universal_html: ^1.2.3
+  # flutter_session_manager: ^1.0.1
+  # flutter_session: ^0.0.1
   # image_picker_web: ^1.0.9
 
 dev_dependencies:
@@ -128,6 +134,13 @@ flutter:
     - assets/images/jamaah-3.png
     - assets/images/jamaah-4.png
     - assets/images/jamaah-5.png
+    - assets/images/happy-animate.png
+    - assets/images/frame-login.png
+    - assets/images/logo-frame-login.png
+    - assets/images/produk-none.png
+    - assets/images/none-produk.png
+    - assets/images/legalitas-1.png
+    - assets/images/legalitas-2.png
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

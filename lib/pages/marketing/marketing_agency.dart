@@ -1,4 +1,4 @@
-// ignore_for_file: await_only_futures
+// ignore_for_file: await_only_futures, invalid_use_of_visible_for_testing_member
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -17,6 +17,7 @@ import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/table_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/form_agency.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/agensi/print_agency.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MarketingAgencyPage extends StatefulWidget {
   const MarketingAgencyPage({Key key}) : super(key: key);
@@ -120,6 +121,12 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
+        // SharedPreferences.setMockInitialValues({});
+        // final prefs = await SharedPreferences.getInstance();
+        // final myData = prefs.getString('token');
+
+        // print(prefs.getString('token'));
+
         authAddx == '1'
             ? setState(() {
                 enableFormL = !enableFormL;

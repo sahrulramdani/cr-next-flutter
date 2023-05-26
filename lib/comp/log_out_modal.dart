@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
+import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_delete_fail.dart';
 import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/models/http_controller.dart';
 
-class LogoutModal extends StatelessWidget {
+class LogoutModal extends StatefulWidget {
   const LogoutModal({Key key}) : super(key: key);
 
+  @override
+  State<LogoutModal> createState() => _LogoutModalState();
+}
+
+class _LogoutModalState extends State<LogoutModal> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -22,7 +28,7 @@ class LogoutModal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(
-                Icons.add_alert_rounded,
+                Icons.logout,
                 color: Colors.red,
                 size: 100,
               ),
@@ -47,6 +53,14 @@ class LogoutModal extends StatelessWidget {
                       onPressed: () {
                         menuController.changeActiveitemTo(" ");
                         Get.offAllNamed('/auth');
+
+                        setState(() {
+                          kodeToken = "";
+                          namaUser = "";
+                          username = "";
+                          fotoUser = null;
+                          kodeAgen = null;
+                        });
                       },
                       child: const Text('Yakin')),
                   const SizedBox(

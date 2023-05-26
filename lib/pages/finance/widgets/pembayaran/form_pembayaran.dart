@@ -1,7 +1,5 @@
 // ignore_for_file: missing_return, deprecated_member_use, prefer_interpolation_to_compose_strings
 // import 'package:http/http.dart' as http;
-import 'dart:html';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';

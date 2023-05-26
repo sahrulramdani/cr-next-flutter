@@ -13,6 +13,7 @@ class HttpPendaftaran {
 
   static Future<HttpPendaftaran> saveFotoPendaftaran(
     String nik,
+    String ktpBase,
     String kkBase,
     String dokumenBase,
   ) async {
@@ -24,6 +25,7 @@ class HttpPendaftaran {
       },
       body: {
         "NOXX_IDNT": nik,
+        "FOTO_KTPX": ktpBase,
         "FOTO_KKXX": kkBase,
         "FOTO_DOCX": dokumenBase,
       },

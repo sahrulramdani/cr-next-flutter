@@ -66,7 +66,6 @@ class MyData extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
       DataCell(Text(fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()))),
-      // DataCell(Text(dataJadwal[index]['jenisPaket'].toString())),
       DataCell(Text(dataJadwal[index]['NAME_PESWT_BGKT'])),
       DataCell(Text(dataJadwal[index]['RUTE_AKHR_BRKT'] == null
           ? ""
@@ -81,42 +80,13 @@ class MyData extends DataTableSource {
         child: Text(
             "${myformat.format(int.parse(dataJadwal[index]['TARIF_PKET'].toString()) / 1000000)} Juta"),
       )),
-      // DataCell(Text(dataJadwal[index]['NAME_PESWT_PLNG'] == null
-      //     ? "-"
-      //     : dataJadwal[index]['NAME_PESWT_PLNG'].toString())),
       DataCell(Text(dataJadwal[index]['JMLX_SEAT'] == null
           ? "-"
           : dataJadwal[index]['JMLX_SEAT'].toString())),
-      // DataCell(Text(dataJadwal[index]['MATA_UANG'].toString())),
       DataCell(Text(dataJadwal[index]['TERISI'].toString())),
       DataCell(Text(dataJadwal[index]['SISA'] == 0
           ? 'Full'
           : dataJadwal[index]['SISA'].toString())),
-      // DataCell(Text(dataJadwal[index]['KETERANGAN'])),
-      // DataCell(Center(
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       ButtonDetail(
-      //         idJadwal: dataJadwal[index]['IDXX_JDWL'],
-      //         keberangkatan:
-      //             fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()),
-      //         jenisPaket: dataJadwal[index]['jenisPaket'].toString(),
-      //         harga: dataJadwal[index]['TARIF_PKET'].toString(),
-      //         tglBgkt: dataJadwal[index]['TGLX_BGKT'].toString(),
-      //         tglPlng: dataJadwal[index]['TGLX_PLNG'].toString(),
-      //       ),
-      //       const SizedBox(width: 5),
-      //       ButtonEdit(
-      //         idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
-      //       ),
-      //       const SizedBox(width: 5),
-      //       ButtonHapus(
-      //         idJadwal: dataJadwal[index]['IDXX_JDWL'].toString(),
-      //       ),
-      //     ],
-      //   ),
-      // )),
     ]);
   }
 
@@ -142,27 +112,191 @@ class TableJadwalDashboard extends StatefulWidget {
 }
 
 class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
-  @override
-  Widget build(BuildContext context) {
-    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
-    final DataTableSource myTable = MyData(widget.dataJadwal);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    int x = 1;
+  Widget datatableLogin(row, col) {
     int y = 1;
+    NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     bool show = widget.show;
     double fontSizeHeader = 0;
     double fontSizeRow = 0;
     double spacingTable = 0;
     if (show == true) {
-      fontSizeHeader = 24;
+      fontSizeHeader = 22;
       fontSizeRow = 20;
       spacingTable = 30;
     } else {
-      fontSizeHeader = 18;
+      fontSizeHeader = 16;
       fontSizeRow = 17;
       spacingTable = 18;
     }
+
+    final tbLoginColumnStyle = TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Gilroy',
+        fontSize: fontSizeHeader);
+    final tbLoginRowStyle = TextStyle(
+        color: Color.fromARGB(249, 48, 50, 51),
+        fontWeight: FontWeight.bold,
+        fontSize: fontSizeRow);
+
+    return DataTable(
+      columnSpacing: spacingTable,
+      dataRowColor: MaterialStateColor.resolveWith(
+          (states) => Color.fromARGB(189, 231, 231, 231)),
+      headingRowColor: MaterialStateColor.resolveWith(
+          (states) => Color.fromARGB(255, 33, 149, 243)),
+      dataRowHeight: row,
+      headingRowHeight: col,
+      columns: [
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('No.',
+                textAlign: TextAlign.center, style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Keberangkatan', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Pesawat',
+                textAlign: TextAlign.center, style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Rute', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Hotel', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Harga', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Seat', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Terisi', style: tbLoginColumnStyle),
+          ),
+        )),
+        DataColumn(
+            label: Expanded(
+          child: Center(
+            child: Text('Sisa', style: tbLoginColumnStyle),
+          ),
+        )),
+      ],
+      rows: widget.dataJadwal.map((e) {
+        return DataRow(cells: [
+          DataCell(Center(
+            child: Text(
+              (y++).toString(),
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              fncGetTanggal(e['TGLX_BGKT'].toString()),
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              e['NAME_PESWT_BGKT'] == null
+                  ? "-"
+                  : e['NAME_PESWT_BGKT'].toString(),
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              e['KETX_RUTE'] ?? '-',
+              style: tbLoginRowStyle,
+            ),
+          )),
+          col == 50
+              ? DataCell(Center(
+                  child: Row(
+                    children: [
+                      Text(""),
+                      Center(
+                          child: Text(
+                        e["KETX_HTLX"] == null
+                            ? "-"
+                            : e["KETX_HTLX"].toString(),
+                        style: tbLoginRowStyle,
+                      )),
+                    ],
+                  ),
+                ))
+              : DataCell(Row(
+                  children: [
+                    Icon(
+                      Icons.star,
+                      size: 15,
+                      color: Color.fromARGB(248, 213, 192, 0),
+                    ),
+                    Text(
+                      e["KETX_HTLX"] == null ? "-" : e["KETX_HTLX"].toString(),
+                      style: tbLoginRowStyle,
+                    ),
+                  ],
+                )),
+          DataCell(Center(
+            child: Text(
+              e['MATA_UANG'] == 'IDR'
+                  ? "${myformat.format(int.parse(e['TARIF_PKET'].toString()) / 1000000)} Juta"
+                  : "\$ ${myformat.format(int.parse(e['TARIF_PKET'].toString()) / 1000)} Ribu",
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              e['JMLX_SEAT'] == null ? "-" : e['JMLX_SEAT'].toString(),
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              e['TERISI'].toString(),
+              style: tbLoginRowStyle,
+            ),
+          )),
+          DataCell(Center(
+            child: Text(
+              e['SISA'] == 0 ? 'Full' : e['SISA'].toString(),
+              style: tbLoginRowStyle,
+            ),
+          )),
+        ]);
+      }).toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    int x = 1;
 
     return Align(
       child: Container(
@@ -170,281 +304,7 @@ class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
         width: screenWidth * 1,
         height: 0.45 * screenHeight,
         child: Column(children: [
-          DataTable(
-            columnSpacing: spacingTable,
-            dataRowColor: MaterialStateColor.resolveWith(
-                (states) => Color.fromARGB(143, 231, 231, 231)),
-            headingRowColor: MaterialStateColor.resolveWith(
-                (states) => Color.fromARGB(143, 33, 149, 243)),
-            dataRowHeight: 0,
-            headingRowHeight: 50,
-            columns: [
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('No.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              // DataColumn(
-              //     label: Text('#',
-              //         style: TextStyle(
-              //             color: myGrey,
-              //             fontWeight: FontWeight.bold,
-              //             fontFamily: 'Gilroy',
-              //             fontSize: 18))),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Keberangkatan',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              // DataColumn(
-              //     label: Text('Jenis',
-              //         style: TextStyle(
-              //             color: myGrey,
-              //             fontWeight: FontWeight.bold,
-              //             fontFamily: 'Gilroy',
-              //             fontSize: 18))),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Pesawat',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Rute',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Hotel',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Harga',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              // DataColumn(
-              //     label: Text('Pesawat Pulang',
-              //         style: TextStyle(
-              //             color: myGrey,
-              //             fontWeight: FontWeight.bold,
-              //             fontFamily: 'Gilroy',
-              //             fontSize: 18))),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Seat',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              // DataColumn(
-              //     label: Text('Kurs',
-              //         style: TextStyle(
-              //             color: myGrey,
-              //             fontWeight: FontWeight.bold,
-              //             fontFamily: 'Gilroy',
-              //             fontSize: 18))),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Terisi',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              DataColumn(
-                  label: Expanded(
-                child: Center(
-                  child: Text('Sisa',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                          fontSize: fontSizeHeader)),
-                ),
-              )),
-              // DataColumn(
-              //     label: Text('Keterangan',
-              //         style: TextStyle(
-              //             color: myGrey,
-              //             fontWeight: FontWeight.bold,
-              //             fontFamily: 'Gilroy',
-              //             fontSize: 16))),
-              // DataColumn(
-              //     label: SizedBox(
-              //         width: 80,
-              //         child: Center(
-              //           child: Text('Aksi',
-              //               style: TextStyle(
-              //                   color: myGrey,
-              //                   fontWeight: FontWeight.bold,
-              //                   fontFamily: 'Gilroy',
-              //                   fontSize: 16)),
-              //         )))
-            ],
-            rows: widget.dataJadwal.map((e) {
-              return DataRow(cells: [
-                DataCell(Center(
-                  child: Text(
-                    (y++).toString(),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                DataCell(Center(
-                  child: Text(
-                    fncGetTanggal(e['TGLX_BGKT'].toString()),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                // DataCell(Text(e['jenisPaket'].toString())),
-                DataCell(Center(
-                  child: Text(
-                    e['NAME_PESWT_BGKT'] == null
-                        ? "-"
-                        : e['NAME_PESWT_BGKT'].toString(),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                // DataCell(Center(
-                //   child: Text(
-                //     e['RUTE_AKHR_BRKT'] == null
-                //         ? ""
-                //         : "${e['RUTE_AKHR_BRKT'].toString()} - ${e['RUTE_AWAL_PLNG'].toString()}",
-                //     style: TextStyle(
-                //         color:
-                //             Color.fromARGB(249, 48, 50, 51),
-                //         fontWeight: FontWeight.bold,
-                //         fontSize: fontSizeRow),
-                //   ),
-                // )),
-                DataCell(Center(
-                  child: Text(
-                    e['KETX_RUTE'] ?? '-',
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                DataCell(Center(
-                  child: Row(
-                    children: [
-                      Text(""),
-                      // Icon(
-                      //   Icons.star,
-                      //   size: 15,
-                      //   color: Color.fromARGB(249, 48, 50, 51),
-                      // ),
-                      Center(
-                          child: Text(
-                        e["KETX_HTLX"] == null
-                            ? "-"
-                            : "${e["KETX_HTLX"].toString()}",
-                        style: TextStyle(
-                            color: Color.fromARGB(249, 48, 50, 51),
-                            fontWeight: FontWeight.bold,
-                            fontSize: fontSizeRow),
-                      )),
-                    ],
-                  ),
-                )),
-                DataCell(Center(
-                  child: Text(
-                    "${myformat.format(int.parse(e['TARIF_PKET'].toString()) / 1000000)} Juta",
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                // DataCell(Text(e['NAME_PESWT_PLNG'] == null
-                //     ? "-"
-                //     : e['NAME_PESWT_PLNG'].toString())),
-                DataCell(Center(
-                  child: Text(
-                    e['JMLX_SEAT'] == null ? "-" : e['JMLX_SEAT'].toString(),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                // DataCell(Text(e['MATA_UANG'].toString())),
-                DataCell(Center(
-                  child: Text(
-                    e['TERISI'].toString(),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-                DataCell(Center(
-                  child: Text(
-                    e['SISA'] == 0 ? 'Full' : e['SISA'].toString(),
-                    style: TextStyle(
-                        color: Color.fromARGB(249, 48, 50, 51),
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSizeRow),
-                  ),
-                )),
-              ]);
-            }).toList(),
-          ),
+          datatableLogin(0, 50),
           Expanded(
               child: CupertinoScrollbar(
                   scrollbarOrientation: ScrollbarOrientation.right,
@@ -455,593 +315,11 @@ class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            DataTable(
-                              columnSpacing: spacingTable,
-                              dataRowColor: MaterialStateColor.resolveWith(
-                                  (states) =>
-                                      Color.fromARGB(143, 231, 231, 231)),
-                              headingRowColor: MaterialStateColor.resolveWith(
-                                  (states) =>
-                                      Color.fromARGB(143, 33, 149, 243)),
-                              dataRowHeight: 50,
-                              headingRowHeight: 0,
-                              columns: [
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('No.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                // DataColumn(
-                                //     label: Text('#',
-                                //         style: TextStyle(
-                                //             color: myGrey,
-                                //             fontWeight: FontWeight.bold,
-                                //             fontFamily: 'Gilroy',
-                                //             fontSize: 18))),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Keberangkatan',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                // DataColumn(
-                                //     label: Text('Jenis',
-                                //         style: TextStyle(
-                                //             color: myGrey,
-                                //             fontWeight: FontWeight.bold,
-                                //             fontFamily: 'Gilroy',
-                                //             fontSize: 18))),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Pesawat',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Rute',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Hotel',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Harga',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                // DataColumn(
-                                //     label: Text('Pesawat Pulang',
-                                //         style: TextStyle(
-                                //             color: myGrey,
-                                //             fontWeight: FontWeight.bold,
-                                //             fontFamily: 'Gilroy',
-                                //             fontSize: 18))),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Seat',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                // DataColumn(
-                                //     label: Text('Kurs',
-                                //         style: TextStyle(
-                                //             color: myGrey,
-                                //             fontWeight: FontWeight.bold,
-                                //             fontFamily: 'Gilroy',
-                                //             fontSize: 18))),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Terisi',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                DataColumn(
-                                    label: Expanded(
-                                  child: Center(
-                                    child: Text('Sisa',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: fontSizeHeader)),
-                                  ),
-                                )),
-                                // DataColumn(
-                                //     label: Text('Keterangan',
-                                //         style: TextStyle(
-                                //             color: myGrey,
-                                //             fontWeight: FontWeight.bold,
-                                //             fontFamily: 'Gilroy',
-                                //             fontSize: 16))),
-                                // DataColumn(
-                                //     label: SizedBox(
-                                //         width: 80,
-                                //         child: Center(
-                                //           child: Text('Aksi',
-                                //               style: TextStyle(
-                                //                   color: myGrey,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontFamily: 'Gilroy',
-                                //                   fontSize: 16)),
-                                //         )))
-                              ],
-                              rows: widget.dataJadwal.map((e) {
-                                return DataRow(cells: [
-                                  DataCell(Center(
-                                    child: Text(
-                                      (x++).toString(),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  DataCell(Center(
-                                    child: Text(
-                                      fncGetTanggal(e['TGLX_BGKT'].toString()),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  // DataCell(Text(e['jenisPaket'].toString())),
-                                  DataCell(Center(
-                                    child: Text(
-                                      e['NAME_PESWT_BGKT'] == null
-                                          ? "-"
-                                          : e['NAME_PESWT_BGKT'].toString(),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  // DataCell(Center(
-                                  //   child: Text(
-                                  //     e['RUTE_AKHR_BRKT'] == null
-                                  //         ? ""
-                                  //         : "${e['RUTE_AKHR_BRKT'].toString()} - ${e['RUTE_AWAL_PLNG'].toString()}",
-                                  //     style: TextStyle(
-                                  //         color:
-                                  //             Color.fromARGB(249, 48, 50, 51),
-                                  //         fontWeight: FontWeight.bold,
-                                  //         fontSize: fontSizeRow),
-                                  //   ),
-                                  // )),
-                                  DataCell(Center(
-                                    child: Text(
-                                      e['KETX_RUTE'] ?? '-',
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  DataCell(Center(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.star,
-                                          size: 15,
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                        ),
-                                        Center(
-                                            child: Text(
-                                          e["KETX_HTLX"] == null
-                                              ? "-"
-                                              : "${e["KETX_HTLX"].toString()}",
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  249, 48, 50, 51),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: fontSizeRow),
-                                        )),
-                                      ],
-                                    ),
-                                  )),
-                                  DataCell(Center(
-                                    child: Text(
-                                      "${myformat.format(int.parse(e['TARIF_PKET'].toString()) / 1000000)} Juta",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  // DataCell(Text(e['NAME_PESWT_PLNG'] == null
-                                  //     ? "-"
-                                  //     : e['NAME_PESWT_PLNG'].toString())),
-                                  DataCell(Center(
-                                    child: Text(
-                                      e['JMLX_SEAT'] == null
-                                          ? "-"
-                                          : e['JMLX_SEAT'].toString(),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  // DataCell(Text(e['MATA_UANG'].toString())),
-                                  DataCell(Center(
-                                    child: Text(
-                                      e['TERISI'].toString(),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                  DataCell(Center(
-                                    child: Text(
-                                      e['SISA'] == 0
-                                          ? 'Full'
-                                          : e['SISA'].toString(),
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(249, 48, 50, 51),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSizeRow),
-                                    ),
-                                  )),
-                                ]);
-                              }).toList(),
-                            )
-                          ]),
+                          children: [datatableLogin(50, 0)]),
                     ),
                   )))
         ]),
       ),
     );
-
-    // return Align(
-    //   child: Container(
-    //     alignment: Alignment.center,
-    //     width: screenWidth * 1,
-    //     height: 0.45 * screenHeight,
-    //     child: CupertinoScrollbar(
-    //       thumbVisibility: true,
-    //       scrollbarOrientation: ScrollbarOrientation.right,
-    //       child: SingleChildScrollView(
-    //         scrollDirection: Axis.vertical,
-    //         child: SingleChildScrollView(
-    //           scrollDirection: Axis.horizontal,
-    //           child: Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             crossAxisAlignment: CrossAxisAlignment.center,
-    //             children: [
-    //               DataTable(
-    //                 columnSpacing: spacingTable,
-    //                 dataRowColor: MaterialStateColor.resolveWith(
-    //                     (states) => Color.fromARGB(143, 231, 231, 231)),
-    //                 headingRowColor: MaterialStateColor.resolveWith(
-    //                     (states) => Color.fromARGB(143, 33, 149, 243)),
-    //                 dataRowHeight: 50,
-    //                 headingRowHeight: 0,
-    //                 // ignore: prefer_const_literals_to_create_immutables
-    //                 columns: [
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('No.',
-    //                           textAlign: TextAlign.center,
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   // DataColumn(
-    //                   //     label: Text('#',
-    //                   //         style: TextStyle(
-    //                   //             color: myGrey,
-    //                   //             fontWeight: FontWeight.bold,
-    //                   //             fontFamily: 'Gilroy',
-    //                   //             fontSize: 18))),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Keberangkatan',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   // DataColumn(
-    //                   //     label: Text('Jenis',
-    //                   //         style: TextStyle(
-    //                   //             color: myGrey,
-    //                   //             fontWeight: FontWeight.bold,
-    //                   //             fontFamily: 'Gilroy',
-    //                   //             fontSize: 18))),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Pesawat',
-    //                           textAlign: TextAlign.center,
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Rute',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Hotel',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Harga Paket',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   // DataColumn(
-    //                   //     label: Text('Pesawat Pulang',
-    //                   //         style: TextStyle(
-    //                   //             color: myGrey,
-    //                   //             fontWeight: FontWeight.bold,
-    //                   //             fontFamily: 'Gilroy',
-    //                   //             fontSize: 18))),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Seat',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   // DataColumn(
-    //                   //     label: Text('Kurs',
-    //                   //         style: TextStyle(
-    //                   //             color: myGrey,
-    //                   //             fontWeight: FontWeight.bold,
-    //                   //             fontFamily: 'Gilroy',
-    //                   //             fontSize: 18))),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Terisi',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   DataColumn(
-    //                       label: Expanded(
-    //                     child: Center(
-    //                       child: Text('Sisa',
-    //                           style: TextStyle(
-    //                               color: Colors.white,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontFamily: 'Gilroy',
-    //                               fontSize: fontSizeHeader)),
-    //                     ),
-    //                   )),
-    //                   // DataColumn(
-    //                   //     label: Text('Keterangan',
-    //                   //         style: TextStyle(
-    //                   //             color: myGrey,
-    //                   //             fontWeight: FontWeight.bold,
-    //                   //             fontFamily: 'Gilroy',
-    //                   //             fontSize: 16))),
-    //                   // DataColumn(
-    //                   //     label: SizedBox(
-    //                   //         width: 80,
-    //                   //         child: Center(
-    //                   //           child: Text('Aksi',
-    //                   //               style: TextStyle(
-    //                   //                   color: myGrey,
-    //                   //                   fontWeight: FontWeight.bold,
-    //                   //                   fontFamily: 'Gilroy',
-    //                   //                   fontSize: 16)),
-    //                   //         )))
-    //                 ],
-    //                 rows: widget.dataJadwal.map((e) {
-    //                   return DataRow(cells: [
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         (x++).toString(),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         fncGetTanggal(e['TGLX_BGKT'].toString()),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     // DataCell(Text(e['jenisPaket'].toString())),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         e['NAME_PESWT_BGKT'] == null
-    //                             ? "-"
-    //                             : e['NAME_PESWT_BGKT'].toString(),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         e['RUTE_AKHR_BRKT'] == null
-    //                             ? ""
-    //                             : "${e['RUTE_AKHR_BRKT'].toString()} - ${e['RUTE_AWAL_PLNG'].toString()}",
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     DataCell(Center(
-    //                       child: Row(
-    //                         children: [
-    //                           Icon(
-    //                             Icons.star,
-    //                             size: 15,
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                           ),
-    //                           Center(
-    //                               child: Text(
-    //                             e["CODD_DESC"] == null
-    //                                 ? "-"
-    //                                 : "${e["CODD_DESC"].toString()}",
-    //                             style: TextStyle(
-    //                                 color: Color.fromARGB(249, 48, 50, 51),
-    //                                 fontWeight: FontWeight.bold,
-    //                                 fontSize: fontSizeRow),
-    //                           )),
-    //                         ],
-    //                       ),
-    //                     )),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         "${myformat.format(int.parse(e['TARIF_PKET'].toString()) / 1000000)} Juta",
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     // DataCell(Text(e['NAME_PESWT_PLNG'] == null
-    //                     //     ? "-"
-    //                     //     : e['NAME_PESWT_PLNG'].toString())),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         e['JMLX_SEAT'] == null
-    //                             ? "-"
-    //                             : e['JMLX_SEAT'].toString(),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     // DataCell(Text(e['MATA_UANG'].toString())),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         e['TERISI'].toString(),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                     DataCell(Center(
-    //                       child: Text(
-    //                         e['SISA'] == 0 ? 'Full' : e['SISA'].toString(),
-    //                         style: TextStyle(
-    //                             color: Color.fromARGB(249, 48, 50, 51),
-    //                             fontWeight: FontWeight.bold,
-    //                             fontSize: fontSizeRow),
-    //                       ),
-    //                     )),
-    //                   ]);
-    //                 }).toList(),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

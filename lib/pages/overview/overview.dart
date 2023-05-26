@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/comp/revenue_info_large.dart';
@@ -62,45 +63,29 @@ class _OverViewPageState extends State<OverViewPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: menuController.activeItem.value,
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: screenWidth,
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            image: const DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('images/hero-dashboard-2.png')),
           ),
-          Container(
-            width: screenWidth,
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('images/hero-dashboard-2.png')),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: ResponsiveWidget.isSmallScreen(context)
-                ? screenHeight * 0.6
-                : screenHeight * 0.48,
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Expanded(
+          child: SizedBox(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(children: [
@@ -124,9 +109,9 @@ class _OverViewPageState extends State<OverViewPage> {
                   const RevenueInfoSmall(),
               ]),
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

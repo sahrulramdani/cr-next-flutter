@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, missing_return, avoid_print, unrelated_type_equality_checks
+// ignore_for_file: deprecated_member_use, missing_return, avoid_print, unrelated_type_equality_checks, unused_local_variable, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
@@ -6,7 +6,6 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/models/http_pendaftaran.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
-import 'package:flutter_web_course/pages/jamaah/widgets/jamaah/modal_upload_foto_jamaah.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/pendaftaran/table_side_pendaftaran.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +28,9 @@ class JamaahPendaftaranPage extends StatefulWidget {
   State<JamaahPendaftaranPage> createState() => _JamaahPendaftaranPageState();
 }
 
-class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
-  String idKantor = '00001';
+class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage>
+    with TickerProviderStateMixin {
+  String idKantor;
   String namaKantor;
   String idProduk;
   String namaProduk;
@@ -69,6 +69,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   String mataUang;
 
   String ktpPelanggan;
+  String ktpPelangganBase = "";
   Uint8List ktpPelangganByte;
 
   String fotoKkPelanggan = "";
@@ -81,21 +82,19 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
 
   bool enableMarket = false;
   bool disableHand = true;
+  bool isKtp = true;
 
-  List<Map<String, dynamic>> listAgency = [];
-  List<Map<String, dynamic>> listJadwal = [];
-  List<Map<String, dynamic>> listKantor = [];
   List<Map<String, dynamic>> listJamaah = [];
-  List<Map<String, String>> listTagihan = [];
+  List<Map<String, dynamic>> listBarangHandling = [];
+  List<Map<String, dynamic>> listBarangPelanggan = [];
+  List<Map<String, dynamic>> listJadwal = [];
   List<Map<String, dynamic>> listBiayaPaspor = [];
   List<Map<String, dynamic>> listBiayaVaksin = [];
   List<Map<String, dynamic>> listBiayaKamar = [];
-  List<Map<String, dynamic>> listBarangHandling = [];
-  List<Map<String, dynamic>> listBarangPelanggan = [];
+  List<Map<String, dynamic>> listAgency = [];
+  List<Map<String, dynamic>> listTagihan = [];
 
   void getAuth() async {
-    loadStart();
-
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -113,28 +112,29 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     });
   }
 
-  void getList() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
-      'pte-token': kodeToken,
-    });
+  getKantor() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/jadwal/getKantorUser/$username"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
     setState(() {
-      listAgency = dataStatus;
+      idKantor = dataStatus[0]['KDXX_KNTR'];
+      namaKantor = dataStatus[0]['NAMA_KNTR'];
     });
   }
 
-  getKantor() async {
+  void getJamaah() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/setup/kantor"), headers: {
+        await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"), headers: {
       'pte-token': kodeToken,
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
-
     setState(() {
-      listKantor = dataStatus;
+      listJamaah = dataStatus;
     });
   }
 
@@ -158,8 +158,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
-    listBiayaPaspor = dataStatus;
-    setState(() {});
+    setState(() {
+      listBiayaPaspor = dataStatus;
+    });
   }
 
   void getBiayaVaksin() async {
@@ -169,8 +170,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
-    listBiayaVaksin = dataStatus;
-    setState(() {});
+    setState(() {
+      listBiayaVaksin = dataStatus;
+    });
   }
 
   void getBiayaKamar() async {
@@ -180,8 +182,9 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
-    listBiayaKamar = dataStatus;
-    setState(() {});
+    setState(() {
+      listBiayaKamar = dataStatus;
+    });
   }
 
   void getBiayaAdmin() async {
@@ -199,17 +202,16 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     fncTotal();
   }
 
-  void getJamaah() async {
+  void getAgency() async {
     var response =
-        await http.get(Uri.parse("$urlAddress/jamaah/all-jamaah"), headers: {
+        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
       'pte-token': kodeToken,
     });
     List<Map<String, dynamic>> dataStatus =
         List.from(json.decode(response.body) as List);
-    listJamaah = dataStatus;
-    setState(() {});
-
-    loadEnd();
+    setState(() {
+      listAgency = dataStatus;
+    });
   }
 
   void getBarangHandling(jk) async {
@@ -245,8 +247,7 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     int ttl = 0;
     for (var j = 0; j < dataStatus.length; j++) {
       if (dataStatus[j]['JMLH'] != 0) {
-        ttl += int.parse(
-            dataStatus[j]['HRGX_JUAL'].toString().replaceAll(',', ''));
+        ttl += (dataStatus[j]['HRGX_JUAL'] * dataStatus[j]['JMLH']);
       }
     }
 
@@ -258,47 +259,107 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
 
   @override
   void initState() {
+    loadStart();
     getAuth();
-    getList();
-    getJadwal();
     getKantor();
+    getJamaah();
+    getJadwal();
     getBiayaPaspor();
     getBiayaVaksin();
     getBiayaKamar();
     getBiayaAdmin();
-    getJamaah();
+    getAgency();
+    loadEnd();
     super.initState();
   }
 
   Widget inputKantor() {
+    return TextFormField(
+      initialValue: namaKantor ?? 'Kantor Tidak Terdeteksi',
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(labelText: 'Nama Kantor', hintText: ''),
+    );
+  }
+
+  Widget inputNamapelanggan() {
     return Container(
-      height: 50,
       decoration: const BoxDecoration(
           border: Border(
               bottom: BorderSide(
                   style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      height: 50,
       child: DropdownSearch(
-        enabled: enableMarket,
-        mode: Mode.BOTTOM_SHEET,
-        label: "Nama Kantor",
-        items: listKantor,
-        onChanged: (value) {
-          namaKantor = value['NAMA_KNTR'];
-          idKantor = value['KDXX_KNTR'];
-        },
-        showSearchBox: true,
-        popupItemBuilder: (context, item, isSelected) => ListTile(
-          title: Text(item['NAMA_KNTR'].toString()),
-        ),
-        dropdownBuilder: (context, selectedItem) => const Text('Pusat'),
-        validator: (value) {
-          if (value == "Nama Kantor belum Dipilih") {
-            return "Kantor masih kosong !";
-          }
-        },
-        dropdownSearchDecoration:
-            const InputDecoration(border: InputBorder.none),
-      ),
+          mode: Mode.BOTTOM_SHEET,
+          label: "Nama Pelanggan",
+          items: listJamaah,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                nik = value['NOXX_IDNT'];
+                namaPelanggan = value["NAMA_LGKP"];
+                umur = value['UMUR'].toString();
+                alamat = value['ALAMAT'];
+                paspor =
+                    value['NOXX_PSPR'] != null ? 'Tersedia' : 'Tidak Tersedia';
+
+                ktp = value['FOTO_KTPX'] != '' ? 'KTP' : 'Belum';
+                kk = 'Belum';
+                lampiran = 'Belum';
+                ktpPelanggan =
+                    value['FOTO_KTPX'] == '' ? null : value['FOTO_KTPX'];
+                isKtp = value['FOTO_KTPX'] == '' ? false : true;
+                jenisKelamin = value['JENS_KLMN'] == 'P' ? 'L' : 'P';
+                disableHand = false;
+                textHandling = 'Lihat List Barang Handling';
+                getBarangHandling(value['JENS_KLMN'] == 'P' ? 'L' : 'P');
+              });
+            } else {
+              setState(() {
+                nik = null;
+                namaPelanggan = '';
+                umur = '';
+                alamat = '';
+                paspor = '';
+
+                ktp = null;
+                kk = null;
+                lampiran = null;
+                ktpPelanggan = null;
+                isKtp = false;
+                jenisKelamin = null;
+                disableHand = true;
+                textHandling = 'Barang Handling';
+                getBarangHandling(null);
+              });
+            }
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_LGKP'].toString()),
+                leading: CircleAvatar(
+                  backgroundImage: item['FOTO_JMAH'] != ""
+                      ? NetworkImage(
+                          '$urlAddress/uploads/foto/${item['FOTO_JMAH']}')
+                      : const AssetImage('assets/images/box-background.png'),
+                ),
+                subtitle: Text(item['NOXX_IDNT'].toString()),
+                trailing: Text(
+                    DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
+                    textAlign: TextAlign.center),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(
+              namaPelanggan ?? "Pelanggan Belum dipilih",
+              style: TextStyle(
+                  color: namaPelanggan == null ? Colors.red : Colors.black)),
+          validator: (value) {
+            if (value == null) {
+              return "Nama Pelanggan masih kosong !";
+            }
+          },
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
     );
   }
 
@@ -377,83 +438,6 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
           validator: (value) {
             if (value == null) {
               return "Jadwal Produk masih kosong !";
-            }
-          },
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
-
-  Widget inputNamapelanggan() {
-    return Container(
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      height: 50,
-      child: DropdownSearch(
-          mode: Mode.BOTTOM_SHEET,
-          label: "Nama Pelanggan",
-          items: listJamaah,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                nik = value['NOXX_IDNT'];
-                namaPelanggan = value["NAMA_LGKP"];
-                umur = value['UMUR'].toString();
-                alamat = value['ALAMAT'];
-                paspor =
-                    value['NOXX_PSPR'] != null ? 'Tersedia' : 'Tidak Tersedia';
-
-                ktp = value['FOTO_KTPX'] != '' ? 'KTP' : 'Belum';
-                kk = 'Belum';
-                lampiran = 'Belum';
-                ktpPelanggan =
-                    value['FOTO_KTPX'] == '' ? null : value['FOTO_KTPX'];
-                jenisKelamin = value['JENS_KLMN'] == 'P' ? 'L' : 'P';
-                disableHand = false;
-                textHandling = 'Lihat List Barang Handling';
-                getBarangHandling(value['JENS_KLMN'] == 'P' ? 'L' : 'P');
-              });
-            } else {
-              setState(() {
-                nik = null;
-                namaPelanggan = '';
-                umur = '';
-                alamat = '';
-                paspor = '';
-
-                ktp = null;
-                kk = null;
-                lampiran = null;
-                ktpPelanggan = null;
-                jenisKelamin = null;
-                disableHand = true;
-                textHandling = 'Barang Handling';
-                getBarangHandling(null);
-              });
-            }
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(item['NAMA_LGKP'].toString()),
-                leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('$urlAddress/uploads/${item['FOTO_JMAH']}'),
-                ),
-                subtitle: Text(item['NOXX_IDNT'].toString()),
-                trailing: Text(
-                    DateFormat("dd-MM-yyyy")
-                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(
-              namaPelanggan ?? "Pelanggan Belum dipilih",
-              style: TextStyle(
-                  color: namaPelanggan == null ? Colors.red : Colors.black)),
-          validator: (value) {
-            if (value == null) {
-              return "Nama Pelanggan masih kosong !";
             }
           },
           dropdownSearchDecoration:
@@ -603,129 +587,6 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     );
   }
 
-  Widget inputStatusHandling() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          label: "Status Handling",
-          mode: Mode.MENU,
-          items: const [
-            "Diterima Lengkap",
-            "Diterima Sebagian",
-            "Belum Diterima",
-            "Tidak Dengan Handling",
-          ],
-          onChanged: (value) {
-            handling = value;
-          },
-          selectedItem: "Pilih Status Handling",
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
-
-  Widget inputHandling() {
-    return TextFormField(
-      initialValue: textHandling ?? 'Barang Handling',
-      readOnly: true,
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(labelText: 'Handling', hintText: ''),
-    );
-  }
-
-  Widget inputKurs() {
-    return TextFormField(
-      initialValue: "15,653",
-      readOnly: true,
-      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration:
-          const InputDecoration(labelText: 'Kurs Saat Ini', hintText: '15,653'),
-    );
-  }
-
-  Widget inputRefrensi() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          label: "Refrensi",
-          mode: Mode.BOTTOM_SHEET,
-          items: const [
-            "LANGSUNG",
-            "MARKETING",
-            "MARKETING NONSISTEM",
-            "UMROH SMART",
-            "TOURLEADER",
-            "FREE",
-          ],
-          onChanged: (value) {
-            refrensi = value;
-            if (value == 'MARKETING') {
-              setState(() {
-                enableMarket = true;
-              });
-            } else {
-              setState(() {
-                enableMarket = false;
-              });
-            }
-          },
-          dropdownBuilder: (context, selectedItem) => Text(
-              refrensi ?? "Pilih Refrensi",
-              style: TextStyle(
-                  color: refrensi == null ? Colors.red : Colors.black)),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
-
-  Widget inputNamaMarketing() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
-      child: DropdownSearch(
-          enabled: enableMarket,
-          mode: Mode.BOTTOM_SHEET,
-          label: "Nama Marketing",
-          items: listAgency,
-          onChanged: (value) {
-            if (value != null) {
-              namaAgency = value["KDXX_MRKT"];
-            } else {
-              namaAgency = '';
-            }
-          },
-          showSearchBox: true,
-          popupItemBuilder: (context, item, isSelected) => ListTile(
-                title: Text(item['NAMA_LGKP'].toString()),
-                leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('$urlAddress/uploads/${item['FOTO_AGEN']}'),
-                ),
-                subtitle: Text(item['KDXX_MRKT'].toString()),
-                trailing: Text(
-                    DateFormat("dd-MM-yyyy")
-                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
-                    textAlign: TextAlign.center),
-              ),
-          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
-              ? selectedItem['NAMA_LGKP']
-              : "Marketing belum Dipilih"),
-          dropdownSearchDecoration:
-              const InputDecoration(border: InputBorder.none)),
-    );
-  }
-
   Widget inputKamar() {
     NumberFormat myformat = NumberFormat.decimalPattern('en_us');
     return Container(
@@ -758,145 +619,38 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     );
   }
 
-  Widget inputRouteFile() {
+  Widget inputStatusHandling() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          label: "Status Handling",
+          mode: Mode.MENU,
+          items: const [
+            "Diterima Lengkap",
+            "Diterima Sebagian",
+            "Belum Diterima",
+            "Tidak Dengan Handling",
+          ],
+          onChanged: (value) {
+            handling = value;
+          },
+          selectedItem: "Pilih Status Handling",
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputHandling() {
     return TextFormField(
-      initialValue: "Upload Foto",
+      initialValue: textHandling ?? 'Barang Handling',
       readOnly: true,
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
-      decoration: const InputDecoration(
-        labelText: 'Upload Foto',
-      ),
+      decoration: const InputDecoration(labelText: 'Handling', hintText: ''),
     );
-  }
-
-  fncTotalHandling() {
-    int ttl = 0;
-    for (var i = 0; i < listBarangHandling.length; i++) {
-      if (listBarangHandling[i]['JMLH'] != 0) {
-        ttl += int.parse(
-            listBarangHandling[i]['SUBTOTAL'].toString().replaceAll(',', ''));
-      }
-    }
-
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-
-    setState(() {
-      biayaHandling = myFormat.format(ttl).toString();
-    });
-  }
-
-  fncTotal() {
-    int cek = (
-        // (biaya != null ? int.parse(biaya.replaceAll(',', '')) : 0) +
-        (harga != null ? int.parse(harga.replaceAll(',', '')) : 0) +
-            (biayaPaspor != null
-                ? int.parse(biayaPaspor.replaceAll(',', ''))
-                : 0) +
-            (biayaAdmin != null
-                ? int.parse(biayaAdmin.replaceAll(',', ''))
-                : 0) +
-            (biayaVaksin != null
-                ? int.parse(biayaVaksin.replaceAll(',', ''))
-                : 0) +
-            (biayaHandling != null
-                ? int.parse(biayaHandling.replaceAll(',', ''))
-                : 0) +
-            (biayaKamar != null
-                ? int.parse(biayaKamar.replaceAll(',', ''))
-                : 0));
-
-    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-    setState(() {
-      estimasi = ('${mataUang ?? 'Rp'}.${myFormat.format(cek)}').toString();
-      totalEst = cek.toString();
-    });
-  }
-
-  Widget btnUploadKK() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        getImageKK();
-      },
-      icon: const Icon(Icons.save),
-      label: const Text(
-        'Upload KK',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 10,
-      ),
-    );
-  }
-
-  Widget btnUploadDokumen() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        getImageDok();
-      },
-      icon: const Icon(Icons.save),
-      label: const Text(
-        'Upload Dokumen',
-        style: TextStyle(fontFamily: 'Gilroy'),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: myBlue,
-        minimumSize: const Size(100, 40),
-        shadowColor: Colors.grey,
-        elevation: 10,
-      ),
-    );
-  }
-
-  Widget resultFotoKTP() {
-    if (ktpPelangganByte != null) {
-      return Image.memory(
-        ktpPelangganByte,
-        height: 100,
-      );
-    } else {
-      if (ktpPelanggan != null) {
-        return Image(
-          image: NetworkImage('$urlAddress/uploads/ktp/$ktpPelanggan'),
-          height: 100,
-        );
-      } else {
-        return const Image(
-          image: AssetImage('assets/images/ktp_pict.jpg'),
-          height: 100,
-        );
-      }
-    }
-  }
-
-  Widget resultFotoKK() {
-    if (fotoKkPelangganByte != null) {
-      return Image.memory(
-        fotoKkPelangganByte,
-        height: 100,
-      );
-    } else {
-      return const Image(
-        image: AssetImage('assets/images/kartu_keluarga.png'),
-        height: 100,
-      );
-    }
-  }
-
-  Widget resultFotoDok() {
-    if (fotoDokPelangganByte != null) {
-      return Image.memory(
-        fotoDokPelangganByte,
-        height: 100,
-      );
-    } else {
-      return const Image(
-        image: AssetImage('assets/images/NO_IMAGE.jpg'),
-        height: 100,
-      );
-    }
   }
 
   // WIDGET MODAL HANDLING
@@ -1015,6 +769,203 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   }
   // WIDGET MODAL HANDLING
 
+  Widget inputKurs() {
+    return TextFormField(
+      initialValue: "15,653",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration:
+          const InputDecoration(labelText: 'Kurs Saat Ini', hintText: '15,653'),
+    );
+  }
+
+  Widget inputRefrensi() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          label: "Refrensi",
+          mode: Mode.BOTTOM_SHEET,
+          items: const [
+            "LANGSUNG",
+            "MARKETING",
+            "MARKETING NONSISTEM",
+            "UMROH SMART",
+            "TOURLEADER",
+            "FREE",
+          ],
+          onChanged: (value) {
+            refrensi = value;
+            if (value == 'MARKETING') {
+              setState(() {
+                enableMarket = true;
+              });
+            } else {
+              setState(() {
+                enableMarket = false;
+              });
+            }
+          },
+          dropdownBuilder: (context, selectedItem) => Text(
+              refrensi ?? "Pilih Refrensi",
+              style: TextStyle(
+                  color: refrensi == null ? Colors.red : Colors.black)),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputNamaMarketing() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          enabled: enableMarket,
+          mode: Mode.BOTTOM_SHEET,
+          label: "Nama Marketing",
+          items: listAgency,
+          onChanged: (value) {
+            if (value != null) {
+              namaAgency = value["KDXX_MRKT"];
+            } else {
+              namaAgency = '';
+            }
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_LGKP'].toString()),
+                leading: CircleAvatar(
+                  backgroundImage: item['FOTO_AGEN'] != ""
+                      ? NetworkImage(
+                          '$urlAddress/uploads/foto/${item['FOTO_AGEN']}')
+                      : const AssetImage('assets/images/box-background.png'),
+                ),
+                subtitle: Text(item['KDXX_MRKT'].toString()),
+                trailing: Text(
+                    DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
+                    textAlign: TextAlign.center),
+              ),
+          dropdownBuilder: (context, selectedItem) => Text(selectedItem != null
+              ? selectedItem['NAMA_LGKP']
+              : "Marketing belum Dipilih"),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget btnUploadKK() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        getImageKK();
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload KK',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
+
+  Widget btnUploadDokumen() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        getImageDok();
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload Dokumen',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
+
+  Widget btnUploadKTP() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        getImageKTP();
+      },
+      icon: const Icon(Icons.save),
+      label: const Text(
+        'Upload KTP',
+        style: TextStyle(fontFamily: 'Gilroy'),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: myBlue,
+        minimumSize: const Size(100, 40),
+        shadowColor: Colors.grey,
+        elevation: 10,
+      ),
+    );
+  }
+
+  Widget resultFotoKTP() {
+    if (ktpPelangganByte != null) {
+      return Image.memory(
+        ktpPelangganByte,
+        height: 100,
+      );
+    } else {
+      if (ktpPelanggan != null) {
+        return Image(
+          image: NetworkImage('$urlAddress/uploads/ktp/$ktpPelanggan'),
+          height: 100,
+        );
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/ktp_pict.jpg'),
+          height: 100,
+        );
+      }
+    }
+  }
+
+  Widget resultFotoKK() {
+    if (fotoKkPelangganByte != null) {
+      return Image.memory(
+        fotoKkPelangganByte,
+        height: 100,
+      );
+    } else {
+      return const Image(
+        image: AssetImage('assets/images/kartu_keluarga.png'),
+        height: 100,
+      );
+    }
+  }
+
+  Widget resultFotoDok() {
+    if (fotoDokPelangganByte != null) {
+      return Image.memory(
+        fotoDokPelangganByte,
+        height: 100,
+      );
+    } else {
+      return const Image(
+        image: AssetImage('assets/images/NO_IMAGE.jpg'),
+        height: 100,
+      );
+    }
+  }
+
   getImageKK() async {
     FilePickerResult fileResult = await FilePicker.platform.pickFiles();
 
@@ -1045,9 +996,68 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
     }
   }
 
+  getImageKTP() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        ktpPelanggan = fileResult.files.first.name;
+        ktpPelangganByte = fileResult.files.first.bytes;
+        ktpPelangganBase = encodeFoto;
+      });
+    }
+  }
+
+  fncTotalHandling() {
+    int ttl = 0;
+    for (var i = 0; i < listBarangHandling.length; i++) {
+      if (listBarangHandling[i]['JMLH'] != 0) {
+        ttl += int.parse(
+            listBarangHandling[i]['SUBTOTAL'].toString().replaceAll(',', ''));
+      }
+    }
+
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+
+    setState(() {
+      biayaHandling = myFormat.format(ttl).toString();
+    });
+  }
+
+  fncTotal() {
+    int cek = (
+        // (biaya != null ? int.parse(biaya.replaceAll(',', '')) : 0) +
+        (harga != null ? int.parse(harga.replaceAll(',', '')) : 0) +
+            (biayaPaspor != null
+                ? int.parse(biayaPaspor.replaceAll(',', ''))
+                : 0) +
+            (biayaAdmin != null
+                ? int.parse(biayaAdmin.replaceAll(',', ''))
+                : 0) +
+            (biayaVaksin != null
+                ? int.parse(biayaVaksin.replaceAll(',', ''))
+                : 0) +
+            (biayaHandling != null
+                ? int.parse(biayaHandling.replaceAll(',', ''))
+                : 0) +
+            (biayaKamar != null
+                ? int.parse(biayaKamar.replaceAll(',', ''))
+                : 0));
+
+    NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
+    setState(() {
+      estimasi = ('${mataUang ?? 'Rp'}.${myFormat.format(cek)}').toString();
+      totalEst = cek.toString();
+    });
+  }
+
   fncSaveFoto() {
     HttpPendaftaran.saveFotoPendaftaran(
       nik,
+      ktpPelangganBase != '' ? ktpPelangganBase : 'TIDAK',
       fotoKkPelangganBase != '' ? fotoKkPelangganBase : 'TIDAK',
       fotoDokPelangganBase != '' ? fotoDokPelangganBase : 'TIDAK',
     ).then((value) {
@@ -1121,9 +1131,6 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
       }
     }
 
-    print(listBarangPelanggan.length);
-    print(listBarangPelanggan);
-
     HttpPendaftaran.savePendaftaran(
       idPelanggan,
       idKantor,
@@ -1160,255 +1167,342 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    TabController _tabController = TabController(vsync: this, length: 2);
+    final formKey = GlobalKey<FormState>();
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Jamaah - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          Container(
-            width: screenWidth,
-            padding: const EdgeInsets.only(right: 15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+    return Form(
+      key: formKey,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Obx(() => Row(
                   children: [
                     Container(
-                      height: 60,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
+                      margin: EdgeInsets.only(
+                          top:
+                              ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
+                      child: CustomText(
+                        text: 'Jamaah - ${menuController.activeItem.value}',
+                        size: 24,
+                        weight: FontWeight.bold,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    )
+                  ],
+                )),
+            const SizedBox(height: 20),
+            Container(
+              width: screenWidth,
+              padding: const EdgeInsets.only(right: 15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Form Pendaftaran',
+                              style: TextStyle(
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: myBlue),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Expanded(child: SizedBox(width: 20)),
+                      Row(
                         children: [
-                          Text(
-                            'Form Pendaftaran',
-                            style: TextStyle(
-                                fontFamily: 'Gilroy',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: myBlue),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              authAddx == '1'
+                                  ? fncSaveFoto()
+                                  : showDialog(
+                                      context: context,
+                                      builder: (context) => const ModalInfo(
+                                            deskripsi:
+                                                'Anda Tidak Memiliki Akses',
+                                          ));
+                            },
+                            icon: const Icon(Icons.save),
+                            style: fncButtonAuthStyle(authAddx, context),
+                            label: fncLabelButtonStyle('Simpan', context),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              menuController.changeActiveitemTo('Pendaftaran');
+                              navigationController
+                                  .navigateTo('/jamaah/pendaftaran');
+                            },
+                            icon: const Icon(Icons.restart_alt),
+                            label: fncLabelButtonStyle('Batal', context),
+                            style: fncButtonRegulerStyle(context),
                           ),
                         ],
                       ),
-                    ),
-                    const Expanded(child: SizedBox(width: 20)),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            authAddx == '1'
-                                ? fncSaveFoto()
-                                : showDialog(
-                                    context: context,
-                                    builder: (context) => const ModalInfo(
-                                          deskripsi:
-                                              'Anda Tidak Memiliki Akses',
-                                        ));
-                          },
-                          icon: const Icon(Icons.save),
-                          style: fncButtonAuthStyle(authAddx, context),
-                          label: fncLabelButtonStyle('Simpan', context),
-                        ),
-                        const SizedBox(width: 20),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            menuController.changeActiveitemTo('Pendaftaran');
-                            navigationController
-                                .navigateTo('/jamaah/pendaftaran');
-                          },
-                          icon: const Icon(Icons.restart_alt),
-                          label: fncLabelButtonStyle('Batal', context),
-                          style: fncButtonRegulerStyle(context),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: screenHeight * 0.7,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Row(children: [
-                              Container(
-                                width: 700,
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    inputKantor(),
-                                    const SizedBox(height: 8),
-                                    inputNamaJadwal(),
-                                    const SizedBox(height: 8),
-                                    inputNamapelanggan(),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 213, child: inputKTP()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(width: 213, child: inputKK()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 213, child: inputLampiran()),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 330, child: inputPaspor()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 330, child: inputVaksin()),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 300,
-                                            child: inputStatusHandling()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 360, child: inputKamar()),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 540, child: inputHandling()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 120,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                disableHand == true
-                                                    ? ''
-                                                    : showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            barangHandling(
-                                                                context));
-                                              },
-                                              icon: const Icon(Icons
-                                                  .shopping_basket_outlined),
-                                              label: fncLabelButtonStyle(
-                                                  'Handling', context),
-                                              style: fncButtonAuthStyle(
-                                                  disableHand == true
-                                                      ? '0'
-                                                      : '1',
-                                                  context),
-                                            )),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: 200, child: inputKurs()),
-                                        const SizedBox(width: 20),
-                                        SizedBox(
-                                            width: 460, child: inputRefrensi()),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    inputNamaMarketing(),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      width: 680,
-                                      height: 260,
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          resultFotoKTP(),
-                                          const SizedBox(width: 10),
-                                          resultFotoKK(),
-                                          const SizedBox(width: 10),
-                                          resultFotoDok()
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        btnUploadKK(),
-                                        const SizedBox(width: 10),
-                                        btnUploadDokumen()
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              TableSidePendaftaran(
-                                  tarif: tarif,
-                                  biayaVaksin: biayaVaksin,
-                                  biayaPaspor: biayaPaspor,
-                                  biayaAdmin: biayaAdmin,
-                                  biayaHandling: biayaHandling,
-                                  biayaKamar: biayaKamar,
-                                  estimasi: estimasi,
-                                  paket: paket,
-                                  berangkat: berangkat,
-                                  pulang: pulang,
-                                  namaPelanggan: namaPelanggan,
-                                  umur: umur,
-                                  harga: harga,
-                                  alamat: alamat,
-                                  paspor: paspor,
-                                  vaksin: vaksin,
-                                  pembuatan: pembuatan)
-                            ]),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                      ],
+                    ],
+                  ),
+                  SizedBox(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TabBar(
+                        controller: _tabController,
+                        labelColor: myBlue,
+                        unselectedLabelColor: Colors.grey[700],
+                        labelStyle: const TextStyle(
+                            fontWeight: FontWeight.bold, fontFamily: 'Gilroy'),
+                        tabs: const [
+                          Tab(text: 'Form'),
+                          Tab(text: 'Detail'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    height: screenHeight * 0.63,
+                    width: double.maxFinite,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: screenHeight * 0.63,
+                                  child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: 530,
+                                                  child: inputKantor()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 530,
+                                                  child: inputNamapelanggan()),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: 530,
+                                                  child: inputNamaJadwal()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 259,
+                                                  child: inputKTP()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 259, child: inputKK()),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputLampiran()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputVaksin()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputPaspor()),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputKamar()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputStatusHandling()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 219,
+                                                  child: inputHandling()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 120,
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      disableHand == true
+                                                          ? ''
+                                                          : showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  barangHandling(
+                                                                      context));
+                                                    },
+                                                    icon: const Icon(Icons
+                                                        .shopping_basket_outlined),
+                                                    label: fncLabelButtonStyle(
+                                                        'Handling', context),
+                                                    style: fncButtonAuthStyle(
+                                                        disableHand == true
+                                                            ? '0'
+                                                            : '1',
+                                                        context),
+                                                  )),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputKurs()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputRefrensi()),
+                                              const SizedBox(width: 12),
+                                              SizedBox(
+                                                  width: 349,
+                                                  child: inputNamaMarketing()),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 680,
+                                                height: 260,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    resultFotoKTP(),
+                                                    const SizedBox(width: 10),
+                                                    resultFotoKK(),
+                                                    const SizedBox(width: 10),
+                                                    resultFotoDok()
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      btnUploadKK(),
+                                                      const SizedBox(width: 10),
+                                                      btnUploadDokumen(),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  isKtp != true
+                                                      ? btnUploadKTP()
+                                                      : const SizedBox(),
+                                                  const SizedBox(height: 180),
+                                                  const SizedBox(
+                                                    width: 300,
+                                                    child: Text(
+                                                        '*Pembayaran lunas dilakukan paling lambat 30 hari sebelum keberangkatan'),
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(width: 60),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 60),
+                                        ],
+                                      )),
+                                )
+                              ]),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: screenHeight * 0.63,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: TableSidePendaftaran(
+                                      tarif: tarif,
+                                      biayaVaksin: biayaVaksin,
+                                      biayaPaspor: biayaPaspor,
+                                      biayaAdmin: biayaAdmin,
+                                      biayaHandling: biayaHandling,
+                                      biayaKamar: biayaKamar,
+                                      estimasi: estimasi,
+                                      paket: paket,
+                                      berangkat: berangkat,
+                                      pulang: pulang,
+                                      namaPelanggan: namaPelanggan,
+                                      umur: umur,
+                                      harga: harga,
+                                      alamat: alamat,
+                                      paspor: paspor,
+                                      vaksin: vaksin,
+                                      pembuatan: pembuatan),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

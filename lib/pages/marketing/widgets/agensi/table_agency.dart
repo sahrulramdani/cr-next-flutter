@@ -40,7 +40,12 @@ class ButtonHapus extends StatelessWidget {
 /// BUTTON DETAIL
 class ButtonDetail extends StatelessWidget {
   final String idAgen;
-  const ButtonDetail({Key key, @required this.idAgen}) : super(key: key);
+  final String telp;
+  const ButtonDetail({
+    Key key,
+    @required this.idAgen,
+    @required this.telp,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,7 @@ class ButtonDetail extends StatelessWidget {
                 context: context,
                 builder: (context) => ModalDetailAgency(
                       idAgency: idAgen,
+                      telp: telp,
                     ))
             : showDialog(
                 context: context,
@@ -124,9 +130,12 @@ class MyData extends DataTableSource {
           Text(dataAgency[index]['TOTL_JMAH'].toString(), style: styleRow)),
       DataCell(
           Text(dataAgency[index]['PERD_JMAH'].toString(), style: styleRow)),
-      DataCell(
-          Text(dataAgency[index]['TOTL_POIN'].toString(), style: styleRow)),
-      DataCell(Text((20 - dataAgency[index]['TOTL_POIN']).toString(),
+      // DataCell(
+      //     Text(dataAgency[index]['TOTL_POIN'].toString(), style: styleRow)),
+      DataCell(Text(
+          (int.parse(dataAgency[index]['PERIODE']) -
+                  dataAgency[index]['PERD_JMAH'])
+              .toString(),
           style: styleRow)),
       DataCell(Center(
         child: Row(
@@ -135,7 +144,10 @@ class MyData extends DataTableSource {
             const SizedBox(
               width: 5,
             ),
-            ButtonDetail(idAgen: dataAgency[index]['KDXX_MRKT'].toString()),
+            ButtonDetail(
+              idAgen: dataAgency[index]['KDXX_MRKT'].toString(),
+              telp: dataAgency[index]['NOXX_TELP'].toString(),
+            ),
             // const SizedBox(
             //   width: 5,
             // ),
@@ -187,7 +199,7 @@ class _TableAgencyState extends State<TableAgency> {
             DataColumn(label: Text('Tgl. Bergabung', style: styleColumn)),
             DataColumn(label: Text('Total', style: styleColumn)),
             DataColumn(label: Text('Musim', style: styleColumn)),
-            DataColumn(label: Text('Poin', style: styleColumn)),
+            // DataColumn(label: Text('Poin', style: styleColumn)),
             DataColumn(label: Text('Kurang Poin', style: styleColumn)),
             DataColumn(
                 label: SizedBox(

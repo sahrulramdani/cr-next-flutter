@@ -44,7 +44,10 @@ class _SettingGrupUserState extends State<SettingGrupUser> {
   }
 
   void getData() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/grup-user/all"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/grup-user/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -88,63 +91,6 @@ class _SettingGrupUserState extends State<SettingGrupUser> {
     );
   }
 
-  // Widget cmdPrint() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       // print(listAgency);
-  //     },
-  //     icon: const Icon(Icons.print_outlined),
-  //     label: const Text(
-  //       'Print',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
-  // Widget cmdExport() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {},
-  //     icon: const Icon(Icons.download_outlined),
-  //     label: const Text(
-  //       'Export',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
   Widget spacePemisah() {
     return const SizedBox(
       height: 10,
@@ -158,39 +104,7 @@ class _SettingGrupUserState extends State<SettingGrupUser> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Visibility(
-                visible: !enableFormL,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    cmdTambah(),
-                    //---------------------------------
-                    // spacePemisah(),
-                    // //---------------------------------
-                    // cmdPrint(),
-                    // //---------------------------------
-                    // spacePemisah(),
-                    // //---------------------------------
-                    // cmdExport(),
-                    // //---------------------------------
-                    // spacePemisah(),
-                  ],
-                )),
-
-            //---------------------------------
-            // Visibility(
-            //   visible: enableFormL,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       // cmdSimpan(),
-            //       //---------------------------------
-            //       // spacePemisah(),
-            //       //---------------------------------
-            //       cmdBatal()
-            //     ],
-            //   ),
-            // ),
+            cmdTambah(),
           ],
         ),
       );

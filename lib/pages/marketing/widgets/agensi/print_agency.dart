@@ -1,7 +1,7 @@
 // ignore_for_file: division_optimization, avoid_web_libraries_in_flutter
 
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/foundation.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:intl/intl.dart';

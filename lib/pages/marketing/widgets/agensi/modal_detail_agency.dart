@@ -16,10 +16,12 @@ import 'package:flutter_web_course/pages/marketing/widgets/agensi/detail_downlin
 
 class ModalDetailAgency extends StatefulWidget {
   final String idAgency;
+  final String telp;
 
   const ModalDetailAgency({
     Key key,
     @required this.idAgency,
+    @required this.telp,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
   @override
   Widget build(BuildContext context) {
     String idAgen = widget.idAgency;
+    String telp = widget.telp;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Dialog(
@@ -191,7 +194,10 @@ class _ModalDetailAgencyState extends State<ModalDetailAgency> {
                     Visibility(
                       visible: enablePelanggan,
                       child: SizedBox(
-                        child: DetailPelangganAgency(idAgency: idAgen),
+                        child: DetailPelangganAgency(
+                          idAgency: idAgen,
+                          telp: telp,
+                        ),
                       ),
                     ),
                     Visibility(

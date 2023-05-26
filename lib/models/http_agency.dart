@@ -209,6 +209,8 @@ class HttpAgency {
     String status,
     String namaFoto,
     String namaKtp,
+    String grade,
+    String first,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/marketing/agency/update");
 
@@ -248,6 +250,8 @@ class HttpAgency {
         "STAS_AGEN": status,
         "NAMA_FOTO": namaFoto,
         "NAMA_KTPX": namaKtp,
+        "GRADE_TL": grade,
+        "FIRST_LVEL": grade,
       },
     );
 

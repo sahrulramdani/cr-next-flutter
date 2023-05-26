@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_course/pages/landing/paket/content/detail-product.dart';
 import 'package:flutter_web_course/pages/landing/paket/content/product_detail_content.dart';
 import 'package:flutter_web_course/pages/landing/paket/navigation/nav_bar_paket.dart';
 import 'package:get/get.dart';

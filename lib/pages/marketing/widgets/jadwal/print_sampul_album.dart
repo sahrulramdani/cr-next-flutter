@@ -1,16 +1,14 @@
 // ignore_for_file: unused_local_variable, avoid_web_libraries_in_flutter, use_build_context_synchronously, division_optimization
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
-import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:pdf/pdf.dart';
-import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pw;
 
 class PrintSampulAlbum extends StatefulWidget {

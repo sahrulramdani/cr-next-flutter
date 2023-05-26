@@ -18,6 +18,7 @@ import 'package:flutter_web_course/pages/finance/finance_penerbangan.dart';
 import 'package:flutter_web_course/pages/finance/finance_ujrah.dart';
 import 'package:flutter_web_course/pages/finance/widgets/pembayaran/pembayaran_page.dart';
 import 'package:flutter_web_course/pages/hr/hr_dash.dart';
+import 'package:flutter_web_course/pages/hr/hr_kantor.dart';
 import 'package:flutter_web_course/pages/hr/setting_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/setting_menu.dart';
 import 'package:flutter_web_course/pages/hr/setting_pengguna.dart';
@@ -31,6 +32,7 @@ import 'package:flutter_web_course/pages/inventory/inventory_satuan.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_alumni.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_dash.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_bandara.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_detail_marketplace.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_jadwal.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_master.dart';
 import 'package:flutter_web_course/pages/jamaah/jamaah_pelanggan.dart';
@@ -39,6 +41,7 @@ import 'package:flutter_web_course/pages/jamaah/jamaah_pendaftaran.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_dash.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_agency.dart';
 import 'package:flutter_web_course/pages/hr/hr_karyawan.dart';
+import 'package:flutter_web_course/pages/marketing/marketing_marketplace.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_pemberangkatan.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_perolehan_tahun.dart';
 import 'package:flutter_web_course/pages/marketing/marketing_tourlead.dart';
@@ -68,6 +71,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const MarketingAgencyPage());
     case mrktJadwalPageRoute:
       return _getPageRoute(const MarketingJadwalPage());
+    case mrktMarketplacePageRoute:
+      return _getPageRoute(const MarketingMarketplacePage());
+    case mrktDetMrktPageRoute:
+      return _getPageRoute(const MarketingDetailMarketplace());
     case mrktPemberangkatanPageRoute:
       return _getPageRoute(const MarketingBerangkatPage());
     case mrktTourleadPageRoute:
@@ -146,6 +153,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const HumanResourceDashPage());
     case hrKaryawanPageRoute:
       return _getPageRoute(const HrKaryawanPage());
+    case hrKantorPageRoute:
+      return _getPageRoute(const HrKantorPage());
     // SETTING
     case settingGrupUserRoute:
       return _getPageRoute(const SettingGrupUser());

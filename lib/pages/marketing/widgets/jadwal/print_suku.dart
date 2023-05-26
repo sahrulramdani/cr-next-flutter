@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_web_libraries_in_flutter, must_be_immutable, missing_return, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';

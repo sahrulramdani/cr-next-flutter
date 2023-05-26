@@ -23,6 +23,9 @@ class HttpPengguna {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "USER_IDXX": username,
         "FOTO_USER": fotoUser,
@@ -39,20 +42,32 @@ class HttpPengguna {
   static Future<HttpPengguna> savePengguna(
     String username,
     String password,
+    String kategori,
+    String agen,
+    String kantor,
     String namaPengguna,
     String grupAkses,
     String email,
     String namaFoto,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/register");
-    var hasilResponse = await http.post(urlApi, body: {
-      "USER_IDXX": username,
-      "USER_PASS": password,
-      "NAME_USER": namaPengguna,
-      "GRUP_MENU": grupAkses,
-      "EMAIL": email,
-      "FOTO_USER": namaFoto,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "USER_IDXX": username,
+        "USER_PASS": password,
+        "KATX_USER": kategori,
+        "KDXX_MRKT": agen,
+        "UNIT_KNTR": kantor,
+        "NAME_USER": namaPengguna,
+        "GRUP_MENU": grupAkses,
+        "EMAIL": email,
+        "FOTO_USER": namaFoto,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(
@@ -65,10 +80,16 @@ class HttpPengguna {
     String detailAkses,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/daftar-pengguna/update-akses");
-    var hasilResponse = await http.post(urlApi, body: {
-      "USER_IDXX": username,
-      "DETX_MENU": detailAkses,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "USER_IDXX": username,
+        "DETX_MENU": detailAkses,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(
@@ -85,6 +106,9 @@ class HttpPengguna {
 
     var hasilResponse = await http.post(
       urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
       body: {
         "USER_IDXX": username,
         "FOTO_USER": fotoUser,
@@ -102,6 +126,9 @@ class HttpPengguna {
   static Future<HttpPengguna> updatePengguna(
     String username,
     String password,
+    String kategori,
+    String agen,
+    String kantor,
     String namaPengguna,
     String grupAkses,
     String email,
@@ -109,15 +136,24 @@ class HttpPengguna {
     String status,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/daftar-pengguna/update");
-    var hasilResponse = await http.post(urlApi, body: {
-      "USER_IDXX": username,
-      "USER_PASS": password,
-      "NAME_USER": namaPengguna,
-      "GRUP_MENU": grupAkses,
-      "EMAIL": email,
-      "FOTO_USER": namaFoto,
-      "Active": status,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "USER_IDXX": username,
+        "USER_PASS": password,
+        "KATX_USER": kategori,
+        "KDXX_MRKT": agen,
+        "UNIT_KNTR": kantor,
+        "NAME_USER": namaPengguna,
+        "GRUP_MENU": grupAkses,
+        "EMAIL": email,
+        "FOTO_USER": namaFoto,
+        "ACTIVE": status,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(
@@ -131,11 +167,17 @@ class HttpPengguna {
     String path,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/menus/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "MDUL_CODE": modulecode,
-      "MENU_NAME": modulenama,
-      "PATH": path,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "MDUL_CODE": modulecode,
+        "MENU_NAME": modulenama,
+        "PATH": path,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(
@@ -148,10 +190,16 @@ class HttpPengguna {
     String subMenuName,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/submenus/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "MDUL_CODE": idMenu,
-      "SUBMENU_NAME": subMenuName,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "MDUL_CODE": idMenu,
+        "SUBMENU_NAME": subMenuName,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(
@@ -167,13 +215,37 @@ class HttpPengguna {
     String typemdul,
   ) async {
     Uri urlApi = Uri.parse("$urlAddress/menu/listmenus/save");
-    var hasilResponse = await http.post(urlApi, body: {
-      "SUBMENU_CODE": idSubmenu,
-      "ID_MENU": idmenu,
-      "LIST_NAME": listName,
-      "PATH": Path,
-      "TYPE_MDUL": typemdul,
-    });
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "SUBMENU_CODE": idSubmenu,
+        "ID_MENU": idmenu,
+        "LIST_NAME": listName,
+        "PATH": Path,
+        "TYPE_MDUL": typemdul,
+      },
+    );
+
+    var data = json.decode(hasilResponse.body);
+    return HttpPengguna(
+      status: data["status"],
+    );
+  }
+
+  static Future<HttpPengguna> deletePengguna(String idKantor) async {
+    Uri urlApi = Uri.parse("$urlAddress/menu/daftar-pengguna/delete");
+    var hasilResponse = await http.post(
+      urlApi,
+      headers: {
+        'pte-token': kodeToken,
+      },
+      body: {
+        "USER_IDXX": idKantor,
+      },
+    );
 
     var data = json.decode(hasilResponse.body);
     return HttpPengguna(

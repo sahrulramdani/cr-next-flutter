@@ -1,21 +1,16 @@
 // ignore_for_file: division_optimization
 
-import 'dart:io';
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PrintRiwayatBayar extends StatefulWidget {
   final String keberangkatan;

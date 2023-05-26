@@ -1,6 +1,6 @@
 // ignore_for_file: unused_local_variable, avoid_web_libraries_in_flutter, use_build_context_synchronously, division_optimization
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';

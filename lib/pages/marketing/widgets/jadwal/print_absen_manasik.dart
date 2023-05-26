@@ -1,19 +1,14 @@
 // ignore_for_file: division_optimization, unused_element, unnecessary_string_interpolations
 
-import 'dart:io';
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class PrintAbsenManasik extends StatefulWidget {

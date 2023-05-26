@@ -1,17 +1,11 @@
 // ignore_for_file: unused_local_variable, must_be_immutable
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_edit_grup_user.dart';
+import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_hapus_grup_user.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/modal_list_user_grup.dart';
-import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_edit_satuan.dart';
-import 'package:flutter_web_course/pages/inventory/widgets/satuan/modal_hapus_satuan.dart';
-import 'package:flutter_web_course/pages/overview/widgets/datatable_proyek.dart';
-import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jadwal.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_edit_jamaah.dart';
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_hapus_jadwal.dart';
@@ -19,6 +13,32 @@ import 'package:http/http.dart' as http;
 // import 'package:flutter_web_course/pages/jamaah/widgets/modal_upload_jamaah.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:intl/intl.dart';
+
+class ButtonHapus extends StatelessWidget {
+  final String idGrup;
+  const ButtonHapus({Key key, @required this.idGrup}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.delete_outline_outlined,
+        color: authDelt == '1' ? myBlue : Colors.blue[200],
+      ),
+      onPressed: () {
+        authDelt == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => ModalHapusGrupUser(idGrup: idGrup))
+            : showDialog(
+                context: context,
+                builder: (context) => const ModalInfo(
+                      deskripsi: 'Anda Tidak Memiliki Akses',
+                    ));
+      },
+    );
+  }
+}
 
 class ButtonEdit extends StatelessWidget {
   final String idGrup;
@@ -58,7 +78,7 @@ class ButtonUser extends StatelessWidget {
         color: authInqu == '1' ? myBlue : Colors.blue[200],
       ),
       onPressed: () {
-        authEdit == '1'
+        authInqu == '1'
             ? showDialog(
                 context: context,
                 builder: (context) => ModalListUserGrup(idGrup: idGrup))
@@ -98,6 +118,8 @@ class MyData extends DataTableSource {
             ButtonEdit(idGrup: listGrupUser[index]['KDXX_GRUP']),
             const SizedBox(width: 10),
             ButtonUser(idGrup: listGrupUser[index]['KDXX_GRUP']),
+            const SizedBox(width: 10),
+            ButtonHapus(idGrup: listGrupUser[index]['KDXX_GRUP']),
           ],
         ),
       )),

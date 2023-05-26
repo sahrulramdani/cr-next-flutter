@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter_web_course/constants/dummy_akses_menu.dart';
 import 'package:flutter_web_course/models/http_satuan.dart';
+import 'package:flutter_web_course/pages/landing/src/widgets/not_find_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,10 @@ class _ModalListUserGrupState extends State<ModalListUserGrup> {
 
   void getDetailUser() async {
     var id = widget.idGrup;
-    var response =
-        await http.get(Uri.parse("$urlAddress/menu/grup-user/detail/user/$id"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/menu/grup-user/detail/user/$id"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -81,46 +84,118 @@ class _ModalListUserGrupState extends State<ModalListUserGrup> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Expanded(
-                    child: Container(
-                  width: screenWidth,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
+                listUserGrup.isNotEmpty
+                    ? Expanded(
+                        child: Container(
+                            width: screenWidth,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  children: [
+                                    DataTable(
+                                        headingTextStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Gilroy',
+                                            fontSize: 16),
+                                        headingRowColor: MaterialStateProperty
+                                            .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                          return Colors.blue;
+                                        }),
+                                        columns: const [
+                                          DataColumn(label: Text('No.')),
+                                          DataColumn(label: Text('ID.')),
+                                          DataColumn(label: Text('Nama User')),
+                                          DataColumn(label: Text('Status')),
+                                          DataColumn(
+                                              label: Text('Terakhir Login')),
+                                        ],
+                                        rows: listUserGrup.map((e) {
+                                          return DataRow(cells: [
+                                            DataCell(Text((x++).toString())),
+                                            DataCell(Text(e['USER_IDXX'])),
+                                            DataCell(Text(e['KETX_USER'])),
+                                            DataCell(Text(e['Active'] == '1'
+                                                ? 'Aktif'
+                                                : 'Tidak Aktif')),
+                                            DataCell(Text(e['LOGIN_TERAKHIR'])),
+                                          ]);
+                                        }).toList())
+                                  ],
+                                ),
+                              ),
+                            )))
+                    : Column(
                         children: [
-                          DataTable(
-                              headingTextStyle: TextStyle(
-                                  color: myGrey,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 16),
-                              columns: const [
-                                DataColumn(label: Text('No.')),
-                                DataColumn(label: Text('ID.')),
-                                DataColumn(label: Text('Nama User')),
-                                DataColumn(label: Text('Status')),
-                                DataColumn(label: Text('Terakhir Login')),
+                          Container(
+                            height: 200,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: const Offset(0, 3),
+                                ),
                               ],
-                              rows: listUserGrup.map((e) {
-                                return DataRow(cells: [
-                                  DataCell(Text((x++).toString())),
-                                  DataCell(Text(e['USER_IDXX'])),
-                                  DataCell(Text(e['KETX_USER'])),
-                                  DataCell(Text(e['Active'] == '1'
-                                      ? 'Aktif'
-                                      : 'Tidak Aktif')),
-                                  DataCell(Text(e['LOGIN_TERAKHIR'])),
-                                ]);
-                              }).toList())
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 180,
+                                  child: Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Image.asset(
+                                        'assets/images/hero-alert-fail.png',
+                                      )),
+                                ),
+                                const SizedBox(width: 30),
+                                Expanded(
+                                  child: SizedBox(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        FittedBox(
+                                          child: Text(
+                                            'Belum Ada User Di Grup Akses Ini',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        FittedBox(
+                                          child: Text(
+                                            'Pergi ke menu pengguna untuk menambahkan User',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 75,
+                          )
                         ],
                       ),
-                    ),
-                  ),
-                )),
                 SizedBox(
                   height: 50,
                   child: Row(

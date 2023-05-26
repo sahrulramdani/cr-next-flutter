@@ -304,8 +304,9 @@ class _AgencyFormState extends State<AgencyForm> {
         popupItemBuilder: (context, item, isSelected) => ListTile(
           title: Text(item['NAMA_LGKP'].toString()),
           leading: CircleAvatar(
-            backgroundImage:
-                NetworkImage('$urlAddress/uploads/${item['FOTO_JMAH']}'),
+            backgroundImage: item['FOTO_JMAH'] != ""
+                ? NetworkImage('$urlAddress/uploads/foto/${item['FOTO_JMAH']}')
+                : const AssetImage('assets/images/box-background.png'),
           ),
           subtitle: Text(item['NOXX_IDNT'].toString()),
           trailing: Text(
@@ -719,13 +720,13 @@ class _AgencyFormState extends State<AgencyForm> {
         label: "Kategori Marketing",
         items: listFee,
         onChanged: (value) {
-          namaFee = value['CODD_DESC'];
-          idFee = value['CODD_VALU'];
-          if (value['CODD_DESC'] == 'Tourleader') {
-            setState(() {
+          setState(() {
+            namaFee = value['CODD_DESC'];
+            idFee = value['CODD_VALU'];
+            if (value['CODD_DESC'] == 'Tourleader') {
               katMarket = 'Perorangan';
-            });
-          }
+            }
+          });
           getJenisMarketing();
         },
         showSearchBox: true,

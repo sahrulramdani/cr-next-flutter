@@ -51,15 +51,17 @@ class TableSidePendaftaran extends StatefulWidget {
 class _TableSidePendaftaranState extends State<TableSidePendaftaran> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: 400,
+          width: 530,
           child: DataTable(
-              dataRowHeight: 35,
-              border: TableBorder.all(color: Colors.grey),
+              border: TableBorder.all(
+                  color: Colors.grey,
+                  width: 2,
+                  borderRadius: BorderRadius.circular(10)),
               columns: const [
                 DataColumn(
                     label: Text('Tarif',
@@ -151,77 +153,73 @@ class _TableSidePendaftaranState extends State<TableSidePendaftaran> {
                 ]),
               ]),
         ),
-        const SizedBox(height: 30),
-        Container(
-          width: 400,
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              children: [
-                DataTable(
-                  columns: [
-                    const DataColumn(label: Text('Paket')),
-                    const DataColumn(label: Text(':')),
-                    DataColumn(label: Text(widget.paket ?? '')),
-                  ],
-                  rows: [
-                    DataRow(cells: [
-                      const DataCell(Text('Berangkat')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.berangkat ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Pulang')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.pulang ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Nama')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.namaPelanggan ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Umur')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.umur ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Alamat')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.alamat ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Paspor')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.paspor ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Pemb. Paspor')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.pembuatan ?? '')),
-                    ]),
-                    DataRow(cells: [
-                      const DataCell(Text('Prss. Vaksin')),
-                      const DataCell(Text(':')),
-                      DataCell(Text(widget.vaksin ?? '')),
-                    ]),
-                    // DataRow(cells: [
-                    //   const DataCell(
-                    //       Text('Biaya Fasilitas')),
-                    //   const DataCell(Text(':')),
-                    //   DataCell(Text(fasilitas ?? '')),
-                    // ]),
-                    // DataRow(cells: [
-                    //   const DataCell(
-                    //       Text('Estimasi Total')),
-                    //   const DataCell(Text(':')),
-                    //   DataCell(Text(estimasi ?? '')),
-                    // ]),
-                  ],
-                ),
-              ],
-            ),
+        const SizedBox(width: 13),
+        SizedBox(
+          width: 530,
+          child: DataTable(
+            border: TableBorder.all(
+                color: Colors.grey,
+                width: 2,
+                borderRadius: BorderRadius.circular(10)),
+            columns: [
+              const DataColumn(label: Text('Paket')),
+              const DataColumn(label: Text(':')),
+              DataColumn(label: Text(widget.paket ?? '')),
+            ],
+            rows: [
+              DataRow(cells: [
+                const DataCell(Text('Berangkat')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.berangkat ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Pulang')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.pulang ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Nama')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.namaPelanggan ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Umur')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.umur ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Alamat')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.alamat ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.paspor ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Pemb. Paspor')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.pembuatan ?? '')),
+              ]),
+              DataRow(cells: [
+                const DataCell(Text('Prss. Vaksin')),
+                const DataCell(Text(':')),
+                DataCell(Text(widget.vaksin ?? '')),
+              ]),
+              // DataRow(cells: [
+              //   const DataCell(
+              //       Text('Biaya Fasilitas')),
+              //   const DataCell(Text(':')),
+              //   DataCell(Text(fasilitas ?? '')),
+              // ]),
+              // DataRow(cells: [
+              //   const DataCell(
+              //       Text('Estimasi Total')),
+              //   const DataCell(Text(':')),
+              //   DataCell(Text(estimasi ?? '')),
+              // ]),
+            ],
           ),
         ),
       ],

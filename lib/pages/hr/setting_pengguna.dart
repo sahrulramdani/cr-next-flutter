@@ -48,8 +48,10 @@ class _SettingUserState extends State<SettingUser> {
   }
 
   void getPenggunaAll() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/menu/daftar-pengguna/all"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/menu/daftar-pengguna/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 

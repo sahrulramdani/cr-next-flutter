@@ -47,8 +47,11 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
 
   void getHeaderDetail() async {
     var id = widget.idPengguna;
-    var response = await http
-        .get(Uri.parse("$urlAddress/menu/daftar-pengguna/detail/grup/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/menu/daftar-pengguna/detail/grup/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
     setState(() {
@@ -59,15 +62,19 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
 
   void getMenuAll() async {
     var id = widget.idPengguna;
-    var response = await http
-        .get(Uri.parse("$urlAddress/menu/daftar-pengguna/detail/menu/$id"));
+    var response = await http.get(
+        Uri.parse("$urlAddress/menu/daftar-pengguna/detail/menu/$id"),
+        headers: {
+          'pte-token': kodeToken,
+        });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
     for (var i = 0; i < data.length; i++) {
       var access = {
         "PROC_CODE": data[i]["PROG_CODE"],
-        "MDUL_CODE": data[i]["LIST_CODE"],
+        "LIST_CODE": data[i]["LIST_CODE"],
+        "MDUL_CODE": data[i]["MDUL_CODE"],
         "MENU_NAME": data[i]["LIST_NAME"],
         "PATH": data[i]["PATH"],
         "TYPE_MDUL": data[i]["TYPE_MDUL"],
@@ -94,7 +101,10 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
   }
 
   void getTypeModul() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/type-menu/all"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/type-menu/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -502,134 +512,138 @@ class _ModalAksesPenggunaState extends State<ModalAksesPengguna> {
                       ),
                       const SizedBox(height: 15),
                       const SizedBox(height: 10),
-                      HeaderTableGrupUser(listMenuAkses: listMenuAkses),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          height: 0.48 * screenHeight,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: DataTable(
-                              border: TableBorder.all(color: Colors.grey),
-                              headingRowHeight: 0,
-                              dataRowHeight: 30,
-                              headingTextStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 16),
-                              columnSpacing: 40,
-                              columns: const [
-                                DataColumn(label: Text('All')),
-                                DataColumn(label: Text('Program')),
-                                DataColumn(label: Text('Module')),
-                                DataColumn(label: Text('Type')),
-                                DataColumn(label: Text('ADD')),
-                                DataColumn(label: Text('EDIT')),
-                                DataColumn(label: Text('DELETE')),
-                                DataColumn(label: Text('SELECT')),
-                                DataColumn(label: Text('PRINT')),
-                                DataColumn(label: Text('EXPORT')),
-                              ],
-                              rows: listMenuAkses.map((e) {
-                                return DataRow(cells: [
-                                  DataCell(Checkbox(
-                                    value: e['CEKX_ROWS'],
-                                    onChanged: (bool value) {
-                                      fncCheckRow(e['PROC_CODE']);
-                                    },
-                                  )),
-                                  DataCell(Text(e['MENU_NAME'])),
-                                  DataCell(Text(e['MDUL_CODE'])),
-                                  DataCell(Text(e['TYPE_MDUL'])),
-                                  DataCell(
-                                    e['AUTH_ADDX'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_ADDX'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_ADDX'] =
-                                                    !e['ACCU_ADDX'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                  DataCell(
-                                    e['AUTH_EDIT'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_EDIT'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_EDIT'] =
-                                                    !e['ACCU_EDIT'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                  DataCell(
-                                    e['AUTH_DELT'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_DELT'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_DELT'] =
-                                                    !e['ACCU_DELT'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                  DataCell(
-                                    e['AUTH_INQU'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_INQU'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_INQU'] =
-                                                    !e['ACCU_INQU'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                  DataCell(
-                                    e['AUTH_PRNT'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_PRNT'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_PRNT'] =
-                                                    !e['ACCU_PRNT'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                  DataCell(
-                                    e['AUTH_PRNT'] == '1'
-                                        ? Switch(
-                                            value: e['ACCU_EXPT'],
-                                            activeColor: Colors.green,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                e['ACCU_EXPT'] =
-                                                    !e['ACCU_EXPT'];
-                                              });
-                                            },
-                                          )
-                                        : const Text(''),
-                                  ),
-                                ]);
-                              }).toList(),
+                        child: Column(
+                          children: [
+                            HeaderTableGrupUser(listMenuAkses: listMenuAkses),
+                            SizedBox(
+                              height: 0.48 * screenHeight,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: DataTable(
+                                  border: TableBorder.all(color: Colors.grey),
+                                  headingRowHeight: 0,
+                                  dataRowHeight: 30,
+                                  headingTextStyle: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Gilroy',
+                                      fontSize: 16),
+                                  columnSpacing: 40,
+                                  columns: const [
+                                    DataColumn(label: Text('All')),
+                                    DataColumn(label: Text('Program')),
+                                    DataColumn(label: Text('Module')),
+                                    DataColumn(label: Text('Type')),
+                                    DataColumn(label: Text('ADD')),
+                                    DataColumn(label: Text('EDIT')),
+                                    DataColumn(label: Text('DELETE')),
+                                    DataColumn(label: Text('SELECT')),
+                                    DataColumn(label: Text('PRINT')),
+                                    DataColumn(label: Text('EXPORT')),
+                                  ],
+                                  rows: listMenuAkses.map((e) {
+                                    return DataRow(cells: [
+                                      DataCell(Checkbox(
+                                        value: e['CEKX_ROWS'],
+                                        onChanged: (bool value) {
+                                          fncCheckRow(e['PROC_CODE']);
+                                        },
+                                      )),
+                                      DataCell(Text(e['MENU_NAME'])),
+                                      DataCell(Text(e['MDUL_CODE'])),
+                                      DataCell(Text(e['TYPE_MDUL'])),
+                                      DataCell(
+                                        e['AUTH_ADDX'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_ADDX'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_ADDX'] =
+                                                        !e['ACCU_ADDX'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                      DataCell(
+                                        e['AUTH_EDIT'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_EDIT'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_EDIT'] =
+                                                        !e['ACCU_EDIT'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                      DataCell(
+                                        e['AUTH_DELT'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_DELT'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_DELT'] =
+                                                        !e['ACCU_DELT'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                      DataCell(
+                                        e['AUTH_INQU'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_INQU'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_INQU'] =
+                                                        !e['ACCU_INQU'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                      DataCell(
+                                        e['AUTH_PRNT'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_PRNT'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_PRNT'] =
+                                                        !e['ACCU_PRNT'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                      DataCell(
+                                        e['AUTH_PRNT'] == '1'
+                                            ? Switch(
+                                                value: e['ACCU_EXPT'],
+                                                activeColor: Colors.green,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    e['ACCU_EXPT'] =
+                                                        !e['ACCU_EXPT'];
+                                                  });
+                                                },
+                                              )
+                                            : const Text(''),
+                                      ),
+                                    ]);
+                                  }).toList(),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ],

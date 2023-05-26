@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'dart:convert';
-import 'dart:html';
+import "package:universal_html/html.dart";
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 

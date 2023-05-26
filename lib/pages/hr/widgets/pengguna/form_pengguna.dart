@@ -1,9 +1,6 @@
 // ignore_for_file: missing_return, deprecated_member_use, avoid_print
-import 'package:flutter_web_course/constants/dummy_akses_menu.dart';
 import 'package:flutter_web_course/models/http_pengguna.dart';
-import 'package:flutter_web_course/models/http_satuan.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
-import 'package:flutter_web_course/pages/hr/widgets/grup-user/header_table.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +10,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'package:get/get.dart';
-import 'package:flutter_web_course/constants/style.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class FormPengguna extends StatefulWidget {
   const FormPengguna({Key key}) : super(key: key);
@@ -31,14 +25,24 @@ class FormPengguna extends StatefulWidget {
 
 class _FormPenggunaState extends State<FormPengguna> {
   List<Map<String, dynamic>> listGrupUser = [];
+  List<Map<String, dynamic>> listKantor = [];
+  List<Map<String, dynamic>> listAgency = [];
+  List<Map<String, dynamic>> listKategoriUser = [];
   String username;
-  String nama;
+  String namaPengguna;
+  String idKategori;
+  String namaKategori;
+  String idAgen;
+  String namaAgen;
   String password1;
   String password2;
+  String namaKantor;
+  String idKantor;
   String idGrup;
   String namaGrup;
   String email;
   bool _isHidePassword = true;
+  bool enableAgency = false;
 
   String fotoUser = "";
   String fotoUserBase = "";
@@ -46,7 +50,10 @@ class _FormPenggunaState extends State<FormPengguna> {
   String fotoLamaKtpAgen = "";
 
   void getGrupUser() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/grup-user/all"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/grup-user/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -55,10 +62,49 @@ class _FormPenggunaState extends State<FormPengguna> {
     });
   }
 
+  void getKantor() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/hr/kantor-all"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listKantor = data;
+    });
+  }
+
+  void getKategoriUser() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/kategori-akun"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listKategoriUser = data;
+    });
+  }
+
+  void getAgen() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/marketing/all-agency"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+    setState(() {
+      listAgency = data;
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
     getGrupUser();
+    getKantor();
+    getKategoriUser();
+    getAgen();
+    super.initState();
   }
 
   hideToggleClick() {
@@ -113,6 +159,122 @@ class _FormPenggunaState extends State<FormPengguna> {
     );
   }
 
+  Widget inputKategori() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
+        label: "Kategori User",
+        items: listKategoriUser,
+        onChanged: (value) {
+          setState(() {
+            idKategori = value['CODD_VALU'];
+            namaKategori = value['CODD_DESC'];
+            if (value['CODD_DESC'] == 'Marketing') {
+              enableAgency = true;
+            } else {
+              enableAgency = false;
+              idAgen = null;
+              namaAgen = null;
+              namaPengguna = null;
+            }
+          });
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) =>
+            Text(namaKategori ?? "Kategori User belum Dipilih"),
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+      ),
+    );
+  }
+
+  Widget inputNamaAgen() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+          mode: Mode.BOTTOM_SHEET,
+          label: "Nama Marketing",
+          items: listAgency,
+          onChanged: (value) {
+            setState(() {
+              if (value != null) {
+                idAgen = value["KDXX_MRKT"];
+                namaAgen = value["NAMA_LGKP"];
+                namaPengguna = value['NAMA_LGKP'];
+              } else {
+                idAgen = null;
+                namaAgen = null;
+                namaPengguna = null;
+              }
+            });
+          },
+          showSearchBox: true,
+          popupItemBuilder: (context, item, isSelected) => ListTile(
+                title: Text(item['NAMA_LGKP'].toString()),
+                leading: CircleAvatar(
+                  backgroundImage: item['FOTO_AGEN'] != ""
+                      ? NetworkImage(
+                          '$urlAddress/uploads/foto/${item['FOTO_AGEN']}')
+                      : const AssetImage('assets/images/box-background.png'),
+                ),
+                subtitle: Text(item['KDXX_MRKT'].toString()),
+                trailing: Text(
+                    DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(item['TGLX_LHIR'].toString())),
+                    textAlign: TextAlign.center),
+              ),
+          dropdownBuilder: (context, selectedItem) =>
+              Text(namaAgen ?? "Marketing belum Dipilih"),
+          dropdownSearchDecoration:
+              const InputDecoration(border: InputBorder.none)),
+    );
+  }
+
+  Widget inputKantor() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  style: BorderStyle.solid, color: Colors.black, width: 0.4))),
+      child: DropdownSearch(
+        mode: Mode.BOTTOM_SHEET,
+        label: "Nama Kantor",
+        items: listKantor,
+        onChanged: (value) {
+          namaKantor = value['NAMA_KNTR'];
+          idKantor = value['KDXX_KNTR'];
+        },
+        showSearchBox: true,
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['NAMA_KNTR'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(
+          namaKantor ?? "Pilih Kantor",
+        ),
+        validator: (value) {
+          if (value == "Nama Kantor belum Dipilih") {
+            return "Kantor masih kosong !";
+          }
+        },
+        dropdownSearchDecoration:
+            const InputDecoration(border: InputBorder.none),
+      ),
+    );
+  }
+
   Widget inputNamaPengguna() {
     return TextFormField(
       style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
@@ -120,9 +282,9 @@ class _FormPenggunaState extends State<FormPengguna> {
         labelText: 'Nama Pengguna',
       ),
       onChanged: ((value) {
-        nama = value;
+        namaPengguna = value;
       }),
-      initialValue: nama ?? '',
+      initialValue: namaPengguna ?? '',
       validator: (value) {
         if (value.isEmpty) {
           return "Nama Pengguna masih kosong !";
@@ -268,7 +430,10 @@ class _FormPenggunaState extends State<FormPengguna> {
     HttpPengguna.savePengguna(
       username,
       password1,
-      nama,
+      idKategori,
+      idAgen ?? '',
+      idKantor,
+      namaPengguna,
       idGrup,
       email ?? '',
       namaFoto,
@@ -380,6 +545,17 @@ class _FormPenggunaState extends State<FormPengguna> {
                               const SizedBox(height: 8),
                               inputPassword(),
                               const SizedBox(height: 8),
+                              inputKategori(),
+                              const SizedBox(height: 8),
+                              Visibility(
+                                visible: enableAgency,
+                                child: Column(
+                                  children: [
+                                    inputNamaAgen(),
+                                    const SizedBox(height: 8),
+                                  ],
+                                ),
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,6 +601,8 @@ class _FormPenggunaState extends State<FormPengguna> {
                           child: Column(
                             children: [
                               inputNamaPengguna(),
+                              const SizedBox(height: 8),
+                              inputKantor(),
                               const SizedBox(height: 8),
                               inputGrupUser(),
                               const SizedBox(height: 8),

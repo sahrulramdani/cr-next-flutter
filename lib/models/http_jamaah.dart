@@ -82,7 +82,7 @@ class HttpJamaah {
         "KDXX_KECX": kecamatan,
         "KDXX_KELX": kelurahan,
         "KDXX_POSX": kodePos,
-        "NAMA_AYAH": namaAyah,
+        "NAMA_AYAH": namaAyah ?? '',
         "NOXX_TELP": noTelp,
         "JENS_MNKH": menikah,
         "JENS_PEND": pendidikan,

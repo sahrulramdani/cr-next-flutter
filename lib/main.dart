@@ -9,7 +9,7 @@ import 'package:flutter_web_course/pages/authentication/authentication.dart';
 import 'package:flutter_web_course/pages/landing/all-paket.dart';
 import 'package:flutter_web_course/pages/landing/detail-paket.dart';
 import 'package:flutter_web_course/pages/landing/landing.dart';
-import 'package:flutter_web_course/pages/landing/paket/content/detail-product.dart';
+import 'package:flutter_web_course/pages/landing/pendaftaran_jamaah.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -50,7 +50,8 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: GetMaterialApp(
         scrollBehavior: MyCustomScrollBehavior(),
-        initialRoute: homePageRoute,
+        // initialRoute: homePageRoute,
+        initialRoute: authenticationPageRoute,
         unknownRoute: GetPage(
             name: "/not-found",
             page: () => const PageNotFound(),
@@ -60,17 +61,22 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: rootRoute,
               page: () {
-                if (kodeToken != "") {
+                if (kodeToken != "" || kodeToken == null) {
                   return const SiteLayout();
                 } else {
-                  return const AuthenticationPage();
+                  return const Scaffold(body: AuthenticationPage());
                 }
               }),
           GetPage(
               name: authenticationPageRoute,
-              page: () => const AuthenticationPage()),
-          GetPage(name: homePageRoute, page: () => const LandingPage()),
-          GetPage(name: allPaketPageRoute, page: () => const AllPaketPage()),
+              page: () => const Scaffold(
+                    body: AuthenticationPage(),
+                  )),
+          // GetPage(name: homePageRoute, page: () => const LandingPage()),
+          // GetPage(name: allPaketPageRoute, page: () => const AllPaketPage()),
+          GetPage(
+              name: pendaftaranJamaahPageRoute,
+              page: () => const PendaftaranJamaahPage()),
           GetPage(
               name: detailPaketPageRoute, page: () => const DetailPaketPage()),
           GetPage(name: "/not-found", page: () => const PageNotFound()),

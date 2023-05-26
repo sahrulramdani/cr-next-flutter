@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_edit_tourlead.dart';
 
 // import 'package:intl/intl.dart';
 class ButtonEdit extends StatelessWidget {
-  const ButtonEdit({Key key}) : super(key: key);
+  final String idAgen;
+  final String namaAgen;
+  final String nik;
+  const ButtonEdit(
+      {Key key,
+      @required this.idAgen,
+      @required this.namaAgen,
+      @required this.nik})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,11 @@ class ButtonEdit extends StatelessWidget {
         authInqu == '1'
             ? showDialog(
                 context: context,
-                builder: (context) => const ModalEditTourlead())
+                builder: (context) => ModalEditTourlead(
+                      idAgen: idAgen,
+                      namaAgen: namaAgen,
+                      nik: nik,
+                    ))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -31,32 +42,38 @@ class ButtonEdit extends StatelessWidget {
 }
 
 class MyData extends DataTableSource {
+  final List<Map<String, dynamic>> dataTourleader;
+  MyData(this.dataTourleader);
+
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString(), style: styleRowReguler)),
       DataCell(
-          Text(listKelolaTourLead[index]['id_lead'], style: styleRowReguler)),
-      DataCell(Text(listKelolaTourLead[index]['nama'], style: styleRowReguler)),
+          Text(dataTourleader[index]['KDXX_MRKT'], style: styleRowReguler)),
       DataCell(
-          Text(listKelolaTourLead[index]['level'], style: styleRowReguler)),
+          Text(dataTourleader[index]['NAMA_LGKP'], style: styleRowReguler)),
       DataCell(
-          Text(listKelolaTourLead[index]['sukses'], style: styleRowReguler)),
-      DataCell(
-          Text(listKelolaTourLead[index]['pending'], style: styleRowReguler)),
-      DataCell(Text(listKelolaTourLead[index]['2022'], style: styleRowReguler)),
-      DataCell(Text(listKelolaTourLead[index]['naik'], style: styleRowReguler)),
-      DataCell(
-          Text(listKelolaTourLead[index]['total'], style: styleRowReguler)),
+          Text(dataTourleader[index]['FEE_LEVEL'], style: styleRowReguler)),
+      DataCell(Text(dataTourleader[index]['TLH_BGKT'].toString(),
+          style: styleRowReguler)),
+      DataCell(Text(dataTourleader[index]['PENDING'].toString(),
+          style: styleRowReguler)),
+      DataCell(Text(dataTourleader[index]['TAHUN_INI'].toString(),
+          style: styleRowReguler)),
+      DataCell(Text(dataTourleader[index]['PERD_JMAH'].toString(),
+          style: styleRowReguler)),
+      DataCell(Text(dataTourleader[index]['TTL_SELURUH'].toString(),
+          style: styleRowReguler)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            ButtonEdit(),
-            // SizedBox(
-            //   width: 5,
-            // ),
-            // ButtonHapus(),
+          children: [
+            ButtonEdit(
+              idAgen: dataTourleader[index]['KDXX_MRKT'],
+              namaAgen: dataTourleader[index]['NAMA_LGKP'],
+              nik: dataTourleader[index]['NOXX_IDNT'],
+            ),
           ],
         ),
       )),
@@ -67,14 +84,17 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listKelolaTourLead.length;
+  int get rowCount => dataTourleader.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
 class TableTourleader extends StatefulWidget {
-  const TableTourleader({Key key}) : super(key: key);
+  final List<Map<String, dynamic>> dataTourleader;
+
+  const TableTourleader({Key key, @required this.dataTourleader})
+      : super(key: key);
 
   @override
   State<TableTourleader> createState() => _TableTourleaderState();
@@ -84,8 +104,7 @@ class _TableTourleaderState extends State<TableTourleader> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final DataTableSource myTable = MyData();
+    final DataTableSource myTable = MyData(widget.dataTourleader);
 
     return SizedBox(
       width: screenWidth,

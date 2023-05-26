@@ -5,10 +5,10 @@ import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_data_fail.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
+import "package:universal_html/html.dart";
 
 class ExcelManifest extends StatefulWidget {
   final List<Map<String, dynamic>> listPelangganJadwal;

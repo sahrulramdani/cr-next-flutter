@@ -46,8 +46,10 @@ class _SettingMenuState extends State<SettingMenu> {
   }
 
   void getModuleAll() async {
-    var response =
-        await http.get(Uri.parse("$urlAddress/menu/daftar-menu/module-all"));
+    var response = await http
+        .get(Uri.parse("$urlAddress/menu/daftar-menu/module-all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 

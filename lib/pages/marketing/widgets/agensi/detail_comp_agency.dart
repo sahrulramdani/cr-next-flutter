@@ -98,7 +98,7 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                         DataRow(cells: [
                           const DataCell(Text('Alamat')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['ALAMAT'])),
+                          DataCell(Text(data['ALAMAT'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Tempat, Tanggal Lahir')),
@@ -111,7 +111,7 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                         DataRow(cells: [
                           const DataCell(Text('Periode Jamaah')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['PERD_JMAH'].toString())),
+                          DataCell(Text((data['PERD_JMAH'] ?? '-').toString())),
                         ]),
                       ])
                     ],
@@ -129,27 +129,27 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                         DataRow(cells: [
                           const DataCell(Text('Kelurahan')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['KDXX_KELX'])),
+                          DataCell(Text(data['KDXX_KELX'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Kecamatan')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['KDXX_KECX'])),
+                          DataCell(Text(data['KDXX_KECX'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Kab / Kota')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['KDXX_KOTA'])),
+                          DataCell(Text(data['KDXX_KOTA'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Provinsi')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['KDXX_PROV'])),
+                          DataCell(Text(data['KDXX_PROV'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('First Level')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['FIRST_LVL'])),
+                          DataCell(Text(data['FIRST_LVL'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Leader')),
@@ -159,7 +159,7 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                         DataRow(cells: [
                           const DataCell(Text('Total Jamaah')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['TOTL_JMAH'].toString())),
+                          DataCell(Text((data['TOTL_JMAH'] ?? 0).toString())),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Tanggal Bergabung')),
@@ -170,17 +170,17 @@ class _DetailCompAgencyState extends State<DetailCompAgency> {
                         DataRow(cells: [
                           const DataCell(Text('Status')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['STATUS_AGEN'])),
+                          DataCell(Text(data['STATUS_AGEN'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Kantor')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['NAMA_KNTR'])),
+                          DataCell(Text(data['NAMA_KNTR'] ?? '-')),
                         ]),
                         DataRow(cells: [
                           const DataCell(Text('Fee Level')),
                           const DataCell(Text(':')),
-                          DataCell(Text(data['FEE'])),
+                          DataCell(Text(data['FEE'] ?? '-')),
                         ]),
                       ])
                     ],

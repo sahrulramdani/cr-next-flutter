@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use, missing_return, unused_local_variable, avoid_print, must_be_immutable, unnecessary_brace_in_string_interps
 
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter_web_course/models/http_bandara.dart';
 import 'package:flutter_web_course/models/http_hotel.dart';

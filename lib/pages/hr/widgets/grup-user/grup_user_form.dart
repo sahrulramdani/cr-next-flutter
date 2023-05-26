@@ -37,7 +37,11 @@ class _GrupUserFormState extends State<GrupUserForm> {
   bool enableSwitch = false;
 
   void getMenuAll() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/menus/all"));
+    loadStart();
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/menus/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -71,7 +75,10 @@ class _GrupUserFormState extends State<GrupUserForm> {
   }
 
   void getTypeModul() async {
-    var response = await http.get(Uri.parse("$urlAddress/menu/type-menu/all"));
+    var response =
+        await http.get(Uri.parse("$urlAddress/menu/type-menu/all"), headers: {
+      'pte-token': kodeToken,
+    });
     List<Map<String, dynamic>> data =
         List.from(json.decode(response.body) as List);
 
@@ -87,13 +94,14 @@ class _GrupUserFormState extends State<GrupUserForm> {
     listTypeModul.add(semua);
 
     setState(() {});
+    loadEnd();
   }
 
   @override
   void initState() {
-    super.initState();
     getMenuAll();
     getTypeModul();
+    super.initState();
   }
 
   Widget inputNamaGrup() {
@@ -349,10 +357,12 @@ class _GrupUserFormState extends State<GrupUserForm> {
   fncSaveData() async {
     detailSaveMenu = [];
     // GET NOMOR GRUP USER
-    var response1 = await http
-        .get(Uri.parse("$urlAddress/menu/grup-user/nomor-grup"), headers: {
-      'pte-token': kodeToken,
-    });
+    var response1 = await http.get(
+      Uri.parse("$urlAddress/menu/grup-user/nomor-grup"),
+      headers: {
+        'pte-token': kodeToken,
+      },
+    );
     dynamic body1 = json.decode(response1.body);
     String noGrup = body1['idGrupUser'];
 
@@ -477,193 +487,200 @@ class _GrupUserFormState extends State<GrupUserForm> {
               ),
             ],
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              height: 0.7 * screenHeight,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          Container(
+            height: 0.7 * screenHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 525,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            inputNamaGrup(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      SizedBox(
+                        width: 510,
+                        child: Column(
+                          children: [
+                            inputKeterangan(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 1080,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        const SizedBox(width: 10),
+                        cmdCekAll(),
+                        const SizedBox(width: 10),
+                        cmdUncekAll(),
+                        Expanded(child: Container()),
+                        menuButton()
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "Akses Menu Permission",
+                    style: TextStyle(
+                      color: myBlue,
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      children: [
+                        HeaderTableGrupUser(listMenuAkses: listMenuAkses),
                         SizedBox(
-                          width: 525,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              inputNamaGrup(),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: 510,
-                          child: Column(
-                            children: [
-                              inputKeterangan(),
-                            ],
+                          height: 0.4 * screenHeight,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: DataTable(
+                              border: TableBorder.all(color: Colors.grey),
+                              headingRowHeight: 0,
+                              dataRowHeight: 30,
+                              headingTextStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Gilroy',
+                                  fontSize: 16),
+                              columnSpacing: 40,
+                              columns: const [
+                                DataColumn(label: Text('All')),
+                                DataColumn(label: Text('Program')),
+                                DataColumn(label: Text('Module')),
+                                DataColumn(label: Text('Type')),
+                                DataColumn(label: Text('ADD')),
+                                DataColumn(label: Text('EDIT')),
+                                DataColumn(label: Text('DELETE')),
+                                DataColumn(label: Text('SELECT')),
+                                DataColumn(label: Text('PRINT')),
+                                DataColumn(label: Text('EXPORT')),
+                              ],
+                              rows: listMenuAkses.map((e) {
+                                return DataRow(cells: [
+                                  DataCell(Checkbox(
+                                    value: e['CEKX_ROWS'],
+                                    onChanged: (bool value) {
+                                      fncCheckRow(e['PROC_CODE']);
+                                    },
+                                  )),
+                                  DataCell(Text(e['MENU_NAME'])),
+                                  DataCell(Text(e['MDUL_CODE'])),
+                                  DataCell(Text(e['TYPE_MDUL'])),
+                                  DataCell(
+                                    e['AUTH_ADDX'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_ADDX'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_ADDX'] =
+                                                    !e['ACCS_ADDX'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  DataCell(
+                                    e['AUTH_EDIT'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_EDIT'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_EDIT'] =
+                                                    !e['ACCS_EDIT'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  DataCell(
+                                    e['AUTH_DELT'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_DELT'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_DELT'] =
+                                                    !e['ACCS_DELT'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  DataCell(
+                                    e['AUTH_INQU'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_INQU'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_INQU'] =
+                                                    !e['ACCS_INQU'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  DataCell(
+                                    e['AUTH_PRNT'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_PRNT'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_PRNT'] =
+                                                    !e['ACCS_PRNT'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  DataCell(
+                                    e['AUTH_PRNT'] == '1'
+                                        ? Switch(
+                                            value: e['ACCS_EXPT'],
+                                            activeColor: Colors.green,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                e['ACCS_EXPT'] =
+                                                    !e['ACCS_EXPT'];
+                                              });
+                                            },
+                                          )
+                                        : const Text(''),
+                                  ),
+                                ]);
+                              }).toList(),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: 1080,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 10),
-                          cmdCekAll(),
-                          const SizedBox(width: 10),
-                          cmdUncekAll(),
-                          const SizedBox(width: 495),
-                          menuButton()
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Text(
-                      "Akses Menu Permission",
-                      style: TextStyle(
-                        color: myBlue,
-                        fontFamily: 'Gilroy',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    HeaderTableGrupUser(listMenuAkses: listMenuAkses),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        height: 0.4 * screenHeight,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: DataTable(
-                            border: TableBorder.all(color: Colors.grey),
-                            headingRowHeight: 0,
-                            dataRowHeight: 30,
-                            headingTextStyle: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gilroy',
-                                fontSize: 16),
-                            columnSpacing: 40,
-                            columns: const [
-                              DataColumn(label: Text('All')),
-                              DataColumn(label: Text('Program')),
-                              DataColumn(label: Text('Module')),
-                              DataColumn(label: Text('Type')),
-                              DataColumn(label: Text('ADD')),
-                              DataColumn(label: Text('EDIT')),
-                              DataColumn(label: Text('DELETE')),
-                              DataColumn(label: Text('SELECT')),
-                              DataColumn(label: Text('PRINT')),
-                              DataColumn(label: Text('EXPORT')),
-                            ],
-                            rows: listMenuAkses.map((e) {
-                              return DataRow(cells: [
-                                DataCell(Checkbox(
-                                  value: e['CEKX_ROWS'],
-                                  onChanged: (bool value) {
-                                    fncCheckRow(e['PROC_CODE']);
-                                  },
-                                )),
-                                DataCell(Text(e['MENU_NAME'])),
-                                DataCell(Text(e['MDUL_CODE'])),
-                                DataCell(Text(e['TYPE_MDUL'])),
-                                DataCell(
-                                  e['AUTH_ADDX'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_ADDX'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_ADDX'] = !e['ACCS_ADDX'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                                DataCell(
-                                  e['AUTH_EDIT'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_EDIT'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_EDIT'] = !e['ACCS_EDIT'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                                DataCell(
-                                  e['AUTH_DELT'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_DELT'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_DELT'] = !e['ACCS_DELT'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                                DataCell(
-                                  e['AUTH_INQU'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_INQU'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_INQU'] = !e['ACCS_INQU'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                                DataCell(
-                                  e['AUTH_PRNT'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_PRNT'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_PRNT'] = !e['ACCS_PRNT'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                                DataCell(
-                                  e['AUTH_PRNT'] == '1'
-                                      ? Switch(
-                                          value: e['ACCS_EXPT'],
-                                          activeColor: Colors.green,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              e['ACCS_EXPT'] = !e['ACCS_EXPT'];
-                                            });
-                                          },
-                                        )
-                                      : const Text(''),
-                                ),
-                              ]);
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           )

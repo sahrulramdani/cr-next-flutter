@@ -16,6 +16,12 @@ const mrktAgencyPageRoute = "/mrkt/agency";
 const mrktJadwalPageDisplayName = "Jadwal";
 const mrktJadwalPageRoute = "/mrkt/jadwal";
 
+const mrktMarketplacePageDisplayName = "Produk Haji dan Umroh";
+const mrktMarketplacePageRoute = "/mrkt/marketplace";
+
+const mrktDetMrktPageDisplayName = "Detail Produk";
+const mrktDetMrktPageRoute = "/mrkt/detail-marketplace";
+
 const mrktPemberangkatanPageDisplayName = "Marketing";
 const mrktPemberangkatanPageRoute = "/mrkt/pemberangkatan";
 
@@ -78,6 +84,9 @@ const hrPageRoute = "/hr";
 
 const hrKaryawanPageDisplayName = "Karyawan";
 const hrKaryawanPageRoute = "/hr/karyawan";
+
+const hrKantorPageDisplayName = "Kantor";
+const hrKantorPageRoute = "/hr/kantor";
 
 const settingGrupUserDisplayName = "Grup User";
 const settingGrupUserRoute = "/setting/grup-user";
@@ -178,6 +187,9 @@ const allPaketPageRoute = "/paket";
 
 const detailPaketPageDisplayName = "Semua Paket";
 const detailPaketPageRoute = "/paket/:id";
+
+const pendaftaranJamaahPageDisplayName = "Pendaftaran Jamaah";
+const pendaftaranJamaahPageRoute = "/pendaftaran/:kode/:id";
 
 // MENU ASLI
 

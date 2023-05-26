@@ -1,5 +1,6 @@
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
+import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_jadwal_tourleader.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_pemberangkatan_tourlead.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,14 @@ class MarketingTourleadPage extends StatefulWidget {
 }
 
 class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
+  String kodeLevel = 'XXXX';
+  String namaLevel = 'Semua';
+  List<Map<String, dynamic>> listTourleader = [];
+  List<Map<String, dynamic>> listFeeLevel = [];
+  List<Map<String, dynamic>> listTourleaderBackup = [];
+
   void getAuth() async {
+    loadStart();
     var response = await http.get(
         Uri.parse("$urlAddress/get-permission/$menuKode/$username"),
         headers: {
@@ -39,26 +47,66 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
     });
   }
 
+  void getFeeLevel() async {
+    var response =
+        await http.get(Uri.parse("$urlAddress/setup/fee-level"), headers: {
+      'pte-token': kodeToken,
+    });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    var tambah = {
+      "CODD_VALU": "XXXX",
+      "CODD_DESC": "Semua",
+    };
+
+    data.add(tambah);
+
+    setState(() {
+      listFeeLevel = data;
+    });
+  }
+
+  void getTourlead() async {
+    var response = await http.get(
+        Uri.parse("$urlAddress/marketing/tourlead/all-tourleader"),
+        headers: {
+          'pte-token': kodeToken,
+        });
+    List<Map<String, dynamic>> data =
+        List.from(json.decode(response.body) as List);
+
+    setState(() {
+      listTourleader = data;
+      listTourleaderBackup = data;
+    });
+    loadEnd();
+  }
+
   @override
   void initState() {
     getAuth();
+    getFeeLevel();
+    getTourlead();
     super.initState();
   }
 
-  Widget cmdPrint() {
+  Widget cmdJadwalTL() {
     return ElevatedButton.icon(
       onPressed: () {
-        authPrnt == '1'
-            ? ''
+        authAddx == '1'
+            ? showDialog(
+                context: context,
+                builder: (context) => const ModalJadwalTourleader())
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
                       deskripsi: 'Anda Tidak Memiliki Akses',
                     ));
       },
-      icon: const Icon(Icons.print_outlined),
-      style: fncButtonAuthStyle(authPrnt, context),
-      label: fncLabelButtonStyle('Akumulasi TL', context),
+      icon: const Icon(Icons.collections_bookmark_outlined),
+      style: fncButtonAuthStyle(authAddx, context),
+      label: fncLabelButtonStyle('Jadwal TL', context),
     );
   }
 
@@ -97,7 +145,7 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                cmdPrint(),
+                cmdJadwalTL(),
                 //---------------------------------
                 spacePemisah(),
                 //---------------------------------
@@ -107,6 +155,47 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
           ],
         ),
       );
+
+  Widget inputFilter() {
+    return SizedBox(
+      height: 50,
+      child: DropdownSearch(
+        mode: Mode.MENU,
+        items: listFeeLevel,
+        onChanged: (value) {
+          namaLevel = value["CODD_DESC"];
+          kodeLevel = value["CODD_VALU"];
+
+          fncFilterFee(namaLevel);
+        },
+        popupItemBuilder: (context, item, isSelected) => ListTile(
+          title: Text(item['CODD_DESC'].toString()),
+        ),
+        dropdownBuilder: (context, selectedItem) => Text(namaLevel ?? "Semua"),
+      ),
+    );
+  }
+
+  fncFilterFee(level) {
+    setState(() {
+      listTourleader = listTourleaderBackup;
+    });
+
+    if (level == 'Semua') {
+      setState(() {
+        listTourleader = listTourleaderBackup;
+      });
+    } else {
+      setState(() {
+        listTourleader = listTourleaderBackup
+            .where(((element) => element['FEE_LEVEL']
+                .toString()
+                .toUpperCase()
+                .contains(level.toString().toUpperCase())))
+            .toList();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,26 +271,8 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           SizedBox(
-                            height: 40,
-                            width: ResponsiveWidget.isSmallScreen(context)
-                                ? 120
-                                : 200,
-                            child: DropdownSearch(
-                              mode: Mode.MENU,
-                              items: const [
-                                "AGEN",
-                                "CABANG",
-                                "TOURLEADER",
-                                "TEAM DARAT",
-                                "PAH",
-                                "DMI",
-                                "POS",
-                                "BKMM",
-                                "APDESI",
-                              ],
-                              onChanged: print,
-                              selectedItem: "AGEN",
-                            ),
+                            width: 200,
+                            child: inputFilter(),
                           ),
                           Container(
                             height: 50,
@@ -216,7 +287,23 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                                   fontFamily: 'Gilroy', fontSize: 14),
                               decoration: const InputDecoration(
                                   hintText: 'Cari Berdasarkan Nama'),
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                if (value == '') {
+                                  setState(() {
+                                    getTourlead();
+                                  });
+                                } else {
+                                  setState(() {
+                                    listTourleader = listTourleaderBackup
+                                        .where(((element) =>
+                                            element['NAMA_LGKP']
+                                                .toString()
+                                                .toUpperCase()
+                                                .contains(value.toUpperCase())))
+                                        .toList();
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],
@@ -224,7 +311,9 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                     ),
                   ],
                 ),
-                const TableTourleader(),
+                TableTourleader(
+                  dataTourleader: listTourleader,
+                ),
               ],
             ),
           )
