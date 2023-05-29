@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/finance/widgets/estimasi-paket/table_estimasi_paket.dart';
@@ -172,26 +173,12 @@ class _FinanceEstimasiPaketState extends State<FinanceEstimasiPaket> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -268,14 +255,16 @@ class _FinanceEstimasiPaketState extends State<FinanceEstimasiPaket> {
                     ),
                   ],
                 ),
-                TableEstimasiPaket(
-                  dataJadwal: listJadwal,
+                Expanded(
+                  child: TableEstimasiPaket(
+                    dataJadwal: listJadwal,
+                  ),
                 ),
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

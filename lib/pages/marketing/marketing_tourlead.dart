@@ -1,3 +1,4 @@
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/tourlead/modal_jadwal_tourleader.dart';
@@ -201,37 +202,25 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Marketing - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 120,
-            width: screenWidth,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: listCardTourleader.map((data) {
-                return MyCardInfo(title: data['title'], total: data['total']);
-              }).toList(),
-            ),
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          width: screenWidth,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: listCardTourleader.map((data) {
+              return MyCardInfo(title: data['title'], total: data['total']);
+            }).toList(),
           ),
-          const SizedBox(height: 20),
-          menuButton(),
-          const SizedBox(height: 10),
-          Container(
+        ),
+        const SizedBox(height: 10),
+        menuButton(),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -311,14 +300,16 @@ class _MarketingTourleadPageState extends State<MarketingTourleadPage> {
                     ),
                   ],
                 ),
-                TableTourleader(
-                  dataTourleader: listTourleader,
+                Expanded(
+                  child: TableTourleader(
+                    dataTourleader: listTourleader,
+                  ),
                 ),
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: missing_return, deprecated_member_use
 
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/finance/widgets/lapor-bayar/table_laporan_pembayaran.dart';
@@ -352,62 +353,50 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          Container(
-            width: screenWidth,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 120, child: inputTglAwal()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 120, child: inputTglAkhir()),
-                    Expanded(child: Container()),
-                    SizedBox(width: 260, child: inputPilihJamaah()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 180, child: selectBerangkat(context)),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 180, child: selectJenis(context)),
-                    const SizedBox(width: 5),
-                    cmdCari(),
-                  ],
-                )
-              ],
-            ),
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Container(
+          width: screenWidth,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 7,
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(width: 120, child: inputTglAwal()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 120, child: inputTglAkhir()),
+                  Expanded(child: Container()),
+                  SizedBox(width: 260, child: inputPilihJamaah()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 180, child: selectBerangkat(context)),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 180, child: selectJenis(context)),
+                  const SizedBox(width: 5),
+                  cmdCari(),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -494,12 +483,13 @@ class _FinanceLaporanTagihanState extends State<FinanceLaporanTagihan> {
                     ),
                   ],
                 ),
-                TableLaporanTagihan(dataLaporan: listDataTagihan)
+                Expanded(
+                    child: TableLaporanTagihan(dataLaporan: listDataTagihan))
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

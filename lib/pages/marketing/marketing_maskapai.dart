@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.dart';
@@ -101,19 +102,11 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
   }
 
   Widget menuButton(context) => Container(
-        height: !enableFormL ? 50 : 0,
         alignment: Alignment.centerRight,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Visibility(
-                visible: !enableFormL,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    cmdTambah(context),
-                  ],
-                )),
+            cmdTambah(context),
           ],
         ),
       );
@@ -122,132 +115,94 @@ class _MarketingMaskapaiState extends State<MarketingMaskapai> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Marketing - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          menuButton(context),
-          const SizedBox(
-            height: 10,
-          ),
-          Visibility(
-              visible: enableFormL,
-              child: Container(
-                padding: const EdgeInsets.only(bottom: 20, right: 15),
-                width: screenWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                    ),
-                  ],
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        menuButton(context),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
+            width: screenWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 7,
                 ),
-                // child: const SatuanForm(),
-              )),
-          Visibility(
-              visible: !enableFormL,
-              child: Container(
-                width: screenWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 60,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Seluruh Maskapai',
-                                style: TextStyle(
-                                    fontFamily: 'Gilroy',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: myBlue),
-                              ),
-                            ],
+                    Container(
+                      height: 60,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Seluruh Maskapai',
+                            style: TextStyle(
+                                fontFamily: 'Gilroy',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: myBlue),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 250,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: TextFormField(
-                                  style: const TextStyle(
-                                      fontFamily: 'Gilroy', fontSize: 14),
-                                  decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Maskapai'),
-                                  onChanged: (value) {
-                                    if (value == '') {
-                                      getData();
-                                    } else {
-                                      setState(() {
-                                        listMaskapai = listMaskapai
-                                            .where(((element) =>
-                                                element['NAMA_PSWT']
-                                                    .toString()
-                                                    .toUpperCase()
-                                                    .contains(
-                                                        value.toUpperCase())))
-                                            .toList();
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    TableMasterMaskapai(listMaskapai: listMaskapai)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 250,
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5)),
+                            child: TextFormField(
+                              style: const TextStyle(
+                                  fontFamily: 'Gilroy', fontSize: 14),
+                              decoration: const InputDecoration(
+                                  hintText: 'Cari Nama Maskapai'),
+                              onChanged: (value) {
+                                if (value == '') {
+                                  getData();
+                                } else {
+                                  setState(() {
+                                    listMaskapai = listMaskapai
+                                        .where(((element) =>
+                                            element['NAMA_PSWT']
+                                                .toString()
+                                                .toUpperCase()
+                                                .contains(value.toUpperCase())))
+                                        .toList();
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ))
-        ],
-      ),
+                Expanded(child: TableMasterMaskapai(listMaskapai: listMaskapai))
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
@@ -37,6 +38,10 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
         "total": dataStatus[0]['TTL_BRGKT'].toString(),
       },
       {
+        "title": "Jamaah Bertransaksi",
+        "total": dataStatus[0]['TRANSAKSI_JAMAAH'].toString(),
+      },
+      {
         "title": "Tagihan",
         "total": myFormat.format(dataStatus[0]['TGIH_THUN']),
       },
@@ -68,22 +73,8 @@ class _FinanceDashboardPageState extends State<FinanceDashboardPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: menuController.activeItem.value,
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
+          Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+          const SizedBox(height: 10),
           SizedBox(
             height: 120,
             width: screenWidth,

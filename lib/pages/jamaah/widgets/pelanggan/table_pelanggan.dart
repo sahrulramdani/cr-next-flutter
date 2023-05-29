@@ -118,7 +118,6 @@ class _TablePelangganState extends State<TablePelanggan> {
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCardWithoutTambah(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
@@ -133,41 +132,6 @@ class _TablePelangganState extends State<TablePelanggan> {
             DataColumn(label: Text('Umur', style: styleColumn)),
             DataColumn(label: Text('Berangkat', style: styleColumn)),
             DataColumn(label: Text('Persyaratan', style: styleColumn)),
-            // DataColumn(
-            //     label: Text('Handling',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Telepon',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Uang Masuk',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Estimasi Sisa',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
-            // DataColumn(
-            //     label: Text('Agency',
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontWeight: FontWeight.bold,
-            //             fontFamily: 'Gilroy',
-            //             fontSize: 16))),
             DataColumn(
                 label: SizedBox(
                     width: 80,

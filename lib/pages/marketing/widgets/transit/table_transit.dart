@@ -124,7 +124,6 @@ class _TableMasterTransitState extends State<TableMasterTransit> {
 
     return SizedBox(
       width: screenWidth * 0.9,
-      height: 0.6 * screenHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

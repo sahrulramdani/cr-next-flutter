@@ -19,7 +19,7 @@ Color myGrey = Colors.grey[700];
 // String kodeAgen;
 
 String kodeToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODUwNjk5NzUsImV4cCI6MTY4NTE1NjM3NX0.g4aMTYVA9IAAIg1SkYcnh6COsTtnGaCNVIGr2O2BrR8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InN1cGVyYWRtaW4iLCJpYXQiOjE2ODUzMjYxMjcsImV4cCI6MTY4NTQxMjUyN30.O5Jc_HyLyC_GRPn6a2dqfkD9u3Mh1RmBGpZm5l6jbkA";
 String namaUser = "Superadmin";
 String username = "superadmin";
 String fotoUser = 'superadmin20230513.png';

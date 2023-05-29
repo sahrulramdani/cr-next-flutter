@@ -1,5 +1,6 @@
 // ignore_for_file: missing_return, deprecated_member_use
 
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/finance/widgets/lapor-bayar/table_laporan_pembayaran.dart';
@@ -207,25 +208,49 @@ class _FinanceKasBankHarianState extends State<FinanceKasBankHarian> {
         fontSize: ResponsiveWidget.isSmallScreen(context) ? 12 : 16,
         color: myBlue);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Container(
+          width: screenWidth,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 7,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
+                  SizedBox(width: 220, child: inputTglAwal()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 220, child: inputTglAkhir()),
+                  Expanded(child: Container()),
+                  SizedBox(width: 220, child: selectJenis()),
+                  const SizedBox(width: 5),
+                  cmdCari(),
                 ],
-              )),
-          const SizedBox(height: 20),
-          Container(
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
             width: screenWidth,
+            height: screenHeight * 0.68,
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -238,168 +263,130 @@ class _FinanceKasBankHarianState extends State<FinanceKasBankHarian> {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 220, child: inputTglAwal()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 220, child: inputTglAkhir()),
-                    Expanded(child: Container()),
-                    SizedBox(width: 220, child: selectJenis()),
-                    const SizedBox(width: 5),
-                    cmdCari(),
-                  ],
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Container(
-              width: screenWidth,
-              height: screenHeight * 0.68,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 7,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DataTable(
+                    columnSpacing: 132,
+                    dataRowHeight: 30,
+                    dataTextStyle: const TextStyle(
+                        fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                    headingTextStyle: const TextStyle(
+                        fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
+                    columns: const [
+                      DataColumn(label: Text('No.')),
+                      DataColumn(label: Text('Kode Akun')),
+                      DataColumn(label: Text('Keterangan')),
+                      DataColumn(label: Text('Debet')),
+                      DataColumn(label: Text('Kredit')),
+                    ],
+                    rows: const [
+                      DataRow(cells: [
+                        DataCell(Text('-')),
+                        DataCell(Text('PENERIMAAN')),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('1.')),
+                        DataCell(Text('11103')),
+                        DataCell(Text('Kas Operasional - CR')),
+                        DataCell(Text('0,00')),
+                        DataCell(Text('10,000,000,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('2.')),
+                        DataCell(Text('11104')),
+                        DataCell(Text('Bank BSI 0088319 - CR')),
+                        DataCell(Text('0,00')),
+                        DataCell(Text('10,000,000,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('3.')),
+                        DataCell(Text('11105')),
+                        DataCell(Text('Bank Permata 38819310 - CR')),
+                        DataCell(Text('0,00')),
+                        DataCell(Text('10,000,000,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                        DataCell(Text('Jumlah Penerimaan Rp. :')),
+                        DataCell(Text('')),
+                        DataCell(Text('30,000,000,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('-')),
+                        DataCell(Text('PENGELUARAN')),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('1.')),
+                        DataCell(Text('11103')),
+                        DataCell(Text('Kas Operasional - CR')),
+                        DataCell(Text('10,000,000,00')),
+                        DataCell(Text('0,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('2.')),
+                        DataCell(Text('11104')),
+                        DataCell(Text('Bank BSI 0088319 - CR')),
+                        DataCell(Text('10,000,000,00')),
+                        DataCell(Text('0,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('3.')),
+                        DataCell(Text('11105')),
+                        DataCell(Text('Bank Permata 38819310 - CR')),
+                        DataCell(Text('10,000,000,00')),
+                        DataCell(Text('0,00')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('')),
+                        DataCell(Text('')),
+                        DataCell(Text('Jumlah Penerimaan Rp. :')),
+                        DataCell(Text('30,000,000,00')),
+                        DataCell(Text('')),
+                      ]),
+                    ],
                   ),
+
+                  // Row(
+                  //   children: [
+                  //     Container(
+                  //       height: 60,
+                  //       padding: const EdgeInsets.symmetric(
+                  //           horizontal: 15, vertical: 15),
+                  //       decoration:
+                  //           BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Text(
+                  //             'Kas Bank Harian',
+                  //             style: TextStyle(
+                  //                 fontFamily: 'Gilroy',
+                  //                 fontWeight: FontWeight.bold,
+                  //                 fontSize: 20,
+                  //                 color: myBlue),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // // TableLaporanPembayaran(dataLaporan: listDataPembayaran)
                 ],
               ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DataTable(
-                      columnSpacing: 132,
-                      dataRowHeight: 30,
-                      dataTextStyle: const TextStyle(
-                          fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
-                      headingTextStyle: const TextStyle(
-                          fontFamily: 'Gilroy', fontWeight: FontWeight.bold),
-                      columns: const [
-                        DataColumn(label: Text('No.')),
-                        DataColumn(label: Text('Kode Akun')),
-                        DataColumn(label: Text('Keterangan')),
-                        DataColumn(label: Text('Debet')),
-                        DataColumn(label: Text('Kredit')),
-                      ],
-                      rows: const [
-                        DataRow(cells: [
-                          DataCell(Text('-')),
-                          DataCell(Text('PENERIMAAN')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('1.')),
-                          DataCell(Text('11103')),
-                          DataCell(Text('Kas Operasional - CR')),
-                          DataCell(Text('0,00')),
-                          DataCell(Text('10,000,000,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('2.')),
-                          DataCell(Text('11104')),
-                          DataCell(Text('Bank BSI 0088319 - CR')),
-                          DataCell(Text('0,00')),
-                          DataCell(Text('10,000,000,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('3.')),
-                          DataCell(Text('11105')),
-                          DataCell(Text('Bank Permata 38819310 - CR')),
-                          DataCell(Text('0,00')),
-                          DataCell(Text('10,000,000,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('Jumlah Penerimaan Rp. :')),
-                          DataCell(Text('')),
-                          DataCell(Text('30,000,000,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('-')),
-                          DataCell(Text('PENGELUARAN')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('1.')),
-                          DataCell(Text('11103')),
-                          DataCell(Text('Kas Operasional - CR')),
-                          DataCell(Text('10,000,000,00')),
-                          DataCell(Text('0,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('2.')),
-                          DataCell(Text('11104')),
-                          DataCell(Text('Bank BSI 0088319 - CR')),
-                          DataCell(Text('10,000,000,00')),
-                          DataCell(Text('0,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('3.')),
-                          DataCell(Text('11105')),
-                          DataCell(Text('Bank Permata 38819310 - CR')),
-                          DataCell(Text('10,000,000,00')),
-                          DataCell(Text('0,00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('Jumlah Penerimaan Rp. :')),
-                          DataCell(Text('30,000,000,00')),
-                          DataCell(Text('')),
-                        ]),
-                      ],
-                    ),
-
-                    // Row(
-                    //   children: [
-                    //     Container(
-                    //       height: 60,
-                    //       padding: const EdgeInsets.symmetric(
-                    //           horizontal: 15, vertical: 15),
-                    //       decoration:
-                    //           BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Text(
-                    //             'Kas Bank Harian',
-                    //             style: TextStyle(
-                    //                 fontFamily: 'Gilroy',
-                    //                 fontWeight: FontWeight.bold,
-                    //                 fontSize: 20,
-                    //                 color: myBlue),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // // TableLaporanPembayaran(dataLaporan: listDataPembayaran)
-                  ],
-                ),
-              ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

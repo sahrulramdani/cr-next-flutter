@@ -2,18 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/comp/modal_delete_fail.dart';
-import 'package:flutter_web_course/comp/modal_delete_success.dart';
-import 'package:flutter_web_course/models/http_maskapai.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_web_course/comp/modal_save_success.dart';
+import 'package:flutter_web_course/models/http_musim.dart';
 
-class ModalHapusMaskapai extends StatelessWidget {
-  String idMaskapai;
-  String fotoMaskapai;
+class ModalUpdateMusim extends StatelessWidget {
+  String idMusim;
 
-  ModalHapusMaskapai(
-      {Key key, @required this.idMaskapai, @required this.fotoMaskapai})
-      : super(key: key);
+  ModalUpdateMusim({Key key, @required this.idMusim}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +24,15 @@ class ModalHapusMaskapai extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(
-                Icons.add_alert_rounded,
-                color: Colors.red,
+                Icons.edit_calendar_outlined,
+                color: Colors.green,
                 size: 100,
               ),
               const SizedBox(
                 height: 20,
               ),
               const FittedBox(
-                child: Text('Apakah Kamu Yakin Ingin Menghapus Data?',
+                child: Text('Apakah Kamu Yakin Ingin Mengubah Musim Berjalan?',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               ),
@@ -53,19 +48,16 @@ class ModalHapusMaskapai extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        HttpMaskapai.deleteMaskapai(
-                          idMaskapai,
-                          fotoMaskapai != '' ? fotoMaskapai : 'TIDAK',
-                        ).then((value) {
+                        HttpMusim.updateMusim(idMusim).then((value) {
                           if (value.status == true) {
                             showDialog(
                                 context: context,
-                                builder: (context) =>
-                                    const ModalDeleteSuccess());
+                                builder: (context) => const ModalSaveSuccess());
 
                             menuController
-                                .changeActiveitemTo('Master Maskapai');
-                            navigationController.navigateTo('/mrkt/maskapai');
+                                .changeActiveitemTo('Pengaturan Musim');
+                            navigationController
+                                .navigateTo('/setting/pengaturan-musim');
                           }
                         });
                       },

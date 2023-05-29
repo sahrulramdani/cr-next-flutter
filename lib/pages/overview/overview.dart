@@ -67,9 +67,7 @@ class _OverViewPageState extends State<OverViewPage> {
     return Column(
       children: [
         Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
           width: screenWidth,
           height: 200,

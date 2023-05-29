@@ -69,30 +69,27 @@ class _ChartLaporanTahunanState extends State<ChartLaporanTahunan> {
               blurRadius: 12)
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          CustomText(
+            text: "Perolehan Per Tahun ",
+            size: 20,
+            weight: FontWeight.bold,
+            color: myBlue,
+          ),
           Expanded(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomText(
-                text: "Perolehan Per Tahun ",
-                size: 20,
-                weight: FontWeight.bold,
-                color: myBlue,
+            child: SizedBox(
+              width: 600,
+              // height: ResponsiveWidget.isSmallScreen(context) ? 300 : 450,
+              child: charts.BarChart(
+                _createSampleData(),
+                barRendererDecorator: charts.BarLabelDecorator<String>(),
+                domainAxis: charts.OrdinalAxisSpec(),
+                animate: true,
               ),
-              SizedBox(
-                width: 600,
-                height: ResponsiveWidget.isSmallScreen(context) ? 300 : 450,
-                child: charts.BarChart(
-                  _createSampleData(),
-                  barRendererDecorator: charts.BarLabelDecorator<String>(),
-                  domainAxis: charts.OrdinalAxisSpec(),
-                  animate: true,
-                ),
-              )
-            ],
-          )),
+            ),
+          )
         ],
       ),
     );

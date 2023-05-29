@@ -111,7 +111,6 @@ class _TablePendapatanState extends State<TablePendapatan> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.63,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

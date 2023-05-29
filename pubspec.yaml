@@ -141,6 +141,7 @@ flutter:
     - assets/images/none-produk.png
     - assets/images/legalitas-1.png
     - assets/images/legalitas-2.png
+    - assets/images/pesawat-none.png
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

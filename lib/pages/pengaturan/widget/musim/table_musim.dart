@@ -6,6 +6,7 @@ import 'package:flutter_web_course/pages/hr/widgets/grup-user/detail_modal_info.
 import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_cd_hotel.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/hotel/modal_hapus_hotel.dart';
 import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_hapus_jadwal.dart';
+import 'package:flutter_web_course/pages/pengaturan/widget/musim/modal_update_musim.dart';
 // import 'modal_cd_maskapai.dart';
 // import 'modal_hapus_maskapai.dart';
 // import 'package:intl/intl.dart';
@@ -14,52 +15,24 @@ import 'package:flutter_web_course/pages/marketing/widgets/jadwal/modal_hapus_ja
 // MYDATA
 
 class ButtonEdit extends StatelessWidget {
-  String idHotel;
+  String idMusim;
   ButtonEdit({
     Key key,
-    @required this.idHotel,
+    @required this.idMusim,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
-        Icons.edit_outlined,
-        color: authEdit == '1' ? myBlue : Colors.blue[200],
+        Icons.power_settings_new_sharp,
+        color: authEdit == '1' ? myBlue : Colors.red[700],
       ),
       onPressed: () {
         authEdit == '1'
             ? showDialog(
                 context: context,
-                builder: (context) => ModalCdHotel(
-                      idHotel: idHotel,
-                    ))
-            : showDialog(
-                context: context,
-                builder: (context) => const ModalInfo(
-                      deskripsi: 'Anda Tidak Memiliki Akses',
-                    ));
-      },
-    );
-  }
-}
-
-class ButtonHapus extends StatelessWidget {
-  String idHotel;
-  ButtonHapus({Key key, @required this.idHotel}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.delete_outline,
-        color: authDelt == '1' ? myBlue : Colors.blue[200],
-      ),
-      onPressed: () {
-        authEdit == '1'
-            ? showDialog(
-                context: context,
-                builder: (context) => ModalHapusHotel(idHotel: idHotel))
+                builder: (context) => ModalUpdateMusim(idMusim: idMusim))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -71,32 +44,36 @@ class ButtonHapus extends StatelessWidget {
 }
 
 class MyData extends DataTableSource {
-  final List<Map<String, dynamic>> listHotel;
-  MyData(this.listHotel);
+  final List<Map<String, dynamic>> listMusim;
+  MyData(this.listMusim);
 
   @override
   DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString(), style: styleRowReguler)),
-      DataCell(Text(listHotel[index]['NAMA_HTLX'].toString(),
+      DataCell(Text(listMusim[index]['AWAL_MUSM'].toString(),
           style: styleRowReguler)),
-      DataCell(Text(listHotel[index]['CODD_DESC'].toString(),
+      DataCell(Text(listMusim[index]['AKHR_MUSM'].toString(),
           style: styleRowReguler)),
-      DataCell(Text(listHotel[index]['LOKX_HTLX'].toString(),
+      DataCell(Text(listMusim[index]['PELANGGAN'].toString(),
           style: styleRowReguler)),
-      DataCell(Text(listHotel[index]['ALMT_HTLX'].toString(),
+      DataCell(Text(listMusim[index]['BERANGKAT'].toString(),
           style: styleRowReguler)),
+      DataCell(Container(
+        padding: const EdgeInsets.all(3),
+        color: listMusim[index]['STAS_MUSM'] == '1' ? Colors.green : Colors.red,
+        child: Text(
+          listMusim[index]['STAS_MUSM'] == '1' ? 'Active' : 'NonActive',
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      )),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 5),
             ButtonEdit(
-              idHotel: listHotel[index]['IDXX_HTLX'].toString(),
-            ),
-            const SizedBox(width: 5),
-            ButtonHapus(
-              idHotel: listHotel[index]['IDXX_HTLX'].toString(),
+              idMusim: listMusim[index]['KDXX_MUSM'].toString(),
             ),
           ],
         ),
@@ -108,24 +85,24 @@ class MyData extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => listHotel.length;
+  int get rowCount => listMusim.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
-class TableHotel extends StatefulWidget {
-  final List<Map<String, dynamic>> listHotel;
-  const TableHotel({Key key, @required this.listHotel}) : super(key: key);
+class TableMusim extends StatefulWidget {
+  final List<Map<String, dynamic>> listMusim;
+  const TableMusim({Key key, @required this.listMusim}) : super(key: key);
 
   @override
-  State<TableHotel> createState() => _TableHotelState();
+  State<TableMusim> createState() => _TableMusimState();
 }
 
-class _TableHotelState extends State<TableHotel> {
+class _TableMusimState extends State<TableMusim> {
   @override
   Widget build(BuildContext context) {
-    final DataTableSource myTable = MyData(widget.listHotel);
+    final DataTableSource myTable = MyData(widget.listMusim);
     final screenWidth = MediaQuery.of(context).size.width;
 
     return SizedBox(
@@ -136,15 +113,17 @@ class _TableHotelState extends State<TableHotel> {
           source: myTable,
           columns: const [
             DataColumn(label: Text('No.', style: styleColumn)),
-            DataColumn(label: Text('Nama', style: styleColumn)),
-            DataColumn(label: Text('Bintang', style: styleColumn)),
-            DataColumn(label: Text('Lokasi', style: styleColumn)),
-            DataColumn(label: Text('Alamat', style: styleColumn)),
+            DataColumn(label: Text('Tanggal Awal', style: styleColumn)),
+            DataColumn(label: Text('Tanggal Akhir', style: styleColumn)),
+            DataColumn(label: Text('Pelanggan Musim Ini', style: styleColumn)),
+            DataColumn(
+                label: Text('Jamaah Berangkat Musim Ini', style: styleColumn)),
+            DataColumn(label: Text('Status', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,
                     child: Center(
-                      child: Text('Aksi', style: styleColumn),
+                      child: Text('Opsi', style: styleColumn),
                     ))),
           ],
         ),

@@ -51,6 +51,7 @@ import 'package:flutter_web_course/pages/marketing/marketing_hotel.dart';
 // import 'package:flutter_web_course/pages/marketing/marketing_02dealtrack.dart';
 import 'package:flutter_web_course/pages/overview/overview.dart';
 import 'package:flutter_web_course/pages/pengaturan/setting_biaya.dart';
+import 'package:flutter_web_course/pages/pengaturan/setting_musim.dart';
 // import 'package:flutter_web_course/pages/pm/pm.dart';
 import 'package:flutter_web_course/routing/routes.dart';
 //import 'package:get/get.dart';
@@ -164,7 +165,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(const SettingMenu());
     case settingBiayaRoute:
       return _getPageRoute(const SettingBiaya());
-      return _getPageRoute(ClientsPage());
+    case settingLainnyaRoute:
+      return _getPageRoute(const SettingMusim());
     // AUTHENTICATION
     case authenticationPageRoute:
       return _getPageRoute(const AuthenticationPage());

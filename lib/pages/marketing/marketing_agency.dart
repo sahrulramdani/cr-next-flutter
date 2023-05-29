@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy.dart';
 // import 'package:flutter_web_course/constants/dummy_marketing.dart';
@@ -121,12 +122,6 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   Widget cmdTambah() {
     return ElevatedButton.icon(
       onPressed: () async {
-        // SharedPreferences.setMockInitialValues({});
-        // final prefs = await SharedPreferences.getInstance();
-        // final myData = prefs.getString('token');
-
-        // print(prefs.getString('token'));
-
         authAddx == '1'
             ? setState(() {
                 enableFormL = !enableFormL;
@@ -189,46 +184,28 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Marketing - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          width: screenWidth,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: listCardAgency.map((data) {
+              return MyCardInfo(title: data['title'], total: data['total']);
+            }).toList(),
           ),
-          SizedBox(
-            height: 120,
-            width: screenWidth,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: listCardAgency.map((data) {
-                return MyCardInfo(title: data['title'], total: data['total']);
-              }).toList(),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          menuButton(),
-          const SizedBox(
-            height: 10,
-          ),
-          Visibility(
-              visible: enableFormL,
+        ),
+        const SizedBox(height: 10),
+        menuButton(),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: enableFormL,
+            child: Expanded(
               child: Container(
-                padding: const EdgeInsets.only(bottom: 20, right: 15),
+                padding: const EdgeInsets.all(5),
                 width: screenWidth,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -242,9 +219,11 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                   ],
                 ),
                 child: const AgencyForm(),
-              )),
-          Visibility(
-              visible: !enableFormL,
+              ),
+            )),
+        Visibility(
+            visible: !enableFormL,
+            child: Expanded(
               child: Container(
                 width: screenWidth,
                 decoration: BoxDecoration(
@@ -324,14 +303,16 @@ class _MarketingAgencyPageState extends State<MarketingAgencyPage> {
                         ),
                       ],
                     ),
-                    TableAgency(
-                      dataAgency: listAgency,
+                    Expanded(
+                      child: TableAgency(
+                        dataAgency: listAgency,
+                      ),
                     ),
                   ],
                 ),
-              ))
-        ],
-      ),
+              ),
+            ))
+      ],
     );
   }
 }

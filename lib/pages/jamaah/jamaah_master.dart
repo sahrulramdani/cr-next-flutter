@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
@@ -158,27 +159,6 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
     );
   }
 
-  // Widget cmdBatal() {
-  //   return ElevatedButton.icon(
-  //     onPressed: () {
-  //       setState(() {
-  //         enableFormL = !enableFormL;
-  //       });
-  //     },
-  //     icon: const Icon(Icons.cancel),
-  //     label: const Text(
-  //       'Batal',
-  //       style: TextStyle(fontFamily: 'Gilroy'),
-  //     ),
-  //     style: ElevatedButton.styleFrom(
-  //       backgroundColor: myBlue,
-  //       minimumSize: const Size(100, 40),
-  //       shadowColor: Colors.grey,
-  //       elevation: 5,
-  //     ),
-  //   );
-  // }
-
   Widget spacePemisah() {
     return const SizedBox(
       height: 10,
@@ -210,21 +190,6 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                     spacePemisah(),
                   ],
                 )),
-
-            //---------------------------------
-            // Visibility(
-            //   visible: enableFormL,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       // cmdSimpan(),
-            //       //---------------------------------
-            //       // spacePemisah(),
-            //       //---------------------------------
-            //       cmdBatal()
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       );
@@ -232,46 +197,28 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Jamaah - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          width: screenWidth,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: listCardCalonJamaah.map((data) {
+              return MyCardInfo(title: data['title'], total: data['total']);
+            }).toList(),
           ),
-          SizedBox(
-            height: 120,
-            width: screenWidth,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: listCardCalonJamaah.map((data) {
-                return MyCardInfo(title: data['title'], total: data['total']);
-              }).toList(),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          menuButton(),
-          const SizedBox(
-            height: 10,
-          ),
-          Visibility(
-              visible: enableFormL,
+        ),
+        const SizedBox(height: 10),
+        menuButton(),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: enableFormL,
+            child: Expanded(
               child: Container(
-                  padding: const EdgeInsets.only(bottom: 20, right: 15),
+                  padding: const EdgeInsets.all(5),
                   width: screenWidth,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -284,11 +231,11 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                       ),
                     ],
                   ),
-                  child: const JamaahForm(
-                      // listProvinsi: listProvinsi,
-                      ))),
-          Visibility(
-              visible: !enableFormL,
+                  child: const JamaahForm()),
+            )),
+        Visibility(
+            visible: !enableFormL,
+            child: Expanded(
               child: Container(
                 width: screenWidth,
                 decoration: BoxDecoration(
@@ -366,14 +313,14 @@ class _JamaahDataPageState extends State<JamaahDataPage> {
                         ),
                       ],
                     ),
-                    TableMasterJamaah(
-                      dataJamaah: listJamaah,
+                    Expanded(
+                      child: TableMasterJamaah(dataJamaah: listJamaah),
                     )
                   ],
                 ),
-              ))
-        ],
-      ),
+              ),
+            ))
+      ],
     );
   }
 }

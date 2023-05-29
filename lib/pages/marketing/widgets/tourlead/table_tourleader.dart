@@ -108,7 +108,6 @@ class _TableTourleaderState extends State<TableTourleader> {
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

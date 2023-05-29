@@ -136,7 +136,6 @@ class _TablePemberangkatanState extends State<TablePemberangkatan> {
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCardWithoutTambah(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

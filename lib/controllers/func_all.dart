@@ -83,6 +83,16 @@ fncTanggal(String tgl) {
   return date;
 }
 
+fncTukarTanggal(String tgl) {
+  String tanggalAll = tgl.replaceAll('-', '');
+  String tahun = tanggalAll.substring(0, 4);
+  String bulan = tanggalAll.substring(4, 6);
+  String tanggal = tanggalAll.substring(6, 8);
+  String date = "$tanggal-$bulan-$tahun";
+
+  return date;
+}
+
 fncTelp(String telp) {
   String reguler = telp.substring(1);
   String noAkhir = '62$reguler';

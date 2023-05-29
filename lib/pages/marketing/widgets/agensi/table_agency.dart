@@ -184,7 +184,6 @@ class _TableAgencyState extends State<TableAgency> {
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

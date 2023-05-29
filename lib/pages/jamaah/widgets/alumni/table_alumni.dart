@@ -98,7 +98,6 @@ class _TableAlumniState extends State<TableAlumni> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.72,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

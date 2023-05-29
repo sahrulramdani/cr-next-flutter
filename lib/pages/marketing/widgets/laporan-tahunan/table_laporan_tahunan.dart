@@ -65,46 +65,42 @@ class _TableLaporanTahunanState extends State<TableLaporanTahunan> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      width: screenWidth * 0.9,
-      height: 0.73 * screenHeight,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: PaginatedDataTable(
-          source: myTable,
-          dataRowHeight: 40,
-          columnSpacing: 14,
-          columns: const [
-            DataColumn(
-                label: Text('No.',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Tahun',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Perolehan',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-            DataColumn(
-                label: Text('Berangkat',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Gilroy',
-                        fontSize: 16))),
-          ],
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: PaginatedDataTable(
+        source: myTable,
+        dataRowHeight: 40,
+        columnSpacing: 14,
+        columns: const [
+          DataColumn(
+              label: Text('No.',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy',
+                      fontSize: 16))),
+          DataColumn(
+              label: Text('Tahun',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy',
+                      fontSize: 16))),
+          DataColumn(
+              label: Text('Perolehan',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy',
+                      fontSize: 16))),
+          DataColumn(
+              label: Text('Berangkat',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gilroy',
+                      fontSize: 16))),
+        ],
       ),
     );
   }

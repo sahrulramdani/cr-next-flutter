@@ -103,7 +103,6 @@ class _TableTransaksiState extends State<TableTransaksi> {
 
     return SizedBox(
       width: screenWidth,
-      height: 0.41 * screenHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

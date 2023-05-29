@@ -75,7 +75,6 @@ class _TableLaporanTagihanState extends State<TableLaporanTagihan> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.58,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

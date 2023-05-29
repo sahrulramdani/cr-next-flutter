@@ -1,14 +1,12 @@
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/dummy_pelanggan.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/alumni/table_alumni.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
-import 'package:flutter_web_course/constants/dummy.dart';
-import 'package:flutter_web_course/comp/card_info.dart';
 import 'package:flutter_web_course/constants/style.dart';
 import 'package:get/get.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
 class JamaahAlumniPage extends StatefulWidget {
   const JamaahAlumniPage({Key key}) : super(key: key);
@@ -25,35 +23,12 @@ class _JamaahAlumniPageState extends State<JamaahAlumniPage> {
         .where((element) => element['status_selesai'] == 'a')
         .toList();
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Jamaah - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          // SizedBox(
-          //   height: 120,
-          //   width: screenWidth,
-          //   child: ListView(
-          //     scrollDirection: Axis.horizontal,
-          //     children: listCardPelanggan.map((data) {
-          //       return MyCardInfo(title: data['title'], total: data['total']);
-          //     }).toList(),
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
-          Container(
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -117,14 +92,16 @@ class _JamaahAlumniPageState extends State<JamaahAlumniPage> {
                     ),
                   ],
                 ),
-                TableAlumni(
-                  dataAlumni: listAlumni,
+                Expanded(
+                  child: TableAlumni(
+                    dataAlumni: listAlumni,
+                  ),
                 ),
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

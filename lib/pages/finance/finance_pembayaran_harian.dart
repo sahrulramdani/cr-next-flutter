@@ -1,11 +1,8 @@
 // ignore_for_file: missing_return, deprecated_member_use
 
-import 'package:flutter_web_course/constants/dummy.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
-import 'package:flutter_web_course/pages/finance/widgets/lapor-bayar/table_laporan_pembayaran.dart';
-import 'package:flutter_web_course/pages/finance/widgets/penerbangan.dart/penerbangan_table.dart';
-import 'package:flutter_web_course/pages/inventory/widgets/kirim/table_kirim_barang.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -386,67 +383,51 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final DataTableSource myTable = MyData(listDataPembayaran);
-    // NumberFormat myFormat = NumberFormat.decimalPattern('en_us');
-    // final styleRowKhusus = TextStyle(
-    //     fontWeight: FontWeight.bold, color: Colors.grey[800], fontSize: 12);
-    // int x = 1;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          Container(
-            width: screenWidth,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 150, child: inputTglAwal()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 150, child: inputTglAkhir()),
-                    Expanded(child: Container()),
-                    SizedBox(width: 260, child: inputPilihJamaah()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 160, child: selectJenis()),
-                    const SizedBox(width: 10),
-                    SizedBox(width: 200, child: inputCaraBayar()),
-                    const SizedBox(width: 5),
-                    cmdCari(),
-                  ],
-                )
-              ],
-            ),
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Container(
+          width: screenWidth,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 7,
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(width: 150, child: inputTglAwal()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 150, child: inputTglAkhir()),
+                  Expanded(child: Container()),
+                  SizedBox(width: 260, child: inputPilihJamaah()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 160, child: selectJenis()),
+                  const SizedBox(width: 10),
+                  SizedBox(width: 200, child: inputCaraBayar()),
+                  const SizedBox(width: 5),
+                  cmdCari(),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -521,40 +502,44 @@ class _FinancePembayaranHarianState extends State<FinancePembayaranHarian> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: screenHeight * 0.58,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: PaginatedDataTable(
-                      columnSpacing: 30,
-                      dataRowHeight: 25,
-                      rowsPerPage: 150,
-                      source: myTable,
-                      columns: const [
-                        DataColumn(label: Text('No.', style: styleColumn)),
-                        DataColumn(label: Text('Tanggal', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Nomor Transaksi', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Kode Daftar', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Nama Jamaah', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Tgl Tagihan', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Nama Tagihan', style: styleColumn)),
-                        DataColumn(
-                            label: Text('Cara Bayar', style: styleColumn)),
-                        DataColumn(label: Text('Jumlah', style: styleColumn)),
-                      ],
+                Expanded(
+                  child: SizedBox(
+                    width: screenWidth,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: PaginatedDataTable(
+                        columnSpacing: listDataPembayaran.isEmpty ? 35 : 30,
+                        dataRowHeight: 25,
+                        rowsPerPage: 150,
+                        source: myTable,
+                        columns: const [
+                          DataColumn(label: Text('No.', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Tanggal', style: styleColumn)),
+                          DataColumn(
+                              label:
+                                  Text('Nomor Transaksi', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Kode Daftar', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Nama Jamaah', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Tgl Tagihan', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Nama Tagihan', style: styleColumn)),
+                          DataColumn(
+                              label: Text('Cara Bayar', style: styleColumn)),
+                          DataColumn(label: Text('Jumlah', style: styleColumn)),
+                        ],
+                      ),
                     ),
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

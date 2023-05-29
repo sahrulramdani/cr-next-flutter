@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 // import 'package:flutter_web_course/constants/dummy.dart';
 // import 'package:flutter_web_course/constants/dummy_jadwal.dart';
@@ -103,38 +104,22 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(children: [
-        Obx(() => Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                  child: CustomText(
-                    text: 'Marketing - ${menuController.activeItem.value}',
-                    size: 24,
-                    weight: FontWeight.bold,
-                  ),
-                )
-              ],
-            )),
-        const SizedBox(
-          height: 20,
+    return Column(children: [
+      Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+      const SizedBox(height: 10),
+      SizedBox(
+        height: 120,
+        width: screenWidth,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: listCardPemberangkatan.map((data) {
+            return MyCardInfo(title: data['title'], total: data['total']);
+          }).toList(),
         ),
-        SizedBox(
-          height: 120,
-          width: screenWidth,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: listCardPemberangkatan.map((data) {
-              return MyCardInfo(title: data['title'], total: data['total']);
-            }).toList(),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Container(
+      ),
+      const SizedBox(height: 10),
+      Expanded(
+        child: Container(
           width: screenWidth,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -208,11 +193,13 @@ class _MarketingBerangkatPageState extends State<MarketingBerangkatPage> {
                   ),
                 ],
               ),
-              TablePemberangkatan(dataPemberangkatan: listPemberangkatan),
+              Expanded(
+                  child: TablePemberangkatan(
+                      dataPemberangkatan: listPemberangkatan)),
             ],
           ),
-        )
-      ]),
-    );
+        ),
+      )
+    ]);
   }
 }

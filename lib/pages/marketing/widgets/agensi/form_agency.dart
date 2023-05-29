@@ -29,6 +29,8 @@ class AgencyForm extends StatefulWidget {
 }
 
 class _AgencyFormState extends State<AgencyForm> {
+  final formKey = GlobalKey<FormState>();
+
   String namaJamaah;
   String nik;
   String namaAgency;
@@ -1046,6 +1048,137 @@ class _AgencyFormState extends State<AgencyForm> {
     );
   }
 
+  Widget formInputLeft() {
+    return SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(child: SizedBox(child: inputJamaah())),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.only(top: 10),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    fncBersih();
+                  },
+                  icon: const Icon(Icons.clear),
+                  label: fncLabelButtonStyle('Clear', context),
+                  style: fncButtonRegulerStyle(context),
+                ),
+              ),
+            ],
+          ),
+          inputNIK(),
+          const SizedBox(height: 8),
+          inputNama(),
+          const SizedBox(height: 8),
+          inputJenisKelamin(),
+          const SizedBox(height: 8),
+          inputTempatLahir(),
+          const SizedBox(height: 8),
+          inputTglLahir(),
+          const SizedBox(height: 8),
+          inputAlamat(),
+          const SizedBox(height: 8),
+          inputKantor(),
+          const SizedBox(height: 8),
+          inputProvinsi(),
+          const SizedBox(height: 8),
+          inputKota(),
+          const SizedBox(height: 8),
+          inputKec(),
+          const SizedBox(height: 8),
+          inputKel(),
+          const SizedBox(height: 8),
+          inputKodePos(),
+          const SizedBox(height: 8),
+          inputNamaLeader(),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(child: SizedBox(child: inputUploadFoto())),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.only(top: 10),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => const ModalUploadFotoAgency());
+                  },
+                  icon: const Icon(Icons.image_outlined),
+                  label: fncLabelButtonStyle('Upload Foto', context),
+                  style: fncButtonRegulerStyle(context),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget formInputRight() {
+    return SizedBox(
+      width: fncWidthColumnForm(context),
+      child: Column(
+        children: [
+          inputFeeLevel(),
+          const SizedBox(height: 8),
+          inputJenisMarketing(),
+          const SizedBox(height: 8),
+          inputPenanggungJawab(),
+          const SizedBox(height: 8),
+          inputTelpPenanggungJawab(),
+          const SizedBox(height: 8),
+          inputNamaAyah(),
+          const SizedBox(height: 8),
+          inputTelp(),
+          const SizedBox(height: 8),
+          inputMenikah(),
+          const SizedBox(height: 8),
+          inputPendidikan(),
+          const SizedBox(height: 8),
+          inputPekerjaan(),
+          const SizedBox(height: 8),
+          inputPaspor(),
+          const SizedBox(height: 8),
+          inputNoPaspor(),
+          const SizedBox(height: 8),
+          inputPasporKeluar(),
+          const SizedBox(height: 8),
+          inputTglKeluar(),
+          const SizedBox(height: 8),
+          inputTglExp(),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(child: inputUploadKTP()),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.only(top: 10),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => const ModalUploadKtpAgency());
+                  },
+                  icon: const Icon(Icons.image_outlined),
+                  label: fncLabelButtonStyle('Upload KTP', context),
+                  style: fncButtonRegulerStyle(context),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   fncBersih() {
     setState(() {
       nik = null;
@@ -1172,7 +1305,7 @@ class _AgencyFormState extends State<AgencyForm> {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Form(
       key: formKey,
@@ -1195,198 +1328,76 @@ class _AgencyFormState extends State<AgencyForm> {
                   ],
                 ),
               ),
-              const Expanded(child: SizedBox(width: 20)),
-              ElevatedButton.icon(
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    fncSaveFoto();
-                  } else {
-                    return null;
-                  }
-                },
-                icon: const Icon(Icons.save),
-                label: fncLabelButtonStyle('Simpan', context),
-                style: fncButtonRegulerStyle(context),
+              const Expanded(child: SizedBox()),
+              Container(
+                padding: const EdgeInsets.only(right: 15),
+                child: Row(
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (formKey.currentState.validate()) {
+                          fncSaveFoto();
+                        } else {
+                          return null;
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      label: fncLabelButtonStyle('Simpan', context),
+                      style: fncButtonRegulerStyle(context),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          fotoAgency = '';
+                          fotoAgencyBase = '';
+                          fotoAgencyByte = null;
+
+                          fotoKtpAgency = '';
+                          fotoKtpAgencyBase = '';
+                          fotoKtpAgencyByte = null;
+
+                          fotoCalonAgen = '';
+                          ktpCalonAgen = '';
+                        });
+
+                        menuController.changeActiveitemTo('Agency');
+                        navigationController.navigateTo('/mrkt/agency');
+                      },
+                      icon: const Icon(Icons.cancel),
+                      label: fncLabelButtonStyle('Batal', context),
+                      style: fncButtonRegulerStyle(context),
+                    )
+                  ],
+                ),
               ),
-              const SizedBox(width: 10),
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    fotoAgency = '';
-                    fotoAgencyBase = '';
-                    fotoAgencyByte = null;
-
-                    fotoKtpAgency = '';
-                    fotoKtpAgencyBase = '';
-                    fotoKtpAgencyByte = null;
-
-                    fotoCalonAgen = '';
-                    ktpCalonAgen = '';
-                  });
-
-                  menuController.changeActiveitemTo('Agency');
-                  navigationController.navigateTo('/mrkt/agency');
-                },
-                icon: const Icon(Icons.cancel),
-                label: fncLabelButtonStyle('Batal', context),
-                style: fncButtonRegulerStyle(context),
-              )
             ],
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+          Expanded(
             child: Container(
-              height: fncHeightFormWithCard(context),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
+                child: screenWidth >= 500
+                    ? Column(
+                        children: <Widget>[
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: fncWidthInputForm(context),
-                                      child: inputJamaah()),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        fncBersih();
-                                      },
-                                      icon: const Icon(Icons.clear),
-                                      label:
-                                          fncLabelButtonStyle('Clear', context),
-                                      style: fncButtonRegulerStyle(context),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              inputNIK(),
-                              const SizedBox(height: 8),
-                              inputNama(),
-                              const SizedBox(height: 8),
-                              inputJenisKelamin(),
-                              const SizedBox(height: 8),
-                              inputTempatLahir(),
-                              const SizedBox(height: 8),
-                              inputTglLahir(),
-                              const SizedBox(height: 8),
-                              inputAlamat(),
-                              const SizedBox(height: 8),
-                              inputKantor(),
-                              const SizedBox(height: 8),
-                              inputProvinsi(),
-                              const SizedBox(height: 8),
-                              inputKota(),
-                              const SizedBox(height: 8),
-                              inputKec(),
-                              const SizedBox(height: 8),
-                              inputKel(),
-                              const SizedBox(height: 8),
-                              inputKodePos(),
-                              const SizedBox(height: 8),
-                              inputNamaLeader(),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: fncWidthInputForm(context),
-                                      child: inputUploadFoto()),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                const ModalUploadFotoAgency());
-                                      },
-                                      icon: const Icon(Icons.image_outlined),
-                                      label: fncLabelButtonStyle(
-                                          'Upload Foto', context),
-                                      style: fncButtonRegulerStyle(context),
-                                    ),
-                                  ),
-                                ],
-                              )
+                              Expanded(child: formInputLeft()),
+                              const SizedBox(width: 25),
+                              Expanded(child: formInputRight())
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              inputFeeLevel(),
-                              const SizedBox(height: 8),
-                              inputJenisMarketing(),
-                              const SizedBox(height: 8),
-                              inputPenanggungJawab(),
-                              const SizedBox(height: 8),
-                              inputTelpPenanggungJawab(),
-                              const SizedBox(height: 8),
-                              inputNamaAyah(),
-                              const SizedBox(height: 8),
-                              inputTelp(),
-                              const SizedBox(height: 8),
-                              inputMenikah(),
-                              const SizedBox(height: 8),
-                              inputPendidikan(),
-                              const SizedBox(height: 8),
-                              inputPekerjaan(),
-                              const SizedBox(height: 8),
-                              inputPaspor(),
-                              const SizedBox(height: 8),
-                              inputNoPaspor(),
-                              const SizedBox(height: 8),
-                              inputPasporKeluar(),
-                              const SizedBox(height: 8),
-                              inputTglKeluar(),
-                              const SizedBox(height: 8),
-                              inputTglExp(),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: fncWidthInputForm(context),
-                                      child: inputUploadKTP()),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                const ModalUploadKtpAgency());
-                                      },
-                                      icon: const Icon(Icons.image_outlined),
-                                      label: fncLabelButtonStyle(
-                                          'Upload KTP', context),
-                                      style: fncButtonRegulerStyle(context),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                        ],
+                      )
+                    : Column(
+                        children: <Widget>[
+                          formInputLeft(),
+                          const SizedBox(height: 8),
+                          formInputRight(),
+                        ],
+                      ),
               ),
             ),
           )

@@ -153,7 +153,6 @@ class _TableEstimasiPaketState extends State<TableEstimasiPaket> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.72,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

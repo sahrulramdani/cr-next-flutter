@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/constants/style.dart';
@@ -125,38 +126,24 @@ class _FinanceUjrahPageState extends State<FinanceUjrahPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(children: [
-        Obx(() => Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                  child: CustomText(
-                    text: 'Finance - ${menuController.activeItem.value}',
-                    size: 24,
-                    weight: FontWeight.bold,
-                  ),
-                )
-              ],
-            )),
-        const SizedBox(
-          height: 20,
+    return Column(children: [
+      Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+      const SizedBox(height: 10),
+      SizedBox(
+        height: 120,
+        width: screenWidth,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: listCardTransaksi.map((data) {
+            return MyCardInfo(title: data['title'], total: data['total']);
+          }).toList(),
         ),
-        SizedBox(
-          height: 120,
-          width: screenWidth,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: listCardTransaksi.map((data) {
-              return MyCardInfo(title: data['title'], total: data['total']);
-            }).toList(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        menuButton(),
-        const SizedBox(height: 10),
-        Container(
+      ),
+      const SizedBox(height: 10),
+      menuButton(),
+      const SizedBox(height: 10),
+      Expanded(
+        child: Container(
           width: screenWidth,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -217,11 +204,11 @@ class _FinanceUjrahPageState extends State<FinanceUjrahPage> {
                   ),
                 ],
               ),
-              const TableTransaksi(),
+              const Expanded(child: TableTransaksi()),
             ],
           ),
-        )
-      ]),
-    );
+        ),
+      )
+    ]);
   }
 }

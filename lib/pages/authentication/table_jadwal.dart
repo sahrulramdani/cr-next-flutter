@@ -66,7 +66,11 @@ class MyData extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text((index + 1).toString())),
       DataCell(Text(fncGetTanggal(dataJadwal[index]['TGLX_BGKT'].toString()))),
-      DataCell(Text(dataJadwal[index]['NAME_PESWT_BGKT'])),
+      DataCell(dataJadwal[index]['FOTO_PSWT'] == null
+          ? Image.asset('assets/images/pesawat-none.png', height: 30)
+          : Image.network(
+              '$urlAddress/uploads/maskapai/${dataJadwal[index]['FOTO_PSWT']}',
+              height: 30)),
       DataCell(Text(dataJadwal[index]['RUTE_AKHR_BRKT'] == null
           ? ""
           : "${dataJadwal[index]['RUTE_AKHR_BRKT'].toString()} - ${dataJadwal[index]['RUTE_AWAL_PLNG'].toString()}")),
@@ -220,12 +224,11 @@ class _TableJadwalDashboardState extends State<TableJadwalDashboard> {
             ),
           )),
           DataCell(Center(
-            child: Text(
-              e['NAME_PESWT_BGKT'] == null
-                  ? "-"
-                  : e['NAME_PESWT_BGKT'].toString(),
-              style: tbLoginRowStyle,
-            ),
+            child: e['FOTO_PSWT'] == null
+                ? Image.asset('assets/images/pesawat-none.png', height: 30)
+                : Image.network(
+                    '$urlAddress/uploads/maskapai/${e['FOTO_PSWT']}',
+                    height: 30),
           )),
           DataCell(Center(
             child: Text(

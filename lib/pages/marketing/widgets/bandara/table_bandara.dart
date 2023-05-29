@@ -124,11 +124,9 @@ class _TableBandaraState extends State<TableBandara> {
   Widget build(BuildContext context) {
     final DataTableSource myTable = MyData(widget.listBandara);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: screenWidth * 0.9,
-      height: 0.6 * screenHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

@@ -1,3 +1,4 @@
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/jamaah/widgets/pelanggan/table_pelanggan.dart';
 import 'package:flutter_web_course/widgets/custom_text.dart';
@@ -100,35 +101,23 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Jamaah - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 120,
-            width: screenWidth,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: listCardPelanggan.map((data) {
-                return MyCardInfo(title: data['title'], total: data['total']);
-              }).toList(),
-            ),
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          width: screenWidth,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: listCardPelanggan.map((data) {
+              return MyCardInfo(title: data['title'], total: data['total']);
+            }).toList(),
           ),
-          const SizedBox(height: 20),
-          Container(
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -250,12 +239,12 @@ class _JamaahPelangganPageState extends State<JamaahPelangganPage> {
                     ),
                   ],
                 ),
-                TablePelanggan(dataPelanggan: listPelanggan),
+                Expanded(child: TablePelanggan(dataPelanggan: listPelanggan)),
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

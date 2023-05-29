@@ -1,3 +1,4 @@
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/helpers/responsiveness.dart';
 import 'package:flutter_web_course/pages/finance/widgets/penerbangan.dart/penerbangan_table.dart';
 import 'package:flutter_web_course/pages/inventory/widgets/kirim/table_kirim_barang.dart';
@@ -42,24 +43,12 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
-          const SizedBox(height: 20),
-          Container(
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        Expanded(
+          child: Container(
             width: screenWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -139,14 +128,16 @@ class _FinancePenerbanganPageState extends State<FinancePenerbanganPage> {
                     ),
                   ],
                 ),
-                TablePenerbangan(
-                  dataProfit: listProfitJadwal,
+                Expanded(
+                  child: TablePenerbangan(
+                    dataProfit: listProfitJadwal,
+                  ),
                 ),
               ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

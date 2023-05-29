@@ -88,7 +88,6 @@ class _TablePenerbanganState extends State<TablePenerbangan> {
 
     return SizedBox(
       width: screenWidth,
-      height: screenHeight * 0.72,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

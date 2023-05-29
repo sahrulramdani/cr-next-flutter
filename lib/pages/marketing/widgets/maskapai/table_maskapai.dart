@@ -41,7 +41,9 @@ class ButtonEdit extends StatelessWidget {
 
 class ButtonHapus extends StatelessWidget {
   String idMaskapai;
-  ButtonHapus({Key key, @required this.idMaskapai}) : super(key: key);
+  String fotoMaskapai;
+  ButtonHapus({Key key, @required this.idMaskapai, @required this.fotoMaskapai})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +56,10 @@ class ButtonHapus extends StatelessWidget {
         authDelt == '1'
             ? showDialog(
                 context: context,
-                builder: (context) =>
-                    ModalHapusMaskapai(idMaskapai: idMaskapai))
+                builder: (context) => ModalHapusMaskapai(
+                      idMaskapai: idMaskapai,
+                      fotoMaskapai: fotoMaskapai,
+                    ))
             : showDialog(
                 context: context,
                 builder: (context) => const ModalInfo(
@@ -80,6 +84,11 @@ class MyData extends DataTableSource {
           style: styleRowReguler)),
       DataCell(Text(listMaskapai[index]['NAMA_PSWT'].toString(),
           style: styleRowReguler)),
+      DataCell(listMaskapai[index]['FOTO_PSWT'] == ""
+          ? Image.asset('assets/images/pesawat-none.png', height: 30)
+          : Image.network(
+              '$urlAddress/uploads/maskapai/${listMaskapai[index]['FOTO_PSWT']}',
+              height: 30)),
       DataCell(Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,6 +100,7 @@ class MyData extends DataTableSource {
             const SizedBox(width: 5),
             ButtonHapus(
               idMaskapai: listMaskapai[index]['IDXX_PSWT'].toString(),
+              fotoMaskapai: listMaskapai[index]['FOTO_PSWT'].toString(),
             ),
           ],
         ),
@@ -122,11 +132,9 @@ class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
   Widget build(BuildContext context) {
     final DataTableSource myTable = MyData(widget.listMaskapai);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: screenWidth * 0.9,
-      height: 0.6 * screenHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(
@@ -135,6 +143,7 @@ class _TableMasterMaskapaiState extends State<TableMasterMaskapai> {
             DataColumn(label: Text('No.', style: styleColumn)),
             DataColumn(label: Text('Kode', style: styleColumn)),
             DataColumn(label: Text('Nama', style: styleColumn)),
+            DataColumn(label: Text('Gambar', style: styleColumn)),
             DataColumn(
                 label: SizedBox(
                     width: 80,

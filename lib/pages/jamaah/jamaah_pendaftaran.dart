@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, missing_return, avoid_print, unrelated_type_equality_checks, unused_local_variable, no_leading_underscores_for_local_identifiers
 
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/comp/modal_save_fail.dart';
 import 'package:flutter_web_course/comp/modal_save_success.dart';
 import 'package:flutter_web_course/controllers/func_all.dart';
@@ -30,6 +31,8 @@ class JamaahPendaftaranPage extends StatefulWidget {
 
 class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage>
     with TickerProviderStateMixin {
+  final formKey = GlobalKey<FormState>();
+
   String idKantor;
   String namaKantor;
   String idProduk;
@@ -1168,31 +1171,17 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     TabController _tabController = TabController(vsync: this, length: 2);
-    final formKey = GlobalKey<FormState>();
 
     return Form(
       key: formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Obx(() => Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                          top:
-                              ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                      child: CustomText(
-                        text: 'Jamaah - ${menuController.activeItem.value}',
-                        size: 24,
-                        weight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                )),
-            const SizedBox(height: 20),
-            Container(
+      child: Column(
+        children: [
+          Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Container(
               width: screenWidth,
-              padding: const EdgeInsets.only(right: 15),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
@@ -1280,229 +1269,200 @@ class _JamaahPendaftaranPageState extends State<JamaahPendaftaranPage>
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    height: screenHeight * 0.63,
-                    width: double.maxFinite,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: screenHeight * 0.63,
-                                  child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: Column(
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputKantor())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: SizedBox(
+                                            child: inputNamapelanggan()),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child:
+                                            SizedBox(child: inputNamaJadwal()),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child: SizedBox(child: inputKTP())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child: SizedBox(child: inputKK())),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputLampiran())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputVaksin())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputPaspor())),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                          child: SizedBox(child: inputKamar())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: SizedBox(
+                                            child: inputStatusHandling()),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputHandling())),
+                                      const SizedBox(width: 12),
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          disableHand == true
+                                              ? ''
+                                              : showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      barangHandling(context));
+                                        },
+                                        icon: const Icon(
+                                            Icons.shopping_basket_outlined),
+                                        label: fncLabelButtonStyle(
+                                            'Handling', context),
+                                        style: fncButtonAuthStyle(
+                                            disableHand == true ? '0' : '1',
+                                            context),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: SizedBox(child: inputKurs())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                          child:
+                                              SizedBox(child: inputRefrensi())),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: SizedBox(
+                                            child: inputNamaMarketing()),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 680,
+                                        height: 260,
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            resultFotoKTP(),
+                                            const SizedBox(width: 10),
+                                            resultFotoKK(),
+                                            const SizedBox(width: 10),
+                                            resultFotoDok()
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
-                                              SizedBox(
-                                                  width: 530,
-                                                  child: inputKantor()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 530,
-                                                  child: inputNamapelanggan()),
+                                              btnUploadKK(),
+                                              const SizedBox(width: 10),
+                                              btnUploadDokumen(),
                                             ],
                                           ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 530,
-                                                  child: inputNamaJadwal()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 259,
-                                                  child: inputKTP()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 259, child: inputKK()),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputLampiran()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputVaksin()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputPaspor()),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputKamar()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputStatusHandling()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 219,
-                                                  child: inputHandling()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 120,
-                                                  child: ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      disableHand == true
-                                                          ? ''
-                                                          : showDialog(
-                                                              context: context,
-                                                              builder: (context) =>
-                                                                  barangHandling(
-                                                                      context));
-                                                    },
-                                                    icon: const Icon(Icons
-                                                        .shopping_basket_outlined),
-                                                    label: fncLabelButtonStyle(
-                                                        'Handling', context),
-                                                    style: fncButtonAuthStyle(
-                                                        disableHand == true
-                                                            ? '0'
-                                                            : '1',
-                                                        context),
-                                                  )),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputKurs()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputRefrensi()),
-                                              const SizedBox(width: 12),
-                                              SizedBox(
-                                                  width: 349,
-                                                  child: inputNamaMarketing()),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: 680,
-                                                height: 260,
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.grey)),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    resultFotoKTP(),
-                                                    const SizedBox(width: 10),
-                                                    resultFotoKK(),
-                                                    const SizedBox(width: 10),
-                                                    resultFotoDok()
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      btnUploadKK(),
-                                                      const SizedBox(width: 10),
-                                                      btnUploadDokumen(),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  isKtp != true
-                                                      ? btnUploadKTP()
-                                                      : const SizedBox(),
-                                                  const SizedBox(height: 180),
-                                                  const SizedBox(
-                                                    width: 300,
-                                                    child: Text(
-                                                        '*Pembayaran lunas dilakukan paling lambat 30 hari sebelum keberangkatan'),
-                                                  )
-                                                ],
-                                              ),
-                                              const SizedBox(width: 60),
-                                            ],
-                                          ),
-                                          const SizedBox(width: 60),
+                                          const SizedBox(height: 10),
+                                          isKtp != true
+                                              ? btnUploadKTP()
+                                              : const SizedBox(),
+                                          const SizedBox(height: 180),
+                                          const SizedBox(
+                                            width: 300,
+                                            child: Text(
+                                                '*Pembayaran lunas dilakukan paling lambat 30 hari sebelum keberangkatan'),
+                                          )
                                         ],
-                                      )),
-                                )
-                              ]),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: screenHeight * 0.63,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: TableSidePendaftaran(
-                                      tarif: tarif,
-                                      biayaVaksin: biayaVaksin,
-                                      biayaPaspor: biayaPaspor,
-                                      biayaAdmin: biayaAdmin,
-                                      biayaHandling: biayaHandling,
-                                      biayaKamar: biayaKamar,
-                                      estimasi: estimasi,
-                                      paket: paket,
-                                      berangkat: berangkat,
-                                      pulang: pulang,
-                                      namaPelanggan: namaPelanggan,
-                                      umur: umur,
-                                      harga: harga,
-                                      alamat: alamat,
-                                      paspor: paspor,
-                                      vaksin: vaksin,
-                                      pembuatan: pembuatan),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                                      ),
+                                      const SizedBox(width: 60),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 60),
+                                ],
+                              )),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: TableSidePendaftaran(
+                                tarif: tarif,
+                                biayaVaksin: biayaVaksin,
+                                biayaPaspor: biayaPaspor,
+                                biayaAdmin: biayaAdmin,
+                                biayaHandling: biayaHandling,
+                                biayaKamar: biayaKamar,
+                                estimasi: estimasi,
+                                paket: paket,
+                                berangkat: berangkat,
+                                pulang: pulang,
+                                namaPelanggan: namaPelanggan,
+                                umur: umur,
+                                harga: harga,
+                                alamat: alamat,
+                                paspor: paspor,
+                                vaksin: vaksin,
+                                pembuatan: pembuatan),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

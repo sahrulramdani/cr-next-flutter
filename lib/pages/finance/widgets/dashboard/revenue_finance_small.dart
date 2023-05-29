@@ -161,33 +161,50 @@ class _RevenueFinanceSmallState extends State<RevenueFinanceSmall> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  children: [
-                    RevenueInfo(
-                      title: "Bulan Ini",
-                      amount: BulanIni,
-                    ),
-                    RevenueInfo(
-                      title: "Bulan Lalu",
-                      amount: BulanLalu,
-                    )
-                  ],
+                CustomText(
+                  text:
+                      "Pendapatan ${DateFormat("yyyy").format(DateTime.now())}",
+                  size: 20,
+                  weight: FontWeight.bold,
+                  color: myBlue,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    RevenueInfo(
-                      title: "Sampai Bulan Ini",
-                      amount: SampaiBulanIni,
-                    ),
-                    RevenueInfo(
-                      title: "Tahun lalu",
-                      amount: TahunLalu,
-                    )
-                  ],
-                ),
+                SizedBox(
+                  width: 600,
+                  height: 200,
+                  child: charts.BarChart(
+                    _createSampleData(),
+                    barRendererDecorator: charts.BarLabelDecorator<String>(),
+                    domainAxis: const charts.OrdinalAxisSpec(),
+                    animate: true,
+                  ),
+                )
+                // Row(
+                //   children: [
+                //     RevenueInfo(
+                //       title: "Bulan Ini",
+                //       amount: BulanIni,
+                //     ),
+                //     RevenueInfo(
+                //       title: "Bulan Lalu",
+                //       amount: BulanLalu,
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(
+                //   height: 30,
+                // ),
+                // Row(
+                //   children: [
+                //     RevenueInfo(
+                //       title: "Sampai Bulan Ini",
+                //       amount: SampaiBulanIni,
+                //     ),
+                //     RevenueInfo(
+                //       title: "Tahun lalu",
+                //       amount: TahunLalu,
+                //     )
+                //   ],
+                // ),
               ],
             ),
           ),

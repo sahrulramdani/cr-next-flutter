@@ -88,18 +88,6 @@ const hrKaryawanPageRoute = "/hr/karyawan";
 const hrKantorPageDisplayName = "Kantor";
 const hrKantorPageRoute = "/hr/kantor";
 
-const settingGrupUserDisplayName = "Grup User";
-const settingGrupUserRoute = "/setting/grup-user";
-
-const settingPenggunaDisplayName = "Daftar Pengguna";
-const settingPenggunaRoute = "/setting/daftar-pengguna";
-
-const settingMenuDisplayName = "Daftar Menu";
-const settingMenuRoute = "/setting/daftar-menu";
-
-const settingBiayaDisplayName = "Daftar Biaya";
-const settingBiayaRoute = "/setting/master-biaya";
-
 const financePageDisplayName = "Finance";
 const financePageRoute = "/finance";
 
@@ -147,6 +135,21 @@ const fincPendapatanBiayaPageRoute = "/finance/master-pendapatan-biaya";
 
 const fincCostStructure = "Cost Structure";
 const fincCostStructurePageRoute = "/finance/cost-structure";
+
+const settingGrupUserDisplayName = "Grup User";
+const settingGrupUserRoute = "/setting/grup-user";
+
+const settingPenggunaDisplayName = "Daftar Pengguna";
+const settingPenggunaRoute = "/setting/daftar-pengguna";
+
+const settingMenuDisplayName = "Daftar Menu";
+const settingMenuRoute = "/setting/daftar-menu";
+
+const settingBiayaDisplayName = "Daftar Biaya";
+const settingBiayaRoute = "/setting/master-biaya";
+
+const settingLainnyaDisplayName = "Pengaturan Musim";
+const settingLainnyaRoute = "/setting/pengaturan-musim";
 // ----------------
 
 // const mrktDealTrackPageDisplayName = "DealTrack";

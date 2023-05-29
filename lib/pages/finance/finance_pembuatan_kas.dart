@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/pages/finance/widgets/kasdanbank/form_kasdanbank.dart';
 import 'package:flutter_web_course/pages/finance/widgets/kasdanbank/table_kasdanbank.dart';
@@ -184,133 +185,115 @@ class _FinanceKasDanBankPageState extends State<FinanceKasDanBankPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        menuButton(),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: enableFormL,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 20, right: 15),
+              width: screenWidth,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                  ),
                 ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          menuButton(),
-          const SizedBox(
-            height: 10,
-          ),
-          Visibility(
-              visible: enableFormL,
-              child: Container(
-                padding: const EdgeInsets.only(bottom: 20, right: 15),
-                width: screenWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: const KasDanBankForm(),
-              )),
-          Visibility(
-              visible: !enableFormL,
-              child: Container(
-                width: screenWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 60,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Daftar Kas dan Bank',
-                                style: TextStyle(
-                                    fontFamily: 'Gilroy',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: myBlue),
-                              ),
-                            ],
-                          ),
+              ),
+              child: const KasDanBankForm(),
+            )),
+        Visibility(
+            visible: !enableFormL,
+            child: Container(
+              width: screenWidth,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Daftar Kas dan Bank',
+                              style: TextStyle(
+                                  fontFamily: 'Gilroy',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: myBlue),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 250,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: TextFormField(
-                                  style: const TextStyle(
-                                      fontFamily: 'Gilroy', fontSize: 14),
-                                  decoration: const InputDecoration(
-                                      hintText: 'Cari Nama Kas/Bank'),
-                                  onChanged: (value) {
-                                    if (value == '') {
-                                      getKasBank();
-                                    } else {
-                                      setState(() {
-                                        listPembuatanKasBank =
-                                            listPembuatanKasBank
-                                                .where(((element) =>
-                                                    element['NAMA_BANK']
-                                                        .toString()
-                                                        .toUpperCase()
-                                                        .contains(value
-                                                            .toUpperCase())))
-                                                .toList();
-                                      });
-                                    }
-                                  },
-                                ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 250,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: TextFormField(
+                                style: const TextStyle(
+                                    fontFamily: 'Gilroy', fontSize: 14),
+                                decoration: const InputDecoration(
+                                    hintText: 'Cari Nama Kas/Bank'),
+                                onChanged: (value) {
+                                  if (value == '') {
+                                    getKasBank();
+                                  } else {
+                                    setState(() {
+                                      listPembuatanKasBank =
+                                          listPembuatanKasBank
+                                              .where(((element) =>
+                                                  element['NAMA_BANK']
+                                                      .toString()
+                                                      .toUpperCase()
+                                                      .contains(
+                                                          value.toUpperCase())))
+                                              .toList();
+                                    });
+                                  }
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    TableKasDanBank(listKasBank: listPembuatanKasBank),
-                  ],
-                ),
-              ))
-        ],
-      ),
+                      ),
+                    ],
+                  ),
+                  TableKasDanBank(listKasBank: listPembuatanKasBank),
+                ],
+              ),
+            ))
+      ],
     );
   }
 }

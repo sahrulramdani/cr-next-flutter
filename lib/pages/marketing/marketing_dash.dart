@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/constants/dummy.dart';
 import 'package:flutter_web_course/comp/card_info.dart';
@@ -73,21 +74,9 @@ class _MarketingDashboardPageState extends State<MarketingDashboardPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: menuController.activeItem.value,
-                      size: 24,
-                      weight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              )),
+          Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           SizedBox(
             height: 120,
@@ -106,9 +95,6 @@ class _MarketingDashboardPageState extends State<MarketingDashboardPage> {
             const RevenueMarketingLarge()
           else
             const RevenueMarketingSmall(),
-          const SizedBox(
-            height: 20,
-          ),
         ],
       ),
     );

@@ -23,6 +23,8 @@ class JadwalForm extends StatefulWidget {
 }
 
 class _JadwalFormState extends State<JadwalForm> {
+  final formKey = GlobalKey<FormState>();
+
   String namaPaket;
   String idpaket;
   String idjenis;
@@ -985,6 +987,212 @@ class _JadwalFormState extends State<JadwalForm> {
     );
   }
 
+  Widget formInputLeft() {
+    return SizedBox(
+      width: fncWidthColumnForm(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          inputPaket(),
+          const SizedBox(height: 8),
+          inputJenisPaket(),
+          const SizedBox(height: 8),
+          inputTglBerangkat(),
+          const SizedBox(height: 5),
+          inputTanggalPulang(),
+          const SizedBox(height: 5),
+          inputJumlahHari(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Maskapai Berangkat",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputPesawatBerangkat(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Rute Berangkat",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputRute(),
+          const SizedBox(height: 8),
+          inputRute2(),
+          const SizedBox(height: 8),
+          inputRute3(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Pilihan Hotel",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputHotelMek(),
+          const SizedBox(height: 8),
+          inputHotelMad(),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              resultFotoJadwal(),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              SizedBox(
+                  width: fncWidthInputModal(context),
+                  child: inputUploadJadwal()),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.only(top: 10),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    getImageJadwal();
+                  },
+                  icon: const Icon(Icons.image_outlined),
+                  label: fncLabelButtonStyle('Upload Foto', context),
+                  style: fncButtonRegulerStyle(context),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget formInputRight() {
+    return SizedBox(
+      width: fncWidthColumnForm(context),
+      child: Column(
+        children: [
+          inputTujuan(),
+          const SizedBox(height: 8),
+          inputTarif(),
+          const SizedBox(height: 8),
+          inputJumlahSeat(),
+          const SizedBox(height: 8),
+          inputMataUang(),
+          const SizedBox(height: 8),
+          inputKeterangan(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Maskapai Pulang",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputPesawatPulang(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Rute Pulang",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputRuteAwalPlng(),
+          const SizedBox(height: 8),
+          inputRuteTransitPlng(),
+          const SizedBox(height: 8),
+          inputRuteAkhirPlng(),
+          SizedBox(height: 15),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          Text(
+            "Pilihan Hotel",
+            style: TextStyle(
+              color: myBlue,
+              fontFamily: 'Gilroy',
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+          Divider(
+            color: myBlue,
+            thickness: 1.5,
+            height: 30,
+          ),
+          inputHotelJed(),
+          const SizedBox(height: 8),
+          inputHotelTambahan(),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
   getImageJadwal() async {
     FilePickerResult fileResult = await FilePicker.platform.pickFiles();
 
@@ -1028,31 +1236,6 @@ class _JadwalFormState extends State<JadwalForm> {
   }
 
   fncSaveData(namaFoto) {
-    // print(namaFoto);
-    // print(fncKeteranganRute(rute, namaTransit, rute3, ruteAwalPlng,
-    //     namaRuteTransitPlng, ruteAkhirPlng));
-    // print("ID PAKET : $idpaket");
-    // print("ID JENIS : $idjenis");
-    // print("TUJUAN : $tujuan");
-    // print("HOTEL MEK : $idHotelMek");
-    // print("HOTEL MAD : $idHotelMad");
-    // print("HOTEL JED : $idHotelJed");
-    // print("HOTEL TRA : $idHotelTra");
-    // print("JUMLAH HARI : $jumlahHari");
-    // print("PESAWAT BRGKT : $pesawatBerangkat");
-    // print("PESAWAT PLANG : $pesawatPulang");
-    // print("RUTE AWAL BERANGKAT : $rute");
-    // print("RUTE TRANSIT BERANGKAT : $rute2");
-    // print("RUTE PULANG BERANGKAT : $rute3");
-    // print("RUTE AWAL PULANG : $ruteAwalPlng ");
-    // print("RUTE TRANSIT PULANG : $ruteTransitPlng ");
-    // print("RUTE AKHIR PULANG : $ruteAkhirPlng ");
-    // print("TARIF : $tarif");
-    // print("JUMLAH SEAT : $jumlahSeat");
-    // print("MATA UANG : $idMataUang");
-    // print("KETERANGAN : $keterangan");
-    // print("TANGGAL BERANGKT : ${dateBerangkat.text}");
-    // print("TANGGAL PULNG : ${datePulang.text}");
     HttpJadwal.saveJadwal(
       idpaket,
       idjenis,
@@ -1094,7 +1277,7 @@ class _JadwalFormState extends State<JadwalForm> {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Form(
@@ -1120,352 +1303,63 @@ class _JadwalFormState extends State<JadwalForm> {
                   ],
                 ),
               ),
-              const Expanded(child: SizedBox(width: 20)),
-              ElevatedButton.icon(
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    fncSaveFoto();
-                  } else {
-                    return null;
-                  }
-                },
-                icon: const Icon(Icons.save),
-                label: fncLabelButtonStyle('Simpan', context),
-                style: fncButtonRegulerStyle(context),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton.icon(
-                onPressed: () {
-                  menuController.changeActiveitemTo('Jadwal');
-                  navigationController.navigateTo('/mrkt/jadwal');
-                },
-                icon: const Icon(Icons.cancel),
-                label: fncLabelButtonStyle('Batal', context),
-                style: fncButtonRegulerStyle(context),
-              )
-            ],
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              height: fncHeightFormWithCard(context),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      color: myBlue,
-                      thickness: 10,
+              const Expanded(child: SizedBox()),
+              Container(
+                padding: const EdgeInsets.only(right: 15),
+                child: Row(
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (formKey.currentState.validate()) {
+                          fncSaveFoto();
+                        } else {
+                          return null;
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      label: fncLabelButtonStyle('Simpan', context),
+                      style: fncButtonRegulerStyle(context),
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              inputPaket(),
-                              const SizedBox(height: 8),
-                              inputJenisPaket(),
-                              const SizedBox(height: 8),
-                              inputTglBerangkat(),
-                              const SizedBox(height: 8),
-                              inputTanggalPulang(),
-                              const SizedBox(height: 8),
-                              inputJumlahHari(),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              inputTujuan(),
-                              const SizedBox(height: 8),
-                              inputTarif(),
-                              const SizedBox(height: 8),
-                              inputJumlahSeat(),
-                              const SizedBox(height: 8),
-                              inputMataUang(),
-                              const SizedBox(height: 8),
-                              inputKeterangan(),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Maskapai Berangkat",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputPesawatBerangkat()
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Maskapai Pulang",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputPesawatPulang()
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Rute Berangkat",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputRute(),
-                              const SizedBox(height: 8),
-                              inputRute2(),
-                              const SizedBox(height: 8),
-                              inputRute3(),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Rute Pulang",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputRuteAwalPlng(),
-                              const SizedBox(height: 8),
-                              inputRuteTransitPlng(),
-                              const SizedBox(height: 8),
-                              inputRuteAkhirPlng(),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Pilihan Hotel",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputHotelMek(),
-                              const SizedBox(height: 8),
-                              inputHotelMad(),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: [
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              Text(
-                                "Pilihan Hotel",
-                                style: TextStyle(
-                                  color: myBlue,
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Divider(
-                                color: myBlue,
-                                thickness: 1.5,
-                                height: 30,
-                              ),
-                              inputHotelJed(),
-                              const SizedBox(height: 8),
-                              inputHotelTambahan(),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  resultFotoJadwal(),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: fncWidthInputModal(context),
-                                      child: inputUploadJadwal()),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        getImageJadwal();
-                                      },
-                                      icon: const Icon(Icons.image_outlined),
-                                      label: fncLabelButtonStyle(
-                                          'Upload Foto', context),
-                                      style: fncButtonRegulerStyle(context),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 25,
-                        ),
-                        SizedBox(
-                          width: fncWidthColumnForm(context),
-                          child: Column(
-                            children: const [],
-                          ),
-                        ),
-                      ],
-                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        menuController.changeActiveitemTo('Jadwal');
+                        navigationController.navigateTo('/mrkt/jadwal');
+                      },
+                      icon: const Icon(Icons.cancel),
+                      label: fncLabelButtonStyle('Batal', context),
+                      style: fncButtonRegulerStyle(context),
+                    )
                   ],
                 ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: screenWidth >= 500
+                    ? Column(
+                        children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(child: formInputLeft()),
+                              const SizedBox(width: 25),
+                              Expanded(child: formInputRight())
+                            ],
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: <Widget>[
+                          formInputLeft(),
+                          const SizedBox(height: 8),
+                          formInputRight(),
+                        ],
+                      ),
               ),
             ),
           )

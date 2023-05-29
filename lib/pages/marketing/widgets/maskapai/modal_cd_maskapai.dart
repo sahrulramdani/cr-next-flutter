@@ -2,9 +2,11 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_web_course/models/http_maskapai.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_course/constants/style.dart';
 // import 'package:flutter_web_course/comp/modal_save_fail.dart';
@@ -31,6 +33,10 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
   String idMaskapai;
   String kodeMaskapai;
   String namaMaskapai;
+  String fotoMaskapai = "";
+  String fotoMaskapaiBase = "";
+  Uint8List fotoMaskapaiByte;
+  String fotoLamaMaskapai = "";
 
   void getDetailSatuan() async {
     var id = widget.idMaskapai;
@@ -46,6 +52,8 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
       idMaskapai = data[0]['IDXX_PSWT'];
       kodeMaskapai = data[0]['KODE_PSWT'];
       namaMaskapai = data[0]['NAMA_PSWT'];
+      fotoMaskapai = data[0]['FOTO_PSWT'];
+      fotoLamaMaskapai = data[0]['FOTO_PSWT'];
     });
   }
 
@@ -99,9 +107,96 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
     );
   }
 
-  fncSaveData(context) {
+  Widget inputUploadFoto() {
+    return TextFormField(
+      initialValue: fotoMaskapai != "" ? fotoMaskapai : "Pilih",
+      readOnly: true,
+      style: const TextStyle(fontFamily: 'Gilroy', fontSize: 15),
+      decoration: const InputDecoration(
+        labelText: 'Upload Foto',
+        filled: true,
+        fillColor: Colors.white,
+        hoverColor: Colors.white,
+      ),
+    );
+  }
+
+  Widget resultFotoMaskapai() {
+    if (fotoMaskapaiByte != null) {
+      return Image.memory(
+        fotoMaskapaiByte,
+        width: 150,
+      );
+    } else {
+      if (fotoMaskapai != "") {
+        if (fotoMaskapai != null) {
+          return Image(
+            image: NetworkImage('$urlAddress/uploads/maskapai/$fotoMaskapai'),
+            width: 150,
+          );
+        } else {
+          return const Image(
+            image: AssetImage('assets/images/pesawat-none.png'),
+            width: 150,
+          );
+        }
+      } else {
+        return const Image(
+          image: AssetImage('assets/images/pesawat-none.png'),
+          width: 150,
+        );
+      }
+    }
+  }
+
+  getImageMaskapai() async {
+    FilePickerResult fileResult = await FilePicker.platform.pickFiles();
+
+    Uint8List bytes = fileResult.files.first.bytes;
+    String encodeFoto = base64.encode(bytes);
+
+    if (fileResult != null) {
+      setState(() {
+        fotoMaskapai = fileResult.files.first.name;
+        fotoMaskapaiByte = fileResult.files.first.bytes;
+        fotoMaskapaiBase = encodeFoto;
+      });
+    }
+  }
+
+  fncSaveFoto(context) {
     if (widget.tambah == true) {
-      HttpMaskapai.saveMaskapai(kodeMaskapai, namaMaskapai).then((value) {
+      HttpMaskapai.saveFotoMaskapai(
+        fotoMaskapaiBase != '' ? fotoMaskapaiBase : 'TIDAK',
+      ).then((value) {
+        if (value.status == true) {
+          fncSaveData(value.foto, context);
+        } else {
+          print('GAGAL UPLOAD FOTO');
+        }
+      });
+    } else {
+      HttpMaskapai.updateFotoMaskapai(
+        idMaskapai,
+        fotoMaskapaiBase != '' ? fotoMaskapaiBase : 'TIDAK',
+        fotoLamaMaskapai,
+      ).then((value) {
+        if (value.status == true) {
+          fncSaveData(value.foto, context);
+        } else {
+          print('GAGAL UPLOAD FOTO');
+        }
+      });
+    }
+  }
+
+  fncSaveData(foto, context) {
+    if (widget.tambah == true) {
+      HttpMaskapai.saveMaskapai(
+        kodeMaskapai,
+        namaMaskapai,
+        foto,
+      ).then((value) {
         if (value.status == true) {
           Navigator.pop(context);
 
@@ -116,8 +211,12 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
         }
       });
     } else {
-      HttpMaskapai.updateMaskapai(idMaskapai, kodeMaskapai, namaMaskapai)
-          .then((value) {
+      HttpMaskapai.updateMaskapai(
+        idMaskapai,
+        kodeMaskapai,
+        namaMaskapai,
+        foto,
+      ).then((value) {
         if (value.status == true) {
           showDialog(
               context: context, builder: (context) => const ModalSaveSuccess());
@@ -145,7 +244,7 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
           child: Container(
             padding: const EdgeInsets.all(10),
             width: screenWidth * 0.5,
-            height: 280,
+            height: 500,
             child: Column(
               children: [
                 SizedBox(
@@ -177,6 +276,31 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
                       inputKodeMaskapai(),
                       const SizedBox(height: 8),
                       inputNamaMaskapai(),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [resultFotoMaskapai()],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(child: SizedBox(child: inputUploadFoto())),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                getImageMaskapai();
+                              },
+                              icon: const Icon(Icons.image_outlined),
+                              label:
+                                  fncLabelButtonStyle('Upload Foto', context),
+                              style: fncButtonRegulerStyle(context),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 )),
@@ -189,7 +313,7 @@ class _ModalCdMaskapaiState extends State<ModalCdMaskapai> {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState.validate()) {
-                            fncSaveData(context);
+                            fncSaveFoto(context);
                           } else {
                             return null;
                           }

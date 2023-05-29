@@ -187,7 +187,6 @@ class _TableMasterJamaahState extends State<TableMasterJamaah> {
 
     return SizedBox(
       width: screenWidth,
-      height: fncHeightTableWithCard(context),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: PaginatedDataTable(

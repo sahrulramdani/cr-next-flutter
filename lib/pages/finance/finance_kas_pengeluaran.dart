@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_course/comp/header_title_menu.dart';
 import 'package:flutter_web_course/constants/controllers.dart';
 import 'package:flutter_web_course/pages/finance/widgets/kaspendapatan/formkaspendapatan.dart';
 // import 'package:flutter_web_course/pages/inventory/widgets/satuan/form_satuan.dart';
@@ -191,48 +192,32 @@ class _KasPengeluaranState extends State<KasPengeluaran> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: ResponsiveWidget.isSmallScreen(context) ? 56 : 6),
-                    child: CustomText(
-                      text: 'Finance - ${menuController.activeItem.value}',
-                      size: 24,
-                      weight: FontWeight.bold,
+    return Column(
+      children: [
+        Obx(() => HeaderTitleMenu(menu: menuController.activeItem.value)),
+        const SizedBox(height: 10),
+        menuButton(),
+        const SizedBox(height: 10),
+        Visibility(
+            visible: enableFormL,
+            child: Container(
+                padding: const EdgeInsets.only(bottom: 20, right: 15),
+                width: screenWidth,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 7,
                     ),
-                  )
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          menuButton(),
-          const SizedBox(
-            height: 10,
-          ),
-          Visibility(
-              visible: enableFormL,
-              child: Container(
-                  padding: const EdgeInsets.only(bottom: 20, right: 15),
-                  width: screenWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: const FormKasPengeluaran())),
-          Visibility(
-              visible: !enableFormL,
+                  ],
+                ),
+                child: const FormKasPengeluaran())),
+        Visibility(
+            visible: !enableFormL,
+            child: Expanded(
               child: Container(
                 width: screenWidth,
                 decoration: BoxDecoration(
@@ -308,12 +293,14 @@ class _KasPengeluaranState extends State<KasPengeluaran> {
                         ),
                       ],
                     ),
-                    TablePengeluaran(listPengeluaran: listPengeluaran)
+                    Expanded(
+                        child:
+                            TablePengeluaran(listPengeluaran: listPengeluaran))
                   ],
                 ),
-              ))
-        ],
-      ),
+              ),
+            ))
+      ],
     );
   }
 }
